@@ -1,16 +1,16 @@
 import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
 
-export class Pref {
+export class Player {
 
     @ApiPropertyOptional()
     id: number;
 
-    @ApiPropertyOptional()
-    user_id: number;
-
     @ApiProperty()
-    game_id: number;
+    session_id: number;
 
     @ApiPropertyOptional()
-    created: Date;
+    player_num: number;
+
+    @ApiPropertyOptional()
+    is_ai: number;
 }

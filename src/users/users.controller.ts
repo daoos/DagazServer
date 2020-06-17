@@ -1,7 +1,7 @@
-import { Controller, Get, Res, HttpStatus, UseGuards } from '@nestjs/common';
+import { Controller, Get, Res, HttpStatus, UseGuards, Post, Body, Delete, Param } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { User } from '../interfaces/user.interface';
-import { ApiOkResponse, ApiUnauthorizedResponse, ApiInternalServerErrorResponse, ApiForbiddenResponse, ApiSecurity } from '@nestjs/swagger';
+import { ApiOkResponse, ApiUnauthorizedResponse, ApiInternalServerErrorResponse, ApiForbiddenResponse, ApiSecurity, ApiBody, ApiCreatedResponse, ApiNotFoundResponse } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { RolesGuard } from '../auth/roles.guard';
 import { Roles } from '../auth/roles.decorator';
@@ -14,8 +14,7 @@ export class UsersController {
         private readonly service: UsersService
     ) {}
 
-    @UseGuards(JwtAuthGuard, RolesGuard)
-    @Roles('admin')
+    @UseGuards(JwtAuthGuard)
     @Get()
     @ApiOkResponse({ description: 'Successfully.'})
     @ApiUnauthorizedResponse({ description: 'Unauthorized.'})
@@ -26,6 +25,40 @@ export class UsersController {
             const r = await this.service.findAll();
             return res.status(HttpStatus.OK).json(r);
         } catch(e) {
+            return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ error: e.message.error.toString(), stack: e.stack});
+        }
+    }
+
+    @Post()
+    @ApiBody({ type: [User] })
+    @ApiCreatedResponse({ description: 'Successfully.'})
+    @ApiUnauthorizedResponse({ description: 'Unauthorized.'})
+    @ApiInternalServerErrorResponse({ description: 'Internal Server error.'})
+    async update(@Res() res, @Body() x: User): Promise<User> {
+        try {
+            const r = await this.service.addUser(x);
+            return res.status(HttpStatus.CREATED).json(r);
+        } catch (e) {
+            return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ error: e.message.error.toString(), stack: e.stack});
+        }
+    }
+
+    @UseGuards(JwtAuthGuard, RolesGuard)
+    @Roles('admin')
+    @Delete(':id')
+    @ApiOkResponse({ description: 'Successfully.'})
+    @ApiUnauthorizedResponse({ description: 'Unauthorized.'})
+    @ApiNotFoundResponse({ description: 'Not Found.'})
+    @ApiInternalServerErrorResponse({ description: 'Internal Server error.'})
+    async delete(@Res() res, @Param('id') id): Promise<User> {
+        try {
+            const r = await this.service.delUser(id);
+            if (!r) {
+                return res.status(HttpStatus.NOT_FOUND).json();
+            } else {
+                return res.status(HttpStatus.OK).json(r);
+            }
+        } catch (e) {
             return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ error: e.message.error.toString(), stack: e.stack});
         }
     }

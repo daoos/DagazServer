@@ -1,16 +1,16 @@
 import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
 
-export class Pref {
+export class Challenge {
 
     @ApiPropertyOptional()
     id: number;
 
-    @ApiPropertyOptional()
-    user_id: number;
+    @ApiProperty()
+    session_id: number;
 
     @ApiProperty()
-    game_id: number;
+    user_id: number;
 
     @ApiPropertyOptional()
-    created: Date;
+    player_num: number;
 }

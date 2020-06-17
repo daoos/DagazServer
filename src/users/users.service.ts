@@ -38,11 +38,15 @@ export class UsersService {
         }
       }
 
-      async findOneByName(name: string): Promise<User> {
+      async findOneByLogin(name: string): Promise<User> {
         try {
+          // TODO: Check Activated EMail
           const x = await this.service.createQueryBuilder("users")
-          .where("users.name = :name", {name: name})
+          .where("users.login = :name", {name: name})
           .getOne();
+          if (!x) {
+              return null;
+          }
           let it = new User();
           it.id = x.id;
           it.is_admin = x.is_admin;
@@ -68,6 +72,9 @@ export class UsersService {
           const x = await this.service.createQueryBuilder("users")
           .where("users.id = :id", {id: id})
           .getOne();
+          if (!x) {
+            return null;
+          }
           let it = new User();
           it.id = x.id;
           it.is_admin = x.is_admin;
@@ -87,4 +94,45 @@ export class UsersService {
           });
         }
       }
-    }
+    
+      async addUser(x: User): Promise<User> {
+        try {
+          const y = await this.service.createQueryBuilder("users")
+          .insert()
+          .into(users)
+          .values({
+            name: x.name,
+            login: x.username,
+            pass: x.password,
+            newmail: x.email
+          })
+          .returning('*')
+          .execute();
+          x.id = y.generatedMaps[0].id;
+          return x;
+        } catch (error) {
+          console.error(error);
+          throw new InternalServerErrorException({
+              status: HttpStatus.BAD_REQUEST,
+              error: error
+          });
+        }
+      }
+
+      async delUser(id: number): Promise<User> {
+        try {
+          await this.service.createQueryBuilder("users")
+          .update(users)
+          .set({ deleted: new Date() })
+          .where("users.id = :id", {id: id})
+          .execute();
+          return await this.findOneById(id);
+      } catch (error) {
+          console.error(error);
+          throw new InternalServerErrorException({
+              status: HttpStatus.BAD_REQUEST,
+              error: error
+          });
+        }
+      }
+}

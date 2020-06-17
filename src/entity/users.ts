@@ -1,34 +1,35 @@
-import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, Check } from "typeorm";
 
 @Entity()
+@Check(`"is_admin" in (0, 1)`)
 export class users {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column()
+    @Column({ default: 0 })
     is_admin: number;
 
-    @Column()
+    @Column({ type: "varchar", length: 100 })
     name: string;
 
-    @Column()
+    @Column({ type: "varchar", length: 20, unique: true })
     login: string;
 
-    @Column()
+    @Column({ type: "varchar", length: 20 })
     pass: string;
 
-    @Column({ nullable: true })
+    @Column({ type: "varchar", length: 100, nullable: true })
     email: string;
 
-    @Column({ nullable: true })
+    @Column({ type: "varchar", length: 100, nullable: true })
     newmail: string;
 
-    @Column()
+    @Column({default: () => "now()"})
     created: Date;
 
     @Column({ nullable: true })
     deleted: Date;
 
-    @Column()
+    @Column({default: () => "now()"})
     last_actived: Date;
 }

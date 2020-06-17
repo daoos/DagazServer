@@ -5,6 +5,6 @@ export class game_statuses {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column()
+    @Column({ type: "varchar", length: 100 })
     name: string;
 }

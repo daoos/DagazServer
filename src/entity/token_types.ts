@@ -5,6 +5,6 @@ export class token_types {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column()
+    @Column({ type: "varchar", length: 100 })
     name: string;
 }

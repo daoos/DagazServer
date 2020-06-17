@@ -21,13 +21,13 @@ export class tokens {
     @JoinColumn({ name: "user_id" })
     user: users;
 
-    @Column()
+    @Column({ type: "varchar", length: 100 })
     device_str: string;
 
-    @Column()
+    @Column({ type: "text" })
     value_str: string;
 
-    @Column()
+    @Column({default: () => "now()"})
     created: Date;
 
     @Column()

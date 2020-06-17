@@ -1,16 +1,19 @@
 import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
 
-export class Pref {
+export class Move {
 
     @ApiPropertyOptional()
     id: number;
 
-    @ApiPropertyOptional()
+    @ApiProperty()
+    session_id: number;
+
+    @ApiProperty()
     user_id: number;
 
     @ApiProperty()
-    game_id: number;
+    result_id: number;
 
     @ApiPropertyOptional()
-    created: Date;
+    score: number;
 }

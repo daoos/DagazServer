@@ -12,12 +12,15 @@ export class games {
     @JoinColumn({ name: "parent_id" })
     parent: games;
 
-    @Column()
+    @Column({ type: "varchar", length: 100 })
     name: string;
 
-    @Column()
+    @Column({ type: "text", unique: true })
     filename: string;
 
     @Column()
     players_total: number;
+
+    @Column({default: () => "now()"})
+    created: Date;
 }

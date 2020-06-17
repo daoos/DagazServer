@@ -1,9 +1,10 @@
-import { Entity, PrimaryGeneratedColumn, Column, Index, ManyToOne, JoinColumn } from "typeorm";
-import { users } from "./users";
+import { Entity, PrimaryGeneratedColumn, Index, Column, ManyToOne, JoinColumn, Unique } from "typeorm";
 import { game_sessions } from "./game_sessions";
+import { users } from "./users";
 
 @Entity()
-export class game_moves {
+@Unique(["session_id", "user_id"])
+export class challenge {
     @PrimaryGeneratedColumn()
     id: number;
 
@@ -21,15 +22,9 @@ export class game_moves {
     @JoinColumn({ name: "user_id" })
     user: users;
 
-    @Column()
-    turn_num: number;
+    @Column({ nullable: true })
+    player_num: number;
 
-    @Column({ type: "text" })
-    move_str: string
-
-    @Column({ type: "text" })
-    setup_str: string;
-
-    @Column({ type: "text", nullable: true })
-    note: string;
+    @Column({default: () => "now()"})
+    created: Date;
 }

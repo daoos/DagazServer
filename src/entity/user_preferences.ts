@@ -1,8 +1,9 @@
-import { Entity, PrimaryGeneratedColumn, Column, Index, ManyToOne, JoinColumn } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, Index, ManyToOne, JoinColumn, Unique } from "typeorm";
 import { games } from "./games";
 import { users } from "./users";
 
 @Entity()
+@Unique(["user_id", "game_id"])
 export class user_preferences {
     @PrimaryGeneratedColumn()
     id: number;
@@ -21,6 +22,6 @@ export class user_preferences {
     @JoinColumn({ name: "game_id" })
     game: games;
 
-    @Column()
+    @Column({default: () => "now()"})
     created: Date;
 }

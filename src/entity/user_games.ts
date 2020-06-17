@@ -1,9 +1,11 @@
-import { Entity, PrimaryGeneratedColumn, Column, Index, ManyToOne, JoinColumn } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, Index, ManyToOne, JoinColumn, Check, Unique } from "typeorm";
 import { users } from "./users";
 import { game_sessions } from "./game_sessions";
 import { game_results } from "./game_results";
 
 @Entity()
+@Unique(["session_id", "player_num"])
+@Check(`"is_ai" in (0, 1)`)
 export class user_games {
     @PrimaryGeneratedColumn()
     id: number;
@@ -35,6 +37,6 @@ export class user_games {
     @Column()
     player_num: number;
 
-    @Column()
+    @Column({ default: 0 })
     is_ai: number;
 }
