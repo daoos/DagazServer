@@ -57,11 +57,9 @@ export class PreferencesService {
         }
       }
 
-      async addPref(user: number, game: number): Promise<Pref> {
+      async addPref(user: number, x: Pref): Promise<Pref> {
         try {
-            let x = new Pref();
             x.user_id = user;
-            x.game_id = game;
             x.created = new Date();
             const y = await this.service.createQueryBuilder("user_preferences")
             .insert()
@@ -85,7 +83,7 @@ export class PreferencesService {
     }
 
     async delPref(user: number, game: number): Promise<Pref> {
-        let x = await this.findOne(user,game);
+        let x = await this.findOne(user, game);
         if (!x) {
             return null;
         }

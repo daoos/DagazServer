@@ -1,7 +1,7 @@
 import { Injectable, Inject, InternalServerErrorException, HttpStatus } from '@nestjs/common';
-import { game_sessions } from '../../dist/entity/game_sessions';
 import { Repository } from 'typeorm';
 import { Sess } from '../interfaces/sess.interface';
+import { game_sessions } from '../entity/game_sessions';
 
 @Injectable()
 export class SessionService {
@@ -52,6 +52,29 @@ export class SessionService {
                 return it;
             });
             return l;
+        } catch (error) {
+          console.error(error);
+          throw new InternalServerErrorException({
+              status: HttpStatus.BAD_REQUEST,
+              error: error
+          });
+        }
+    }
+
+    async createSesssion(user:number, x: Sess): Promise<Sess> {
+        try {
+            const y = await this.service.createQueryBuilder("game_sessions")
+            .insert()
+            .into(game_sessions)
+            .values({
+                game_id: x.game_id,
+                user_id: user,
+                status_id: 1
+            })
+            .returning('*')
+            .execute();
+            x.id = y.generatedMaps[0].id;
+            return x;
         } catch (error) {
           console.error(error);
           throw new InternalServerErrorException({

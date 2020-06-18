@@ -5,7 +5,7 @@ export class User {
     @ApiProperty()
     id: number;
     
-    @ApiProperty()
+    @ApiPropertyOptional()
     is_admin: number;
 
     @ApiProperty()

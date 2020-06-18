@@ -38,6 +38,46 @@ export class UsersService {
         }
       }
 
+      async getUsersByGame(id: number): Promise<User[]> {
+        try {
+          const x = await this.service.query(
+            `select b.id as id, b.name as name, b.login as username,
+                    b.created as created, b.last_actived as last_actived
+             from   user_preferences a
+             inner  join users b on (b.id = a.user_id)
+             where  a.game_id = $1
+             and  ( b.deleted is null or b.deleted > now() )`, [id]);
+          if (!x || x.length != 1) {
+              return null;
+          }
+          let l: User[] = x.map(x => {
+            let it = new User();
+            it.id = x.id;
+            it.name = x.name;
+            it.username = x.username;
+            it.created = x.created;
+            it.last_actived = x.last_actived;
+            return it;
+        });
+        return l;
+        } catch (error) {
+          console.error(error);
+          throw new InternalServerErrorException({
+              status: HttpStatus.BAD_REQUEST,
+              error: error
+          });
+        }
+      }
+
+      async touchUser(id: number): Promise<boolean> {
+        await this.service.createQueryBuilder("users")
+        .update(users)
+        .set({ last_actived: new Date()})
+        .where("users.id = :id", {id: id})
+        .execute();
+        return true;
+      }
+
       async findOneByLogin(name: string): Promise<User> {
         try {
           // TODO: Check Activated EMail
@@ -47,6 +87,7 @@ export class UsersService {
           if (!x) {
               return null;
           }
+          await this.touchUser(x.id);
           let it = new User();
           it.id = x.id;
           it.is_admin = x.is_admin;
@@ -75,6 +116,7 @@ export class UsersService {
           if (!x) {
             return null;
           }
+          await this.touchUser(x.id);
           let it = new User();
           it.id = x.id;
           it.is_admin = x.is_admin;

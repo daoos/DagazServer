@@ -12,5 +12,8 @@ export class Challenge {
     user_id: number;
 
     @ApiPropertyOptional()
+    user: string;
+
+    @ApiPropertyOptional()
     player_num: number;
 }

@@ -2,31 +2,31 @@ import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
 
 export class Sess {
 
-    @ApiProperty()
+    @ApiPropertyOptional()
     id: number;
 
-    @ApiProperty()
+    @ApiPropertyOptional()
     status: number;
 
     @ApiProperty()
     game_id: number;
 
-    @ApiProperty()
+    @ApiPropertyOptional()
     game: string;
 
-    @ApiProperty()
+    @ApiPropertyOptional()
     filename: string;
 
-    @ApiProperty()
+    @ApiPropertyOptional()
     created: Date;
 
-    @ApiProperty()
+    @ApiPropertyOptional()
     creator: string;
 
     @ApiProperty()
     players_total: number;
 
-    @ApiProperty()
+    @ApiPropertyOptional()
     player_num: number;
 
     @ApiPropertyOptional()

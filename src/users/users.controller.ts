@@ -29,6 +29,21 @@ export class UsersController {
         }
     }
 
+    @UseGuards(JwtAuthGuard)
+    @Get(':id')
+    @ApiOkResponse({ description: 'Successfully.'})
+    @ApiUnauthorizedResponse({ description: 'Unauthorized.'})
+    @ApiForbiddenResponse({ description: 'Forbidden.'})
+    @ApiInternalServerErrorResponse({ description: 'Internal Server error.'})
+    async findUsers(@Res() res, @Param('id') id): Promise<User[]> {
+        try {
+            const r = await this.service.getUsersByGame(id);
+            return res.status(HttpStatus.OK).json(r);
+        } catch(e) {
+            return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ error: e.message.error.toString(), stack: e.stack});
+        }
+    }
+
     @Post()
     @ApiBody({ type: [User] })
     @ApiCreatedResponse({ description: 'Successfully.'})

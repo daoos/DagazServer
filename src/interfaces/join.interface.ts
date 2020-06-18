@@ -1,9 +1,15 @@
 import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
 
-export class Player {
+export class Join {
 
     @ApiPropertyOptional()
     id: number;
+
+    @ApiPropertyOptional()
+    user_id: number;
+
+    @ApiPropertyOptional()
+    user: string;
 
     @ApiProperty()
     session_id: number;

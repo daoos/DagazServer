@@ -6,7 +6,7 @@ export class games {
     id: number;
 
     @Index()
-    @Column()
+    @Column({ nullable: true })
     parent_id: number;
     @ManyToOne(type => games)
     @JoinColumn({ name: "parent_id" })

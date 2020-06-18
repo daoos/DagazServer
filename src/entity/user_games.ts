@@ -25,7 +25,7 @@ export class user_games {
     session: game_sessions;
 
     @Index()
-    @Column()
+    @Column({ nullable: true })
     result_id: number;
     @ManyToOne(type => game_results)
     @JoinColumn({ name: "result_id" })
