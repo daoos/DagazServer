@@ -34,7 +34,7 @@ export class PreferencesController {
     @ApiCreatedResponse({ description: 'Successfully.'})
     @ApiUnauthorizedResponse({ description: 'Unauthorized.'})
     @ApiInternalServerErrorResponse({ description: 'Internal Server error.'})
-    async update(@Req() request: Request, @Res() res, @Body() x: Pref): Promise<Pref> {
+    async create(@Req() request: Request, @Res() res, @Body() x: Pref): Promise<Pref> {
         const user: any = request.user;
         try {
             const r = await this.service.addPref(user.id, x);

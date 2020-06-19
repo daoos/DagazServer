@@ -23,7 +23,13 @@ export class Sess {
     @ApiPropertyOptional()
     creator: string;
 
-    @ApiProperty()
+    @ApiPropertyOptional()
+    changed: Date;
+
+    @ApiPropertyOptional()
+    closed: Date;
+
+    @ApiPropertyOptional()
     players_total: number;
 
     @ApiPropertyOptional()

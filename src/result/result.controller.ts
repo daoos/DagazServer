@@ -1,27 +1,33 @@
-import { Controller, UseGuards, Get, Res, Param, HttpStatus, Post, Body, Req } from '@nestjs/common';
-import { ApiSecurity, ApiOkResponse, ApiUnauthorizedResponse, ApiInternalServerErrorResponse, ApiBody, ApiCreatedResponse, ApiNotFoundResponse } from '@nestjs/swagger';
-import { JoinService } from './join.service';
+import { Controller, UseGuards, Get, Res, Param, Req, HttpStatus, Post, Body } from '@nestjs/common';
+import { ApiSecurity, ApiOkResponse, ApiUnauthorizedResponse, ApiInternalServerErrorResponse, ApiNotFoundResponse, ApiBody, ApiCreatedResponse } from '@nestjs/swagger';
+import { ResultService } from './result.service';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
-import { Join } from '../interfaces/join.interface';
+import { Result } from '../interfaces/result.interface';
 import { Request } from 'express';
 
 @ApiSecurity('bearer')
-@Controller('api/join')
-export class JoinController {
-    
+@Controller('api/result')
+export class ResultController {
+
     constructor(
-        private readonly service: JoinService
+        private readonly service: ResultService
     ) {}
 
     @UseGuards(JwtAuthGuard)
     @Get(':id')
     @ApiOkResponse({ description: 'Successfully.'})
     @ApiUnauthorizedResponse({ description: 'Unauthorized.'})
+    @ApiNotFoundResponse({ description: 'Not Found.'})
     @ApiInternalServerErrorResponse({ description: 'Internal Server error.'})
-    async findJoined(@Res() res, @Param('id') id): Promise<Join[]> {
+    async getMoves(@Req() request: Request, @Res() res, @Param('id') id): Promise<Result> {
+        const user: any = request.user;
         try {
-            const r = await this.service.getJoinedBySession(id);
-            return res.status(HttpStatus.OK).json(r);
+            const r = await this.service.getResult(user.id, id);
+            if (!r) {
+                return res.status(HttpStatus.NOT_FOUND).json();
+            } else {
+                return res.status(HttpStatus.OK).json(r);
+            }
         } catch(e) {
             return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ error: e.message.error.toString(), stack: e.stack});
         }
@@ -29,15 +35,15 @@ export class JoinController {
 
     @UseGuards(JwtAuthGuard)
     @Post()
-    @ApiBody({ type: [Join] })
+    @ApiBody({ type: [Result] })
     @ApiCreatedResponse({ description: 'Successfully.'})
     @ApiUnauthorizedResponse({ description: 'Unauthorized.'})
     @ApiNotFoundResponse({ description: 'Not Found.'})
     @ApiInternalServerErrorResponse({ description: 'Internal Server error.'})
-    async join(@Req() request: Request, @Res() res, @Body() x: Join): Promise<Join> {
+    async join(@Req() request: Request, @Res() res, @Body() x: Result): Promise<Result> {
         const user: any = request.user;
         try {
-            const r = await this.service.joinToSession(user.id, x);
+            const r = await this.service.addResult(user.id, x);
             if (!r) {
                 return res.status(HttpStatus.NOT_FOUND).json();
             } else {

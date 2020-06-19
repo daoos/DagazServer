@@ -42,8 +42,5 @@ export class game_sessions {
     last_setup: string;
 
     @Column({ nullable: true })
-    last_turn: string;
-
-    @Column({ nullable: true })
-    last_player: string;
+    last_turn: number;
 }

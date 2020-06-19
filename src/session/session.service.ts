@@ -61,6 +61,33 @@ export class SessionService {
         }
     }
 
+    async getSesssionById(id: number): Promise<Sess> {
+        try {
+            const x = await this.service.createQueryBuilder("game_sessions")
+            .where("game_sessions.id = :id", {id: id})
+            .getOne();
+            if (!x) {
+              return null;
+            }
+            let it = new Sess();
+            it.id = x.id;
+            it.status = x.status_id;
+            it.game_id = x.game_id;
+            it.created = x.created;
+            it.changed = x.changed;
+            it.closed = x.closed;
+            it.last_setup = x.last_setup;
+            it.last_turn = x.last_turn;
+            return it;
+          } catch (error) {
+          console.error(error);
+          throw new InternalServerErrorException({
+              status: HttpStatus.BAD_REQUEST,
+              error: error
+          });
+        }
+    }
+
     async createSesssion(user:number, x: Sess): Promise<Sess> {
         try {
             const y = await this.service.createQueryBuilder("game_sessions")

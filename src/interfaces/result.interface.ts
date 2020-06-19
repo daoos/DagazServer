@@ -1,6 +1,6 @@
 import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
 
-export class Move {
+export class Result {
 
     @ApiPropertyOptional()
     id: number;
@@ -8,7 +8,7 @@ export class Move {
     @ApiProperty()
     session_id: number;
 
-    @ApiProperty()
+    @ApiPropertyOptional()
     user_id: number;
 
     @ApiProperty()

@@ -139,6 +139,7 @@ export class UsersService {
     
       async addUser(x: User): Promise<User> {
         try {
+          // TODO: Verify EMail
           const y = await this.service.createQueryBuilder("users")
           .insert()
           .into(users)
