@@ -1,9 +1,10 @@
 import { Controller, UseGuards, Get, Res, Param, Req, HttpStatus, Post, Body } from '@nestjs/common';
-import { ApiSecurity, ApiOkResponse, ApiUnauthorizedResponse, ApiInternalServerErrorResponse, ApiNotFoundResponse, ApiBody, ApiCreatedResponse } from '@nestjs/swagger';
+import { ApiSecurity, ApiOkResponse, ApiUnauthorizedResponse, ApiInternalServerErrorResponse, ApiNotFoundResponse, ApiBody, ApiCreatedResponse, ApiForbiddenResponse } from '@nestjs/swagger';
 import { ResultService } from './result.service';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { Result } from '../interfaces/result.interface';
 import { Request } from 'express';
+import { TokenGuard } from '../auth/token.guard';
 
 @ApiSecurity('bearer')
 @Controller('api/result')
@@ -13,10 +14,11 @@ export class ResultController {
         private readonly service: ResultService
     ) {}
 
-    @UseGuards(JwtAuthGuard)
+    @UseGuards(JwtAuthGuard, TokenGuard)
     @Get(':id')
     @ApiOkResponse({ description: 'Successfully.'})
     @ApiUnauthorizedResponse({ description: 'Unauthorized.'})
+    @ApiForbiddenResponse({ description: 'Forbidden.'})
     @ApiNotFoundResponse({ description: 'Not Found.'})
     @ApiInternalServerErrorResponse({ description: 'Internal Server error.'})
     async getMoves(@Req() request: Request, @Res() res, @Param('id') id): Promise<Result> {
@@ -33,11 +35,12 @@ export class ResultController {
         }
     }
 
-    @UseGuards(JwtAuthGuard)
+    @UseGuards(JwtAuthGuard, TokenGuard)
     @Post()
     @ApiBody({ type: [Result] })
     @ApiCreatedResponse({ description: 'Successfully.'})
     @ApiUnauthorizedResponse({ description: 'Unauthorized.'})
+    @ApiForbiddenResponse({ description: 'Forbidden.'})
     @ApiNotFoundResponse({ description: 'Not Found.'})
     @ApiInternalServerErrorResponse({ description: 'Internal Server error.'})
     async join(@Req() request: Request, @Res() res, @Body() x: Result): Promise<Result> {

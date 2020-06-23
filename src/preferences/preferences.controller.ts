@@ -1,9 +1,10 @@
 import { Controller, Get, Res, Param, HttpStatus, UseGuards, Req, Post, Body, Delete } from '@nestjs/common';
 import { PreferencesService } from './preferences.service';
-import { ApiOkResponse, ApiUnauthorizedResponse, ApiInternalServerErrorResponse, ApiSecurity, ApiBody, ApiCreatedResponse, ApiNotFoundResponse } from '@nestjs/swagger';
+import { ApiOkResponse, ApiUnauthorizedResponse, ApiInternalServerErrorResponse, ApiSecurity, ApiBody, ApiCreatedResponse, ApiNotFoundResponse, ApiForbiddenResponse } from '@nestjs/swagger';
 import { Pref } from '../interfaces/pref.interface';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { Request } from 'express';
+import { TokenGuard } from '../auth/token.guard';
 
 @ApiSecurity('bearer')
 @Controller('api/preferences')
@@ -13,10 +14,11 @@ export class PreferencesController {
         private readonly service: PreferencesService
     ) {}
 
-    @UseGuards(JwtAuthGuard)
+    @UseGuards(JwtAuthGuard, TokenGuard)
     @Get()
     @ApiOkResponse({ description: 'Successfully.'})
     @ApiUnauthorizedResponse({ description: 'Unauthorized.'})
+    @ApiForbiddenResponse({ description: 'Forbidden.'})
     @ApiInternalServerErrorResponse({ description: 'Internal Server error.'})
     async findAll(@Req() request: Request, @Res() res): Promise<Pref[]> {
         const user: any = request.user;
@@ -28,11 +30,12 @@ export class PreferencesController {
         }
     }
 
-    @UseGuards(JwtAuthGuard)
+    @UseGuards(JwtAuthGuard, TokenGuard)
     @Post()
     @ApiBody({ type: [Pref] })
     @ApiCreatedResponse({ description: 'Successfully.'})
     @ApiUnauthorizedResponse({ description: 'Unauthorized.'})
+    @ApiForbiddenResponse({ description: 'Forbidden.'})
     @ApiInternalServerErrorResponse({ description: 'Internal Server error.'})
     async create(@Req() request: Request, @Res() res, @Body() x: Pref): Promise<Pref> {
         const user: any = request.user;
@@ -44,11 +47,12 @@ export class PreferencesController {
         }
     }
 
-    @UseGuards(JwtAuthGuard)
+    @UseGuards(JwtAuthGuard, TokenGuard)
     @Delete(':id')
     @ApiOkResponse({ description: 'Successfully.'})
     @ApiUnauthorizedResponse({ description: 'Unauthorized.'})
     @ApiNotFoundResponse({ description: 'Not Found.'})
+    @ApiForbiddenResponse({ description: 'Forbidden.'})
     @ApiInternalServerErrorResponse({ description: 'Internal Server error.'})
     async delete(@Req() request: Request, @Res() res, @Param('id') id): Promise<Pref> {
         const user: any = request.user;

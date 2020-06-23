@@ -1,9 +1,10 @@
 import { Controller, UseGuards, Get, Req, Res, HttpStatus, Post, Body, Delete, Param } from '@nestjs/common';
-import { ApiSecurity, ApiOkResponse, ApiUnauthorizedResponse, ApiInternalServerErrorResponse, ApiBody, ApiCreatedResponse, ApiNotFoundResponse } from '@nestjs/swagger';
+import { ApiSecurity, ApiOkResponse, ApiUnauthorizedResponse, ApiInternalServerErrorResponse, ApiBody, ApiCreatedResponse, ApiNotFoundResponse, ApiForbiddenResponse } from '@nestjs/swagger';
 import { ChallengeService } from './challenge.service';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { Request } from 'express';
 import { Challenge } from '../interfaces/challenge.interface';
+import { TokenGuard } from '../auth/token.guard';
 
 @ApiSecurity('bearer')
 @Controller('api/challenge')
@@ -13,10 +14,11 @@ export class ChallengeController {
         private readonly service: ChallengeService
     ) {}
 
-    @UseGuards(JwtAuthGuard)
+    @UseGuards(JwtAuthGuard, TokenGuard)
     @Get()
     @ApiOkResponse({ description: 'Successfully.'})
     @ApiUnauthorizedResponse({ description: 'Unauthorized.'})
+    @ApiForbiddenResponse({ description: 'Forbidden.'})
     @ApiInternalServerErrorResponse({ description: 'Internal Server error.'})
     async findAll(@Req() request: Request, @Res() res): Promise<Challenge[]> {
         const user: any = request.user;
@@ -28,11 +30,12 @@ export class ChallengeController {
         }
     }
 
-    @UseGuards(JwtAuthGuard)
+    @UseGuards(JwtAuthGuard, TokenGuard)
     @Post()
     @ApiBody({ type: [Challenge] })
     @ApiCreatedResponse({ description: 'Successfully.'})
     @ApiUnauthorizedResponse({ description: 'Unauthorized.'})
+    @ApiForbiddenResponse({ description: 'Forbidden.'})
     @ApiInternalServerErrorResponse({ description: 'Internal Server error.'})
     async create(@Req() request: Request, @Res() res, @Body() x: Challenge): Promise<Challenge> {
         const user: any = request.user;
@@ -44,11 +47,12 @@ export class ChallengeController {
         }
     }
 
-    @UseGuards(JwtAuthGuard)
+    @UseGuards(JwtAuthGuard, TokenGuard)
     @Delete(':id')
     @ApiOkResponse({ description: 'Successfully.'})
     @ApiUnauthorizedResponse({ description: 'Unauthorized.'})
     @ApiNotFoundResponse({ description: 'Not Found.'})
+    @ApiForbiddenResponse({ description: 'Forbidden.'})
     @ApiInternalServerErrorResponse({ description: 'Internal Server error.'})
     async delete(@Req() request: Request, @Res() res, @Param('id') id): Promise<Challenge> {
         const user: any = request.user;

@@ -2,14 +2,52 @@ import { Injectable, Inject, InternalServerErrorException, HttpStatus } from '@n
 import { Repository } from 'typeorm';
 import { users } from '../entity/users';
 import { User } from '../interfaces/user.interface';
+import { tokens } from '../entity/tokens';
 
 @Injectable()
 export class UsersService {
 
     constructor(
         @Inject('USERS_REPOSITORY')
-        private readonly service: Repository<users>
+        private readonly service: Repository<users>,
+        @Inject('TOKENS_REPOSITORY')
+        private readonly tokens: Repository<tokens>,
     ) {}  
+
+    async getToken(user: number, dev: string, val: string): Promise<tokens> {
+      const x = await this.tokens.createQueryBuilder("tokens")
+      .where("tokens.user_id = :user_id and tokens.device_str = :dev and value_str = :val", { user_id: user,dev: dev, val: val })
+      .getOne();
+      if (!x) {
+        return null;
+      }
+      return x;
+    }
+
+    async addToken(user: number, dev: string, type: number, val: string): Promise<tokens> {
+      let x: tokens = new tokens();
+      x.type_id = type;
+      x.user_id = user;
+      x.device_str = dev;
+      x.value_str = val;
+      const y = await this.service.createQueryBuilder("tokens")
+      .insert()
+      .into(tokens)
+      .values(x)
+      .returning('*')
+      .execute();
+      x.id = y.generatedMaps[0].id;
+      return x;
+    }
+
+    async clearTokens(user: number, dev: string): Promise<boolean> {
+      await this.tokens.createQueryBuilder("tokens")
+      .delete()
+      .from(tokens)
+      .where("tokens.user_id = :user_id and tokens.device_str = :dev", { user_id: user,dev: dev })
+      .execute();
+      return true;
+    }
       
     async findAll(): Promise<User[]> {
         try {
