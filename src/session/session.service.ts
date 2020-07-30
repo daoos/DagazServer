@@ -11,7 +11,7 @@ export class SessionService {
         private readonly service: Repository<game_sessions>
     ) {}  
 
-    async getInitSesssions(id: number): Promise<Sess[]> {
+    async getInitSessions(id: number): Promise<Sess[]> {
         try {
             const x = await this.service.query(
                 `select a.id as id, a.status_id as status_id, a.game_id as game_id, 

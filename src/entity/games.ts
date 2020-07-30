@@ -18,9 +18,15 @@ export class games {
     @Column({ type: "text", unique: true })
     filename: string;
 
-    @Column()
+    @Column({ nullable: false })
     players_total: number;
 
     @Column({default: () => "now()"})
     created: Date;
+
+    @Column({ nullable: true })
+    main_time: number;
+
+    @Column({ nullable: true })
+    additional_time: number;
 }

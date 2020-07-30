@@ -23,7 +23,7 @@ export class SessionController {
     async findAll(@Req() request: Request, @Res() res): Promise<Sess[]> {
         const user: any = request.user;
         try {
-            const r = await this.service.getInitSesssions(user.id);
+            const r = await this.service.getInitSessions(user.id);
             return res.status(HttpStatus.OK).json(r);
         } catch(e) {
             return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ error: e.message.error.toString(), stack: e.stack});

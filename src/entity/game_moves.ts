@@ -24,12 +24,15 @@ export class game_moves {
     @Column()
     turn_num: number;
 
-    @Column({ type: "text" })
+    @Column({ type: "text", nullable: false  })
     move_str: string
 
-    @Column({ type: "text" })
+    @Column({ type: "text", nullable: true })
     setup_str: string;
 
     @Column({ type: "text", nullable: true })
     note: string;
+
+    @Column({ nullable: false })
+    time_delta: number;
 }

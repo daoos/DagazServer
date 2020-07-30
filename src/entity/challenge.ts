@@ -16,7 +16,7 @@ export class challenge {
     session: game_sessions;
 
     @Index()
-    @Column({ nullable: false })
+    @Column({ nullable: true })
     user_id: number;
     @ManyToOne(type => users)
     @JoinColumn({ name: "user_id" })

@@ -39,4 +39,7 @@ export class user_games {
 
     @Column({ default: 0 })
     is_ai: number;
+
+    @Column({ nullable: true })
+    time_limit: number;
 }

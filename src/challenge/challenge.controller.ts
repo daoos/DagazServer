@@ -18,7 +18,6 @@ export class ChallengeController {
     @Get()
     @ApiOkResponse({ description: 'Successfully.'})
     @ApiUnauthorizedResponse({ description: 'Unauthorized.'})
-    @ApiForbiddenResponse({ description: 'Forbidden.'})
     @ApiInternalServerErrorResponse({ description: 'Internal Server error.'})
     async findAll(@Req() request: Request, @Res() res): Promise<Challenge[]> {
         const user: any = request.user;

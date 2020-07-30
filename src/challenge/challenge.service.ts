@@ -17,8 +17,8 @@ export class ChallengeService {
                 `select a.id as id, a.session_id as session_id, a.user_id as user_id
                         b.name as user, a.player_num as player_num
                  from   challenge a
-                 inner  join users b on (b.id = a.user_id)
-                 where  a.user_id = $1`, [id]);
+                 left   join users b on (b.id = a.user_id)
+                 where  coalesce(a.user_id, $1) = $2`, [id, id]);
             if (!x || x.length != 1) {
                 return null;
             }
