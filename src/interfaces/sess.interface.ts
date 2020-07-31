@@ -33,11 +33,8 @@ export class Sess {
     players_total: number;
 
     @ApiPropertyOptional()
-    player_num: number;
+    winner: number;
 
     @ApiPropertyOptional()
-    last_setup: string;
-
-    @ApiPropertyOptional()
-    last_turn: number;
+    loser: number;
 }

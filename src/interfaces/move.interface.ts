@@ -17,9 +17,18 @@ export class Move {
     @ApiProperty()
     move_str: string;
 
-    @ApiProperty()
+    @ApiPropertyOptional()
     setup_str: string;
 
     @ApiPropertyOptional()
     note: string;
+
+    @ApiPropertyOptional()
+    time_delta: number;
+
+    @ApiPropertyOptional()
+    time_limit: number;
+
+    @ApiPropertyOptional()
+    additional_time: number;
 }

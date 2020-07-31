@@ -21,7 +21,7 @@ export class game_moves {
     @JoinColumn({ name: "user_id" })
     user: users;
 
-    @Column()
+    @Column({ nullable: false })
     turn_num: number;
 
     @Column({ type: "text", nullable: false  })

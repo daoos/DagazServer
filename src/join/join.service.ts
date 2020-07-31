@@ -87,12 +87,25 @@ export class JoinService {
         return y[0].player_num;
     }
 
+    async getMainTime(id: number): Promise<number> {
+        const x = await this.service.query(
+            `select b.main_time * 1000 as main_time
+             from game_sessions a
+             inner join games b on (b.id = a.game_id)
+             where a.id = :id`, [id]);
+        if (!x || x.length != 1) {
+            return null;
+        }
+        return x[0].main_time;
+    }
+
     async joinToSession(user: number, x: Join): Promise<Join> {
+        x.user_id = user;
+        if (!x.is_ai) {
+            x.is_ai = 0;
+        }
         try {
-            x.user_id = user;
-            if (!x.is_ai) {
-                x.is_ai = 0;
-            }
+            const t = await this.getMainTime(x.session_id);
             if (!x.player_num) {
                 x.player_num = await this.getAvailPlayer(x.session_id);
             }
@@ -106,6 +119,7 @@ export class JoinService {
                 user_id: x.user_id,
                 session_id: x.session_id,
                 player_num: x.player_num,
+                time_limit: t,
                 is_ai: x.is_ai
             })
             .returning('*')

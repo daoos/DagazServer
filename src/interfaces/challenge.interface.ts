@@ -8,7 +8,7 @@ export class Challenge {
     @ApiProperty()
     session_id: number;
 
-    @ApiProperty()
+    @ApiPropertyOptional()
     user_id: number;
 
     @ApiPropertyOptional()

@@ -14,10 +14,11 @@ export class ChallengeService {
     async getChallengesByUser(id: number): Promise<Challenge[]> {
         try {
             const x = await this.service.query(
-                `select a.id as id, a.session_id as session_id, a.user_id as user_id
-                        b.name as user, a.player_num as player_num
+                `select a.id as id, a.session_id as session_id, b.user_id as user_id
+                        c.name as user, a.player_num as player_num
                  from   challenge a
-                 left   join users b on (b.id = a.user_id)
+                 inner  join game_sessions b on (b.id = a.session_id)
+                 inner  join users c on (c.id = b.user_id)
                  where  coalesce(a.user_id, $1) = $2`, [id, id]);
             if (!x || x.length != 1) {
                 return null;
@@ -71,7 +72,6 @@ export class ChallengeService {
             .into(challenge)
             .values({
                 session_id: x.session_id,
-                user_id: x.user_id,
                 player_num: x.player_num
             })
             .returning('*')
