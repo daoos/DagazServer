@@ -190,7 +190,12 @@ export class MoveService {
             .returning('*')
             .execute();
             x.id = y.generatedMaps[0].id;
-            const time_limit = await this.getTimeLimit(x.user_id, x.session_id) - time_delta;
+            let time_limit = await this.getTimeLimit(x.user_id, x.session_id) 
+            if (time_limit > 0) {
+                time_limit -= time_delta;
+            } else {
+                time_limit = 0;
+            }
             await this.service.createQueryBuilder("user_games")
             .update(user_games)
             .set({ 
