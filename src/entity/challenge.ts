@@ -27,4 +27,7 @@ export class challenge {
 
     @Column({default: () => "now()"})
     created: Date;
+
+    @Column({ nullable: true })
+    accepted: Date;
 }

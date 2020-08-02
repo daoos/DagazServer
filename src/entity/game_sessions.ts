@@ -44,8 +44,8 @@ export class game_sessions {
     @Column({ nullable: true })
     last_turn: number;
 
-    @Column({ nullable: false })
-    last_time: Date;
+    @Column({ type: "bigint", nullable: false })
+    last_time: number;
 
     @Column({ nullable: true })
     last_user: number;

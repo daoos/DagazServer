@@ -3,6 +3,7 @@ import { user_games } from '../entity/user_games';
 import { Repository } from 'typeorm';
 import { Join } from '../interfaces/join.interface';
 import { game_sessions } from '../entity/game_sessions';
+import { challenge } from '../entity/challenge';
 
 @Injectable()
 export class JoinService {
@@ -92,7 +93,7 @@ export class JoinService {
             `select b.main_time * 1000 as main_time
              from game_sessions a
              inner join games b on (b.id = a.game_id)
-             where a.id = :id`, [id]);
+             where a.id = $1`, [id]);
         if (!x || x.length != 1) {
             return null;
         }
@@ -126,6 +127,14 @@ export class JoinService {
             .execute();
             x.id = y.generatedMaps[0].id;
             await this.activateSession(x.session_id);
+            await this.service.createQueryBuilder("challenge")
+            .update(challenge)
+            .set({ 
+                accepted: new Date(),
+                user_id: x.user_id
+            })
+            .where("session_id = :id and player_num = :num", {id: x.session_id, num: x.player_num})
+            .execute();
             return x;
         } catch (error) {
             console.error(error);

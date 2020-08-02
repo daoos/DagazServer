@@ -44,7 +44,7 @@ export class MoveController {
         try {
             const r = await this.service.getUnconfirmedMove(id);
             if (!r) {
-                return res.status(HttpStatus.NOT_FOUND).json(r);
+                return res.status(HttpStatus.NOT_FOUND).json();
             } else {
                 return res.status(HttpStatus.OK).json(r);
             }
@@ -62,9 +62,9 @@ export class MoveController {
     async getConfirmedMove(@Req() request: Request, @Res() res, @Param('id') id): Promise<Move> {
         const user: any = request.user;
         try {
-            const r = await this.service.getConfirmedMove(user, id);
+            const r = await this.service.getConfirmedMove(user.id, id);
             if (!r) {
-                return res.status(HttpStatus.NOT_FOUND).json(r);
+                return res.status(HttpStatus.NOT_FOUND).json();
             } else {
                 return res.status(HttpStatus.OK).json(r);
             }
@@ -107,7 +107,7 @@ export class MoveController {
         try {
             const r = await this.service.confirmMove(x);
             if (!r) {
-                return res.status(HttpStatus.NOT_FOUND).json(r);
+                return res.status(HttpStatus.NOT_FOUND).json();
             } else {
                 return res.status(HttpStatus.OK).json(r);
             }

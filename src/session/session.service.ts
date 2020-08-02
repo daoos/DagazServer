@@ -116,7 +116,7 @@ export class SessionService {
     async getMainTime(id: number): Promise<number> {
         const x = await this.service.query(
             `select main_time * 1000 as main_time
-             from games where id = :id`, [id]);
+             from games where id = $1`, [id]);
         if (!x || x.length != 1) {
             return null;
         }
@@ -178,6 +178,7 @@ export class SessionService {
                 await this.service.createQueryBuilder("user_games")
                 .update(user_games)
                 .set({ 
+                    score: x.score ? x.score : null,
                     result_id: 3
                  })
                 .where("session_id = :id", {id: x.id})
@@ -188,6 +189,7 @@ export class SessionService {
                 await this.service.createQueryBuilder("user_games")
                 .update(user_games)
                 .set({ 
+                    score: x.score ? x.score : null,
                     result_id: 1
                  })
                 .where("session_id = :id and user_id = :user", {id: x.id, user: x.winner})
@@ -195,6 +197,7 @@ export class SessionService {
                 await this.service.createQueryBuilder("user_games")
                 .update(user_games)
                 .set({ 
+                    score: x.score ? -x.score : null,
                     result_id: 2
                  })
                 .where("session_id = :id and user_id <> :user", {id: x.id, user: x.winner})
@@ -205,6 +208,7 @@ export class SessionService {
                 await this.service.createQueryBuilder("user_games")
                 .update(user_games)
                 .set({ 
+                    score: x.score ? -x.score : null,
                     result_id: 2
                  })
                 .where("session_id = :id and user_id = :user", {id: x.id, user: x.loser})
@@ -212,6 +216,7 @@ export class SessionService {
                 await this.service.createQueryBuilder("user_games")
                 .update(user_games)
                 .set({ 
+                    score: x.score ? x.score : null,
                     result_id: 1
                  })
                 .where("session_id = :id and user_id <> :user", {id: x.id, user: x.loser})

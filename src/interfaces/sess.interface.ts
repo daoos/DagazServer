@@ -37,4 +37,7 @@ export class Sess {
 
     @ApiPropertyOptional()
     loser: number;
+
+    @ApiPropertyOptional()
+    score: number;
 }

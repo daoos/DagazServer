@@ -65,10 +65,10 @@ export class MoveService {
                         a.move_str, a.setup_str, a.note, a.time_delta
                  from game_moves a
                  inner join game_sessions b on (b.id = a.session_id and b.closed is null)
-                 where a.user_id <> :user and a.session_id = :sess
+                 where a.session_id = $1
                  and not a.setup_str is null
-                 order by a.id is desc`, [user, sess]);
-            if (!x || x.length != 1) {
+                 order by a.id desc`, [sess]);
+            if (!x || x.length != 1 || x[0].user_id == user) {
                 return null;
             }
             let it = new Move();
@@ -95,8 +95,8 @@ export class MoveService {
         const x = await this.service.query(
             `select time_limit 
              from user_games 
-             where session_id = :sess 
-             and user_id = :user`, [sess, user]);
+             where session_id = $1 
+             and user_id = $2`, [sess, user]);
         if (!x || x.length != 1) {
             return null;
         }
@@ -108,7 +108,7 @@ export class MoveService {
             `select b.additional_time * 1000 as additional_time
              from  game_sessions a
              inner join games b on (b.id = a.game_id)
-             where a.id = :sess`, [sess]);
+             where a.id = $1`, [sess]);
         if (!x || x.length != 1) {
             return null;
         }
@@ -122,9 +122,9 @@ export class MoveService {
                         a.move_str, a.setup_str, a.note, a.time_delta
                  from game_moves a
                  inner join game_sessions b on (b.id = a.session_id and b.closed is null)
-                 where a.session_id = :sess
+                 where a.session_id = $1
                  and a.setup_str is null
-                 order by a.id is desc`, [sess]);
+                 order by a.id desc`, [sess]);
             if (!x || x.length != 1) {
                 return null;
             }
@@ -151,7 +151,7 @@ export class MoveService {
 
     async getLastTime(id: number): Promise<number> {
         const x = await this.service.query(
-            `select last_time from game_sessions where id = :id`, [id]);
+            `select last_time from game_sessions where id = $1`, [id]);
         if (!x || x.length != 1) {
             return null;
         }
@@ -160,11 +160,23 @@ export class MoveService {
 
     async checkSession(id: number): Promise<boolean> {
         const x = await this.service.query(
-            `select id from game_sessions where id = :id and closed is null`, [id]);
+            `select id from game_sessions where id = $1 and closed is null`, [id]);
         if (!x || x.length != 1) {
             return false;
         }
         return true;
+    }
+
+    async getLastUser(id: number): Promise<number> {
+        const x = await this.service.query(
+            `select user_id
+             from game_moves 
+             where session_id = $1
+             order by id desc`, [id]);
+        if (!x || x.length != 1) {
+            return null;
+        }
+        return x[0].user_id;
     }
 
     async addMove(user: number, x: Move): Promise<Move> {
@@ -172,6 +184,10 @@ export class MoveService {
         try {
             const f = await this.checkSession(x.session_id);
             if (!f) {
+                return null;
+            }
+            const last_user = await this.getLastUser(x.session_id);
+            if (last_user !== null && last_user == user) {
                 return null;
             }
             const last_time = await this.getLastTime(x.session_id);

@@ -14,15 +14,13 @@ export class ChallengeService {
     async getChallengesByUser(id: number): Promise<Challenge[]> {
         try {
             const x = await this.service.query(
-                `select a.id as id, a.session_id as session_id, b.user_id as user_id
+                `select a.id as id, a.session_id as session_id, b.user_id as user_id,
                         c.name as user, a.player_num as player_num
                  from   challenge a
                  inner  join game_sessions b on (b.id = a.session_id)
                  inner  join users c on (c.id = b.user_id)
-                 where  coalesce(a.user_id, $1) = $2`, [id, id]);
-            if (!x || x.length != 1) {
-                return null;
-            }
+                 where  a.accepted is null
+                 and    coalesce(a.user_id, $1) = $2`, [id, id]);
             let l: Challenge[] = x.map(x => {
                 let it = new Challenge();
                 it.id = x.id;
