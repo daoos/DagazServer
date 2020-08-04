@@ -40,7 +40,7 @@ export class MoveController {
     @ApiUnauthorizedResponse({ description: 'Unauthorized.'})
     @ApiForbiddenResponse({ description: 'Forbidden.'})
     @ApiInternalServerErrorResponse({ description: 'Internal Server error.'})
-    async getUnconfirmedMove(@Res() res, @Param('id') id): Promise<Move> {
+    async getUnconfirmedMove(@Res() res, @Param('id') id): Promise<Move[]> {
         try {
             const r = await this.service.getUnconfirmedMove(id);
             if (!r) {
@@ -59,7 +59,7 @@ export class MoveController {
     @ApiNotFoundResponse({ description: 'Not Found.'})
     @ApiUnauthorizedResponse({ description: 'Unauthorized.'})
     @ApiInternalServerErrorResponse({ description: 'Internal Server error.'})
-    async getConfirmedMove(@Req() request: Request, @Res() res, @Param('id') id): Promise<Move> {
+    async getConfirmedMove(@Req() request: Request, @Res() res, @Param('id') id): Promise<Move[]> {
         const user: any = request.user;
         try {
             const r = await this.service.getConfirmedMove(user.id, id);

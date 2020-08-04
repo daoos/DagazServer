@@ -18,7 +18,8 @@ export class SessionService {
             const x = await this.service.query(
                 `select a.id as id, a.status_id as status, a.game_id as game_id,
                         b.name as game, b.filename as filename, a.created as created,
-                        c.name as creator, b.players_total as players_total
+                        c.name as creator, b.players_total as players_total,
+                        a.last_setup
                  from game_sessions a
                  inner join games b on (b.id = a.game_id)
                  inner join users c on (c.id = a.user_id)
@@ -32,6 +33,7 @@ export class SessionService {
                     it.filename = x.filename;
                     it.created = x.created;
                     it.players_total = x.players_total;
+                    it.last_setup = x.last_setup;
                     return it;
                 });
                 return l;

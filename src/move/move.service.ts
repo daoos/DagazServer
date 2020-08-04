@@ -58,7 +58,11 @@ export class MoveService {
         return true;
     }
 
-    async getConfirmedMove(user: number, sess: number): Promise<Move> {
+    async getConfirmedMove(user: number, sess: number): Promise<Move[]> {
+        const f = await this.checkSession(sess);
+        if (!f) {
+            return null;
+        }
         try {
             const x = await this.service.query(
                 `select a.id, a.session_id, a.user_id, a.turn_num,
@@ -68,20 +72,24 @@ export class MoveService {
                  where a.session_id = $1
                  and not a.setup_str is null
                  order by a.id desc`, [sess]);
-            if (!x || x.length != 1 || x[0].user_id == user) {
+            if (!x) {
                 return null;
             }
-            let it = new Move();
-            it.id = x[0].id;
-            it.session_id = x[0].session_id;
-            it.user_id = x[0].user_id;
-            it.turn_num = x[0].turn_num;
-            it.move_str = x[0].move_str;
-            it.setup_str = x[0].setup_str;
-            it.note = x[0].note;
-            it.time_delta = x[0].time_delta;
-            await this.touchSession(user, sess);
-            return it;
+            let l = new Array();
+            if (x.length > 0 && x[0].user_id != user) {
+                let it = new Move();
+                it.id = x[0].id;
+                it.session_id = x[0].session_id;
+                it.user_id = x[0].user_id;
+                it.turn_num = x[0].turn_num;
+                it.move_str = x[0].move_str;
+                it.setup_str = x[0].setup_str;
+                it.note = x[0].note;
+                it.time_delta = x[0].time_delta;
+                l.push(it);
+                await this.touchSession(user, sess);
+            }
+            return l;
         } catch (error) {
           console.error(error);
           throw new InternalServerErrorException({
@@ -115,8 +123,12 @@ export class MoveService {
         return x[0].additional_time;
     }
 
-    async getUnconfirmedMove(sess: number): Promise<Move> {
+    async getUnconfirmedMove(sess: number): Promise<Move[]> {
         try {
+            const f = await this.checkSession(sess);
+            if (!f) {
+                return null;
+            }
             const x = await this.service.query(
                 `select a.id, a.session_id, a.user_id, a.turn_num,
                         a.move_str, a.setup_str, a.note, a.time_delta
@@ -125,21 +137,25 @@ export class MoveService {
                  where a.session_id = $1
                  and a.setup_str is null
                  order by a.id desc`, [sess]);
-            if (!x || x.length != 1) {
+            if (!x) {
                 return null;
             }
-            let it = new Move();
-            it.id = x[0].id;
-            it.session_id = x[0].session_id;
-            it.user_id = x[0].user_id;
-            it.turn_num = x[0].turn_num;
-            it.move_str = x[0].move_str;
-            it.setup_str = x[0].setup_str;
-            it.note = x[0].note;
-            it.time_delta = x[0].time_delta;
-            it.time_limit = await this.getTimeLimit(it.user_id, it.session_id);
-            it.additional_time = await this.getAdditionalTime(it.session_id);
-            return it;
+            let l = new Array();
+            if (x.length > 0) {
+                let it = new Move();
+                it.id = x[0].id;
+                it.session_id = x[0].session_id;
+                it.user_id = x[0].user_id;
+                it.turn_num = x[0].turn_num;
+                it.move_str = x[0].move_str;
+                it.setup_str = x[0].setup_str;
+                it.note = x[0].note;
+                it.time_delta = x[0].time_delta;
+                it.time_limit = await this.getTimeLimit(it.user_id, it.session_id);
+                it.additional_time = await this.getAdditionalTime(it.session_id);
+                l.push(it);
+            }
+            return l;
         } catch (error) {
           console.error(error);
           throw new InternalServerErrorException({
@@ -192,6 +208,10 @@ export class MoveService {
             }
             const last_time = await this.getLastTime(x.session_id);
             const time_delta = Date.now() - last_time;
+            let time_limit = await this.getTimeLimit(x.user_id, x.session_id);
+            if (time_limit === null) {
+                return null;
+            }
             const y = await this.service.createQueryBuilder("game_moves")
             .insert()
             .into(game_moves)
@@ -206,7 +226,9 @@ export class MoveService {
             .returning('*')
             .execute();
             x.id = y.generatedMaps[0].id;
-            let time_limit = await this.getTimeLimit(x.user_id, x.session_id);
+            if (time_limit < 0) {
+                time_limit = 0;
+            }
             time_limit -= time_delta;
             await this.service.createQueryBuilder("user_games")
             .update(user_games)

@@ -40,4 +40,7 @@ export class Sess {
 
     @ApiPropertyOptional()
     score: number;
+
+    @ApiPropertyOptional()
+    last_setup: string;
 }
