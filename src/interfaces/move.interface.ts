@@ -11,7 +11,7 @@ export class Move {
     @ApiProperty()
     user_id: number;
 
-    @ApiProperty()
+    @ApiPropertyOptional()
     turn_num: number;
 
     @ApiProperty()

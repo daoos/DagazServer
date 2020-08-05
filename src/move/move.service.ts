@@ -195,6 +195,17 @@ export class MoveService {
         return x[0].user_id;
     }
 
+    async getTurnNumber(id: number): Promise<number> {
+        const x = await this.service.query(
+            `select coalesce(max(turn_num), 0) + 1 as turn_num
+             from   game_moves 
+             where  session_id = $1`, [id]);
+        if (!x || x.length != 1) {
+            return null;
+        }
+        return x[0].turn_num;
+    }
+
     async addMove(user: number, x: Move): Promise<Move> {
         x.user_id = user;
         try {
@@ -212,6 +223,7 @@ export class MoveService {
             if (time_limit === null) {
                 return null;
             }
+            const turn_num = await this.getTurnNumber(x.session_id);
             const y = await this.service.createQueryBuilder("game_moves")
             .insert()
             .into(game_moves)
@@ -219,7 +231,7 @@ export class MoveService {
                 session_id: x.session_id,
                 user_id: x.user_id,
                 move_str: x.move_str,
-                turn_num: x.turn_num,
+                turn_num: turn_num,
                 note: x.note,
                 time_delta: time_delta
             })
