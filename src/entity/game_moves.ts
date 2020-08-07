@@ -35,4 +35,7 @@ export class game_moves {
 
     @Column({ nullable: false })
     time_delta: number;
+
+    @Column({ nullable: true })
+    accepted: Date;
 }

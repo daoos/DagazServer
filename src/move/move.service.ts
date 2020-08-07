@@ -58,6 +58,17 @@ export class MoveService {
         return true;
     }
 
+    async acceptMove(id: number): Promise<boolean> {
+        await this.service.createQueryBuilder("game_moves")
+        .update(game_moves)
+        .set({ 
+            accepted: new Date()
+        })
+        .where("id = :id", {id: id})
+        .execute();
+        return true;
+    }
+
     async getConfirmedMove(user: number, sess: number): Promise<Move[]> {
         const f = await this.checkSession(sess);
         if (!f) {
@@ -70,7 +81,8 @@ export class MoveService {
                  from game_moves a
                  inner join game_sessions b on (b.id = a.session_id and b.closed is null)
                  where a.session_id = $1
-                 and not a.setup_str is null
+                 and not a.setup_str is null 
+                 and a.accepted is null
                  order by a.id desc`, [sess]);
             if (!x) {
                 return null;
@@ -87,6 +99,7 @@ export class MoveService {
                 it.note = x[0].note;
                 it.time_delta = x[0].time_delta;
                 l.push(it);
+                await this.acceptMove(it.id);
                 await this.touchSession(user, sess);
             }
             return l;
