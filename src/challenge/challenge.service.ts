@@ -20,7 +20,8 @@ export class ChallengeService {
                  inner  join game_sessions b on (b.id = a.session_id)
                  inner  join users c on (c.id = b.user_id)
                  where  a.accepted is null
-                 and    coalesce(a.user_id, $1) = $2`, [id, id]);
+                 and    coalesce(a.user_id, $1) = $2
+                 order  by a.session_id`, [id, id]);
             let l: Challenge[] = x.map(x => {
                 let it = new Challenge();
                 it.id = x.id;
