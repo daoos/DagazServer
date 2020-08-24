@@ -29,4 +29,7 @@ export class tokens {
 
     @Column({default: () => "now()"})
     created: Date;
+
+    @Column({default: () => "now()", nullable: false })
+    expired: Date;
 }

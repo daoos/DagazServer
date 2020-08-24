@@ -22,7 +22,7 @@ export class TokenGuard implements CanActivate {
         }).map((s: string) => {
             return s.substring(7);
         })[0];
-        const x = await this.usersService.getToken(u.id, device, token);
+        const x = await this.usersService.checkToken(u.id, device, token);
         return x !== null;
     }
 }

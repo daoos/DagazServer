@@ -67,18 +67,59 @@ export class SessionController {
         }
     }
 
-    @UseGuards(JwtAuthGuard, RolesGuard, TokenGuard)
-    @Roles('admin')
+    @UseGuards(JwtAuthGuard, TokenGuard)
+    @Post('anonymous')
+    @ApiBody({ type: [Sess] })
+    @ApiCreatedResponse({ description: 'Successfully.'})
+    @ApiNotFoundResponse({ description: 'Not Found.'})
+    @ApiUnauthorizedResponse({ description: 'Unauthorized.'})
+    @ApiInternalServerErrorResponse({ description: 'Internal Server error.'})
+    async anonymous(@Req() request: Request, @Res() res, @Body() x: Sess): Promise<Sess> {
+        const user: any = request.user;
+        try {
+            const r = await this.service.anonymous(user.id, x);
+            if (!r) {
+                return res.status(HttpStatus.NOT_FOUND).json();
+            } else {
+                return res.status(HttpStatus.CREATED).json(r);
+            }
+        } catch (e) {
+            return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ error: e.message.error.toString(), stack: e.stack});
+        }
+    }
+
+    @UseGuards(JwtAuthGuard, TokenGuard)
+    @Post('recovery')
+    @ApiBody({ type: [Sess] })
+    @ApiCreatedResponse({ description: 'Successfully.'})
+    @ApiUnauthorizedResponse({ description: 'Unauthorized.'})
+    @ApiInternalServerErrorResponse({ description: 'Internal Server error.'})
+    async recovery(@Req() request: Request, @Res() res, @Body() x: Sess): Promise<Sess[]> {
+        const user: any = request.user;
+        try {
+            const r = await this.service.recovery(user.id, x);
+            return res.status(HttpStatus.CREATED).json(r);
+        } catch (e) {
+            return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ error: e.message.error.toString(), stack: e.stack});
+        }
+    }
+
+    @UseGuards(JwtAuthGuard, TokenGuard)
     @Post('close')
     @ApiBody({ type: [Sess] })
     @ApiOkResponse({ description: 'Successfully.'})
     @ApiUnauthorizedResponse({ description: 'Unauthorized.'})
     @ApiForbiddenResponse({ description: 'Forbidden.'})
     @ApiInternalServerErrorResponse({ description: 'Internal Server error.'})
-    async close(@Res() res, @Body() x: Sess): Promise<Sess> {
+    async close(@Req() request: Request, @Res() res, @Body() x: Sess): Promise<Sess> {
+        const user: any = request.user;
         try {
-            const r = await this.service.closeSession(x);
-            return res.status(HttpStatus.OK).json(r);
+            const r = await this.service.closeSession(user.id, x);
+            if (!r) {
+                return res.status(HttpStatus.FORBIDDEN).json(x);
+            } else {
+                return res.status(HttpStatus.OK).json(r);
+            }
         } catch (e) {
             return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ error: e.message.error.toString(), stack: e.stack});
         }

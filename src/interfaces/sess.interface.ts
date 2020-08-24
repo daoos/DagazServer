@@ -43,4 +43,10 @@ export class Sess {
 
     @ApiPropertyOptional()
     last_setup: string;
+
+    @ApiPropertyOptional()
+    player_num: number;
+
+    @ApiPropertyOptional()
+    uid: number;
 }

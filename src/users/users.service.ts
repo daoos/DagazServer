@@ -14,7 +14,19 @@ export class UsersService {
         private readonly tokens: Repository<tokens>,
     ) {}  
 
-    async getToken(user: number, dev: string, val: string): Promise<tokens> {
+    async getToken(id: number, type: number): Promise<string> {
+      const x = await this.service.query(
+        `select value_str
+         from   tokens
+         where  user_id = $1 and type_id = $2
+         and    now() < expired`, [id, type]);
+      if (!x || x.length != 1) {
+          return null;
+      }
+      return x[0].value_str;
+  }
+
+    async checkToken(user: number, dev: string, val: string): Promise<tokens> {
       const x = await this.tokens.createQueryBuilder("tokens")
       .where("tokens.user_id = :user_id and tokens.device_str = :dev and value_str = :val", { user_id: user,dev: dev, val: val })
       .getOne();
@@ -24,12 +36,35 @@ export class UsersService {
       return x;
     }
 
-    async addToken(user: number, dev: string, type: number, val: string): Promise<tokens> {
+    async createUser(username: string): Promise<User> {
+      let x: users = new users();
+      x.is_admin = 0;
+      x.name = username;
+      x.login = username;
+      x.pass = username;
+      x.is_anonymous = 1;
+      const y = await this.service.createQueryBuilder("users")
+      .insert()
+      .into(users)
+      .values(x)
+      .returning('*')
+      .execute();
+      let r: User = new User();
+      r.id = y.generatedMaps[0].id;
+      r.name = username;
+      r.username = username;
+      r.created = new Date();
+      return r;
+    }
+
+    async addToken(user: number, dev: string, type: number, val: string, sec: number): Promise<tokens> {
       let x: tokens = new tokens();
       x.type_id = type;
       x.user_id = user;
       x.device_str = dev;
       x.value_str = val;
+      x.created = new Date();
+      x.expired = new Date(x.created.getTime() + sec);
       const y = await this.service.createQueryBuilder("tokens")
       .insert()
       .into(tokens)

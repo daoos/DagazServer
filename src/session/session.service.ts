@@ -2,7 +2,6 @@ import { Injectable, Inject, InternalServerErrorException, HttpStatus } from '@n
 import { Repository } from 'typeorm';
 import { Sess } from '../interfaces/sess.interface';
 import { game_sessions } from '../entity/game_sessions';
-import { Join } from '../interfaces/join.interface';
 import { user_games } from '../entity/user_games';
 
 @Injectable()
@@ -125,19 +124,182 @@ export class SessionService {
         return x[0].main_time;
     }
 
-    async joinToSession(user:number, s: Sess): Promise<boolean> {
+    async getAvailPlayer(id: number, num: number): Promise<number> {
+        const x = await this.service.query(
+            `select b.players_total as cnt
+             from   game_sessions a
+             inner  join games b on (b.id = a.game_id)
+             where  a.id = $1`, [id]);
+        if (!x || x.length != 1) {
+            return null;
+        }
+        const cnt = x[0].cnt;
+        const y = await this.service.query(
+            `select a.player_num as player_num
+             from ( select generate_series as player_num 
+                    from   generate_series(1, $1)) a
+             left   join   user_games b on (b.player_num = a.player_num and b.session_id = $2)
+             order  by player_num`, [cnt, id]);
+        if (!y || y.length != 1) {
+             return null;
+        }
+        const z = y.filter(function(it) {
+            return it.player_num == num;
+        });
+        if (z && z.length == 1) {
+            return z[0].player_num;
+        }
+        return y[0].player_num;
+    }
+
+    async joinToSession(user:number, s: Sess): Promise<number> {
+        s.player_num = await this.getAvailPlayer(s.id, s.player_num);
         const t = await this.getMainTime(s.game_id);
-        await this.service.createQueryBuilder("user_games")
+        const y = await this.service.createQueryBuilder("user_games")
         .insert()
         .into(user_games)
         .values({
             user_id: user,
             session_id: s.id,
-            player_num: 1,
+            player_num: s.player_num,
             time_limit: t
         })
+        .returning('*')
         .execute();
-        return true;
+        const a: number = await this.getAvailPlayer(s.id, null);
+        if (!a) {
+            await this.service.createQueryBuilder("game_sessions")
+            .update(game_sessions)
+            .set({ 
+                status_id: 2,
+                last_time: Date.now()
+             })
+            .where("id = :id", {id: s.id})
+            .execute();
+        }
+        return y.generatedMaps[0].id;
+    }
+
+    async findGame(filename: string): Promise<number> {
+        const x = await this.service.query(
+            `select id
+             from   games
+             where  filename = $1`, [filename]);
+        if (!x || x.length != 1) {
+             return null;
+        }
+        return x[0].id;
+    }
+
+    async findSessionByGame(filename: string): Promise<number> {
+        const x = await this.service.query(
+            `select b.id as id
+             from   games a
+             inner  join game_sessions b on (b.game_id = a.id and b.closed is null and b.status_id = 1)
+             inner  join user_games c on (c.session_id = b.id)
+             inner  join users d on (d.id = c.user_id and d.is_anonymous = 1)
+             where  a.filename = $1`, [filename]);
+        if (!x || x.length != 1) {
+             return null;
+        }
+        return x[0].id;
+    }
+
+    async createAnonymousSession(user:number, x: Sess): Promise<number> {
+        const y = await this.service.createQueryBuilder("game_sessions")
+        .insert()
+        .into(game_sessions)
+        .values({
+            game_id: x.game_id,
+            user_id: user,
+            status_id: 1,
+            last_user: user,
+            last_time: Date.now()
+        })
+        .returning('*')
+        .execute();
+        return y.generatedMaps[0].id;
+    }
+
+    async getPlayerNum(uid: number): Promise<number> {
+        const x = await this.service.query(
+            `select player_num
+             from   user_games
+             where  id = $1`, [uid]);
+        if (!x || x.length != 1) {
+             return null;
+        }
+        return x[0].player_num;
+    }
+
+    async anonymous(user:number, s: Sess): Promise<Sess> {
+        try {
+            s.id = await this.findSessionByGame(s.filename);
+            if (!s.id) {
+                s.game_id = await this.findGame(s.filename);
+                s.id = await this.createAnonymousSession(user, s);
+            }
+            const uid: number = await this.joinToSession(user, s);
+            const num: number = await this.getPlayerNum(uid);
+            if (!num) {
+                return null;
+            }
+            const x = await this.service.query(
+                `select a.status_id as status, a.game_id as game_id, b.name as game, b.filename as filename,
+                        b.players_total as players_total
+                 from   game_sessions a
+                 inner  join games b on (b.id = a.game_id)
+                 where  a.id = $1`, [s.id]);
+            if (!x || x.length != 1) {
+                return null;
+            }
+            s.status = x[0].status;
+            s.game_id = x[0].game_id;
+            s.game = x[0].game;
+            s.filename = x[0].filename;
+            s.players_total = x[0].players_total;
+            s.player_num = num;
+            s.uid = uid;
+            return s;
+        } catch (error) {
+          console.error(error);
+          throw new InternalServerErrorException({
+              status: HttpStatus.BAD_REQUEST,
+              error: error
+          });
+        }
+    }
+
+    async recovery(user:number, s: Sess): Promise<Sess[]> {
+        try {
+            const x = await this.service.query(
+                `select b.id as id, b.game_id as game_id, c.name as game, c.filename as filename,
+                        c.players_total as players_total, b.last_setup as last_setup,
+                        a.player_num as player_num, a.id as uid
+                 from   user_games a
+                 inner  join game_sessions b on (b.id = a.session_id and b.closed is null)
+                 inner  join games c on (c.id = b.game_id)
+                 where  a.id = $1`, [s.uid]);
+            let l: Sess[] = x.map(x => {
+                let it = new Sess();
+                it.id = x.id;
+                it.game_id = x.game_id;
+                it.game = x.game;
+                it.filename = x.filename;
+                it.players_total = x.players_total;
+                it.last_setup = x.last_setup;
+                it.player_num = x.player_num;
+                it.uid = x.uid;
+                return it;
+            });
+            return l;
+        } catch (error) {
+          console.error(error);
+          throw new InternalServerErrorException({
+              status: HttpStatus.BAD_REQUEST,
+              error: error
+          });
+        }
     }
 
     async createSession(user:number, x: Sess): Promise<Sess> {
@@ -155,6 +317,7 @@ export class SessionService {
             .returning('*')
             .execute();
             x.id = y.generatedMaps[0].id;
+            x.player_num = 1;
             await this.joinToSession(user, x);
             return x;
         } catch (error) {
@@ -166,8 +329,32 @@ export class SessionService {
         }
     }
 
-    async closeSession(x: Sess): Promise<Sess> {
+    async isValidUser(user: number, sess: number) {
+        const x = await this.service.query(
+            `select id
+             from   users
+             where  id = $1 and is_admin = 1`, [user]);
+        if (x && x.length > 0) {
+             return true;
+        }
+        const y = await this.service.query(
+            `select b.id
+             from   game_sessions a
+             inner  join user_games b on (b.session_id = a.id and b.user_id = $1)
+             inner  join users c on (c.id = b.user_id and c.is_anonymous = 1)
+             where  a.id = $2`, [user, sess]);
+        if (y && y.length > 0) {
+             return true;
+        }
+        return false;
+    }
+
+    async closeSession(user: number, x: Sess): Promise<Sess> {
         try {
+            const isValid: boolean = await this.isValidUser(user, x.id);
+            if (!isValid) {
+                return null;
+            }
             await this.service.createQueryBuilder("game_sessions")
             .update(game_sessions)
             .set({ 
@@ -194,7 +381,7 @@ export class SessionService {
                     score: x.score ? x.score : null,
                     result_id: 1
                  })
-                .where("session_id = :id and user_id = :user", {id: x.id, user: x.winner})
+                .where("id = :uid", {uid: x.winner})
                 .execute();
                 await this.service.createQueryBuilder("user_games")
                 .update(user_games)
@@ -202,7 +389,7 @@ export class SessionService {
                     score: x.score ? -x.score : null,
                     result_id: 2
                  })
-                .where("session_id = :id and user_id <> :user", {id: x.id, user: x.winner})
+                .where("session_id = :id and id <> :uid", {id: x.id, uid: x.winner})
                 .execute();
                 return x;
             }
@@ -213,7 +400,7 @@ export class SessionService {
                     score: x.score ? -x.score : null,
                     result_id: 2
                  })
-                .where("session_id = :id and user_id = :user", {id: x.id, user: x.loser})
+                .where("id = :uid", {uid: x.loser})
                 .execute();
                 await this.service.createQueryBuilder("user_games")
                 .update(user_games)
@@ -221,7 +408,7 @@ export class SessionService {
                     score: x.score ? x.score : null,
                     result_id: 1
                  })
-                .where("session_id = :id and user_id <> :user", {id: x.id, user: x.loser})
+                .where("session_id = :id and user_id <> :uid", {id: x.id, uid: x.loser})
                 .execute();
             }
             return x;

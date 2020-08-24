@@ -34,4 +34,13 @@ export class AppController {
     const r = await this.authService.login(req.user, device);
     return r;
   }
+
+  @Get('api/auth/anonymous')
+  @ApiCreatedResponse({ description: 'Successfully.'})
+  @ApiUnauthorizedResponse({ description: 'Unauthorized.'})
+  async anonymous(@Request() req) {
+    const device: string = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+    const r = await this.authService.anonymous(device);
+    return r;
+  }
 }

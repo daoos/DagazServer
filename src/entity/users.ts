@@ -6,7 +6,7 @@ export class users {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column({ default: 0 })
+    @Column({ default: 0, nullable: false  })
     is_admin: number;
 
     @Column({ type: "varchar", length: 100 })
@@ -32,4 +32,7 @@ export class users {
 
     @Column({default: () => "now()"})
     last_actived: Date;
+
+    @Column({ default: 0, nullable: false })
+    is_anonymous: number;
 }

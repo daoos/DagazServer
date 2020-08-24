@@ -244,6 +244,7 @@ export class MoveService {
                 session_id: x.session_id,
                 user_id: x.user_id,
                 move_str: x.move_str,
+                setup_str: x.setup_str,
                 turn_num: turn_num,
                 note: x.note,
                 time_delta: time_delta
