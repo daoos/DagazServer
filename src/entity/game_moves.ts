@@ -21,6 +21,10 @@ export class game_moves {
     @JoinColumn({ name: "user_id" })
     user: users;
 
+    @Index()
+    @Column({ nullable: true })
+    uid: number;
+
     @Column({ nullable: false })
     turn_num: number;
 

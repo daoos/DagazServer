@@ -46,14 +46,14 @@ export class MoveService {
         }
     }
 
-    async touchSession(user: number, sess: number): Promise<boolean> {
+    async touchSession(uid: number, sess: number): Promise<boolean> {
         await this.service.createQueryBuilder("game_sessions")
         .update(game_sessions)
         .set({ 
-            last_user: user,
+            last_user: uid,
             last_time: Date.now()
         })
-        .where("id = :id and last_user <> :user", {id: sess, user: user})
+        .where("id = :id and last_user <> :uid", {id: sess, uid: uid})
         .execute();
         return true;
     }
@@ -69,38 +69,53 @@ export class MoveService {
         return true;
     }
 
-    async getConfirmedMove(user: number, sess: number): Promise<Move[]> {
-        const f = await this.checkSession(sess);
-        if (!f) {
-            return null;
+    async getSession(user: number, uid: number): Promise<number> {
+        const x = await this.service.query(
+            `select session_id
+             from   user_games
+             where  id = $1 and user_id = $2`, [uid, user]);
+        if (!x || x.length == 0) {
+             return null;
         }
+        return x[0].session_id;
+    }
+
+    async getConfirmedMove(user: number, uid: number): Promise<Move[]> {
         try {
+            const sess: number = await this.getSession(user, uid);
+            const f = await this.checkSession(sess);
+            if (!f) {
+                return null;
+            }
             const x = await this.service.query(
-                `select a.id, a.session_id, a.user_id, a.turn_num,
-                        a.move_str, a.setup_str, a.note, a.time_delta
-                 from game_moves a
-                 inner join game_sessions b on (b.id = a.session_id and b.closed is null)
-                 where a.session_id = $1
-                 and not a.setup_str is null 
-                 and a.accepted is null
-                 order by a.id desc`, [sess]);
+            `select a.id, a.session_id, a.user_id, a.turn_num,
+                    a.move_str, a.setup_str, a.note, a.time_delta, a.uid
+             from   game_moves a
+             inner  join game_sessions b on (b.id = a.session_id and b.closed is null)
+             where  a.session_id = $1
+             and    not a.setup_str is null 
+             and    a.accepted is null
+             order  by a.id desc`, [sess]);
             if (!x) {
                 return null;
             }
             let l = new Array();
-            if (x.length > 0 && x[0].user_id != user) {
+            if (x.length > 0 && x[0].uid != uid) {
                 let it = new Move();
                 it.id = x[0].id;
                 it.session_id = x[0].session_id;
                 it.user_id = x[0].user_id;
+                it.uid = x[0].uid;
                 it.turn_num = x[0].turn_num;
                 it.move_str = x[0].move_str;
                 it.setup_str = x[0].setup_str;
                 it.note = x[0].note;
                 it.time_delta = x[0].time_delta;
+                it.time_limit = await this.getTimeLimit(it.uid);
+                it.additional_time = await this.getAdditionalTime(it.session_id);
                 l.push(it);
                 await this.acceptMove(it.id);
-                await this.touchSession(user, sess);
+                await this.touchSession(it.uid, sess);
             }
             return l;
         } catch (error) {
@@ -112,12 +127,11 @@ export class MoveService {
         }
     }
 
-    async getTimeLimit(user: number, sess: number): Promise<number> {
+    async getTimeLimit(uid: number): Promise<number> {
         const x = await this.service.query(
             `select time_limit 
-             from user_games 
-             where session_id = $1 
-             and user_id = $2`, [sess, user]);
+             from   user_games 
+             where  id = $1`, [uid]);
         if (!x || x.length != 1) {
             return null;
         }
@@ -144,12 +158,12 @@ export class MoveService {
             }
             const x = await this.service.query(
                 `select a.id, a.session_id, a.user_id, a.turn_num,
-                        a.move_str, a.setup_str, a.note, a.time_delta
-                 from game_moves a
-                 inner join game_sessions b on (b.id = a.session_id and b.closed is null)
-                 where a.session_id = $1
-                 and a.setup_str is null
-                 order by a.id desc`, [sess]);
+                        a.move_str, a.setup_str, a.note, a.time_delta, a.uid
+                 from   game_moves a
+                 inner  join game_sessions b on (b.id = a.session_id and b.closed is null)
+                 where  a.session_id = $1
+                 and    a.setup_str is null
+                 order  by a.id desc`, [sess]);
             if (!x) {
                 return null;
             }
@@ -164,7 +178,7 @@ export class MoveService {
                 it.setup_str = x[0].setup_str;
                 it.note = x[0].note;
                 it.time_delta = x[0].time_delta;
-                it.time_limit = await this.getTimeLimit(it.user_id, it.session_id);
+                it.time_limit = await this.getTimeLimit(it.uid);
                 it.additional_time = await this.getAdditionalTime(it.session_id);
                 l.push(it);
             }
@@ -198,14 +212,13 @@ export class MoveService {
 
     async getLastUser(id: number): Promise<number> {
         const x = await this.service.query(
-            `select user_id
-             from game_moves 
-             where session_id = $1
-             order by id desc`, [id]);
+            `select last_user as uid
+             from   game_sessions
+             where  id = $1`, [id]);
         if (!x || x.length != 1) {
             return null;
         }
-        return x[0].user_id;
+        return x[0].uid;
     }
 
     async getTurnNumber(id: number): Promise<number> {
@@ -221,18 +234,21 @@ export class MoveService {
 
     async addMove(user: number, x: Move): Promise<Move> {
         x.user_id = user;
+        if (!x.uid) {
+            x.uid = user;
+        }
         try {
             const f = await this.checkSession(x.session_id);
             if (!f) {
                 return null;
             }
             const last_user = await this.getLastUser(x.session_id);
-            if (last_user !== null && last_user == user) {
+            if (last_user !== null && last_user == x.uid) {
                 return null;
             }
             const last_time = await this.getLastTime(x.session_id);
             const time_delta = Date.now() - last_time;
-            let time_limit = await this.getTimeLimit(x.user_id, x.session_id);
+            let time_limit = await this.getTimeLimit(x.uid);
             if (time_limit === null) {
                 return null;
             }
@@ -243,6 +259,7 @@ export class MoveService {
             .values({
                 session_id: x.session_id,
                 user_id: x.user_id,
+                uid: x.uid,
                 move_str: x.move_str,
                 setup_str: x.setup_str,
                 turn_num: turn_num,
@@ -261,8 +278,19 @@ export class MoveService {
             .set({ 
                 time_limit: time_limit
              })
-            .where("session_id = :sess and user_id = :user", {sess: x.session_id, user: x.user_id})
+            .where("id = :uid", {uid: x.uid})
             .execute();
+            if (x.setup_str) {
+                await this.service.createQueryBuilder("game_sessions")
+                .update(game_sessions)
+                .set({ 
+                    last_setup: x.setup_str,
+                    last_turn: turn_num,
+                    last_user: x.uid
+                 })
+                .where("id = :sess", {sess: x.session_id})
+                .execute();
+            }
             return x;
         } catch (error) {
           console.error(error);

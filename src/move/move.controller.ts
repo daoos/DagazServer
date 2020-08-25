@@ -85,7 +85,7 @@ export class MoveController {
         try {
             const r = await this.service.addMove(user.id, x);
             if (!r) {
-                return res.status(HttpStatus.NOT_FOUND).json(r);
+                return res.status(HttpStatus.NOT_FOUND).json();
             } else {
                 return res.status(HttpStatus.CREATED).json(r);
             }

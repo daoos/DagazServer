@@ -31,4 +31,7 @@ export class Move {
 
     @ApiPropertyOptional()
     additional_time: number;
+
+    @ApiProperty()
+    uid: number;
 }

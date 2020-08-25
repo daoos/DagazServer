@@ -139,8 +139,9 @@ export class SessionService {
              from ( select generate_series as player_num 
                     from   generate_series(1, $1)) a
              left   join   user_games b on (b.player_num = a.player_num and b.session_id = $2)
+             where  b.id is null
              order  by player_num`, [cnt, id]);
-        if (!y || y.length != 1) {
+        if (!y || y.length == 0) {
              return null;
         }
         const z = y.filter(function(it) {
@@ -166,18 +167,27 @@ export class SessionService {
         })
         .returning('*')
         .execute();
+        const uid = y.generatedMaps[0].id;
         const a: number = await this.getAvailPlayer(s.id, null);
         if (!a) {
             await this.service.createQueryBuilder("game_sessions")
             .update(game_sessions)
             .set({ 
-                status_id: 2,
+                status_id: 2
+             })
+            .where("id = :id", {id: s.id})
+            .execute();
+        }
+        if (s.player_num == 1) {
+            await this.service.createQueryBuilder("game_sessions")
+            .update(game_sessions)
+            .set({ 
                 last_time: Date.now()
              })
             .where("id = :id", {id: s.id})
             .execute();
         }
-        return y.generatedMaps[0].id;
+        return uid;
     }
 
     async findGame(filename: string): Promise<number> {
@@ -193,7 +203,7 @@ export class SessionService {
 
     async findSessionByGame(filename: string): Promise<number> {
         const x = await this.service.query(
-            `select b.id as id
+            `select distinct b.id as id
              from   games a
              inner  join game_sessions b on (b.game_id = a.id and b.closed is null and b.status_id = 1)
              inner  join user_games c on (c.session_id = b.id)
@@ -213,7 +223,6 @@ export class SessionService {
             game_id: x.game_id,
             user_id: user,
             status_id: 1,
-            last_user: user,
             last_time: Date.now()
         })
         .returning('*')
@@ -235,9 +244,15 @@ export class SessionService {
     async anonymous(user:number, s: Sess): Promise<Sess> {
         try {
             s.id = await this.findSessionByGame(s.filename);
+            s.game_id = await this.findGame(s.filename);
+            if (!s.game_id) {
+                return null;
+            }
             if (!s.id) {
-                s.game_id = await this.findGame(s.filename);
                 s.id = await this.createAnonymousSession(user, s);
+            }
+            if (!s.player_num) {
+                s.player_num = 1;
             }
             const uid: number = await this.joinToSession(user, s);
             const num: number = await this.getPlayerNum(uid);
@@ -311,7 +326,6 @@ export class SessionService {
                 game_id: x.game_id,
                 user_id: user,
                 status_id: 2,
-                last_user: user,
                 last_time: Date.now()
             })
             .returning('*')
