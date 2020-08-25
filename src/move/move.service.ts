@@ -234,10 +234,8 @@ export class MoveService {
 
     async addMove(user: number, x: Move): Promise<Move> {
         x.user_id = user;
-        if (!x.uid) {
-            x.uid = user;
-        }
         try {
+            x.session_id = await this.getSession(user, x.uid);
             const f = await this.checkSession(x.session_id);
             if (!f) {
                 return null;
