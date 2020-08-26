@@ -1,4 +1,4 @@
-import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
+import { ApiPropertyOptional } from "@nestjs/swagger";
 
 export class Sess {
 
@@ -8,7 +8,7 @@ export class Sess {
     @ApiPropertyOptional()
     status: number;
 
-    @ApiProperty()
+    @ApiPropertyOptional()
     game_id: number;
 
     @ApiPropertyOptional()

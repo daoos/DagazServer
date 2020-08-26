@@ -363,8 +363,27 @@ export class SessionService {
         return false;
     }
 
+    async getSession(uid: number): Promise<number> {
+        const x = await this.service.query(
+            `select session_id
+             from   user_games
+             where  id = $1`, [uid]);
+        if (!x || x.length != 1) {
+             return null;
+        }
+        return x[0].session_id;
+    }
+
     async closeSession(user: number, x: Sess): Promise<Sess> {
         try {
+            if (!x.id) {
+                if (x.winner) {
+                    x.id = await this.getSession(x.winner);
+                }
+                if (x.loser) {
+                    x.id = await this.getSession(x.loser);
+                }
+            }
             const isValid: boolean = await this.isValidUser(user, x.id);
             if (!isValid) {
                 return null;
@@ -377,7 +396,7 @@ export class SessionService {
              })
             .where("id = :id", {id: x.id})
             .execute();
-            if (!x.winner && !x.loser) {
+            if ((!x.winner && !x.loser) || (x.winner && x.loser)) {
                 await this.service.createQueryBuilder("user_games")
                 .update(user_games)
                 .set({ 
