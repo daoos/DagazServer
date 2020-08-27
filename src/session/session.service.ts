@@ -441,7 +441,7 @@ export class SessionService {
                     score: x.score ? x.score : null,
                     result_id: 1
                  })
-                .where("session_id = :id and user_id <> :uid", {id: x.id, uid: x.loser})
+                .where("session_id = :id and id <> :uid", {id: x.id, uid: x.loser})
                 .execute();
             }
             return x;
