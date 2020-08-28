@@ -13,17 +13,14 @@ export class MoveService {
         private readonly service: Repository<game_moves>
     ) {}  
     
-    async getMovesBySession(id: number): Promise<Move[]> {
+    async getMovesBySession(sid: number, turn: number): Promise<Move[]> {
         try {
             const x = await this.service.query(
                 `select id, session_id, user_id, turn_num,
                         move_str, setup_str, note, time_delta
                  from   game_moves
-                 where  session_id = $1
-                 order  by id`, [id]);
-            if (!x || x.length != 1) {
-                return null;
-            }
+                 where  session_id = $1 and turn_num = $2
+                 order  by id`, [sid, turn]);
             let l: Move[] = x.map(x => {
                 let it = new Move();
                 it.id = x.id;

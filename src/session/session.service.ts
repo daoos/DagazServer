@@ -19,10 +19,11 @@ export class SessionService {
                         b.name as game, b.filename as filename, a.created as created,
                         c.name as creator, b.players_total as players_total,
                         a.last_setup
-                 from game_sessions a
-                 inner join games b on (b.id = a.game_id)
-                 inner join users c on (c.id = a.user_id)
-                 where a.status_id = 2 and a.closed is null`);
+                 from   game_sessions a
+                 inner  join games b on (b.id = a.game_id)
+                 inner  join users c on (c.id = a.user_id)
+                 where  a.status_id = 2 and a.closed is null
+                 order  by a.id`);
                  let l: Sess[] = x.map(x => {
                     let it = new Sess();
                     it.id = x.id;

@@ -5,8 +5,6 @@ import { Request } from 'express';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { Sess } from '../interfaces/sess.interface';
 import { TokenGuard } from '../auth/token.guard';
-import { RolesGuard } from '../auth/roles.guard';
-import { Roles } from '../auth/roles.decorator';
 
 @ApiSecurity('bearer')
 @Controller('api/session')
@@ -16,12 +14,10 @@ export class SessionController {
         private readonly service: SessionService
     ) {}
 
-    @UseGuards(JwtAuthGuard, RolesGuard, TokenGuard)
-    @Roles('admin')
+    @UseGuards(JwtAuthGuard, TokenGuard)
     @Get()
     @ApiOkResponse({ description: 'Successfully.'})
     @ApiUnauthorizedResponse({ description: 'Unauthorized.'})
-    @ApiForbiddenResponse({ description: 'Forbidden.'})
     @ApiInternalServerErrorResponse({ description: 'Internal Server error.'})
     async findAll(@Res() res): Promise<Sess[]> {
         try {
