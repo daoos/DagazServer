@@ -10,9 +10,10 @@ import { JoinModule } from './join/join.module';
 import { MoveModule } from './move/move.module';
 import { ResultModule } from './result/result.module';
 import { GameModule } from './game/game.module';
+import { BonusModule } from './bonus/bonus.module';
 
 @Module({
-  imports: [DatabaseModule, UsersModule, AuthModule, PreferencesModule, SessionModule, ChallengeModule, JoinModule, MoveModule, ResultModule, GameModule],
+  imports: [DatabaseModule, UsersModule, AuthModule, PreferencesModule, SessionModule, ChallengeModule, JoinModule, MoveModule, ResultModule, GameModule, BonusModule],
   controllers: [AppController]
 })
 export class AppModule {}
