@@ -121,7 +121,7 @@ export class JoinService {
                 session_id: x.session_id,
                 player_num: x.player_num,
                 time_limit: t,
-                is_ai: x.is_ai
+                is_ai: x.is_ai ? 1 : 0
             })
             .returning('*')
             .execute();
