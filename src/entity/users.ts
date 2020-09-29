@@ -9,19 +9,19 @@ export class users {
     @Column({ default: 0, nullable: false  })
     is_admin: number;
 
-    @Column({ type: "varchar", length: 100 })
+    @Column({ type: "varchar", length: 200 })
     name: string;
 
-    @Column({ type: "varchar", length: 20, unique: true })
+    @Column({ type: "varchar", length: 200, unique: true })
     login: string;
 
-    @Column({ type: "varchar", length: 20 })
+    @Column({ type: "varchar", length: 200 })
     pass: string;
 
-    @Column({ type: "varchar", length: 100, nullable: true })
+    @Column({ type: "varchar", length: 200, nullable: true })
     email: string;
 
-    @Column({ type: "varchar", length: 100, nullable: true })
+    @Column({ type: "varchar", length: 200, nullable: true })
     newmail: string;
 
     @Column({default: () => "now()"})

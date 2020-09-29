@@ -2,6 +2,7 @@ import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { NestExpressApplication } from "@nestjs/platform-express";
+import { join } from 'path';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(
@@ -16,6 +17,9 @@ async function bootstrap() {
     .build();
   const document = SwaggerModule.createDocument(app, options);
   SwaggerModule.setup('api/swagger', app, document);  
+
+  app.useStaticAssets(join(__dirname, '/../public'), {prefix: '/'});
+  app.setBaseViewsDir(join(__dirname, '/../public'));
 
   app.enableCors();
   await app.listen(3000);
