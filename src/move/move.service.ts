@@ -237,10 +237,10 @@ export class MoveService {
             if (!f) {
                 return null;
             }
-            const last_user = await this.getLastUser(x.session_id);
+/*          const last_user = await this.getLastUser(x.session_id);
             if (last_user !== null && last_user == x.uid) {
                 return null;
-            }
+            }*/
             const last_time = await this.getLastTime(x.session_id);
             const time_delta = Date.now() - last_time;
             let time_limit = await this.getTimeLimit(x.uid);
