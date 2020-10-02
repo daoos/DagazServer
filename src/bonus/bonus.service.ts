@@ -72,10 +72,10 @@ export class BonusService {
                 return null;
             }
             let salt = 0;
-            x.bonus = require('crypto').createHash('md5').update(salt.toString(16).toUpperCase() + digest).digest('hex').toUpperCase().substr(1, 12);
+            x.bonus = require('crypto').createHash('md5').update(salt.toString(16).toUpperCase() + digest).digest('hex').toUpperCase().substr(1, 16);
             while (await this.bonusFound(x.bonus)) {
                 salt++;
-                x.bonus = require('crypto').createHash('md5').update(salt.toString(16).toUpperCase() + digest).digest('hex').toUpperCase().substr(1, 12);
+                x.bonus = require('crypto').createHash('md5').update(salt.toString(16).toUpperCase() + digest).digest('hex').toUpperCase().substr(1, 16);
             }
             x.created = new Date();
             x.expired = null;
