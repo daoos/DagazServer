@@ -220,7 +220,7 @@ export class UsersService {
             name: x.name,
             login: x.username,
             pass: x.password,
-            newmail: x.email
+            email: x.email
           })
           .returning('*')
           .execute();

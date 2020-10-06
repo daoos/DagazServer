@@ -5,11 +5,11 @@ export class Bonus {
     @ApiPropertyOptional()
     id: number;
 
-    @ApiProperty()
-    uid: number;
+    @ApiPropertyOptional()
+    type_id: number;
 
     @ApiProperty()
-    digest: string;
+    uid: number;
 
     @ApiPropertyOptional()
     bonus: string;
@@ -19,4 +19,7 @@ export class Bonus {
 
     @ApiPropertyOptional()
     expired: Date;
+
+    @ApiPropertyOptional()
+    activated: Date;
 }

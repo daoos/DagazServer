@@ -64,6 +64,44 @@ export class BonusService {
         return x[0].expire_period;
     }
 
+    async getBonus(bonus: string): Promise<Bonus> {
+        try {
+            const x = await this.service.query(
+                `select a.id as id, a.type_id as type_id, a.uid as uid, 
+                        a.bonus as bonus, a.created as created, 
+                        a.expired as expired, a.activated as activated
+                 from   bonuses a
+                 where  a.bonus = $1 and now() <= coalesce(a.expired, now())`, [bonus]);
+            if (!x || x.length != 1) {
+                 return null;
+            }
+            var r = new Bonus();
+            r.id = x[0].id;
+            r.type_id = x[0].type_id;
+            r.uid = x[0].uid;
+            r.bonus = x[0].bonus;
+            r.created = x[0].created;
+            r.expired = x[0].expired;
+            r.activated = x[0].activated;
+            if (!r.activated) {
+                await this.service.createQueryBuilder("bonuses")
+                .update(bonuses)
+                .set({ 
+                    activated: new Date()
+                 })
+                .where("id = :id", {id: r.id})
+                .execute();
+            }
+            return r;
+        } catch (error) {
+            console.error(error);
+            throw new InternalServerErrorException({
+                status: HttpStatus.BAD_REQUEST,
+                error: error
+            });
+        }
+    }
+
     async createBonus(user: number, x: Bonus): Promise<Bonus> {
         try {
             const type_id = await this.getBonusType(x.uid);
