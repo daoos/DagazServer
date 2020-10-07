@@ -2,7 +2,7 @@ import { Injectable, Inject, InternalServerErrorException, HttpStatus } from '@n
 import { user_games } from '../entity/user_games';
 import { Repository } from 'typeorm';
 import { Result } from '../interfaces/result.interface';
-import { game_sessions } from '../../dist/entity/game_sessions';
+import { game_sessions } from '../entity/game_sessions';
 
 @Injectable()
 export class ResultService {
