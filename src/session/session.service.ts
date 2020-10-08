@@ -222,6 +222,7 @@ export class SessionService {
         .into(game_sessions)
         .values({
             game_id: x.game_id,
+            var_num: x.var_num,
             user_id: user,
             status_id: 1,
             last_time: Date.now()

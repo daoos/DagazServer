@@ -41,6 +41,19 @@ var getName = function() {
   }
 }
 
+var getVar = function(name) {
+  var result = name.match(/-(\d+)$/);
+  if (result) {
+      return result[1];
+  } else {
+      return null;
+  }
+}
+
+var cutName = function(name, num) {
+  return name.substr(0, name.length - num.length - 1);
+}
+
 var authorize = function() {
   if (auth !== null) return;
   inProgress = true;
@@ -74,12 +87,18 @@ var connect = function() {
   if (inProgress) return;
   if (auth === null) return;
   if (uid !== null) return;
+  var name = getName();
+  var num = getVar(name);
+  if (num) {
+      name = cutName(name, num);
+  }
   inProgress = true;
   $.ajax({
      url: SERVICE + "session/anonymous",
      type: "POST",
      data: {
-         filename: getName(),
+         filename: name,
+         var_num: +num,
          player_num: 1
      },
      dataType: "json",

@@ -22,6 +22,9 @@ export class game_sessions {
     @JoinColumn({ name: "game_id" })
     game: games;
 
+    @Column({ nullable: true })
+    var_num: number;
+
     @Index()
     @Column({ nullable: false })
     status_id: number;

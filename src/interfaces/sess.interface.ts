@@ -15,6 +15,9 @@ export class Sess {
     game: string;
 
     @ApiPropertyOptional()
+    var_num: number;
+
+    @ApiPropertyOptional()
     filename: string;
 
     @ApiPropertyOptional()
