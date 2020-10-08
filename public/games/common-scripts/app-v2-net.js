@@ -171,9 +171,6 @@ var addMove = function(id, move, setup) {
          setup_str: setup
      },
      dataType: "json",
-     beforeSend: function (xhr) {
-         xhr.setRequestHeader('Authorization', 'Bearer ' + auth);
-     },
      success: function(data) {
          console.log('Move: Succeed [move = ' + move + ']');
          inProgress = false;
@@ -183,10 +180,6 @@ var addMove = function(id, move, setup) {
          alert('Move: Error!');
      },
      statusCode: {
-        401: function() {
-             Dagaz.Controller.app.state = STATE.STOP;
-             alert('Move: Bad User!');
-        },
         404: function() {
              Dagaz.Controller.app.state = STATE.STOP;
              alert('Move: Not Found!');
@@ -211,9 +204,6 @@ var winGame = function(id) {
          winner: id
      },
      dataType: "json",
-     beforeSend: function (xhr) {
-         xhr.setRequestHeader('Authorization', 'Bearer ' + auth);
-     },
      success: function(data) {
          wait = false;
          console.log('Close: Succeed');
@@ -224,10 +214,6 @@ var winGame = function(id) {
          alert('Close: Error!');
      },
      statusCode: {
-        401: function() {
-             Dagaz.Controller.app.state = STATE.STOP;
-             alert('Close: Bad User!');
-        },
         403: function() {
              Dagaz.Controller.app.state = STATE.STOP;
              alert('Close: Not Found!');
@@ -252,9 +238,6 @@ var getBonus = function() {
          uid: uid
      },
      dataType: "json",
-     beforeSend: function (xhr) {
-         xhr.setRequestHeader('Authorization', 'Bearer ' + auth);
-     },
      success: function(data) {
          wait = false;
          won = false;
@@ -267,10 +250,6 @@ var getBonus = function() {
          alert('Close: Error!');
      },
      statusCode: {
-        401: function() {
-             Dagaz.Controller.app.state = STATE.STOP;
-             alert('Close: Bad User!');
-        },
         403: function() {
              Dagaz.Controller.app.state = STATE.STOP;
              alert('Close: Not Found!');

@@ -66,20 +66,31 @@ export class MoveService {
         return true;
     }
 
-    async getSession(user: number, uid: number): Promise<number> {
+    async getSession(uid: number): Promise<number> {
         const x = await this.service.query(
             `select session_id
              from   user_games
-             where  id = $1 and user_id = $2`, [uid, user]);
+             where  id = $1`, [uid]);
         if (!x || x.length == 0) {
              return null;
         }
         return x[0].session_id;
     }
 
-    async getConfirmedMove(user: number, uid: number): Promise<Move[]> {
+    async getUser(uid: number): Promise<number> {
+        const x = await this.service.query(
+            `select user_id
+             from   user_games
+             where  id = $1`, [uid]);
+        if (!x || x.length == 0) {
+             return null;
+        }
+        return x[0].user_id;
+    }
+
+    async getConfirmedMove(uid: number): Promise<Move[]> {
         try {
-            const sess: number = await this.getSession(user, uid);
+            const sess: number = await this.getSession(uid);
             const f = await this.checkSession(sess);
             if (!f) {
                 return null;
@@ -229,18 +240,14 @@ export class MoveService {
         return x[0].turn_num;
     }
 
-    async addMove(user: number, x: Move): Promise<Move> {
-        x.user_id = user;
+    async addMove(x: Move): Promise<Move> {
         try {
-            x.session_id = await this.getSession(user, x.uid);
+            x.session_id = await this.getSession(x.uid);
+            x.user_id = await this.getUser(x.uid);
             const f = await this.checkSession(x.session_id);
             if (!f) {
                 return null;
             }
-/*          const last_user = await this.getLastUser(x.session_id);
-            if (last_user !== null && last_user == x.uid) {
-                return null;
-            }*/
             const last_time = await this.getLastTime(x.session_id);
             const time_delta = Date.now() - last_time;
             let time_limit = await this.getTimeLimit(x.uid);

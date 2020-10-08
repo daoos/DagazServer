@@ -375,7 +375,7 @@ export class SessionService {
         return x[0].session_id;
     }
 
-    async closeSession(user: number, x: Sess): Promise<Sess> {
+    async closeSession(x: Sess): Promise<Sess> {
         try {
             if (!x.id) {
                 if (x.winner) {
@@ -384,10 +384,6 @@ export class SessionService {
                 if (x.loser) {
                     x.id = await this.getSession(x.loser);
                 }
-            }
-            const isValid: boolean = await this.isValidUser(user, x.id);
-            if (!isValid) {
-                return null;
             }
             await this.service.createQueryBuilder("game_sessions")
             .update(game_sessions)

@@ -37,17 +37,15 @@ export class BonusController {
         }
     }
 
-    @UseGuards(JwtAuthGuard, TokenGuard)
     @Post()
     @ApiBody({ type: [Bonus] })
     @ApiCreatedResponse({ description: 'Successfully.'})
     @ApiUnauthorizedResponse({ description: 'Unauthorized.'})
     @ApiNotFoundResponse({ description: 'Not Found.'})
     @ApiInternalServerErrorResponse({ description: 'Internal Server error.'})
-    async join(@Req() request: Request, @Res() res, @Body() x: Bonus): Promise<Bonus> {
-        const user: any = request.user;
+    async join(@Res() res, @Body() x: Bonus): Promise<Bonus> {
         try {
-            const r = await this.service.createBonus(user.id, x);
+            const r = await this.service.createBonus(x);
             if (!r) {
                 return res.status(HttpStatus.NOT_FOUND).json();
             } else {

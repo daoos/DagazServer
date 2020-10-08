@@ -57,10 +57,9 @@ export class MoveController {
     @ApiNotFoundResponse({ description: 'Not Found.'})
     @ApiUnauthorizedResponse({ description: 'Unauthorized.'})
     @ApiInternalServerErrorResponse({ description: 'Internal Server error.'})
-    async getConfirmedMove(@Req() request: Request, @Res() res, @Param('id') id): Promise<Move[]> {
-        const user: any = request.user;
+    async getConfirmedMove(@Res() res, @Param('id') id): Promise<Move[]> {
         try {
-            const r = await this.service.getConfirmedMove(user.id, id);
+            const r = await this.service.getConfirmedMove(id);
             if (!r) {
                 return res.status(HttpStatus.NOT_FOUND).json();
             } else {
@@ -71,17 +70,14 @@ export class MoveController {
         }
     }
 
-    @UseGuards(JwtAuthGuard, TokenGuard)
     @Post()
     @ApiBody({ type: [Move] })
     @ApiCreatedResponse({ description: 'Successfully.'})
     @ApiNotFoundResponse({ description: 'Not Found.'})
-    @ApiUnauthorizedResponse({ description: 'Unauthorized.'})
     @ApiInternalServerErrorResponse({ description: 'Internal Server error.'})
-    async update(@Req() request: Request, @Res() res, @Body() x: Move): Promise<Move> {
-        const user: any = request.user;
+    async update(@Res() res, @Body() x: Move): Promise<Move> {
         try {
-            const r = await this.service.addMove(user.id, x);
+            const r = await this.service.addMove(x);
             if (!r) {
                 return res.status(HttpStatus.NOT_FOUND).json();
             } else {

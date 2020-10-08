@@ -100,17 +100,15 @@ export class SessionController {
         }
     }
 
-    @UseGuards(JwtAuthGuard, TokenGuard)
     @Post('close')
     @ApiBody({ type: [Sess] })
     @ApiOkResponse({ description: 'Successfully.'})
     @ApiUnauthorizedResponse({ description: 'Unauthorized.'})
     @ApiForbiddenResponse({ description: 'Forbidden.'})
     @ApiInternalServerErrorResponse({ description: 'Internal Server error.'})
-    async close(@Req() request: Request, @Res() res, @Body() x: Sess): Promise<Sess> {
-        const user: any = request.user;
+    async close(@Res() res, @Body() x: Sess): Promise<Sess> {
         try {
-            const r = await this.service.closeSession(user.id, x);
+            const r = await this.service.closeSession(x);
             if (!r) {
                 return res.status(HttpStatus.FORBIDDEN).json(x);
             } else {

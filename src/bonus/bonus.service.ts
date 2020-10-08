@@ -11,13 +11,13 @@ export class BonusService {
         private readonly service: Repository<bonuses>
     ) {}  
 
-    async getDigest(user: number, uid: number): Promise<string> {
+    async getDigest(uid: number): Promise<string> {
         const x = await this.service.query(
             `select b.last_setup || d.value_str as digest
              from   user_games a
              inner  join game_sessions b on (b.id = a.session_id)
-             inner  join tokens d on (d.user_id = a.user_id and d.type_id = 1 and d.user_id = $1)
-             where  a.id = $2`, [user, uid]);
+             inner  join tokens d on (d.user_id = a.user_id and d.type_id = 1)
+             where  a.id = $1`, [uid]);
         if (!x || x.length != 1) {
             return null;
         }
@@ -102,10 +102,10 @@ export class BonusService {
         }
     }
 
-    async createBonus(user: number, x: Bonus): Promise<Bonus> {
+    async createBonus(x: Bonus): Promise<Bonus> {
         try {
             const type_id = await this.getBonusType(x.uid);
-            const digest = await this.getDigest(user, x.uid);
+            const digest = await this.getDigest(x.uid);
             if ((type_id === null) || !digest) {
                 return null;
             }
