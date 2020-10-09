@@ -10,7 +10,7 @@ var STATE = {
     STOP: 6
 };
 
-var SERVICE = "http://91.245.33.45:3000/api/";
+var SERVICE = "/api/";
 
 var isDrag = false;
 var passForced = 0;
