@@ -872,7 +872,11 @@ ZrfDesign.prototype.addDrop = function(type, template, params, mode, sound) {
   }
 }
 
-ZrfDesign.prototype.checkVersion = function(name, value) {
+ZrfDesign.prototype.checkVersion = function(name, value, selector) {
+  if (!_.isUndefined(selector) && (selector != Dagaz.Model.getSetupSelector())) {
+      return;
+  }
+  console.log("checkVersion: " + name + "=" + value);
   this.options[name] = value;
   Dagaz.Model.checkVersion(this, name, value);
 }

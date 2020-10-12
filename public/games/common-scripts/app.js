@@ -15,6 +15,16 @@ var passForced = 0;
 var once = false;
 var onceGameOver = true;
 
+var getName = function() {
+  var str = window.location.pathname.toString();
+  var result = str.match(/\/([^.\/]+)\./);
+  if (result) {
+      return result[1];
+  } else {
+      return str;
+  }
+}
+
 function App(canvas, params) {
   this.design = Dagaz.Model.getDesign();
   this.canvas = canvas;
@@ -56,11 +66,11 @@ Dagaz.Controller.newGame = function() {
 }
 
 var win = function() {
-   window.location = "bonus.htm";
+   window.location = "bonus.htm?back=" + getName() + ".htm";
 }
 
 var lose = function() {
-   window.location = "lose.htm";
+   window.location = "lose.htm?back=" + getName() + ".htm";
 }
 
 App.prototype.gameOver = function(text, player) {

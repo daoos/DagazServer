@@ -210,7 +210,7 @@ var getBonus = function() {
      success: function(data) {
          wait = false;
          won = false;
-         url = url + "?bonus=" + data.bonus;
+         url = url + "&bonus=" + data.bonus;
          console.log('Bonus: Succeed [' + data.bonus + "]");
          inProgress = false;
      },
@@ -273,13 +273,13 @@ Dagaz.Controller.newGame = function() {
 
 var win = function() {
    winGame(uid);
-   url = "bonus.htm";
+   url = "bonus.htm?back=" + getName() + ".htm";
    wait = true;
    won = true;
 }
 
 var lose = function() {
-   window.location = "lose.htm";
+   window.location = "lose.htm?back=" + getName() + ".htm";
    wait = true;
 }
 
