@@ -1,9 +1,17 @@
 import { Entity, PrimaryGeneratedColumn, Column, Index, ManyToOne, JoinColumn } from "typeorm";
+import { realms } from "./realms";
 
 @Entity()
 export class games {
     @PrimaryGeneratedColumn()
     id: number;
+
+    @Index()
+    @Column({ nullable: false })
+    realm_id: number;
+    @ManyToOne(type => realms)
+    @JoinColumn({ name: "realm_id" })
+    realm: realms;
 
     @Column({ type: "varchar", length: 100 })
     name: string;

@@ -3,6 +3,7 @@ import { Repository } from 'typeorm';
 import { users } from '../entity/users';
 import { User } from '../interfaces/user.interface';
 import { tokens } from '../entity/tokens';
+import { realms } from '../entity/realms';
 
 @Injectable()
 export class UsersService {
@@ -24,7 +25,18 @@ export class UsersService {
           return null;
       }
       return x[0].value_str;
-  }
+    }
+
+    async getRealm(user: number): Promise<number> {
+      const x = await this.service.query(
+        `select realm_id
+         from   users
+         where  id = $1`, [user]);
+      if (!x || x.length != 1) {
+          return null;
+      }
+      return x[0].realm_id;
+    }
 
     async checkToken(user: number, dev: string, val: string): Promise<tokens> {
       const x = await this.tokens.createQueryBuilder("tokens")
@@ -36,8 +48,9 @@ export class UsersService {
       return x;
     }
 
-    async createUser(username: string): Promise<User> {
+    async createUser(username: string, realm: number): Promise<User> {
       let x: users = new users();
+      x.realm_id = realm;
       x.is_admin = 0;
       x.name = username;
       x.login = username;
@@ -52,6 +65,7 @@ export class UsersService {
       let r: User = new User();
       r.id = y.generatedMaps[0].id;
       r.name = username;
+      r.realm = realm;
       r.username = username;
       r.created = new Date();
       return r;
@@ -79,15 +93,16 @@ export class UsersService {
       await this.tokens.createQueryBuilder("tokens")
       .delete()
       .from(tokens)
-      .where("tokens.user_id = :user_id and tokens.device_str = :dev", { user_id: user,dev: dev })
+      .where("tokens.user_id = :user_id and tokens.device_str = :dev", { user_id: user, dev: dev })
       .execute();
       return true;
     }
       
-    async findAll(): Promise<User[]> {
+    async findAll(user: number): Promise<User[]> {
         try {
+          const realm = await this.getRealm(user);
           const u = await this.service.createQueryBuilder("users")
-          .where("users.deleted is null or users.deleted > now()")
+          .where("users.deleted is null or users.deleted > now() and users.realm_id = :realm", { realm: realm})
           .getMany();
           let l: User[] = u.map(x => {
               let it = new User();
@@ -111,15 +126,16 @@ export class UsersService {
         }
       }
 
-      async getUsersByGame(id: number): Promise<User[]> {
+      async getUsersByGame(user:number, id: number): Promise<User[]> {
         try {
+          const realm = await this.getRealm(user);
           const x = await this.service.query(
             `select b.id as id, b.name as name, b.login as username,
                     b.created as created, b.last_actived as last_actived
              from   user_preferences a
              inner  join users b on (b.id = a.user_id)
-             where  a.game_id = $1
-             and  ( b.deleted is null or b.deleted > now() )`, [id]);
+             where  a.game_id = $1 and b.realm_id = $2
+             and  ( b.deleted is null or b.deleted > now() )`, [id, realm]);
           if (!x || x.length != 1) {
               return null;
           }
@@ -151,6 +167,36 @@ export class UsersService {
         return true;
       }
 
+      async findOneByLoginAndPass(name: string, pass: string): Promise<User> {
+        try {
+          const x = await this.service.createQueryBuilder("users")
+          .where("users.login = :name and users.pass = :pass", {name: name, pass: pass})
+          .getOne();
+          if (!x) {
+              return null;
+          }
+          await this.touchUser(x.id);
+          let it = new User();
+          it.id = x.id;
+          it.realm = x.realm_id;
+          it.is_admin = x.is_admin;
+          it.name = x.name;
+          it.username = x.login;
+          it.password = x.pass;
+          it.email = x.email;
+          it.created = x.created;
+          it.deleted = x.deleted;
+          it.last_actived = x.last_actived;
+          return it;
+        } catch (error) {
+          console.error(error);
+          throw new InternalServerErrorException({
+              status: HttpStatus.BAD_REQUEST,
+              error: error
+          });
+        }
+      }
+
       async findOneByLogin(name: string): Promise<User> {
         try {
           // TODO: Check Activated EMail
@@ -163,6 +209,7 @@ export class UsersService {
           await this.touchUser(x.id);
           let it = new User();
           it.id = x.id;
+          it.realm = x.realm_id;
           it.is_admin = x.is_admin;
           it.name = x.name;
           it.username = x.login;
@@ -192,6 +239,7 @@ export class UsersService {
           await this.touchUser(x.id);
           let it = new User();
           it.id = x.id;
+          it.realm = x.realm_id;
           it.is_admin = x.is_admin;
           it.name = x.name;
           it.username = x.login;
@@ -212,11 +260,16 @@ export class UsersService {
     
       async addUser(x: User): Promise<User> {
         try {
+          const u = await this.findOneByLogin(x.username);
+          if (u) {
+              return null;
+          }
           // TODO: Verify EMail
           const y = await this.service.createQueryBuilder("users")
           .insert()
           .into(users)
           .values({
+            realm_id: x.realm,
             name: x.name,
             login: x.username,
             pass: x.password,
@@ -235,12 +288,13 @@ export class UsersService {
         }
       }
 
-      async delUser(id: number): Promise<User> {
+      async delUser(user: number, id: number): Promise<User> {
         try {
+          const realm = await this.getRealm(user);
           await this.service.createQueryBuilder("users")
           .update(users)
           .set({ deleted: new Date() })
-          .where("users.id = :id", {id: id})
+          .where("users.id = :id and users.realm_id = :realm", {id: id, realm: realm})
           .execute();
           return await this.findOneById(id);
       } catch (error) {

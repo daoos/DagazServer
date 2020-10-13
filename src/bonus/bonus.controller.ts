@@ -40,12 +40,29 @@ export class BonusController {
     @Post()
     @ApiBody({ type: [Bonus] })
     @ApiCreatedResponse({ description: 'Successfully.'})
-    @ApiUnauthorizedResponse({ description: 'Unauthorized.'})
     @ApiNotFoundResponse({ description: 'Not Found.'})
     @ApiInternalServerErrorResponse({ description: 'Internal Server error.'})
     async join(@Res() res, @Body() x: Bonus): Promise<Bonus> {
         try {
             const r = await this.service.createBonus(x);
+            if (!r) {
+                return res.status(HttpStatus.NOT_FOUND).json();
+            } else {
+                return res.status(HttpStatus.CREATED).json(r);
+            }
+        } catch (e) {
+            return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ error: e.message.error.toString(), stack: e.stack});
+        }
+    }
+
+    @Post('send')
+    @ApiBody({ type: [Bonus] })
+    @ApiOkResponse({ description: 'Successfully.'})
+    @ApiNotFoundResponse({ description: 'Not Found.'})
+    @ApiInternalServerErrorResponse({ description: 'Internal Server error.'})
+    async send(@Res() res, @Body() x: Bonus): Promise<Bonus> {
+        try {
+            const r = await this.service.sendBonus(x);
             if (!r) {
                 return res.status(HttpStatus.NOT_FOUND).json();
             } else {

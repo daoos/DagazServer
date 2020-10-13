@@ -6,6 +6,10 @@ import {MigrationInterface, QueryRunner} from "typeorm";
 export class init1592210976213 implements MigrationInterface {
 
     public async up(queryRunner: QueryRunner): Promise<any> {
+        await queryRunner.query(`insert into realms(id, name) values(1, 'Dagaz')`);
+
+        await queryRunner.query(`insert into contact_types(id, name) values(1, 'EMail')`);
+
         await queryRunner.query(`insert into token_types(id, name) values(1, 'Access')`);
         await queryRunner.query(`insert into token_types(id, name) values(2, 'Refresh')`);
 
@@ -25,5 +29,7 @@ export class init1592210976213 implements MigrationInterface {
         await queryRunner.query(`delete from game_statuses`);
         await queryRunner.query(`delete from game_results`);
         await queryRunner.query(`delete from token_types`);
+        await queryRunner.query(`delete from contact_types`);
+        await queryRunner.query(`delete from realms`);
     }
 }

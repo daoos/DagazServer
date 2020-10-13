@@ -12,8 +12,20 @@ export class SessionService {
         private readonly service: Repository<game_sessions>
     ) {}  
 
-    async getActiveSessions(): Promise<Sess[]> {
+    async getRealm(user: number): Promise<number> {
+        const x = await this.service.query(
+          `select realm_id
+           from   users
+           where  id = $1`, [user]);
+        if (!x || x.length != 1) {
+            return null;
+        }
+        return x[0].realm_id;
+      }
+
+      async getActiveSessions(user: number): Promise<Sess[]> {
         try {
+            const realm = await this.getRealm(user);
             const x = await this.service.query(
                 `select a.id as id, a.status_id as status, a.game_id as game_id,
                         b.name as game, b.filename as filename, a.created as created,
@@ -21,9 +33,9 @@ export class SessionService {
                         a.last_setup
                  from   game_sessions a
                  inner  join games b on (b.id = a.game_id)
-                 inner  join users c on (c.id = a.user_id)
+                 inner  join users c on (c.id = a.user_id and c.realm_id = $1)
                  where  a.status_id = 2 and a.closed is null
-                 order  by a.id`);
+                 order  by a.id`, [realm]);
                  let l: Sess[] = x.map(x => {
                     let it = new Sess();
                     it.id = x.id;
@@ -90,21 +102,25 @@ export class SessionService {
         }
     }
 
-    async getSessionById(id: number): Promise<Sess> {
+    async getSessionById(user: number, id: number): Promise<Sess> {
         try {
-            const x = await this.service.createQueryBuilder("game_sessions")
-            .where("game_sessions.id = :id", {id: id})
-            .getOne();
-            if (!x) {
-              return null;
+            const realm = await this.getRealm(user);
+            const x = await this.service.query(
+                `select a.id as id, a.status_id as status_id, a.game_id as game_id,
+                        a.created as created, a.changed as changed, a.closed as closed
+                 from   game_sessions a
+                 inner  join users c on (c.id = a.user_id and c.realm_id = $1)
+                 where  a.id = $2`, [realm, id]);
+            if (!x || x.length != 1) {
+                 return null;
             }
             let it = new Sess();
-            it.id = x.id;
-            it.status = x.status_id;
-            it.game_id = x.game_id;
-            it.created = x.created;
-            it.changed = x.changed;
-            it.closed = x.closed;
+            it.id = x[0].id;
+            it.status = x[0].status_id;
+            it.game_id = x[0].game_id;
+            it.created = x[0].created;
+            it.changed = x[0].changed;
+            it.closed = x[0].closed;
             return it;
           } catch (error) {
           console.error(error);
@@ -191,11 +207,11 @@ export class SessionService {
         return uid;
     }
 
-    async findGame(filename: string): Promise<number> {
+    async findGame(filename: string, realm: number): Promise<number> {
         const x = await this.service.query(
             `select id
              from   games
-             where  filename = $1`, [filename]);
+             where  filename = $1 and realm_id = $2`, [filename, realm]);
         if (!x || x.length != 1) {
              return null;
         }
@@ -245,8 +261,9 @@ export class SessionService {
 
     async anonymous(user:number, s: Sess): Promise<Sess> {
         try {
+            const realm = await this.getRealm(user);
             s.id = await this.findSessionByGame(s.filename);
-            s.game_id = await this.findGame(s.filename);
+            s.game_id = await this.findGame(s.filename, realm);
             if (!s.game_id) {
                 return null;
             }

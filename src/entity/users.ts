@@ -1,10 +1,18 @@
-import { Entity, PrimaryGeneratedColumn, Column, Check } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, Check, Index, ManyToOne, JoinColumn } from "typeorm";
+import { realms } from "./realms";
 
 @Entity()
 @Check(`"is_admin" in (0, 1)`)
 export class users {
     @PrimaryGeneratedColumn()
     id: number;
+
+    @Index()
+    @Column({ nullable: false })
+    realm_id: number;
+    @ManyToOne(type => realms)
+    @JoinColumn({ name: "realm_id" })
+    realm: realms;
 
     @Column({ default: 0, nullable: false  })
     is_admin: number;

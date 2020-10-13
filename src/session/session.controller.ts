@@ -19,9 +19,10 @@ export class SessionController {
     @ApiOkResponse({ description: 'Successfully.'})
     @ApiUnauthorizedResponse({ description: 'Unauthorized.'})
     @ApiInternalServerErrorResponse({ description: 'Internal Server error.'})
-    async findAll(@Res() res): Promise<Sess[]> {
+    async findAll(@Req() request: Request, @Res() res): Promise<Sess[]> {
+        const user: any = request.user;
         try {
-            const r = await this.service.getActiveSessions();
+            const r = await this.service.getActiveSessions(user.id);
             return res.status(HttpStatus.OK).json(r);
         } catch(e) {
             return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ error: e.message.error.toString(), stack: e.stack});
@@ -34,9 +35,10 @@ export class SessionController {
     @ApiUnauthorizedResponse({ description: 'Unauthorized.'})
     @ApiNotFoundResponse({ description: 'Not Found.'})
     @ApiInternalServerErrorResponse({ description: 'Internal Server error.'})
-    async getSession(@Res() res, @Param('id') id): Promise<Sess> {
+    async getSession(@Req() request: Request, @Res() res, @Param('id') id): Promise<Sess> {
+        const user: any = request.user;
         try {
-            const r = await this.service.getSessionById(id);
+            const r = await this.service.getSessionById(user.id, id);
             if (!r) {
                 return res.status(HttpStatus.NOT_FOUND).json();
             } else {

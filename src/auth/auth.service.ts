@@ -12,7 +12,7 @@ export class AuthService {
     ) {}
 
     async validateUser(username: string, pass: string): Promise<any> {
-        const user = await this.usersService.findOneByLogin(username);
+        const user = await this.usersService.findOneByLoginAndPass(username, pass);
         if (user && user.password === pass) {
           const { password, ...result } = user;
           return result;
@@ -45,9 +45,9 @@ export class AuthService {
 
     async anonymous(username: string) {
       try {
-        let user = await this.usersService.findOneByLogin(username);
+        let user = await this.usersService.findOneByLoginAndPass(username, username);
         if (user === null) {
-            user = await this.usersService.createUser(username);
+            user = await this.usersService.createUser(username, 2);
         }
         let a = await this.usersService.getToken(user.id, 1);
         let r = await this.usersService.getToken(user.id, 2);

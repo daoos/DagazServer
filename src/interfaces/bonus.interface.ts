@@ -22,4 +22,7 @@ export class Bonus {
 
     @ApiPropertyOptional()
     activated: Date;
+
+    @ApiPropertyOptional()
+    email: string;
 }

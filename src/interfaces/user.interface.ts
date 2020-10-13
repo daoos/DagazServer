@@ -5,6 +5,9 @@ export class User {
     @ApiProperty()
     id: number;
     
+    @ApiProperty()
+    realm: number;
+
     @ApiPropertyOptional()
     is_admin: number;
 

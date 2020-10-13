@@ -2,6 +2,8 @@ import { Injectable, Inject, InternalServerErrorException, HttpStatus } from '@n
 import { bonuses } from '../entity/bonuses';
 import { Repository } from 'typeorm';
 import { Bonus } from '../interfaces/bonus.interface';
+import { queue } from '../entity/queue';
+import { contacts } from '../entity/contacts';
 
 @Injectable()
 export class BonusService {
@@ -62,6 +64,39 @@ export class BonusService {
             return null;
         }
         return x[0].expire_period;
+    }
+
+    async getUserId(uid: number): Promise<number> {
+        const x = await this.service.query(
+            `select user_id
+             from   user_games a
+             where  a.id = $1`, [uid]);
+        if (!x || x.length != 1) {
+            return null;
+        }
+        return x[0].user_id;
+    }
+
+    async getContactId(user: number, email: string) {
+        const x = await this.service.query(
+            `select id
+             from   contacts a
+             where  a.type_id = 1 and a.user_id = $1 and a.address = $3`, [user, email]);
+        if (x && x.length == 1) {
+             return x[0].id;
+        }
+        const y = await this.service.createQueryBuilder("contacts")
+        .insert()
+        .into(contacts)
+        .values({
+            type_id: 1,
+            user_id: user,
+            address: email,
+            created: new Date()
+        })
+        .returning('*')
+        .execute();
+        return y.generatedMaps[0].id;
     }
 
     async getBonus(bonus: string): Promise<Bonus> {
@@ -136,6 +171,33 @@ export class BonusService {
             .returning('*')
             .execute();
             x.id = y.generatedMaps[0].id;
+            return x;
+        } catch (error) {
+            console.error(error);
+            throw new InternalServerErrorException({
+                status: HttpStatus.BAD_REQUEST,
+                error: error
+            });
+        }
+    }
+
+    async sendBonus(x: Bonus): Promise<Bonus> {
+        try {
+            const bonus = await this.getBonus(x.bonus);
+            if (!bonus) {
+                return null;
+            }
+            const user = await this.getUserId(x.uid);
+            const contact = await this.getContactId(user, x.email);
+            const y = await this.service.createQueryBuilder("queue")
+            .insert()
+            .into(queue)
+            .values({
+                contact_id: contact,
+                bonuse_id: bonus.id,
+                scheduled: new Date()
+            })
+            .execute();
             return x;
         } catch (error) {
             console.error(error);

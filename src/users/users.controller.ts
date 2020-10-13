@@ -1,11 +1,12 @@
-import { Controller, Get, Res, HttpStatus, UseGuards, Post, Body, Delete, Param } from '@nestjs/common';
+import { Controller, Get, Res, HttpStatus, UseGuards, Post, Body, Delete, Param, Req } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { User } from '../interfaces/user.interface';
-import { ApiOkResponse, ApiUnauthorizedResponse, ApiInternalServerErrorResponse, ApiForbiddenResponse, ApiSecurity, ApiBody, ApiCreatedResponse, ApiNotFoundResponse } from '@nestjs/swagger';
+import { ApiOkResponse, ApiUnauthorizedResponse, ApiInternalServerErrorResponse, ApiForbiddenResponse, ApiSecurity, ApiBody, ApiCreatedResponse, ApiNotFoundResponse, ApiConflictResponse } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { RolesGuard } from '../auth/roles.guard';
 import { Roles } from '../auth/roles.decorator';
 import { TokenGuard } from '../auth/token.guard';
+import { Request } from 'express';
 
 @ApiSecurity('bearer')
 @Controller('api/users')
@@ -15,14 +16,16 @@ export class UsersController {
         private readonly service: UsersService
     ) {}
 
-    @UseGuards(JwtAuthGuard, TokenGuard)
+    @UseGuards(JwtAuthGuard, RolesGuard, TokenGuard)
+    @Roles('admin')
     @Get()
     @ApiOkResponse({ description: 'Successfully.'})
     @ApiUnauthorizedResponse({ description: 'Unauthorized.'})
     @ApiInternalServerErrorResponse({ description: 'Internal Server error.'})
-    async findAll(@Res() res): Promise<User[]> {
+    async findAll(@Req() request: Request, @Res() res): Promise<User[]> {
+        const user: any = request.user;
         try {
-            const r = await this.service.findAll();
+            const r = await this.service.findAll(user.id);
             return res.status(HttpStatus.OK).json(r);
         } catch(e) {
             return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ error: e.message.error.toString(), stack: e.stack});
@@ -34,9 +37,10 @@ export class UsersController {
     @ApiOkResponse({ description: 'Successfully.'})
     @ApiUnauthorizedResponse({ description: 'Unauthorized.'})
     @ApiInternalServerErrorResponse({ description: 'Internal Server error.'})
-    async findUsers(@Res() res, @Param('id') id): Promise<User[]> {
+    async findUsers(@Req() request: Request, @Res() res, @Param('id') id): Promise<User[]> {
+        const user: any = request.user;
         try {
-            const r = await this.service.getUsersByGame(id);
+            const r = await this.service.getUsersByGame(user.id, id);
             return res.status(HttpStatus.OK).json(r);
         } catch(e) {
             return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ error: e.message.error.toString(), stack: e.stack});
@@ -46,12 +50,16 @@ export class UsersController {
     @Post()
     @ApiBody({ type: [User] })
     @ApiCreatedResponse({ description: 'Successfully.'})
-    @ApiUnauthorizedResponse({ description: 'Unauthorized.'})
+    @ApiConflictResponse({ description: 'User already exists.'})
     @ApiInternalServerErrorResponse({ description: 'Internal Server error.'})
     async update(@Res() res, @Body() x: User): Promise<User> {
         try {
             const r = await this.service.addUser(x);
-            return res.status(HttpStatus.CREATED).json(r);
+            if (!r) {
+                return res.status(HttpStatus.CONFLICT).json();
+            } else {
+                return res.status(HttpStatus.CREATED).json(r);
+            }
         } catch (e) {
             return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ error: e.message.error.toString(), stack: e.stack});
         }
@@ -65,9 +73,10 @@ export class UsersController {
     @ApiForbiddenResponse({ description: 'Forbidden.'})
     @ApiNotFoundResponse({ description: 'Not Found.'})
     @ApiInternalServerErrorResponse({ description: 'Internal Server error.'})
-    async delete(@Res() res, @Param('id') id): Promise<User> {
+    async delete(@Req() request: Request, @Res() res, @Param('id') id): Promise<User> {
+        const user: any = request.user;
         try {
-            const r = await this.service.delUser(id);
+            const r = await this.service.delUser(user.id, id);
             if (!r) {
                 return res.status(HttpStatus.NOT_FOUND).json();
             } else {
