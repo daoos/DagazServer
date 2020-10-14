@@ -4,7 +4,6 @@ import { BonusService } from './bonus.service';
 import { Bonus } from '../interfaces/bonus.interface';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { TokenGuard } from '../auth/token.guard';
-import { Request } from 'express';
 import { RolesGuard } from '../auth/roles.guard';
 import { Roles } from '../auth/roles.decorator';
 

@@ -79,9 +79,9 @@ export class BonusService {
 
     async getContactId(user: number, email: string) {
         const x = await this.service.query(
-            `select id
+            `select a.id
              from   contacts a
-             where  a.type_id = 1 and a.user_id = $1 and a.address = $3`, [user, email]);
+             where  a.type_id = 1 and a.user_id = $1 and a.address = $2`, [user, email]);
         if (x && x.length == 1) {
              return x[0].id;
         }

@@ -38,9 +38,9 @@ export class UsersService {
       return x[0].realm_id;
     }
 
-    async checkToken(user: number, dev: string, val: string): Promise<tokens> {
+    async checkToken(user: number, val: string): Promise<tokens> {
       const x = await this.tokens.createQueryBuilder("tokens")
-      .where("tokens.user_id = :user_id and tokens.device_str = :dev and value_str = :val", { user_id: user,dev: dev, val: val })
+      .where("tokens.user_id = :user_id and value_str = :val", { user_id: user, val: val })
       .getOne();
       if (!x) {
         return null;
