@@ -1,0 +1,41 @@
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+<title>%%title%%</title>
+<link rel="stylesheet" href="css/%%style%%"/>
+</head>
+<body>
+
+%%imgList%%
+
+<div class="center-body">
+    <div class="back-button">К списку игр</div>
+    <div class="canvas-wrap" id="canvasFit">
+        <div class="cc2">
+        <canvas id="Canvas" width="%%width%%" height="%%height%%" style="cursor:default" class="canvas-body">Broken canvas...</canvas>
+        </div>
+    </div>
+</div>
+<div class="rotate-device" id="rotatePlace">
+    <div class="center-pad">
+        <img src="images/rotate.svg"/>
+        <span>Пожалуйста, поверните устройство</span>
+    </div>
+</div>
+<div class="modal">
+    <div class="modal-dialog">
+        <div class="modal-header"><h2>Покинуть игру?</h2></div>
+        <div class="modal-body">
+        Вы хотите покинуть игру, если вы согласитесь прогресс не будет сохранен.
+        </div>
+        <div class="modal-footer">
+            <button class="btn close">Закрыть игру</button>
+            <button class="btn primary">Продолжить играть</button>
+        </div>
+    </div>
+</div>
+<script src="js/%%allScripts%%"></script>
+
+</body>
+</html>

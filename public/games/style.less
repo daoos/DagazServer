@@ -3,7 +3,7 @@ body, html {
     margin:0;
     padding:0;
     font-family: 'Roboto', sans-serif;
-    background:#0D47A1;
+    background:#FFF;
 }
 .center-body {
     
@@ -16,20 +16,12 @@ body, html {
         padding:6px;
         background:#FFF;
         border-radius: 10px;
-        box-shadow:0px 3px 6px rgba(0,0,0,0.1);
-        width: 70vw;
-    max-width: 1024px;
+        box-shadow:0px 3px 4px 1px rgba(0,0,0,0.3);
     flex-grow:0;
     left:50%;
     top:50%;
     transform: translate(-50%,-50%);
     overflow:hidden;
-
-    &::before {
-        content:' ';
-        display: block;
-        padding-top:61%;
-    }
 
     .cc2 {
         position: absolute;
@@ -56,8 +48,8 @@ body, html {
     align-items: center;
     justify-content: center;
     z-index:98888;
-    background: #0D47A1;
-    color:#FFF;
+    background: #FFF;
+    color:#0D47A1;
     flex-direction: column;
     .center-pad {
         text-align: center;
@@ -75,9 +67,49 @@ body, html {
     }
 }
 
-@media  (orientation: portrait) {
+.back-button {
+    display: block;
+    position: absolute;
+    text-align: center;
+    border:0;
+    background:#FFF;
+    font-size:10pt;
+    padding:5px 10px;
+    border:1px solid #0D47A1;
+    border-radius: 4px;
+    color:#0D47A1;
+    z-index:100000;
+    text-transform: lowercase;
+    box-shadow:0px 1px 4px 1px rgba(0,0,0,0.1);
+    cursor: pointer;
+    user-select: none; 
+}
+
+@media  (orientation: portrait )and( max-width: 1000px) {
     .rotate-device {
+        &.perfect-width {
         display: flex;
+        }
+    }
+    .back-button {
+        
+        left:10px;
+        bottom:10px;
+        right:10px;
+        font-size:16pt;
+    }
+}
+
+@media  (orientation: landscape ) and ( max-width: 1000px) {
+    .rotate-device {
+        &.perfect-height {
+        display: flex;
+        }
+    }
+
+    .back-button {
+        left:10px;
+        bottom:10px;
     }
 }
 
@@ -125,9 +157,10 @@ body, html {
         padding:20px 0 20px 0;
         text-align: center;
         h1 {
-        
+        overflow: hidden;
             text-align: center;
-            color:#FFf;
+            line-height: 54pt;
+            color:#0D47A1;
             text-transform: uppercase;
             font-weight: normal;
             font-size:48pt;
@@ -138,22 +171,67 @@ body, html {
                 position: absolute;
                 left:0;
                 right:0;
-                background:#0D47A1;
+                background:#FFF;
                 &:nth-child(1) {
                     height: @bh;
                     top: @bt;
+                   
                 }
                 &:nth-child(2) {
                     height: @bh;
                     top: @bt + @bo * 1;
+                   
                 }
                 &:nth-child(3) {
                     height: @bh;
                     top: @bt + @bo * 2;
+                   
                 }
                 &:nth-child(4) {
                     height: @bh;
                     top: @bt + @bo * 3;
+                
+                }
+
+                &:nth-child(5) {
+                    height: @bh;
+                    top: @bt + @bo * 4;
+                
+                }
+                &:nth-child(6) {
+                    height: @bh;
+                    top: @bt + @bo * 5;
+                
+                }
+                &:nth-child(7) {
+                    height: @bh;
+                    top: @bt + @bo * 6;
+                
+                }
+                &:nth-child(8) {
+                    height: @bh;
+                    top: @bt + @bo * 7;
+                
+                }
+                &:nth-child(9) {
+                    height: @bh;
+                    top: @bt + @bo * 8;
+                
+                }
+                &:nth-child(10) {
+                    height: @bh;
+                    top: @bt + @bo * 9;
+                
+                }
+                &:nth-child(11) {
+                    height: @bh;
+                    top: @bt + @bo * 10;
+                
+                }
+                &:nth-child(12) {
+                    height: @bh;
+                    top: @bt + @bo * 11;
+                
                 }
             }
             
@@ -162,23 +240,124 @@ body, html {
 }
 
 .btn {
-    display: inline-block;
+    display: block;
     padding:10 20px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.3);
-    background: #1E88E5;
-    color:#FFF;
+    box-shadow: 0 2px 6px 1px rgba(0,0,0,0.3);
+    color:#0D47A1;
     text-transform: uppercase;
     text-decoration: none;
     border-radius: 4px;
-    transition: all 0.5s;
-    &:hover {
-        box-shadow: 0 0px 1px rgba(0,0,0,0.3);
+    transition: box-shadow 0.5s;
+
+    margin-bottom:10px;
+
+    &:hover, &:focus {
+        box-shadow: 0 1px 3px 1px rgba(0,0,0,0.3);
     }
     &.btn-center {
-        margin:0 auto;
+        margin:0 auto 10px auto;
     }
 }
 
 .text-center {
     text-align: center;
+}
+.under-body {
+    margin: 10px 20px 30px;
+    text-align: center;
+    color:#0D47A1;
+    font-size:12px;
+    a {
+        color:#0D47A1;
+    }
+}
+
+.gamesList {
+    display:flex;
+    flex-direction: column;
+    list-style:none;
+    padding:0;
+    margin: -25px -20px;
+    li {
+        a {
+            padding:10px 25px;
+            display: block;
+            color:#0D47A1;
+            text-decoration: none;
+            &:hover, &:focus {
+                background: rgba(0,0,0,0.05);
+            }
+        }
+        border-bottom:1px solid #CCC;
+    }
+}
+
+.modal {
+    display:none;
+    opacity:0;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top:0;bottom:0;
+    left:0;right:0;
+    z-index:9999999;
+    background-color: rgba(0,0,0,0.6);
+    overflow: scroll;
+    transition: opacity 0.5s;
+    .modal-dialog {
+        width:95%;
+        max-width:480px;
+        background:#FFF;
+        box-shadow:0px 2px 6px 2px rgba(0,0,0,0.1);
+        border-radius: 2px;
+        overflow: hidden;
+        transform: translate(0px,-100px);
+        transition: transform 0.5s;
+        .modal-header {
+            padding:10px 30px;
+            margin:0;
+            border-bottom:1px solid #CCC;
+            h2 {
+                margin:0;
+                font-size:16pt;
+                color:#000;
+            }
+        }
+        .modal-body {
+            padding:30px;
+            font-size:14pt;
+        }
+        .modal-footer {
+            border-top:1px solid #CCC;
+            display:flex;
+            .btn {
+                margin:0;
+                padding:30px 10px;
+                width:50%;
+                box-shadow:none;
+                border-radius: 0;
+                border:0;
+                background:#FFF;
+                border-left:1px solid #CCC;
+                &:first-child {
+                    border-left:0;
+                }
+                &.primary {
+                    color:#FFF;
+                    background:#0D47A1;
+                }
+                outline:0;
+            }
+        }
+    }
+    &.fade {
+        display: flex;
+    }
+
+    &.in {
+        opacity:1;
+        .modal-dialog {
+            transform: none;
+        }
+    }
 }

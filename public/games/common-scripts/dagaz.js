@@ -66,4 +66,4 @@ Dagaz.AI.reject = function(ctx, move) {
   ctx.childs = _.filter(ctx.childs, function(child) {
       return child.move.toString() != move.toString();
   });
-}
+};

@@ -1,4 +1,4 @@
-Dagaz.Model.WEST_POS = 33;
+(function(){Dagaz.Model.WEST_POS = 33;
 Dagaz.Model.EAST_POS = 794;
 
 ZRF = {
@@ -1789,3 +1789,5 @@ Dagaz.View.configure = function(view) {
     view.defPosition("s40", 624, 321, 16, 16);
     view.defPosition("t40", 624, 337, 16, 16);
 }
+
+})();
