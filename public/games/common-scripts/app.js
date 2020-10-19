@@ -66,11 +66,11 @@ Dagaz.Controller.newGame = function() {
 }
 
 var win = function() {
-   window.location = "bonus.html?back=" + getName() + ".html";
+   window.location = "bonus.html?gameid=" + getName() ;
 }
 
 var lose = function() {
-   window.location = "lose.html?back=" + getName() + ".html";
+   window.location = "lose.html?gameid=" + getName() ;
 }
 
 App.prototype.gameOver = function(text, player) {

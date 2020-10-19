@@ -319,14 +319,14 @@ Dagaz.Controller.newGame = function() {
 
 var win = function() {
    winGame(uid);
-   url = "bonus.html?back=" + getName() + ".html";
+   url = "bonus.html?gameid=" + getName();
    wait = true;
    won = true;
 }
 
 var lose = function() {
    winGame(bot);
-   url = "lose.html?back=" + getName() + ".html";
+   url = "lose.html?gameid=" + getName();
    wait = true;
 }
 

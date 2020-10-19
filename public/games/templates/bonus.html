@@ -2,7 +2,7 @@
 <head>
 <META http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="style.css?v=22"/>
+    <link rel="stylesheet" href="css/%%style%%"/>
 <title>Бонус</title>
 </head>
 <body>
@@ -25,6 +25,9 @@
         <div class="content-body">
             <h2>Вы победили!</h2>
             <div class="bonus">Ваш бонус: <span class="bonus-self" id="bonusplace">XXXXXXXXXXXXXXXX</span></div>
+            <br/><br/>
+            <a href="#" class="btn btn-center" id="replayButton">Сыграем ещё?</a>
+            <a href="index.html" class="btn btn-center btn-gray">Вернуться к списку игр</a>
         </div>
     </div>
 </body>
@@ -39,6 +42,9 @@
         (function(){
             var names = JSON.parse('%%bonusNames%%');
             document.getElementById("gameName").innerHTML = (names[params['gameid'] ? params['gameid'] : 'filler'])+'<span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>';
+
+            let gameId = params['gameid'] ? ( names[params['gameid']] ? params['gameid'] : null) : null;
+        document.getElementById("replayButton").href = gameId ? (gameId + ".html") : "index.html";
         })();
         
 </script>

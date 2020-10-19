@@ -273,13 +273,13 @@ Dagaz.Controller.newGame = function() {
 
 var win = function() {
    winGame(uid);
-   url = "bonus.html?back=" + getName() + ".html";
+   url = "bonus.html?gameid=" + getName();
    wait = true;
    won = true;
 }
 
 var lose = function() {
-   window.location = "lose.html?back=" + getName() + ".html";
+   window.location = "lose.html?gameid=" + getName();
    wait = true;
 }
 
