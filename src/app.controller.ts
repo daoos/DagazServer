@@ -1,4 +1,4 @@
-import { Controller, UseGuards, Request, Post, Get } from '@nestjs/common';
+import { Controller, UseGuards, Request, Post, Get, Param } from '@nestjs/common';
 import { ApiSecurity, ApiBody, ApiCreatedResponse, ApiUnauthorizedResponse } from '@nestjs/swagger';
 import { AuthService } from './auth/auth.service';
 import { LocalAuthGuard } from './auth/local-auth.guard';
@@ -41,6 +41,14 @@ export class AppController {
   async anonymous(@Request() req) {
     const device: string = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
     const r = await this.authService.anonymous(device);
+    return r;
+  }
+
+  @Get('api/auth/anonymous/:name')
+  @ApiCreatedResponse({ description: 'Successfully.'})
+  @ApiUnauthorizedResponse({ description: 'Unauthorized.'})
+  async named(@Param('name') name) {
+    const r = await this.authService.anonymous(name);
     return r;
   }
 }
