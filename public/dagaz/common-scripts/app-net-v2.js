@@ -10,7 +10,7 @@ var STATE = {
     STOP: 6
 };
 
-var SERVICE = "http://127.0.0.1:3000/api/";
+var SERVICE = "/api/";
 
 var isDrag = false;
 var lastPosition = null;
@@ -423,6 +423,7 @@ var recovery = function() {
      url: SERVICE + "session/recovery",
      type: "POST",
      data: {
+         filename: getName(),
          uid: id
      },
      dataType: "json",

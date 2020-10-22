@@ -313,7 +313,7 @@ export class SessionService {
                  from   user_games a
                  inner  join game_sessions b on (b.id = a.session_id and b.closed is null)
                  inner  join games c on (c.id = b.game_id)
-                 where  a.id = $1`, [s.uid]);
+                 where  a.id = $1 and c.filename = $2`, [s.uid, s.filename]);
             let l: Sess[] = x.map(x => {
                 let it = new Sess();
                 it.id = x.id;
