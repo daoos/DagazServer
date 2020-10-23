@@ -10,7 +10,7 @@ var STATE = {
     STOP: 6
 };
 
-var SERVICE = "/api/";
+var SERVICE = "http://127.0.0.1:3000/api/";
 
 var isDrag = false;
 var lastPosition = null;

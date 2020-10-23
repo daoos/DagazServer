@@ -8,10 +8,6 @@ Dagaz.Model.checkVersion = function(design, name, value) {
   }
 }
 
-if (!_.isUndefined(Dagaz.Controller.addSound)) {
-    Dagaz.Controller.addSound(0, "../sounds/step.ogg");
-}
-
 var expand = function(design, board, player, group, dame) {
    for (var i = 0; i < group.length; i++) {
         var pos = group[i];
