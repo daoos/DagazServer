@@ -1,6 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column, Index, ManyToOne, JoinColumn } from "typeorm";
 import { games } from "./games";
 import { game_statuses } from "./game_statuses";
+import { game_variants } from "./game_variants";
 import { users } from "./users";
 
 @Entity()
@@ -21,6 +22,16 @@ export class game_sessions {
     @ManyToOne(type => games)
     @JoinColumn({ name: "game_id" })
     game: games;
+
+    @Index()
+    @Column({ nullable: true })
+    variant_id: number;
+    @ManyToOne(type => game_variants)
+    @JoinColumn({ name: "variant_id" })
+    variant: game_variants;
+
+    @Column({ nullable: true })
+    selector_value: number;
 
     @Column({ nullable: true })
     var_num: number;
