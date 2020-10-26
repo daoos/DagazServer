@@ -14,7 +14,7 @@ export class Game {
     @ApiProperty()
     players_total: number;
 
-    @ApiProperty()
+    @ApiPropertyOptional()
     created: Date;
 
     @ApiPropertyOptional()
@@ -22,4 +22,10 @@ export class Game {
 
     @ApiPropertyOptional()
     additional_time: number;
+
+    @ApiPropertyOptional()
+    realm_id: number;
+
+    @ApiProperty()
+    max_selector: number;
 }
