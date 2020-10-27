@@ -2,6 +2,7 @@ import { Injectable, Inject, InternalServerErrorException, HttpStatus } from '@n
 import { games } from '../entity/games';
 import { Repository } from 'typeorm';
 import { Game } from '../interfaces/game.interface';
+import { Preview } from '../interfaces/preview.interface';
 
 @Injectable()
 export class GameService {
@@ -88,6 +89,27 @@ export class GameService {
               status: HttpStatus.BAD_REQUEST,
               error: error
           });
+        }
+    }
+
+    async getPreview(r: Preview): Promise<Preview> {
+        try {
+            const x = await this.service.query(
+                `select id, preview
+                 from   game_previews
+                 where  filename = $1 and coalesce(selector_value, 0) = $2`, [r.filename, r.selector_value]);
+            if (!x || x.length == 0) {
+                 return null;
+            }
+            r.id = x[0].id;
+            r.preview = x[0].preview;
+            return r;
+        } catch (error) {
+            console.error(error);
+            throw new InternalServerErrorException({
+                status: HttpStatus.BAD_REQUEST,
+                error: error
+            });
         }
     }
 }

@@ -34,9 +34,26 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(4, 22, 'International Checkers', 'international-checkers', 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(5, 22, 'Frisian Checkers', 'frisian-checkers', 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(6, 22, '80 Cells Checkers', '80-cells-checkers', 2)`);
+
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(1, 'doubutsu-shogi', null, 'doubutsu-shogi')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(2, 'atari-go', null, 'atari-go')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(3, 'chess-go-mobile', null, 'chess-go-mobile')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(4, 'go-9x9', null, 'go-9x9')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(5, 'go-19x19', null, 'go-19x19')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(6, 'jungle', null, 'jungle')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(7, 'margo', null, 'margo')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(8, 'paper-go', null, 'paper-go')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(9, 'dual-go', null, 'dual-go')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(10, 'russian-checkers', null, 'russian-checkers')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(11, 'international-checkers', null, 'international-checkers')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(12, 'frisian-checkers', null, 'frisian-checkers')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(13, '80-cells-checkers', null, '80-cells-checkers')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(14, 'xiangqi', null, 'xiangqi')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(15, 'column-checkers', null, 'column-checkers')`);
     }
 
     public async down(queryRunner: QueryRunner): Promise<any> {
+        await queryRunner.query(`delete from game_previews`);
         await queryRunner.query(`delete from game_variants`);
         await queryRunner.query(`delete from games`);
     }
