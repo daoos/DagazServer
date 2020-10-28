@@ -18,6 +18,9 @@ export class Sess {
     var_num: number;
 
     @ApiPropertyOptional()
+    variant_id: number;
+
+    @ApiPropertyOptional()
     filename: string;
 
     @ApiPropertyOptional()
@@ -49,6 +52,12 @@ export class Sess {
 
     @ApiPropertyOptional()
     player_num: number;
+
+    @ApiPropertyOptional()
+    player_name: string;
+
+    @ApiPropertyOptional()
+    selector_value: number;
 
     @ApiPropertyOptional()
     uid: number;

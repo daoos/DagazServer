@@ -22,7 +22,7 @@ export class SessionController {
     async findAll(@Req() request: Request, @Res() res): Promise<Sess[]> {
         const user: any = request.user;
         try {
-            const r = await this.service.getActiveSessions(user.id);
+            const r = await this.service.getWaitingSessions(user.id);
             return res.status(HttpStatus.OK).json(r);
         } catch(e) {
             return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ error: e.message.error.toString(), stack: e.stack});
@@ -53,13 +53,18 @@ export class SessionController {
     @Post()
     @ApiBody({ type: [Sess] })
     @ApiCreatedResponse({ description: 'Successfully.'})
+    @ApiNotFoundResponse({ description: 'Not Found.'})
     @ApiUnauthorizedResponse({ description: 'Unauthorized.'})
     @ApiInternalServerErrorResponse({ description: 'Internal Server error.'})
     async create(@Req() request: Request, @Res() res, @Body() x: Sess): Promise<Sess> {
         const user: any = request.user;
         try {
             const r = await this.service.createSession(user.id, x);
-            return res.status(HttpStatus.CREATED).json(r);
+            if (!r) {
+                return res.status(HttpStatus.NOT_FOUND).json();
+            } else {
+                return res.status(HttpStatus.CREATED).json(r);
+            }
         } catch (e) {
             return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ error: e.message.error.toString(), stack: e.stack});
         }

@@ -33,9 +33,6 @@ export class game_sessions {
     @Column({ nullable: true })
     selector_value: number;
 
-    @Column({ nullable: true })
-    var_num: number;
-
     @Index()
     @Column({ nullable: false })
     status_id: number;

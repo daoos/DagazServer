@@ -23,28 +23,33 @@ export class SessionService {
         return x[0].realm_id;
       }
 
-      async getActiveSessions(user: number): Promise<Sess[]> {
+      async getWaitingSessions(user: number): Promise<Sess[]> {
         try {
             const realm = await this.getRealm(user);
             const x = await this.service.query(
-                `select a.id as id, a.status_id as status, a.game_id as game_id,
-                        b.name as game, b.filename as filename, a.created as created,
+                `select a.id as id, a.status_id as status, a.game_id as game_id, d.id as variant_id,
+                        coalesce(d.name, b.name) as game, coalesce(d.filename, b.filename) as filename, a.created as created,
                         c.name as creator, b.players_total as players_total,
-                        a.last_setup
+                        a.last_setup as last_setup, e.player_num as player_num
                  from   game_sessions a
                  inner  join games b on (b.id = a.game_id)
                  inner  join users c on (c.id = a.user_id and c.realm_id = $1)
-                 where  a.status_id = 2 and a.closed is null
-                 order  by a.id`, [realm]);
+                 left   join game_variants d on (d.id = a.variant_id)
+                 inner  join user_games e on (e.session_id = a.id and e.user_id <> $2)
+                 where  a.status_id = 1 and a.closed is null
+                 order  by a.id`, [realm, user]);
                  let l: Sess[] = x.map(x => {
                     let it = new Sess();
                     it.id = x.id;
                     it.status = x.status;
                     it.game_id = x.game_id;
                     it.game = x.game;
+                    it.variant_id = x.variant_id;
                     it.filename = x.filename;
                     it.created = x.created;
                     it.players_total = x.players_total;
+                    it.player_name = x.creator;
+                    it.player_num = x.player_num;
                     it.last_setup = x.last_setup;
                     return it;
                 });
@@ -238,7 +243,6 @@ export class SessionService {
         .into(game_sessions)
         .values({
             game_id: x.game_id,
-            var_num: x.var_num,
             user_id: user,
             status_id: 1,
             last_time: Date.now()
@@ -344,13 +348,17 @@ export class SessionService {
             .values({
                 game_id: x.game_id,
                 user_id: user,
-                status_id: 2,
+                status_id: 1,
+                variant_id: x.variant_id,
+                selector_value: x.selector_value,
                 last_time: Date.now()
             })
             .returning('*')
             .execute();
             x.id = y.generatedMaps[0].id;
-            x.player_num = 1;
+            if (!x.player_num) {
+                x.player_num = 1;
+            }
             await this.joinToSession(user, x);
             return x;
         } catch (error) {
