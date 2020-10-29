@@ -88,10 +88,22 @@ export class MoveService {
         return x[0].user_id;
     }
 
+    async getLastTurn(sid: number): Promise<number> {
+        const x = await this.service.query(
+            `select last_turn
+             from   game_sessions
+             where  id = $1`, [sid]);
+        if (!x || x.length == 0) {
+             return null;
+        }
+        return x[0].last_turn;
+    }
+
     async getConfirmedMove(uid: number): Promise<Move[]> {
         try {
-            const sess: number = await this.getSession(uid);
-            const f = await this.checkSession(sess);
+            const sid: number = await this.getSession(uid);
+            const turn: number = await this.getLastTurn(sid);
+            const f = await this.checkSession(sid);
             if (!f) {
                 return null;
             }
@@ -100,10 +112,10 @@ export class MoveService {
                     a.move_str, a.setup_str, a.note, a.time_delta, a.uid
              from   game_moves a
              inner  join game_sessions b on (b.id = a.session_id and b.closed is null)
-             where  a.session_id = $1 and a.uid <> $2
+             where  a.session_id = $1 and a.uid <> $2 and a.turn_num >= $3
              and    not a.setup_str is null 
              and    a.accepted is null
-             order  by a.id desc`, [sess, uid]);
+             order  by a.id desc`, [sid, uid, turn]);
             if (!x) {
                 return null;
             }
@@ -123,7 +135,7 @@ export class MoveService {
                 it.additional_time = await this.getAdditionalTime(it.session_id);
                 l.push(it);
                 await this.acceptMove(it.id);
-                await this.touchSession(it.uid, sess);
+                await this.touchSession(it.uid, sid);
             }
             return l;
         } catch (error) {
