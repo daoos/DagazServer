@@ -52,14 +52,14 @@ export class MoveController {
     }
 
     @UseGuards(JwtAuthGuard, TokenGuard)
-    @Get('confirmed/:id')
+    @Get('confirmed/:uid')
     @ApiOkResponse({ description: 'Successfully.'})
     @ApiNotFoundResponse({ description: 'Not Found.'})
     @ApiUnauthorizedResponse({ description: 'Unauthorized.'})
     @ApiInternalServerErrorResponse({ description: 'Internal Server error.'})
-    async getConfirmedMove(@Res() res, @Param('id') id): Promise<Move[]> {
+    async getConfirmedMove(@Res() res, @Param('uid') uid): Promise<Move[]> {
         try {
-            const r = await this.service.getConfirmedMove(id);
+            const r = await this.service.getConfirmedMove(uid);
             if (!r) {
                 return res.status(HttpStatus.NOT_FOUND).json();
             } else {

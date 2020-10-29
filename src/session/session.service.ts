@@ -37,7 +37,7 @@ export class SessionService {
                  left   join game_variants d on (d.id = a.variant_id)
                  inner  join user_games e on (e.session_id = a.id and e.user_id <> $2)
                  where  a.status_id = 1 and a.closed is null
-                 order  by a.id`, [realm, user]);
+                 order  by a.created desc`, [realm, user]);
                  let l: Sess[] = x.map(x => {
                     let it = new Sess();
                     it.id = x.id;
@@ -63,71 +63,39 @@ export class SessionService {
         }
     }
 
-    async getInitSessions(id: number): Promise<Sess[]> {
-        try {
-            const x = await this.service.query(
-                `select a.id as id, a.status_id as status_id, a.game_id as game_id, 
-                        c.name as game, c.filename as filename, a.created as created, 
-                        d.name as creator, c.players_total as players_total, 
-                        b.player_num as player_num, a.last_setup as last_setup, a.last_turn as last_turn
-                 from   game_sessions a
-                 inner  join challenge b on (b.session_id = a.id and b.user_id = $1)
-                 inner  join games c on (c.id = a.game_id)
-                 inner  join users d on (d.id = a.user_id)
-                 where  a.status_id = 1
-                 union  all
-                 select a.id as id, a.status_id as status_id, a.game_id as game_id, 
-                        c.name as game, c.filename as filename, a.created as created, 
-                        d.name as creator, c.players_total as players_total, 
-                        a.last_player + 1 as player_num, a.last_setup as last_setup, a.last_turn as last_turn
-                 from   game_sessions a
-                 left   join challenge b on (b.session_id = a.id)
-                 inner  join games c on (c.id = a.game_id)
-                 inner  join users d on (d.id = a.user_id)
-                 where  a.status_id = 1 and b.user_id is null`, [id]);
-            let l: Sess[] = x.map(x => {
-                let it = new Sess();
-                it.id = x.id;
-                it.status = x.status_id;
-                it.game_id = x.game_id;
-                it.game = x.game;
-                it.filename = x.filename;
-                it.created = x.created;
-                it.creator = x.creator;
-                it.players_total = x.players_total;
-                return it;
-            });
-            return l;
-        } catch (error) {
-          console.error(error);
-          throw new InternalServerErrorException({
-              status: HttpStatus.BAD_REQUEST,
-              error: error
-          });
-        }
-    }
-
-    async getSessionById(user: number, id: number): Promise<Sess> {
+    async getActiveSessions(user: number): Promise<Sess[]> {
         try {
             const realm = await this.getRealm(user);
             const x = await this.service.query(
-                `select a.id as id, a.status_id as status_id, a.game_id as game_id,
-                        a.created as created, a.changed as changed, a.closed as closed
+                `select a.id as id, a.status_id as status, a.game_id as game_id, d.id as variant_id,
+                        coalesce(d.name, b.name) as game, coalesce(d.filename, b.filename) as filename, a.created as created,
+                        c.name as creator, b.players_total as players_total, a.last_setup as last_setup,
+                        string_agg(f.name || ' (' || e.player_num || ')', ' / ' order by e.player_num) as player_name
                  from   game_sessions a
+                 inner  join games b on (b.id = a.game_id)
                  inner  join users c on (c.id = a.user_id and c.realm_id = $1)
-                 where  a.id = $2`, [realm, id]);
-            if (!x || x.length != 1) {
-                 return null;
-            }
-            let it = new Sess();
-            it.id = x[0].id;
-            it.status = x[0].status_id;
-            it.game_id = x[0].game_id;
-            it.created = x[0].created;
-            it.changed = x[0].changed;
-            it.closed = x[0].closed;
-            return it;
-          } catch (error) {
+                 left   join game_variants d on (d.id = a.variant_id)
+                 inner  join user_games e on (e.session_id = a.id)
+                 inner  join users f on (f.id = e.user_id and f.realm_id = $2)
+                 where  a.status_id = 2 and a.closed is null
+                 group  by a.id, a.status_id, a.game_id, d.id, d.name, b.name, d.filename, b.filename, a.created, c.name, b.players_total, a.last_setup
+                 order  by a.changed desc`, [realm, realm]);
+                 let l: Sess[] = x.map(x => {
+                    let it = new Sess();
+                    it.id = x.id;
+                    it.status = x.status;
+                    it.game_id = x.game_id;
+                    it.game = x.game;
+                    it.variant_id = x.variant_id;
+                    it.filename = x.filename;
+                    it.created = x.created;
+                    it.players_total = x.players_total;
+                    it.player_name = x.player_name;
+                    it.last_setup = x.last_setup;
+                    return it;
+                });
+                return l;
+        } catch (error) {
           console.error(error);
           throw new InternalServerErrorException({
               status: HttpStatus.BAD_REQUEST,
@@ -308,29 +276,30 @@ export class SessionService {
         }
     }
 
-    async recovery(user:number, s: Sess): Promise<Sess[]> {
+    async recovery(user:number, s: Sess): Promise<Sess> {
         try {
-            const x = await this.service.query(
-                `select b.id as id, b.game_id as game_id, c.name as game, c.filename as filename,
-                        c.players_total as players_total, b.last_setup as last_setup,
-                        a.player_num as player_num, a.id as uid
-                 from   user_games a
-                 inner  join game_sessions b on (b.id = a.session_id and b.closed is null)
-                 inner  join games c on (c.id = b.game_id)
-                 where  a.id = $1 and c.filename = $2`, [s.uid, s.filename]);
-            let l: Sess[] = x.map(x => {
-                let it = new Sess();
-                it.id = x.id;
-                it.game_id = x.game_id;
-                it.game = x.game;
-                it.filename = x.filename;
-                it.players_total = x.players_total;
-                it.last_setup = x.last_setup;
-                it.player_num = x.player_num;
-                it.uid = x.uid;
-                return it;
-            });
-            return l;
+            let x = await this.service.query(
+                `select c.id as game_id, c.name as game, c.filename as filename,
+                        c.players_total as players_total, a.last_setup as last_setup,
+                        b.player_num as player_num, b.id as uid, b.user_id as user_id
+                 from   game_sessions a
+                 inner  join user_games b on (b.session_id = a.id)
+                 inner  join games c on (c.id = a.game_id)
+                 where  a.id = $1`, [s.id]);
+            if (!x || x.length == 0) {
+                 return null;
+            }
+            s.game_id = x[0].game_id;
+            s.game = x[0].game;
+            s.filename = x[0].filename;
+            s.players_total = x[0].players_total;
+            s.last_setup = x[0].last_setup;
+            x = x.filter((it) => { return it.user_id == user; });
+            if (x.length == 1) {
+                s.player_num = x[0].player_num;
+                s.uid = x[0].uid;
+            }
+            return s;
         } catch (error) {
           console.error(error);
           throw new InternalServerErrorException({

@@ -100,10 +100,10 @@ export class MoveService {
                     a.move_str, a.setup_str, a.note, a.time_delta, a.uid
              from   game_moves a
              inner  join game_sessions b on (b.id = a.session_id and b.closed is null)
-             where  a.session_id = $1
+             where  a.session_id = $1 and a.uid <> $2
              and    not a.setup_str is null 
              and    a.accepted is null
-             order  by a.id desc`, [sess]);
+             order  by a.id desc`, [sess, uid]);
             if (!x) {
                 return null;
             }
@@ -286,6 +286,7 @@ export class MoveService {
                 await this.service.createQueryBuilder("game_sessions")
                 .update(game_sessions)
                 .set({ 
+                    changed: new Date(),
                     last_setup: x.setup_str,
                     last_turn: turn_num,
                     last_user: x.uid

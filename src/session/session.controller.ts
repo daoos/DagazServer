@@ -15,11 +15,11 @@ export class SessionController {
     ) {}
 
     @UseGuards(JwtAuthGuard, TokenGuard)
-    @Get()
+    @Get('waiting')
     @ApiOkResponse({ description: 'Successfully.'})
     @ApiUnauthorizedResponse({ description: 'Unauthorized.'})
     @ApiInternalServerErrorResponse({ description: 'Internal Server error.'})
-    async findAll(@Req() request: Request, @Res() res): Promise<Sess[]> {
+    async findWaiting(@Req() request: Request, @Res() res): Promise<Sess[]> {
         const user: any = request.user;
         try {
             const r = await this.service.getWaitingSessions(user.id);
@@ -30,20 +30,15 @@ export class SessionController {
     }
 
     @UseGuards(JwtAuthGuard, TokenGuard)
-    @Get(':id')
+    @Get('active')
     @ApiOkResponse({ description: 'Successfully.'})
     @ApiUnauthorizedResponse({ description: 'Unauthorized.'})
-    @ApiNotFoundResponse({ description: 'Not Found.'})
     @ApiInternalServerErrorResponse({ description: 'Internal Server error.'})
-    async getSession(@Req() request: Request, @Res() res, @Param('id') id): Promise<Sess> {
+    async findActive(@Req() request: Request, @Res() res): Promise<Sess[]> {
         const user: any = request.user;
         try {
-            const r = await this.service.getSessionById(user.id, id);
-            if (!r) {
-                return res.status(HttpStatus.NOT_FOUND).json();
-            } else {
-                return res.status(HttpStatus.OK).json(r);
-            }
+            const r = await this.service.getActiveSessions(user.id);
+            return res.status(HttpStatus.OK).json(r);
         } catch(e) {
             return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ error: e.message.error.toString(), stack: e.stack});
         }
@@ -94,14 +89,18 @@ export class SessionController {
     @UseGuards(JwtAuthGuard, TokenGuard)
     @Post('recovery')
     @ApiBody({ type: [Sess] })
-    @ApiCreatedResponse({ description: 'Successfully.'})
+    @ApiOkResponse({ description: 'Successfully.'})
     @ApiUnauthorizedResponse({ description: 'Unauthorized.'})
     @ApiInternalServerErrorResponse({ description: 'Internal Server error.'})
-    async recovery(@Req() request: Request, @Res() res, @Body() x: Sess): Promise<Sess[]> {
+    async recovery(@Req() request: Request, @Res() res, @Body() x: Sess): Promise<Sess> {
         const user: any = request.user;
         try {
             const r = await this.service.recovery(user.id, x);
-            return res.status(HttpStatus.CREATED).json(r);
+            if (!r) {
+                return res.status(HttpStatus.NOT_FOUND).json();
+            } else {
+                return res.status(HttpStatus.OK).json(r);
+            }
         } catch (e) {
             return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ error: e.message.error.toString(), stack: e.stack});
         }

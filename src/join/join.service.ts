@@ -13,37 +13,6 @@ export class JoinService {
         private readonly service: Repository<user_games>
     ) {}  
 
-    async getJoinedBySession(id: number): Promise<Join[]> {
-        try {
-            const x = await this.service.query(
-                `select a.id as id, a.user_id as user_id, a.session_id as session_id, 
-                        a.player_num as player_num, a.is_ai as is_ai, b.name as user
-                 from   user_games a
-                 inner  join users b on (b.id = a.user_id)
-                 where  a.session_id = $1`, [id]);
-            if (!x || x.length != 1) {
-                return null;
-            }
-            let l: Join[] = x.map(x => {
-                let it = new Join();
-                it.id = x.id;
-                it.session_id = x.session_id;
-                it.user_id = x.user_id;
-                it.user = x.user;
-                it.player_num = x.player_num;
-                it.is_ai = x.is_ai;
-                return it;
-            });
-            return l;
-        } catch (error) {
-          console.error(error);
-          throw new InternalServerErrorException({
-              status: HttpStatus.BAD_REQUEST,
-              error: error
-          });
-        }
-    }
-
     async activateSession(id: number): Promise<boolean> {
         const x = await this.service.query(
             `select c.players_total as total_cnt, 
@@ -81,7 +50,8 @@ export class JoinService {
             `select min(a.player_num) as player_num
              from ( select generate_series as player_num 
                     from   generate_series(1, $1)) a
-             left   join   user_games b on (b.player_num = a.player_num and b.session_id = $2)`, [cnt, id]);
+             left   join   user_games b on (b.player_num = a.player_num and b.session_id = $2)
+             where  b.player_num is null`, [cnt, id]);
         if (!y || y.length != 1) {
              return null;
         }

@@ -15,20 +15,6 @@ export class JoinController {
     ) {}
 
     @UseGuards(JwtAuthGuard, TokenGuard)
-    @Get(':id')
-    @ApiOkResponse({ description: 'Successfully.'})
-    @ApiUnauthorizedResponse({ description: 'Unauthorized.'})
-    @ApiInternalServerErrorResponse({ description: 'Internal Server error.'})
-    async findJoined(@Res() res, @Param('id') id): Promise<Join[]> {
-        try {
-            const r = await this.service.getJoinedBySession(id);
-            return res.status(HttpStatus.OK).json(r);
-        } catch(e) {
-            return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ error: e.message.error.toString(), stack: e.stack});
-        }
-    }
-
-    @UseGuards(JwtAuthGuard, TokenGuard)
     @Post()
     @ApiBody({ type: [Join] })
     @ApiCreatedResponse({ description: 'Successfully.'})
