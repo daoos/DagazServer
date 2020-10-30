@@ -61,4 +61,7 @@ export class Sess {
 
     @ApiPropertyOptional()
     uid: number;
+
+    @ApiPropertyOptional()
+    last_turn: number;
 }

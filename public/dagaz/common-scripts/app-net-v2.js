@@ -707,7 +707,7 @@ App.prototype.exec = function() {
           }
       }, this);
       if (this.move === null) {
-          winGame();
+          this.state = STATE.STOP;
           alert('Buzy: Bad move [' + last_move + ']');
       }
       var player = this.design.playerNames[this.board.player];

@@ -60,4 +60,7 @@ export class game_sessions {
 
     @Column({ nullable: true })
     last_user: number;
+
+    @Column({ default: 0, nullable: false })
+    is_protected: number;
 }

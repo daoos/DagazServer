@@ -22,6 +22,13 @@ ZRF = {
     VERIFY:        20
 };
 
+if (!_.isUndefined(Dagaz.Controller.addSound)) {
+    Dagaz.Controller.addSound(0, "sounds/clack.wav", true);
+    Dagaz.Controller.addSound(2,  "sounds/tadam.wav", true);
+    Dagaz.Controller.addSound(3, "sounds/loss.wav", true);
+    Dagaz.Controller.addSound(10, "sounds/slide.ogg", true);
+}
+
 Dagaz.Model.BuildDesign = function(design) {
     design.checkVersion("z2j", "2");
     design.checkVersion("animate-drops", "false");
@@ -263,50 +270,50 @@ Dagaz.Model.BuildDesign = function(design) {
     design.addDrop(0, 0, [], 0);
 
     design.addPiece("Soldier", 1);
-    design.addMove(1, 1, [7], 2);
-    design.addMove(1, 1, [3], 2);
-    design.addMove(1, 1, [4], 2);
-    design.addMove(1, 1, [1], 2);
+    design.addMove(1, 1, [7], 2, 10);
+    design.addMove(1, 1, [3], 2, 10);
+    design.addMove(1, 1, [4], 2, 10);
+    design.addMove(1, 1, [1], 2, 10);
 
     design.addPiece("Horse", 2);
-    design.addMove(2, 2, [7, 6], 2);
-    design.addMove(2, 2, [7, 5], 2);
-    design.addMove(2, 2, [1, 2], 2);
-    design.addMove(2, 2, [1, 0], 2);
-    design.addMove(2, 2, [4, 6], 2);
-    design.addMove(2, 2, [3, 5], 2);
-    design.addMove(2, 2, [4, 2], 2);
-    design.addMove(2, 2, [3, 0], 2);
+    design.addMove(2, 2, [7, 6], 2, 10);
+    design.addMove(2, 2, [7, 5], 2, 10);
+    design.addMove(2, 2, [1, 2], 2, 10);
+    design.addMove(2, 2, [1, 0], 2, 10);
+    design.addMove(2, 2, [4, 6], 2, 10);
+    design.addMove(2, 2, [3, 5], 2, 10);
+    design.addMove(2, 2, [4, 2], 2, 10);
+    design.addMove(2, 2, [3, 0], 2, 10);
 
     design.addPiece("Elephant", 3);
-    design.addMove(3, 2, [6, 6], 2);
-    design.addMove(3, 2, [5, 5], 2);
-    design.addMove(3, 2, [2, 2], 2);
-    design.addMove(3, 2, [0, 0], 2);
+    design.addMove(3, 2, [6, 6], 2, 10);
+    design.addMove(3, 2, [5, 5], 2, 10);
+    design.addMove(3, 2, [2, 2], 2, 10);
+    design.addMove(3, 2, [0, 0], 2, 10);
 
     design.addPiece("Chariot", 4);
-    design.addMove(4, 3, [7, 7], 2);
-    design.addMove(4, 3, [3, 3], 2);
-    design.addMove(4, 3, [4, 4], 2);
-    design.addMove(4, 3, [1, 1], 2);
+    design.addMove(4, 3, [7, 7], 2, 10);
+    design.addMove(4, 3, [3, 3], 2, 10);
+    design.addMove(4, 3, [4, 4], 2, 10);
+    design.addMove(4, 3, [1, 1], 2, 10);
 
     design.addPiece("Cannon", 5);
-    design.addMove(5, 4, [7, 7, 7, 7], 2);
-    design.addMove(5, 4, [3, 3, 3, 3], 2);
-    design.addMove(5, 4, [4, 4, 4, 4], 2);
-    design.addMove(5, 4, [1, 1, 1, 1], 2);
+    design.addMove(5, 4, [7, 7, 7, 7], 2, 10);
+    design.addMove(5, 4, [3, 3, 3, 3], 2, 10);
+    design.addMove(5, 4, [4, 4, 4, 4], 2, 10);
+    design.addMove(5, 4, [1, 1, 1, 1], 2, 10);
 
     design.addPiece("Mandarin", 6);
-    design.addMove(6, 5, [6], 2);
-    design.addMove(6, 5, [5], 2);
-    design.addMove(6, 5, [2], 2);
-    design.addMove(6, 5, [0], 2);
+    design.addMove(6, 5, [6], 2, 10);
+    design.addMove(6, 5, [5], 2, 10);
+    design.addMove(6, 5, [2], 2, 10);
+    design.addMove(6, 5, [0], 2, 10);
 
     design.addPiece("General", 7);
-    design.addMove(7, 6, [7], 2);
-    design.addMove(7, 6, [3], 2);
-    design.addMove(7, 6, [4], 2);
-    design.addMove(7, 6, [1], 2);
+    design.addMove(7, 6, [7], 2, 10);
+    design.addMove(7, 6, [3], 2, 10);
+    design.addMove(7, 6, [4], 2, 10);
+    design.addMove(7, 6, [1], 2, 10);
 
     design.setup("White", "Soldier", 87);
     design.setup("White", "Soldier", 89);

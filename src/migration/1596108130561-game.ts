@@ -27,6 +27,8 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into games(id, name, filename, players_total, main_time, additional_time) values(22, 'Checkers', 'russian-checkers', 2, 0, 1000)`);
         await queryRunner.query(`insert into games(id, name, filename, players_total, main_time, additional_time) values(23, 'XiangQi', 'xiangqi', 2, 0, 1000)`);
         await queryRunner.query(`insert into games(id, name, filename, players_total, main_time, additional_time) values(24, 'Column Checkers', 'column-checkers', 2, 0, 1000)`);
+        await queryRunner.query(`insert into games(id, name, filename, players_total, main_time, additional_time) values(25, 'Shogi', 'shogi', 2, 0, 1000)`);
+        await queryRunner.query(`insert into games(id, name, filename, players_total, main_time, additional_time, max_selector) values(26, 'Reversi', 'reversi', 2, 0, 1000, 10)`);
 
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(1, 17, 'Go (9x9)', 'go-9x9', 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(2, 17, 'Go (19x19)', 'go-19x19', 2)`);
@@ -50,6 +52,17 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(13, '80-cells-checkers', null, '80-cells-checkers')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(14, 'xiangqi', null, 'xiangqi')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(15, 'column-checkers', null, 'column-checkers')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(16, 'shogi', null, 'shogi')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(17, 'reversi', 1, 'reversi-1')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(18, 'reversi', 2, 'reversi-2')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(19, 'reversi', 3, 'reversi-3')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(20, 'reversi', 4, 'reversi-4')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(21, 'reversi', 5, 'reversi-5')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(22, 'reversi', 6, 'reversi-6')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(23, 'reversi', 7, 'reversi-7')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(24, 'reversi', 8, 'reversi-8')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(25, 'reversi', 9, 'reversi-9')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(26, 'reversi', 10, 'reversi-10')`);
     }
 
     public async down(queryRunner: QueryRunner): Promise<any> {

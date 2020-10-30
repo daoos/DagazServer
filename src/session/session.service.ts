@@ -3,6 +3,8 @@ import { Repository } from 'typeorm';
 import { Sess } from '../interfaces/sess.interface';
 import { game_sessions } from '../entity/game_sessions';
 import { user_games } from '../entity/user_games';
+import { game_moves } from '../entity/game_moves';
+import { challenge } from '../entity/challenge';
 
 @Injectable()
 export class SessionService {
@@ -30,7 +32,7 @@ export class SessionService {
                 `select a.id as id, a.status_id as status, a.game_id as game_id, d.id as variant_id,
                         coalesce(d.name, b.name) as game, coalesce(d.filename, b.filename) as filename, a.created as created,
                         c.name as creator, b.players_total as players_total,
-                        a.last_setup as last_setup, e.player_num as player_num
+                        a.last_setup as last_setup, e.player_num as player_num, coalesce(a.selector_value, 0) as selector_value
                  from   game_sessions a
                  inner  join games b on (b.id = a.game_id)
                  inner  join users c on (c.id = a.user_id and c.realm_id = $1)
@@ -51,6 +53,7 @@ export class SessionService {
                     it.player_name = x.creator;
                     it.player_num = x.player_num;
                     it.last_setup = x.last_setup;
+                    it.selector_value = x.selector_value;
                     return it;
                 });
                 return l;
@@ -70,7 +73,8 @@ export class SessionService {
                 `select a.id as id, a.status_id as status, a.game_id as game_id, d.id as variant_id,
                         coalesce(d.name, b.name) as game, coalesce(d.filename, b.filename) as filename, a.created as created,
                         c.name as creator, b.players_total as players_total, a.last_setup as last_setup,
-                        string_agg(f.name || ' (' || e.player_num || ')', ' / ' order by e.player_num) as player_name
+                        string_agg(f.name || ' (' || e.player_num || ')', ' / ' order by e.player_num) as player_name,
+                        coalesce(a.last_turn, 0) as last_turn, coalesce(a.selector_value, 0) as selector_value
                  from   game_sessions a
                  inner  join games b on (b.id = a.game_id)
                  inner  join users c on (c.id = a.user_id and c.realm_id = $1)
@@ -92,6 +96,8 @@ export class SessionService {
                     it.players_total = x.players_total;
                     it.player_name = x.player_name;
                     it.last_setup = x.last_setup;
+                    it.last_turn = x.last_turn;
+                    it.selector_value = x.selector_value;
                     return it;
                 });
                 return l;
@@ -276,12 +282,88 @@ export class SessionService {
         }
     }
 
+    async clearWaiting(): Promise<boolean> {
+        const dt = new Date();
+        await this.service.createQueryBuilder("user_games")
+        .delete()
+        .from(user_games)
+        .where(`session_id in (select id
+                               from   game_sessions
+                               where  status_id = 1 and is_protected = 0
+                               and    created + interval '1 week' < :dt)`, {dt: dt})
+        .execute();
+        await this.service.createQueryBuilder("game_sessions")
+        .delete()
+        .from(game_sessions)
+        .where("status_id = 1 and is_protected = 0 and created + interval '1 week' < :dt", {dt: dt})
+        .execute();
+        return true;
+    }
+
+    async clearObsolete(): Promise<boolean> {
+        const dt = new Date();
+        await this.service.createQueryBuilder("game_moves")
+        .delete()
+        .from(game_moves)
+        .where(`session_id in (select a.id
+                               from   game_sessions a
+                               where  a.status_id = 1 and a.is_protected = 0
+                               and    a.changed + interval '1 month' < :dt
+                               except
+                               select c.id
+                               from   bonuses a
+                               inner  join user_games b on (b.id = a.uid)
+                               inner  join game_sessions c on (c.id = b.session_id))`, {dt: dt})
+        .execute();
+        await this.service.createQueryBuilder("challenge")
+        .delete()
+        .from(challenge)
+        .where(`session_id in (select a.id
+                               from   game_sessions a
+                               where  a.status_id = 1 and a.is_protected = 0
+                               and    a.changed + interval '1 month' < :dt
+                               except
+                               select c.id
+                               from   bonuses a
+                               inner  join user_games b on (b.id = a.uid)
+                               inner  join game_sessions c on (c.id = b.session_id))`, {dt: dt})
+        .execute();
+        await this.service.createQueryBuilder("user_games")
+        .delete()
+        .from(user_games)
+        .where(`session_id in (select a.id
+                               from   game_sessions a
+                               where  a.status_id = 1 and a.is_protected = 0
+                               and    a.changed + interval '1 month' < :dt
+                               except
+                               select c.id
+                               from   bonuses a
+                               inner  join user_games b on (b.id = a.uid)
+                               inner  join game_sessions c on (c.id = b.session_id))`, {dt: dt})
+        .execute();
+        await this.service.createQueryBuilder("game_sessions")
+        .delete()
+        .from(game_sessions)
+        .where(`id in (select a.id
+                       from   game_sessions a
+                       where  a.status_id = 1 and a.is_protected = 0
+                       and    a.changed + interval '1 month' < :dt
+                       except
+                       select c.id
+                       from   bonuses a
+                       inner  join user_games b on (b.id = a.uid)
+                       inner  join game_sessions c on (c.id = b.session_id))`, {dt: dt})
+        .execute();
+        return true;
+    }
+
     async recovery(user:number, s: Sess): Promise<Sess> {
         try {
             let x = await this.service.query(
                 `select c.id as game_id, c.name as game, c.filename as filename,
                         c.players_total as players_total, a.last_setup as last_setup,
-                        b.player_num as player_num, b.id as uid, b.user_id as user_id
+                        b.player_num as player_num, b.id as uid, b.user_id as user_id,
+                        a.status_id as status_id
                  from   game_sessions a
                  inner  join user_games b on (b.session_id = a.id)
                  inner  join games c on (c.id = a.game_id)
@@ -295,7 +377,7 @@ export class SessionService {
             s.players_total = x[0].players_total;
             s.last_setup = x[0].last_setup;
             x = x.filter((it) => { return it.user_id == user; });
-            if (x.length == 1) {
+            if ((x.length == 1) && (x[0].status_id != 3)) {
                 s.player_num = x[0].player_num;
                 s.uid = x[0].uid;
             }
@@ -311,6 +393,8 @@ export class SessionService {
 
     async createSession(user:number, x: Sess): Promise<Sess> {
         try {
+            await this.clearWaiting();
+            await this.clearObsolete();
             const y = await this.service.createQueryBuilder("game_sessions")
             .insert()
             .into(game_sessions)

@@ -34,7 +34,7 @@ export class GameService {
                         realm_id, max_selector
                  from   games
                  where  realm_id = $1
-                 order  by id`, [realm]);
+                 order  by lower(name)`, [realm]);
             let l: Game[] = x.map(x => {
                 let it = new Game();
                 it.id = x.id;
@@ -71,7 +71,7 @@ export class GameService {
                  from   game_variants a
                  inner  join games b on (b.id = a.game_id)
                  where  b.realm_id = $1 and b.id = $2
-                 order  by a.id`, [realm, game]);
+                 order  by lower(a.name)`, [realm, game]);
             let l: Game[] = x.map(x => {
                 let it = new Game();
                 it.id = x.id;

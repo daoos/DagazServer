@@ -22,6 +22,12 @@ ZRF = {
     VERIFY:        20
 };
 
+if (!_.isUndefined(Dagaz.Controller.addSound)) {
+    Dagaz.Controller.addSound(0, "sounds/wind.wav", true);
+    Dagaz.Controller.addSound(2,  "sounds/tadam.wav", true);
+    Dagaz.Controller.addSound(3, "sounds/loss.wav", true);
+}
+
 Dagaz.Model.BuildDesign = function(design) {
     design.checkVersion("z2j", "2");
     design.checkVersion("animate-captures", "false");
