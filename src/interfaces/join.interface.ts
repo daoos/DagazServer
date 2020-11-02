@@ -19,4 +19,7 @@ export class Join {
 
     @ApiPropertyOptional()
     is_ai: number;
+
+    @ApiPropertyOptional()
+    filename: string;
 }

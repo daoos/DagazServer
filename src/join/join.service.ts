@@ -70,6 +70,20 @@ export class JoinService {
         return x[0].main_time;
     }
 
+    async getFilename(sess: number, player_num: number): Promise<string> {
+        const x = await this.service.query(
+            `select coalesce(c.filename, b.filename) || coalesce(d.suffix, '') as filename
+             from   game_sessions a
+             inner  join games b on (b.id = a.game_id)
+             left   join game_variants c on (c.id = a.variant_id)
+             left   join game_styles d on (d.game_id = a.game_id and d.player_num = $1)
+             where  a.id = $2`, [player_num, sess]);
+        if (!x || x.length != 1) {
+             return "";
+        }
+        return x[0].filename;
+    }
+
     async joinToSession(user: number, x: Join): Promise<Join> {
         x.user_id = user;
         if (!x.is_ai) {
@@ -105,6 +119,7 @@ export class JoinService {
             })
             .where("session_id = :id and player_num = :num", {id: x.session_id, num: x.player_num})
             .execute();
+            x.filename = await this.getFilename(x.session_id, x.player_num);
             return x;
         } catch (error) {
             console.error(error);

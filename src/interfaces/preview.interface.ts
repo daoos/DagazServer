@@ -11,6 +11,9 @@ export class Preview {
     @ApiPropertyOptional()
     selector_value: number;
 
+    @ApiPropertyOptional()
+    style: number;
+
     @ApiProperty()
     preview: string;
 }

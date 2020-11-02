@@ -6,6 +6,7 @@ import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { TokenGuard } from '../auth/token.guard';
 import { Request } from 'express';
 import { Preview } from '../interfaces/preview.interface';
+import { Style } from '../interfaces/style.interface';
 
 @ApiSecurity('bearer')
 @Controller('api/game')
@@ -50,6 +51,34 @@ export class GameController {
             } else {
                 return res.status(HttpStatus.OK).json(r);
             }
+        } catch(e) {
+            return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ error: e.message.error.toString(), stack: e.stack});
+        }
+    }
+
+    @UseGuards(JwtAuthGuard, TokenGuard)
+    @Get('styles')
+    @ApiOkResponse({ description: 'Successfully.'})
+    @ApiUnauthorizedResponse({ description: 'Unauthorized.'})
+    @ApiInternalServerErrorResponse({ description: 'Internal Server error.'})
+    async getAllStyles(@Res() res): Promise<Style[]> {
+        try {
+            const r = await this.service.getAllStyles();
+            return res.status(HttpStatus.OK).json(r);
+        } catch(e) {
+            return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ error: e.message.error.toString(), stack: e.stack});
+        }
+    }
+
+    @UseGuards(JwtAuthGuard, TokenGuard)
+    @Get(':id/styles')
+    @ApiOkResponse({ description: 'Successfully.'})
+    @ApiUnauthorizedResponse({ description: 'Unauthorized.'})
+    @ApiInternalServerErrorResponse({ description: 'Internal Server error.'})
+    async getStyles(@Res() res, @Param('id') id): Promise<Style[]> {
+        try {
+            const r = await this.service.getStyles(id);
+            return res.status(HttpStatus.OK).json(r);
         } catch(e) {
             return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ error: e.message.error.toString(), stack: e.stack});
         }

@@ -3,6 +3,7 @@ import { games } from '../entity/games';
 import { Repository } from 'typeorm';
 import { Game } from '../interfaces/game.interface';
 import { Preview } from '../interfaces/preview.interface';
+import { Style } from '../interfaces/style.interface';
 
 @Injectable()
 export class GameService {
@@ -92,12 +93,81 @@ export class GameService {
         }
     }
 
+    async getAllStyles(): Promise<Style[]> {
+        try {
+            const x = await this.service.query(
+                `select a.id as id, a.name as name, a.suffix as suffix, a.game_id as game_id
+                 from   game_styles a
+                 where  a.player_num is null 
+                 order  by a.id`);
+            let l: Style[] = x.map(x => {
+                let it = new Style();
+                it.id = x.id;
+                it.name = x.name;
+                it.suffix = x.suffix;
+                it.game_id = x.game_id;
+                return it;
+            });
+            return l;
+        } catch (error) {
+          console.error(error);
+          throw new InternalServerErrorException({
+              status: HttpStatus.BAD_REQUEST,
+              error: error
+          });
+        }
+    }
+
+    async getStyles(game: number): Promise<Style[]> {
+        try {
+            const x = await this.service.query(
+                `select a.id as id, a.name as name, a.suffix as suffix
+                 from   game_styles a
+                 where  a.game_id = $1 and a.player_num is null 
+                 order  by a.id`, [game]);
+            let l: Style[] = x.map(x => {
+                let it = new Style();
+                it.id = x.id;
+                it.name = x.name;
+                it.suffix = x.suffix;
+                return it;
+            });
+            return l;
+        } catch (error) {
+          console.error(error);
+          throw new InternalServerErrorException({
+              status: HttpStatus.BAD_REQUEST,
+              error: error
+          });
+        }
+    }
+
+    async getSuffix(filename: string, style: number): Promise<string> {
+        if (!style) return "";
+        const x = await this.service.query(
+            `select b.suffix as suffix
+             from   games a
+             inner  join game_styles b on (b.game_id = a.id)
+             where  a.filename = $1 and b.id = $2
+             union  all
+             select c.suffix as suffix
+             from   game_variants a
+             inner  join games b on (b.id = a.game_id)
+             inner  join game_styles c on (c.game_id = b.id)
+             where  a.filename = $3 and c.id = $4`, [filename, style, filename, style]);
+        if (!x || x.length == 0) {
+             return "";
+        }
+        return x[0].suffix;
+    }
+
     async getPreview(r: Preview): Promise<Preview> {
         try {
+            const suffix = await this.getSuffix(r.filename, r.style);
             const x = await this.service.query(
                 `select id, preview
                  from   game_previews
-                 where  filename = $1 and coalesce(selector_value, 0) = $2`, [r.filename, r.selector_value]);
+                 where  filename = $1 and coalesce(selector_value, 0) = $2`, [r.filename + suffix, r.selector_value]);
             if (!x || x.length == 0) {
                  return null;
             }
