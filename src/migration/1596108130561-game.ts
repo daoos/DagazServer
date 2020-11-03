@@ -39,12 +39,18 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(7, 23, 'XiangQi', 'xiangqi', 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(8, 23, 'YitongQi', 'yitongqi', 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(9, 23, 'Five Tigers', 'tigers', 2)`);
+        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(10, 25, 'Shogi', 'shogi', 2)`);
+        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(11, 25, 'Mini Shogi', 'mini-shogi', 2)`);
+        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(12, 23, 'Dark XiangQi', 'dark-chinese-chess', 2)`);
 
         await queryRunner.query(`insert into game_styles(id, game_id, name, suffix, players_num) values(1, 23, 'European', '', null)`);
         await queryRunner.query(`insert into game_styles(id, game_id, name, suffix, players_num) values(2, 23, 'Chinese', '-kanji', null)`);
         await queryRunner.query(`insert into game_styles(id, game_id, name, suffix, players_num) values(3, 23, 'Opposite', '-black', 2)`);
         await queryRunner.query(`insert into game_styles(id, game_id, name, suffix, players_num) values(4, 16, 'European', '', null)`);
         await queryRunner.query(`insert into game_styles(id, game_id, name, suffix, players_num) values(5, 16, 'Chinese', '-kanji', null)`);
+        await queryRunner.query(`insert into game_styles(id, game_id, name, suffix, players_num) values(6, 25, 'European', '', null)`);
+        await queryRunner.query(`insert into game_styles(id, game_id, name, suffix, players_num) values(7, 25, 'Japanese', '-kanji', null)`);
+        await queryRunner.query(`insert into game_styles(id, game_id, name, suffix, players_num) values(8, 25, 'Opposite', '-north', 2)`);
 
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(1, 'doubutsu-shogi', null, 'doubutsu-shogi')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(2, 'atari-go', null, 'atari-go')`);
@@ -73,8 +79,16 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(25, 'reversi', 9, 'reversi-9')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(26, 'reversi', 10, 'reversi-10')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(27, 'xiangqi-kanji', null, 'xiangqi-kanji')`);
-        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(28, 'tigers', null, 'tigers')`);
-        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(29, 'tigers-kanji', null, 'tigers-kanji')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(28, 'chess-go-kanji', null, 'chess-go-kanji')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(29, 'yitongqi', null, 'yitongqi')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(30, 'yitongqi-kanji', null, 'yitongqi-kanji')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(31, 'tigers', null, 'tigers')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(32, 'tigers-kanji', null, 'tigers-kanji')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(33, 'shogi-kanji', null, 'shogi-kanji')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(34, 'mini-shogi', null, 'mini-shogi')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(35, 'mini-shogi-kanji', null, 'mini-shogi-kanji')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(36, 'dark-chinese-chess', null, 'dark-chinese-chess')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(37, 'dark-chinese-chess-kanji', null, 'dark-chinese-chess-kanji')`);
     }
 
     public async down(queryRunner: QueryRunner): Promise<any> {
