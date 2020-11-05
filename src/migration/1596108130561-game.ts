@@ -54,6 +54,8 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_styles(id, game_id, name, suffix, players_num) values(7, 25, 'Japanese', '-kanji', null)`);
         await queryRunner.query(`insert into game_styles(id, game_id, name, suffix, players_num) values(8, 25, 'Opposite', '-north', 2)`);
         await queryRunner.query(`insert into game_styles(id, game_id, name, suffix, players_num) values(9, 27, 'Opposite', '-blue', 2)`);
+        await queryRunner.query(`insert into game_styles(id, game_id, name, suffix, players_num) values(10, 22, 'Opposite', '-black', 2)`);
+        await queryRunner.query(`insert into game_styles(id, game_id, name, suffix, players_num) values(11, 24, 'Opposite', '-black', 2)`);
 
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(1, 'doubutsu-shogi', null, 'doubutsu-shogi')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(2, 'atari-go', null, 'atari-go')`);
