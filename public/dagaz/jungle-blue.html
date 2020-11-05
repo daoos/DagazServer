@@ -1,0 +1,65 @@
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>Jungle</title>
+</head>
+<body>
+
+<img id="Board" style="display:none" src="images/jungle/board.png">
+<img id="RedRat" style="display:none" src="images/jungle/redrat.png">
+<img id="GreenRat" style="display:none" src="images/jungle/blackrat.png">
+<img id="RedCat" style="display:none" src="images/jungle/redcat.png">
+<img id="GreenCat" style="display:none" src="images/jungle/blackcat.png">
+<img id="RedDog" style="display:none" src="images/jungle/reddog.png">
+<img id="GreenDog" style="display:none" src="images/jungle/blackdog.png">
+<img id="RedFox" style="display:none" src="images/jungle/redfox.png">
+<img id="GreenFox" style="display:none" src="images/jungle/blackfox.png">
+<img id="RedPanther" style="display:none" src="images/jungle/redpanther.png">
+<img id="GreenPanther" style="display:none" src="images/jungle/blackpanther.png">
+<img id="RedTiger" style="display:none" src="images/jungle/redtiger.png">
+<img id="GreenTiger" style="display:none" src="images/jungle/blacktiger.png">
+<img id="RedLion" style="display:none" src="images/jungle/redlion.png">
+<img id="GreenLion" style="display:none" src="images/jungle/blacklion.png">
+<img id="RedElephant" style="display:none" src="images/jungle/redelephant.png">
+<img id="GreenElephant" style="display:none" src="images/jungle/blackelephant.png">
+
+<table style="margin:auto; font-family:sans-serif; font-size:14px" id="Table">
+<tr style="height:600px; vertical-align:top">
+<td id="CanvasCell" style="width:470px">
+<canvas id="Canvas" width="470" height="600" style="cursor:default">Broken canvas...</canvas>
+</td><td style="width:300px;">
+<div style="height:510px; overflow:auto" id="ScrollDiv">
+<img id="GlyphImage"><p id="HelpText"></p>
+<p id="GameSession"></p>
+</div>
+</td>
+</tr>
+<tr>
+<td>
+<div style="height:100px; width:500px; margin-left:auto; margin-right:auto">
+<table>
+<tr style="display:none" id="PieceInfo">
+<td><img id="PieceInfoImage"></td><td id="PieceInfoText"></td>
+</tr>
+</table>
+</div>
+</td>
+</tr>
+</table>
+
+<script src="vendor/underscore-min.js"></script>
+<script src="vendor/jquery-3.5.1.min.js"></script>
+<script src="common-scripts/dagaz.js"></script>
+<script src="common-scripts/zrf-model.js"></script>
+<script src="common-scripts/zobrist.js"></script>
+<script src="common-scripts/common-setup-v2.js"></script>
+<script src="common-scripts/ko.js"></script>
+<script src="common-scripts/2d-view-v2.js"></script>
+<script src="common-scripts/move-list-v2.js"></script>
+<script src="common-scripts/sound-manager-v2.js"></script>
+<script src="scripts/jungle-extension.js"></script>
+<script src="scripts/jungle-blue.js"></script>
+<script src="common-scripts/app-net-v2.js"></script>
+
+</body>
+</html>

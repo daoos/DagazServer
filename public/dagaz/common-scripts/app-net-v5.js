@@ -505,11 +505,14 @@ var addMove = function(move, setup) {
   if (auth === null) return;
   if (!uid) return;
   inProgress = true;
+  var app = Dagaz.Controller.app;
+  var design = app.design;
   $.ajax({
      url: SERVICE + "move",
      type: "POST",
      data: {
          uid: uid,
+         next_player: design.currPlayer(app.board.turn),
          move_str: move,
          setup_str: setup
      },

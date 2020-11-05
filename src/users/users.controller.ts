@@ -33,16 +33,44 @@ export class UsersController {
     }
 
     @UseGuards(JwtAuthGuard, TokenGuard)
-    @Get(':id')
+    @Get('current')
     @ApiOkResponse({ description: 'Successfully.'})
     @ApiUnauthorizedResponse({ description: 'Unauthorized.'})
+    @ApiForbiddenResponse({ description: 'Forbidden.'})
+    @ApiNotFoundResponse({ description: 'Not Found.'})
     @ApiInternalServerErrorResponse({ description: 'Internal Server error.'})
-    async findUsers(@Req() request: Request, @Res() res, @Param('id') id): Promise<User[]> {
+    async findCurrent(@Req() request: Request, @Res() res): Promise<User> {
         const user: any = request.user;
         try {
-            const r = await this.service.getUsersByGame(user.id, id);
-            return res.status(HttpStatus.OK).json(r);
+            const r = await this.service.findOneById(user.id);
+            if (!r) {
+                return res.status(HttpStatus.NOT_FOUND).json();
+            } else {
+                return res.status(HttpStatus.OK).json(r);
+            }
         } catch(e) {
+            return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ error: e.message.error.toString(), stack: e.stack});
+        }
+    }
+
+    @UseGuards(JwtAuthGuard, TokenGuard)
+    @Post('current')
+    @ApiBody({ type: [User] })
+    @ApiOkResponse({ description: 'Successfully.'})
+    @ApiUnauthorizedResponse({ description: 'Unauthorized.'})
+    @ApiForbiddenResponse({ description: 'Forbidden.'})
+    @ApiNotFoundResponse({ description: 'Not Found.'})
+    @ApiInternalServerErrorResponse({ description: 'Internal Server error.'})
+    async updateCurrent(@Req() request: Request, @Res() res, @Body() x: User): Promise<User> {
+        const user: any = request.user;
+        try {
+            const r = await this.service.updateUser(user.id, x);
+            if (!r) {
+                return res.status(HttpStatus.NOT_FOUND).json();
+            } else {
+                return res.status(HttpStatus.OK).json(r);
+            }
+        } catch (e) {
             return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ error: e.message.error.toString(), stack: e.stack});
         }
     }

@@ -25,7 +25,54 @@ export class SessionService {
         return x[0].realm_id;
       }
 
-      async getWaitingSessions(user: number): Promise<Sess[]> {
+      async getCurrentSessions(user: number): Promise<Sess[]> {
+        try {
+            const realm = await this.getRealm(user);
+            const x = await this.service.query(
+                `select a.id as id, a.status_id as status, a.game_id as game_id, d.id as variant_id,
+                        coalesce(d.name, b.name) as game, coalesce(d.filename, b.filename) || coalesce(h.suffix, '') as filename, 
+                        a.created as created, c.name as creator, b.players_total as players_total, a.last_setup as last_setup,
+                        string_agg(f.name || ' (' || e.player_num || ')', ' / ' order by e.player_num) as player_name,
+                        coalesce(a.last_turn, 0) as last_turn, coalesce(a.selector_value, 0) as selector_value
+                 from   game_sessions a
+                 inner  join games b on (b.id = a.game_id)
+                 inner  join users c on (c.id = a.user_id and c.realm_id = $1)
+                 left   join game_variants d on (d.id = a.variant_id)
+                 inner  join user_games e on (e.session_id = a.id)
+                 inner  join users f on (f.id = e.user_id and f.realm_id = $2)
+                 left   join user_games g on (g.session_id = a.id and g.user_id = $3)
+                 left   join game_styles h on (h.game_id = b.id and h.player_num = g.player_num)
+                 inner  join user_games i on (i.session_id = a.id and i.player_num = a.next_player and i.user_id = $4)
+                 where  a.status_id = 2 and a.closed is null
+                 group  by a.id, a.status_id, a.game_id, d.id, d.name, b.name, d.filename, b.filename, a.created, c.name, b.players_total, a.last_setup, h.suffix
+                 order  by a.changed desc`, [realm, realm, user, user]);
+                 let l: Sess[] = x.map(x => {
+                    let it = new Sess();
+                    it.id = x.id;
+                    it.status = x.status;
+                    it.game_id = x.game_id;
+                    it.game = x.game;
+                    it.variant_id = x.variant_id;
+                    it.filename = x.filename;
+                    it.created = x.created;
+                    it.players_total = x.players_total;
+                    it.player_name = x.player_name;
+                    it.last_setup = x.last_setup;
+                    it.last_turn = x.last_turn;
+                    it.selector_value = x.selector_value;
+                    return it;
+                });
+                return l;
+        } catch (error) {
+          console.error(error);
+          throw new InternalServerErrorException({
+              status: HttpStatus.BAD_REQUEST,
+              error: error
+          });
+        }
+    }
+
+    async getWaitingSessions(user: number): Promise<Sess[]> {
         try {
             const realm = await this.getRealm(user);
             const x = await this.service.query(
@@ -276,6 +323,74 @@ export class SessionService {
             s.uid = uid;
             return s;
         } catch (error) {
+          console.error(error);
+          throw new InternalServerErrorException({
+              status: HttpStatus.BAD_REQUEST,
+              error: error
+          });
+        }
+    }
+
+    async findOneById(id: number): Promise<Sess> {
+        try {
+          const x = await this.service.createQueryBuilder("game_sessions")
+          .where("id = :id", {id: id})
+          .getOne();
+          if (!x) {
+            return null;
+          }
+          let it = new Sess();
+          it.id = x.id;
+          it.status = x.status_id;
+          it.game_id = x.game_id;
+          it.variant_id = x.variant_id;
+          it.created = x.created;
+          it.changed = x.changed;
+          it.closed = x.closed;
+          return it;
+        } catch (error) {
+          console.error(error);
+          throw new InternalServerErrorException({
+              status: HttpStatus.BAD_REQUEST,
+              error: error
+          });
+        }
+    }
+
+    async delSession(id: number): Promise<Sess> {
+        try {
+            const s = await this.findOneById(id);
+            if (!s) {
+                return null;
+            }
+            await this.service.createQueryBuilder("game_moves")
+            .delete()
+            .from(game_moves)
+            .where(`session_id in (select a.id
+                                   from   game_sessions a
+                                   where  a.id = :id)`, {id: id})
+            .execute();
+            await this.service.createQueryBuilder("challenge")
+            .delete()
+            .from(challenge)
+            .where(`session_id in (select a.id
+                                   from   game_sessions a
+                                   where  a.id = :id)`, {id: id})
+            .execute();
+            await this.service.createQueryBuilder("user_games")
+            .delete()
+            .from(user_games)
+            .where(`session_id in (select a.id
+                                   from   game_sessions a
+                                   where  a.id = :id)`, {id: id})
+            .execute();
+            await this.service.createQueryBuilder("game_sessions")
+            .delete()
+            .from(game_sessions)
+            .where(`id = :id`, {id: id})
+            .execute();
+            return s;
+        } catch(error) {
           console.error(error);
           throw new InternalServerErrorException({
               status: HttpStatus.BAD_REQUEST,

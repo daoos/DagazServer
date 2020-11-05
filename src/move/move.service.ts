@@ -301,7 +301,8 @@ export class MoveService {
                     changed: new Date(),
                     last_setup: x.setup_str,
                     last_turn: turn_num,
-                    last_user: x.uid
+                    last_user: x.uid,
+                    next_player: x.next_player
                  })
                 .where("id = :sess", {sess: x.session_id})
                 .execute();

@@ -76,9 +76,9 @@ var getSetup = function(setup) {
 
 var getSeed = function() {
   var str = window.location.search.toString();
-  var result = str.match(/[?&]seed=([^&]*)/);
+  var result = str.match(/[?&](seed|sid)=([^&]*)/);
   if (result) {
-      return result[1];
+      return result[2];
   } else {
       return "" + _.random(0, 10000);
   }

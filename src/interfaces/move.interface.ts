@@ -34,4 +34,7 @@ export class Move {
 
     @ApiProperty()
     uid: number;
+
+    @ApiPropertyOptional()
+    next_player: number;
 }
