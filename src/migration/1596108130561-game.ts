@@ -26,6 +26,10 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into games(id, name, filename, players_total, main_time, additional_time) values(25, 'Shogi', 'shogi', 2, 0, 1000)`);
         await queryRunner.query(`insert into games(id, name, filename, players_total, main_time, additional_time, max_selector) values(26, 'Reversi', 'reversi', 2, 0, 1000, 10)`);
         await queryRunner.query(`insert into games(id, name, filename, players_total, main_time, additional_time) values(27, 'Stratego', 'stratego', 2, 0, 1000)`);
+        await queryRunner.query(`insert into games(id, name, filename, players_total, main_time, additional_time) values(28, 'Spock', 'spock', 2, 0, 1000)`);
+        await queryRunner.query(`insert into games(id, name, filename, players_total, main_time, additional_time) values(29, 'Hex', 'hex', 2, 0, 1000)`);
+        await queryRunner.query(`insert into games(id, name, filename, players_total, main_time, additional_time) values(30, 'Chess', 'chess', 2, 0, 1000)`);
+        await queryRunner.query(`insert into games(id, name, filename, players_total, main_time, additional_time) values(31, 'Mancala', 'oware', 2, 0, 1000)`);
 
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(1, 17, 'Go (9x9)', 'go-9x9', 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(2, 17, 'Go (19x19)', 'go-19x19', 2)`);
@@ -44,6 +48,9 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(15, 17, 'MarGo', 'margo', 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(16, 27, 'Stratego', 'stratego', 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(17, 27, 'Jungle', 'jungle', 2)`);
+        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(18, 31, 'Oware', 'oware', 2)`);
+        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(19, 31, 'Cross Wari', 'cross-wari', 2)`);
+        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(20, 31, 'Toguz Kumalak', 'toguz-kumalak', 2)`);
 
         await queryRunner.query(`insert into game_styles(id, game_id, name, suffix, players_num) values(1, 23, 'European', '', null)`);
         await queryRunner.query(`insert into game_styles(id, game_id, name, suffix, players_num) values(2, 23, 'Chinese', '-kanji', null)`);
@@ -56,6 +63,11 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_styles(id, game_id, name, suffix, players_num) values(9, 27, 'Opposite', '-blue', 2)`);
         await queryRunner.query(`insert into game_styles(id, game_id, name, suffix, players_num) values(10, 22, 'Opposite', '-black', 2)`);
         await queryRunner.query(`insert into game_styles(id, game_id, name, suffix, players_num) values(11, 24, 'Opposite', '-black', 2)`);
+        await queryRunner.query(`insert into game_styles(id, game_id, name, suffix, players_num) values(12, 28, 'Opposite', '-red', 2)`);
+        await queryRunner.query(`insert into game_styles(id, game_id, name, suffix, players_num) values(13, 30, 'Opposite', '-black', 2)`);
+        await queryRunner.query(`insert into game_styles(id, game_id, name, suffix, players_num) values(14, 31, 'Opposite', '-north', 2)`);
+        await queryRunner.query(`insert into game_styles(id, game_id, name, suffix, players_num) values(15, 23, 'Seeds', '', null)`);
+        await queryRunner.query(`insert into game_styles(id, game_id, name, suffix, players_num) values(16, 23, 'Digits', '-alt', null)`);
 
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(1, 'doubutsu-shogi', null, 'doubutsu-shogi')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(2, 'atari-go', null, 'atari-go')`);
@@ -95,6 +107,15 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(36, 'dark-chinese-chess', null, 'dark-chinese-chess')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(37, 'dark-chinese-chess-kanji', null, 'dark-chinese-chess-kanji')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(38, 'stratego', null, 'stratego')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(39, 'spock', null, 'spock')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(40, 'hex', null, 'hex')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(41, 'chess', null, 'chess')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(42, 'oware', null, 'oware')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(43, 'oware-alt', null, 'oware-alt')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(44, 'cross-wari', null, 'oware')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(45, 'cross-wari-alt', null, 'oware-alt')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(46, 'toguz-kumalak', null, 'toguz-kumalak')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(47, 'toguz-kumalak-alt', null, 'toguz-kumalak-alt')`);
     }
 
     public async down(queryRunner: QueryRunner): Promise<any> {

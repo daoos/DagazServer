@@ -111,7 +111,7 @@ export class MoveService {
             `select a.id, a.session_id, a.user_id, a.turn_num,
                     a.move_str, a.setup_str, a.note, a.time_delta, a.uid
              from   game_moves a
-             inner  join game_sessions b on (b.id = a.session_id and b.closed is null)
+             inner  join game_sessions b on (b.id = a.session_id)
              where  a.session_id = $1 and a.uid <> $2 and a.turn_num >= $3
              and    not a.setup_str is null 
              and    a.accepted is null
@@ -223,7 +223,7 @@ export class MoveService {
 
     async checkSession(id: number): Promise<boolean> {
         const x = await this.service.query(
-            `select id from game_sessions where id = $1 and closed is null`, [id]);
+            `select id from game_sessions where id = $1`, [id]);
         if (!x || x.length != 1) {
             return false;
         }
