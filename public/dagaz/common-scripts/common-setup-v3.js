@@ -85,8 +85,11 @@ var getSeed = function() {
   }
 }
 
-var getReserve = function() {
+var getReserve = function(setup) {
   var str = window.location.search.toString();
+  if (setup) {
+      str = setup;
+  }
   var result = str.match(/[?&]reserve=([,;\d]+)/);
   if (result) {
       return result[1];
@@ -165,7 +168,7 @@ Dagaz.Model.setup = function(board, init) {
           board.turn   = +turn;
           board.player = design.currPlayer(board.turn);
       }
-      var rs = getReserve();
+      var rs = getReserve(init);
       if (rs) {
           Dagaz.Model.setReserve(design, board, rs);
       }

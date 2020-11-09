@@ -240,8 +240,8 @@ export class UsersService {
             realm_id: x.realm,
             name: x.name,
             login: x.username,
-            pass: x.password,
-            email: x.email
+            pass: x.password/*,
+            email: x.email*/
           })
           .returning('*')
           .execute();
@@ -262,12 +262,20 @@ export class UsersService {
           .update(users)
           .set({ 
             name: x.name,
-            login: x.username,
-            pass: x.password,
-            email: x.email
+            login: x.username/*,
+            email: x.email*/
           })
           .where("id = :id", {id: user})
           .execute();
+          if (x.password) {
+            await this.service.createQueryBuilder("users")
+            .update(users)
+            .set({ 
+              pass: x.password
+            })
+            .where("id = :id", {id: user})
+            .execute();
+          }
           return await this.findOneById(x.id);
         } catch (error) {
           console.error(error);

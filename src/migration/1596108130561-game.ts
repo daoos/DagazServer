@@ -51,6 +51,8 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(18, 31, 'Oware', 'oware', 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(19, 31, 'Cross Wari', 'cross-wari', 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(20, 31, 'Toguz Kumalak', 'toguz-kumalak', 2)`);
+        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(21, 27, 'Luzhanqi', 'luzhanqi', 2)`);
+        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(22, 27, 'Game of Generals', 'gog', 2)`);
 
         await queryRunner.query(`insert into game_styles(id, game_id, name, suffix, players_num) values(1, 23, 'European', '', null)`);
         await queryRunner.query(`insert into game_styles(id, game_id, name, suffix, players_num) values(2, 23, 'Chinese', '-kanji', null)`);
@@ -116,6 +118,8 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(45, 'cross-wari-alt', null, 'oware-alt')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(46, 'toguz-kumalak', null, 'toguz-kumalak')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(47, 'toguz-kumalak-alt', null, 'toguz-kumalak-alt')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(48, 'luzhanqi', null, 'luzhanqi')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(49, 'gog', null, 'gog')`);
     }
 
     public async down(queryRunner: QueryRunner): Promise<any> {
