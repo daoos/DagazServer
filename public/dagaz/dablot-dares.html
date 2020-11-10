@@ -1,0 +1,53 @@
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>Dablot Dares</title>
+</head>
+<body>
+
+<img id="Board" style="display:none" src="images/dablot/7x7.png">
+<img id="WhiteKing" style="display:none" src="images/dablot/wking.png">
+<img id="BlackKing" style="display:none" src="images/dablot/bking.png">
+<img id="WhiteMan" style="display:none" src="images/dablot/wprince.png">
+<img id="BlackMan" style="display:none" src="images/dablot/bprince.png">
+
+<table style="margin:auto; font-family:sans-serif; font-size:14px" id="Table">
+<tr style="height:683px; vertical-align:top">
+<td id="CanvasCell" style="width:683px">
+<canvas id="Canvas" width="683" height="683" style="cursor:default">Broken canvas...</canvas>
+</td><td style="width:300px;">
+<div style="height:510px; overflow:auto" id="ScrollDiv">
+<img id="GlyphImage"><p id="HelpText"></p>
+<p id="GameSession"></p>
+</div>
+</td>
+</tr>
+<tr>
+<td>
+<div style="height:100px; width:500px; margin-left:auto; margin-right:auto">
+<table>
+<tr style="display:none" id="PieceInfo">
+<td><img id="PieceInfoImage"></td><td id="PieceInfoText"></td>
+</tr>
+</table>
+</div>
+</td>
+</tr>
+</table>
+
+<script src="vendor/underscore-min.js"></script>
+<script src="vendor/jquery-3.5.1.min.js"></script>
+<script src="common-scripts/dagaz.js"></script>
+<script src="common-scripts/zrf-model.js"></script>
+<script src="common-scripts/zobrist.js"></script>
+<script src="common-scripts/common-setup-v2.js"></script>
+<script src="common-scripts/2d-view-v2.js"></script>
+<script src="common-scripts/move-list-v1.js"></script>
+<script src="common-scripts/sound-manager-v2.js"></script>
+<script src="scripts/dablot-invariant.js"></script>
+<script src="scripts/dablot-extension.js"></script>
+<script src="scripts/dablot-dares-5.js"></script>
+<script src="common-scripts/app-net-v2.js"></script>
+
+</body>
+</html>
