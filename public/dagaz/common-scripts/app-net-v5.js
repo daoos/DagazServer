@@ -403,20 +403,21 @@ var recovery = function() {
      },
      error: function() {
          Dagaz.Controller.app.state = STATE.STOP;
-         alert('Recovery: Error!');
+         console.log('Recovery: Error!');
      },
      statusCode: {
         401: function() {
              Dagaz.Controller.app.state = STATE.STOP;
-             alert('Recovery: Bad User!');
+             console.log('Recovery: Bad User!');
         },
         404: function() {
              Dagaz.Controller.app.state = STATE.STOP;
-             alert('Recovery: Not found!');
+             console.log('Recovery: Not found!');
+             window.location = '/';
         },
         500: function() {
              Dagaz.Controller.app.state = STATE.STOP;
-             alert('Recovery: Internal Error!');
+             console.log('Recovery: Internal Error!');
         }
      }
   });
@@ -445,16 +446,16 @@ var watchMove = function() {
      },
      error: function() {
          Dagaz.Controller.app.state = STATE.STOP;
-         alert('Watch Move: Error!');
+         console.log('Watch Move: Error!');
      },
      statusCode: {
         401: function() {
              Dagaz.Controller.app.state = STATE.STOP;
-             alert('Watch Move: Bad User!');
+             console.log('Watch Move: Bad User!');
         },
         500: function() {
              Dagaz.Controller.app.state = STATE.STOP;
-             alert('Watch Move: Internal Error!');
+             console.log('Watch Move: Internal Error!');
         }
      }
   });
@@ -482,20 +483,23 @@ var getConfirmed = function() {
      },
      error: function() {
          Dagaz.Controller.app.state = STATE.STOP;
-         alert('Confirmed: Error!');
+         console.log('Confirmed: Error!');
+         window.location = '';
      },
      statusCode: {
         401: function() {
              Dagaz.Controller.app.state = STATE.STOP;
-             alert('Confirmed: Bad User!');
+             console.log('Confirmed: Bad User!');
+             window.location = '/';
         },
         404: function() {
              Dagaz.Controller.app.state = STATE.STOP;
-             alert('Confirmed: Not Found!');
+             console.log('Confirmed: Not Found!');
+             window.location = '/';
         },
         500: function() {
              Dagaz.Controller.app.state = STATE.STOP;
-             alert('Confirmed: Internal Error!');
+             console.log('Confirmed: Internal Error!');
         }
      }
   });
@@ -526,20 +530,20 @@ var addMove = function(move, setup) {
      },
      error: function() {
          Dagaz.Controller.app.state = STATE.STOP;
-         alert('Move: Error!');
+         console.log('Move: Error!');
      },
      statusCode: {
         401: function() {
              Dagaz.Controller.app.state = STATE.STOP;
-             alert('Move: Bad User!');
+             console.log('Move: Bad User!');
         },
         404: function() {
              Dagaz.Controller.app.state = STATE.STOP;
-             alert('Move: Not Found!');
+             console.log('Move: Not Found!');
         },
         500: function() {
              Dagaz.Controller.app.state = STATE.STOP;
-             alert('Move: Internal Error!');
+             console.log('Move: Internal Error!');
         }
      }
   });
@@ -565,20 +569,20 @@ var winGame = function() {
      },
      error: function() {
          Dagaz.Controller.app.state = STATE.STOP;
-         alert('Close: Error!');
+         console.log('Close: Error!');
      },
      statusCode: {
         401: function() {
              Dagaz.Controller.app.state = STATE.STOP;
-             alert('Close: Bad User!');
+             console.log('Close: Bad User!');
         },
         403: function() {
              Dagaz.Controller.app.state = STATE.STOP;
-             alert('Close: Not Found!');
+             console.log('Close: Not Found!');
         },
         500: function() {
              Dagaz.Controller.app.state = STATE.STOP;
-             alert('Close: Internal Error!');
+             console.log('Close: Internal Error!');
         }
      }
   });
@@ -604,20 +608,20 @@ var loseGame = function() {
      },
      error: function() {
          Dagaz.Controller.app.state = STATE.STOP;
-         alert('Close: Error!');
+         console.log('Close: Error!');
      },
      statusCode: {
         401: function() {
              Dagaz.Controller.app.state = STATE.STOP;
-             alert('Close: Bad User!');
+             console.log('Close: Bad User!');
         },
         403: function() {
              Dagaz.Controller.app.state = STATE.STOP;
-             alert('Close: Not Found!');
+             console.log('Close: Not Found!');
         },
         500: function() {
              Dagaz.Controller.app.state = STATE.STOP;
-             alert('Close: Internal Error!');
+             console.log('Close: Internal Error!');
         }
      }
   });
@@ -733,7 +737,7 @@ App.prototype.exec = function() {
       }, this);
       if (this.move === null) {
           this.state = STATE.STOP;
-          alert('Buzy: Bad move [' + last_move + ']');
+          console.log('Buzy: Bad move [' + last_move + ']');
       }
       var player = this.design.playerNames[this.board.player];
       console.log("Player: " + player);
