@@ -15,7 +15,10 @@ Dagaz.Model.moveToString = function(move) {
           r = r + " ";
       }
       if (a[0] != null) {
-          r = r + Dagaz.Model.posToString(a[0][0]) + '-' + Dagaz.Model.posToString(a[1][0]);
+          r = r + Dagaz.Model.posToString(a[0][0]);
+          if (a[1] !== null) {
+              r = r + '-' + Dagaz.Model.posToString(a[1][0]);
+          }
       } else {
           r = r + Dagaz.Model.posToString(a[1][0]);
       }

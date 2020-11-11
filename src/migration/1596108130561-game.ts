@@ -62,6 +62,10 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(28, 32, 'Dablot Dares', 'dablot-dares', 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(29, 32, 'Dablot Frostviken', 'dablot-frostviken', 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(30, 32, 'Dablot Prejjesne', 'dablot-prejjesne', 2)`);
+        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(31, 30, 'Chess', 'chess', 2)`);
+        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total, max_selector) values(32, 30, 'Courier Chess', 'courier-chess', 2, 2)`);
+        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(32, 30, 'Fighting Chess', 'fighting-chess', 2)`);
+        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(33, 30, 'Makruk', 'makruk', 2)`);
 
         await queryRunner.query(`insert into game_styles(id, game_id, name, suffix, players_num) values(1, 23, 'European', '', null)`);
         await queryRunner.query(`insert into game_styles(id, game_id, name, suffix, players_num) values(2, 23, 'Chinese', '-kanji', null)`);
@@ -138,6 +142,10 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(55, 'dablot-dares', null, 'dablot-dares')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(56, 'dablot-frostviken', null, 'dablot-frostviken')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(57, 'dablot-prejjesne', null, 'dablot-prejjesne')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(58, 'courier-chess-1', 1, 'courier-chess-1')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(59, 'courier-chess-2', 2, 'courier-chess-2')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(60, 'fighting-chess', null, 'chess')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(61, 'makruk', null, 'makruk')`);
     }
 
     public async down(queryRunner: QueryRunner): Promise<any> {

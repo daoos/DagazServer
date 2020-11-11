@@ -262,8 +262,8 @@ export class UsersService {
           .update(users)
           .set({ 
             name: x.name,
-            login: x.username/*,
-            email: x.email*/
+            login: x.username,
+            email: x.email
           })
           .where("id = :id", {id: user})
           .execute();
