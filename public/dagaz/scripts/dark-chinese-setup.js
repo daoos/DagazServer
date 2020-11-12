@@ -115,9 +115,9 @@ var addPieces = function(design, board, player, type, cnt, positions) {
 
 var setup = Dagaz.Model.setup;
 
-Dagaz.Model.setup = function(board) {
-  if (getSetup()) {
-      setup(board);
+Dagaz.Model.setup = function(board, init) {
+  if (getSetup(init)) {
+      setup(board, init);
       return;
   }
   var seed = getSeed();
