@@ -33,6 +33,7 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into games(id, name, filename, players_total, main_time, additional_time) values(32, 'Alquerque', 'alquerque', 2, 0, 1000)`);
         await queryRunner.query(`insert into games(id, name, filename, players_total, main_time, additional_time) values(33, 'Banqi', 'banqi-chinese', 2, 0, 1000)`);
         await queryRunner.query(`insert into games(id, name, filename, players_total, main_time, additional_time) values(34, 'Passive Chess', 'passive-chess', 2, 0, 1000)`);
+        await queryRunner.query(`insert into games(id, name, filename, players_total, main_time, additional_time) values(35, 'Morris', 'triangle', 2, 0, 1000)`);
 
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(1, 17, 'Go (9x9)', 'go-9x9', 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(2, 17, 'Go (19x19)', 'go-19x19', 2)`);
@@ -78,6 +79,10 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(42, 32, 'Kolowisi Awithlaknannai', 'serpents', 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(43, 34, 'Passive Chess', 'passive-chess', 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(44, 34, 'Littera Chinese Chess', 'litter-chess', 2)`);
+        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(45, 22, 'English Checkers', 'english-checkers', 2)`);
+        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(46, 22, 'Turkish Dama', 'turkish-dama', 2)`);
+        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(47, 22, 'Constitutional Checkers', 'constitutional-checkers', 2)`);
+        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(48, 22, 'Stavropol Checkers', 'stavropol-checkers', 2)`);
 
         await queryRunner.query(`insert into game_styles(id, game_id, name, suffix, players_num) values(1, 23, 'European', '', null)`);
         await queryRunner.query(`insert into game_styles(id, game_id, name, suffix, players_num) values(2, 23, 'Chinese', '-kanji', null)`);
@@ -265,6 +270,12 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(163, 'serpents', null, 'serpents')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(164, 'litter-chess', null, 'litter')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(165, 'passive-chess', null, 'passive')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(166, 'morris-9', null, '9-men')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(167, 'triangle', null, '3-men')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(168, 'english-checkers', null, 'english-checkers')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(169, 'turkish-dama', null, 'turkish-dama')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(170, 'constitutional-checkers', null, 'international-checkers')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(171, 'stavropol-checkers', null, 'russian-checkers')`);
     }
 
     public async down(queryRunner: QueryRunner): Promise<any> {
