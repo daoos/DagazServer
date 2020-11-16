@@ -9,7 +9,7 @@ Dagaz.Model.checkVersion = function(design, name, value) {
 }
 
 Dagaz.Model.isCapture = function(move) {
-  if (move.actions.length != 2) return false;
+  if (move.actions.length < 2) return false;
   if (move.actions[0][0] === null) return false;
   if (move.actions[0][1] !== null) return false;
   if (move.actions[1][0] === null) return false;

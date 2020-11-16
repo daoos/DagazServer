@@ -38,7 +38,6 @@ Dagaz.Model.BuildDesign = function(design) {
     design.checkVersion("show-hints", "false");
     design.checkVersion("show-drops", "true");
     design.checkVersion("show-captures", "false");
-    design.checkVersion("ko", "situation");
     design.checkVersion("chess-go-drops-mobile", "once");
 
     design.addDirection("se"); // 0

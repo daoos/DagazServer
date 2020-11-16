@@ -33,7 +33,7 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into games(id, name, filename, players_total, main_time, additional_time) values(32, 'Alquerque', 'alquerque', 2, 0, 1000)`);
         await queryRunner.query(`insert into games(id, name, filename, players_total, main_time, additional_time) values(33, 'Banqi', 'banqi-chinese', 2, 0, 1000)`);
         await queryRunner.query(`insert into games(id, name, filename, players_total, main_time, additional_time) values(34, 'Passive Chess', 'passive-chess', 2, 0, 1000)`);
-        await queryRunner.query(`insert into games(id, name, filename, players_total, main_time, additional_time) values(35, 'Morris', 'triangle', 2, 0, 1000)`);
+        await queryRunner.query(`insert into games(id, name, filename, players_total, main_time, additional_time) values(35, 'Morris', 'morris-9', 2, 0, 1000)`);
 
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(1, 17, 'Go (9x9)', 'go-9x9', 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(2, 17, 'Go (19x19)', 'go-19x19', 2)`);
@@ -83,6 +83,13 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(46, 22, 'Turkish Dama', 'turkish-dama', 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(47, 22, 'Constitutional Checkers', 'constitutional-checkers', 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(48, 22, 'Stavropol Checkers', 'stavropol-checkers', 2)`);
+        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(49, 35, 'Nine Men's Morris', 'morris-9', 2)`);
+        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(50, 35, 'Three Men's Morris', 'triangle', 2)`);
+        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(51, 35, 'Windmill', 'windmill', 2)`);
+        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(52, 35, 'Eight Men's Morris', 'morris-8', 2)`);
+        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(53, 35, 'Seven Men's Morris', 'morris-7', 2)`);
+        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(54, 35, 'Twelve Men's Morris', 'morris-12', 2)`);
+        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(55, 35, 'Morabaraba', 'morabaraba', 2)`);
 
         await queryRunner.query(`insert into game_styles(id, game_id, name, suffix, players_num) values(1, 23, 'European', '', null)`);
         await queryRunner.query(`insert into game_styles(id, game_id, name, suffix, players_num) values(2, 23, 'Chinese', '-kanji', null)`);
@@ -276,6 +283,11 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(169, 'turkish-dama', null, 'turkish-dama')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(170, 'constitutional-checkers', null, 'international-checkers')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(171, 'stavropol-checkers', null, 'russian-checkers')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(172, 'windmill', null, 'windmill')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(173, 'morris-8', null, '8-men')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(174, 'morris-7', null, '7-men')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(175, 'morris-12', null, '12-men')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(176, 'morabaraba', null, 'morabaraba')`);
     }
 
     public async down(queryRunner: QueryRunner): Promise<any> {

@@ -37,6 +37,7 @@ Dagaz.Model.CheckInvariants = function(board) {
           }
       }
   });
+  console.log(captured);
   if (captured.length > 0) {
       _.each(board.moves, function(move) {
           if (_.isUndefined(move.failed) && Dagaz.Model.isCapture(move)) {

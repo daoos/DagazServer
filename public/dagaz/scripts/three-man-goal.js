@@ -16,9 +16,9 @@ Dagaz.Model.checkGoals = function(design, board, player) {
   if (!_.isUndefined(board.move)) {
       if (board.move.mode > 0) {
           if (board.player == player) {
-              return -1;
-          } else {
               return 1;
+          } else {
+              return -1;
           }
       }
   }

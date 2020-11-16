@@ -773,6 +773,7 @@ App.prototype.exec = function() {
               addMove(m.toString(), s);
               Dagaz.Model.Done(this.design, this.board);
               console.log("Debug: " + m.toString());
+              this.view.markPositions(Dagaz.View.markType.KO, []);
           }
       }
       if (!this.move.isPass()) {
