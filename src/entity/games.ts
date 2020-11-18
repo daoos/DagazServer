@@ -33,4 +33,7 @@ export class games {
 
     @Column({ default: 0, nullable: false })
     max_selector: number;
+
+    @Column({ default: 0, nullable: false })
+    is_hidden: number;
 }

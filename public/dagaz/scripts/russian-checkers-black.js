@@ -261,30 +261,35 @@ Dagaz.Model.BuildDesign = function(design) {
     design.addMove(1, 4, [2, 2], 1);
     design.addMove(1, 4, [1, 1], 1);
 
-    design.setup("White", "Man", 56);
-    design.setup("White", "Man", 58);
-    design.setup("White", "Man", 60);
-    design.setup("White", "Man", 62);
-    design.setup("White", "Man", 49);
-    design.setup("White", "Man", 51);
-    design.setup("White", "Man", 53);
-    design.setup("White", "Man", 55);
-    design.setup("White", "Man", 40);
-    design.setup("White", "Man", 42);
-    design.setup("White", "Man", 44);
-    design.setup("White", "Man", 46);
-    design.setup("Black", "Man", 1);
-    design.setup("Black", "Man", 3);
-    design.setup("Black", "Man", 5);
-    design.setup("Black", "Man", 7);
-    design.setup("Black", "Man", 8);
-    design.setup("Black", "Man", 10);
-    design.setup("Black", "Man", 12);
-    design.setup("Black", "Man", 14);
-    design.setup("Black", "Man", 17);
-    design.setup("Black", "Man", 19);
-    design.setup("Black", "Man", 21);
-    design.setup("Black", "Man", 23);
+    design.setupSelector(2);
+
+    design.setup("White", "Man", 56, 1);
+    design.setup("White", "Man", 58, 1);
+    design.setup("White", "Man", 60, 1);
+    design.setup("White", "Man", 62, 1);
+    design.setup("White", "Man", 49, 1);
+    design.setup("White", "Man", 51, 1);
+    design.setup("White", "Man", 53, 1);
+    design.setup("White", "Man", 55, 1);
+    design.setup("White", "Man", 40, 1);
+    design.setup("White", "Man", 42, 1);
+    design.setup("White", "Man", 44, 1);
+    design.setup("White", "Man", 46, 1);
+    design.setup("Black", "Man", 1, 1);
+    design.setup("Black", "Man", 3, 1);
+    design.setup("Black", "Man", 5, 1);
+    design.setup("Black", "Man", 7, 1);
+    design.setup("Black", "Man", 8, 1);
+    design.setup("Black", "Man", 10, 1);
+    design.setup("Black", "Man", 12, 1);
+    design.setup("Black", "Man", 14, 1);
+    design.setup("Black", "Man", 17, 1);
+    design.setup("Black", "Man", 19, 1);
+    design.setup("Black", "Man", 21, 1);
+    design.setup("Black", "Man", 23, 1);
+
+    design.reserve("White", "King", 3, 2);
+    design.reserve("Black", "King", 1, 2);
 }
 
 Dagaz.View.configure = function(view) {
