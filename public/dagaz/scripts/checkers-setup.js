@@ -65,16 +65,20 @@ var isAttacked = function(a, positions) {
   return r;
 }
 
-Dagaz.AI.isSafePosition = function(design, board, pos) {
-  var piece = board.getPiece(pos);
-  if (piece === null) return false;
-  var r = true;
-  _.each(design.allPositions(), function(p) {
-      var enemy = board.getPiece(p);
-      if ((enemy !== null) && (enemy.player != piece.player)) {
-          if (Math.abs(getX(pos) - getX(p)) == Math.abs(getY(pos) - getY(p))) {
-              r = false;
+var isDanger = function(design, board, pos, player) {
+  var r = false;
+  if (player == 1) return r;
+  _.each(design.allDirections(), function(dir) {
+      var p = design.navigate(0, pos, dir);
+      if (p === null) return;
+      if (board.getPiece(p) !== null) return;
+      p = design.navigate(1, pos, dir);
+      while (p !== null) {
+          if (board.getPiece(p) !== null) {
+              r = true;
+              return;
           }
+          p = design.navigate(1, p, dir);
       }
   });
   return r;
@@ -101,7 +105,7 @@ Dagaz.Model.setup = function(board, init) {
                var piece = Dagaz.Model.createPiece(+type, +player);
                for (var i = 0; i < design.reserve[type][player]; i++) {
                     var pos = _.random(0, cnt - 1);
-                    while (notValid(pos, +player) || (_.indexOf(positions, pos) >= 0)) {
+                    while (notValid(pos, +player) || (_.indexOf(positions, pos) >= 0) || isDanger(design, board, pos, +player)) {
                         pos = _.random(0, cnt - 1);
                     }
                     board.setPiece(pos, Dagaz.Model.createPiece(+type, +player));
@@ -110,6 +114,29 @@ Dagaz.Model.setup = function(board, init) {
           });
       });
   }
+}
+
+var checkGoals = Dagaz.Model.checkGoals;
+
+Dagaz.Model.checkGoals = function(design, board, player) {
+  var selector = Dagaz.Model.getSetupSelector();
+  if (selector == 2) {
+      var c = 0;
+      _.each(design.allPositions(), function(pos) {
+          var piece = board.getPiece(pos);
+          if (piece === null) return;
+          if (piece.player != 1) return;
+          c++;
+      });
+      if (c < 3) {
+          if (player == 1) {
+              return -1;
+          } else {
+              return 1;
+          }
+      }
+  }
+  return checkGoals(design, board, player);
 }
 
 })();
