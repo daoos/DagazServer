@@ -100,6 +100,8 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total, max_selector) values(62, 36, 'Cheskers (10x10)', 'cheskers-10x10', 2, 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total, max_selector) values(63, 36, 'Belarusian Chess', 'belarusian-chess', 2, 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total, is_hidden) values(64, 30, 'Dark Chess', 'dark-chess', 2, 1)`);
+        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(65, 30, 'Progressive Chess', 'progressive-chess', 2)`);
+        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(66, 30, 'Hiashatar', 'hiashatar', 2)`);
 
         await queryRunner.query(`insert into game_styles(id, game_id, name, suffix, player_num) values(1, 23, 'European', '', null)`);
         await queryRunner.query(`insert into game_styles(id, game_id, name, suffix, player_num) values(2, 23, 'Chinese', '-kanji', null)`);
@@ -319,6 +321,8 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(194, 'chess', 7, 'chess-7')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(195, 'chess', 8, 'chess-8')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(196, 'russian-checkers', 2, 'russian-checkers-2')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(197, 'progressive-chess', null, 'chess-1')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(198, 'hiashatar', null, 'hiashatar')`);
     }
 
     public async down(queryRunner: QueryRunner): Promise<any> {

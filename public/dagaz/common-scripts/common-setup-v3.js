@@ -69,8 +69,11 @@ var getTurn = function(setup) {
   }
 }
 
-var getSeed = function() {
+var getSeed = function(setup) {
   var str = window.location.search.toString();
+  if (setup) {
+      str = setup;
+  }
   var result = str.match(/[?&]seed=(\d+)/);
   if (result) {
       return result[1];
@@ -104,8 +107,11 @@ var getReserve = function(setup) {
   }
 }
 
-var getGlobal = function() {
+var getGlobal = function(setup) {
   var str = window.location.search.toString();
+  if (setup) {
+      str = setup;
+  }
   var result = str.match(/[?&]global=([;\d]+)/);
   if (result) {
       return result[1];
@@ -172,7 +178,7 @@ Dagaz.Model.setup = function(board, init) {
       if (rs) {
           Dagaz.Model.setReserve(design, board, rs);
       }
-      var g = getGlobal();
+      var g = getGlobal(init);
       if (g) {
           Dagaz.Model.setGlobal(design, board, g);
       }

@@ -647,6 +647,7 @@ App.prototype.exec = function() {
       recovery();
       if (setup && uid) {
           Dagaz.Model.setup(this.board, setup);
+          Dagaz.Model.Done(this.design, this.board);
           this.view.reInit(this.board);
           setup = null;
       }
@@ -723,6 +724,13 @@ App.prototype.exec = function() {
           this.gameOver(player + " lose", -this.board.player);
           return;
       }
+      if (Dagaz.Model.isHidden) {
+          var ko = [];
+          if (!_.isUndefined(this.board.ko)) {
+              ko = this.board.ko;
+          }
+          this.view.markPositions(Dagaz.View.markType.KO, ko);
+      }
       if (uid) {
           getConfirmed();
       } else {
@@ -791,9 +799,9 @@ App.prototype.exec = function() {
                       s = Dagaz.Model.getSetup(this.design, this.board);
                   }
                   addMove(m.toString(), s);
-                  Dagaz.Model.Done(this.design, this.board);
                   console.log("Debug: " + m.toString());
                   this.view.markPositions(Dagaz.View.markType.KO, []);
+                  Dagaz.Model.Done(this.design, this.board);
               }
           }
       }

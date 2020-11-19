@@ -627,6 +627,7 @@ App.prototype.exec = function() {
       if (setup && uid) {
           Dagaz.Model.setup(this.board, setup);
           this.view.reInit(this.board);
+          Dagaz.Model.Done(this.design, this.board);
           setup = null;
       }
       if (player_num === null) return;
@@ -700,6 +701,13 @@ App.prototype.exec = function() {
           var player = this.design.playerNames[this.board.player];
           this.gameOver(player + " lose", -this.board.player);
           return;
+      }
+      if (Dagaz.Model.isHidden) {
+          var ko = [];
+          if (!_.isUndefined(this.board.ko)) {
+              ko = this.board.ko;
+          }
+          this.view.markPositions(Dagaz.View.markType.KO, ko);
       }
       if (uid) {
           getConfirmed();

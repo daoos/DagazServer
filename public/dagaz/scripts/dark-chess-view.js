@@ -1,11 +1,10 @@
 (function() {
 
-var currentPlayer        = 1;
-
 Dagaz.Model.invisible    = [];
-Dagaz.Model.invisibleOld = [];
+Dagaz.Model.isHidden     = true;
 
-var doneFlag = false;
+var doneFlag             = false;
+var currentPlayer        = 1;
 
 var checkVersion = Dagaz.Model.checkVersion;
 
@@ -80,7 +79,8 @@ var checkSlide = function(design, board, player, pos, dir, visible) {
   }
 }
 
-Dagaz.Model.Done = function(design, board) {
+Dagaz.Model.Done = function(design, board, phase) {
+  console.log("Done: " + board.player + " [" + phase + "]");
   var visible = [];
   var n  = design.getDirection("n");  var w  = design.getDirection("w");
   var s  = design.getDirection("s");  var e  = design.getDirection("e");
@@ -128,24 +128,17 @@ Dagaz.Model.Done = function(design, board) {
           }
       }
   });
-  Dagaz.Model.invisibleOld = [];
-  _.each(Dagaz.Model.invisible, function(p) {
-      if (board.getPiece(p) === null) {
-          Dagaz.Model.invisibleOld.push(p);
-      }
-  });
   Dagaz.Model.invisible = [];
   _.each(design.allPositions(), function(pos) {
-      var piece = board.getPiece(pos);
-      if ((piece !== null) && (_.indexOf(visible, pos) < 0)) {
+      if (_.indexOf(visible, pos) < 0) {
           Dagaz.Model.invisible.push(pos);
       }
   });
   var ko = [];
   _.each(design.allPositions(), function(pos) {
-      if (_.indexOf(visible, pos) >= 0) return;
+      if (_.indexOf(Dagaz.Model.invisible, pos) < 0) return;
       var piece = board.getPiece(pos);
-      if ((piece !== null) && (piece.player == currentPlayer)) return;
+      if ((piece !== null ) && (piece.player == currentPlayer)) return;
       ko.push(pos);
   });
   if (ko.length > 0) {
@@ -160,7 +153,7 @@ Dagaz.Controller.Done = function(board) {
 
 Dagaz.View.showPiece = function(view, ctx, frame, pos, piece, model, x, y, setup) {
   var isSaved = false;
-  if (!doneFlag && (_.indexOf(_.union(Dagaz.Model.invisible, Dagaz.Model.invisibleOld), setup.pos) >= 0)) {
+  if (!doneFlag && (_.indexOf(Dagaz.Model.invisible, setup.pos) >= 0)) {
       ctx.save();
       if (model.player == currentPlayer) {
           ctx.globalAlpha = 0.7;
