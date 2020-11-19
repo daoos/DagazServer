@@ -102,6 +102,12 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total, is_hidden) values(64, 30, 'Dark Chess', 'dark-chess', 2, 1)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(65, 30, 'Progressive Chess', 'progressive-chess', 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(66, 30, 'Hiashatar', 'hiashatar', 2)`);
+        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(67, 22, 'Italian Checkers', 'italian-checkers', 2)`);
+        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(68, 22, 'Spanish Checkers', 'spanish-checkers', 2)`);
+        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(69, 22, 'Thai Checkers', 'thai-checkers', 2)`);
+        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(70, 22, 'Armenian Tama', 'armenian-tama', 2)`);
+        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(71, 22, 'Canadian Checkers', 'canadian-checkers', 2)`);
+        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(72, 22, 'Greek Checkers', 'greek-checkers', 2)`);
 
         await queryRunner.query(`insert into game_styles(id, game_id, name, suffix, player_num) values(1, 23, 'European', '', null)`);
         await queryRunner.query(`insert into game_styles(id, game_id, name, suffix, player_num) values(2, 23, 'Chinese', '-kanji', null)`);
@@ -323,6 +329,12 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(196, 'russian-checkers', 2, 'russian-checkers-2')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(197, 'progressive-chess', null, 'chess-1')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(198, 'hiashatar', null, 'hiashatar')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(199, 'italian-checkers', null, 'italian')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(200, 'spanish-checkers', null, 'italian')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(201, 'thai-checkers', null, 'thai-checkers')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(202, 'armenian-tama', null, 'armenian')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(203, 'canadian-checkers', null, 'canadian')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(204, 'greek-checkers', null, 'turkish-dama')`);
     }
 
     public async down(queryRunner: QueryRunner): Promise<any> {

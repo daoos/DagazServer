@@ -12,7 +12,10 @@ Dagaz.Model.checkVersion = function(design, name, value) {
 }
 
 if (!_.isUndefined(Dagaz.Controller.addSound)) {
-    Dagaz.Controller.addSound(10, "../sounds/wind.wav");
+    Dagaz.Controller.addSound(0, "sounds/clack.wav", true);
+    Dagaz.Controller.addSound(2,  "sounds/tadam.wav", true);
+    Dagaz.Controller.addSound(3, "sounds/loss.wav", true);
+    Dagaz.Controller.addSound(10, "sounds/wind.wav", true);
 }
 
 var canEatMan = function(design, board, pos, dir) {
