@@ -31,11 +31,22 @@ export class GameService {
                 return null;
             }
             const x = await this.service.query(
-                `select id, name, filename, players_total, created, main_time, additional_time,
-                        realm_id, max_selector
-                 from   games
-                 where  realm_id = $1
-                 order  by lower(name)`, [realm]);
+                `select a.id as id, a.name as name, a.filename as filename, 
+                        a.players_total as players_total, a.created as created, 
+                        a.main_time as main_time, a.additional_time as additional_time,
+                        a.realm_id as realm_id, a.max_selector as max_selector,
+                        b.bots as bots
+                 from   games a
+                 left   join ( select game_id, variant_id, 
+                                      string_agg(
+                                          trim(to_char(coalesce(selector_value, 0), '999')) || ':' ||
+                                          trim(to_char(coalesce(player_num, 0), '99'))
+                                      , ',') as bots
+                               from   game_bots
+                               group  by game_id, variant_id
+                             ) b on (b.game_id = a.id and b.variant_id is null)
+                 where  a.realm_id = $1
+                 order  by lower(a.name)`, [realm]);
             let l: Game[] = x.map(x => {
                 let it = new Game();
                 it.id = x.id;
@@ -47,6 +58,9 @@ export class GameService {
                 it.additional_time = x.additional_time;
                 it.realm_id = x.realm_id;
                 it.max_selector = x.max_selector;
+                if (x.bots) {
+                    it.bots = x.bots;
+                }
                 return it;
             });
             return l;
@@ -68,9 +82,18 @@ export class GameService {
             const x = await this.service.query(
                 `select a.id as id, a.name as name, a.filename as filename, 
                         a.players_total as players_total,
-                        a.max_selector as max_selector
+                        a.max_selector as max_selector,
+                        c.bots as bots
                  from   game_variants a
                  inner  join games b on (b.id = a.game_id)
+                 left   join ( select game_id, variant_id, 
+                                      string_agg(
+                                            trim(to_char(coalesce(selector_value, 0), '999')) || ':' ||
+                                            trim(to_char(coalesce(player_num, 0), '99'))
+                                      , ',') as bots
+                               from   game_bots
+                               group  by game_id, variant_id
+                             ) c on (c.game_id = b.id and c.variant_id = a.id)
                  where  b.realm_id = $1 and b.id = $2
                  order  by lower(a.name)`, [realm, game]);
             let l: Game[] = x.map(x => {
@@ -81,6 +104,9 @@ export class GameService {
                 it.players_total = x.players_total;
                 it.realm_id = x.realm_id;
                 it.max_selector = x.max_selector;
+                if (x.bots) {
+                    it.bots = x.bots;
+                }
                 return it;
             });
             return l;

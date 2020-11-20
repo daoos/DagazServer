@@ -100,7 +100,7 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total, max_selector) values(62, 36, 'Cheskers (10x10)', 'cheskers-10x10', 2, 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total, max_selector) values(63, 36, 'Belarusian Chess', 'belarusian-chess', 2, 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total, is_hidden) values(64, 30, 'Dark Chess', 'dark-chess', 2, 1)`);
-        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(65, 30, 'Progressive Chess', 'progressive-chess', 2)`);
+        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(65, 30, 'Logical Progressive Chess', 'progressive-chess', 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(66, 30, 'Hiashatar', 'hiashatar', 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(67, 22, 'Italian Checkers', 'italian-checkers', 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(68, 22, 'Spanish Checkers', 'spanish-checkers', 2)`);
@@ -130,6 +130,9 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_styles(id, game_id, name, suffix, player_num) values(19, 33, 'Chinese', '-kanji', null)`);
         await queryRunner.query(`insert into game_styles(id, game_id, name, suffix, player_num) values(20, 34, 'Opposite', '-black', 2)`);
         await queryRunner.query(`insert into game_styles(id, game_id, name, suffix, player_num) values(21, 36, 'Opposite', '-black', 2)`);
+
+        await queryRunner.query(`insert into game_bots(id, game_id, variant_id, selector_value, player_num) values(1, 35, 50, null, null)`);
+        await queryRunner.query(`insert into game_bots(id, game_id, variant_id, selector_value, player_num) values(2, 31, null, null, null)`);
 
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(1, 'doubutsu-shogi', null, 'doubutsu-shogi')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(2, 'atari-go', null, 'atari-go')`);
@@ -190,7 +193,7 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(57, 'dablot-prejjesne', null, 'dablot-prejjesne')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(58, 'courier-chess', 1, 'courier-chess-1')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(59, 'courier-chess', 2, 'courier-chess-2')`);
-        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(60, 'fighting-chess', null, 'chess')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(60, 'fighting-chess', null, 'chess-1')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(61, 'makruk', null, 'makruk')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(62, 'laska', null, 'laska')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(63, 'stapeldammen', null, 'stapeldammen')`);
@@ -339,6 +342,7 @@ export class game1596108130561 implements MigrationInterface {
 
     public async down(queryRunner: QueryRunner): Promise<any> {
         await queryRunner.query(`delete from game_previews`);
+        await queryRunner.query(`delete from game_bots`);
         await queryRunner.query(`delete from game_styles`);
         await queryRunner.query(`delete from game_variants`);
         await queryRunner.query(`delete from games`);

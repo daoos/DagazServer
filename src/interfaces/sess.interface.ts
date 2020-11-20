@@ -64,4 +64,10 @@ export class Sess {
 
     @ApiPropertyOptional()
     last_turn: number;
+
+    @ApiPropertyOptional()
+    with_ai: boolean;
+
+    @ApiPropertyOptional()
+    ai: number;
 }

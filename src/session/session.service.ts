@@ -32,19 +32,24 @@ export class SessionService {
                 `select a.id as id, a.status_id as status, a.game_id as game_id, d.id as variant_id,
                         coalesce(d.name, b.name) as game, coalesce(d.filename, b.filename) || coalesce(h.suffix, '') as filename, 
                         a.created as created, c.name as creator, b.players_total as players_total, a.last_setup as last_setup,
-                        string_agg(f.name || ' (' || e.player_num || ')', ' / ' order by e.player_num) as player_name,
-                        coalesce(a.last_turn, 0) as last_turn, coalesce(a.selector_value, 0) as selector_value
+                        string_agg(
+                            case
+                              when e.is_ai = 1 then 'AI'
+                              else f.name
+                            end || ' (' || e.player_num || ')', ' / ' order by e.player_num) as player_name,
+                        coalesce(a.last_turn, 0) as last_turn, coalesce(a.selector_value, 0) as selector_value, x.id as ai
                  from   game_sessions a
                  inner  join games b on (b.id = a.game_id)
                  inner  join users c on (c.id = a.user_id and c.realm_id = $1)
                  left   join game_variants d on (d.id = a.variant_id)
                  inner  join user_games e on (e.session_id = a.id)
                  inner  join users f on (f.id = e.user_id and f.realm_id = $2)
-                 left   join user_games g on (g.session_id = a.id and g.user_id = $3)
+                 left   join user_games g on (g.session_id = a.id and g.user_id = $3 and g.is_ai = 0)
                  left   join game_styles h on (h.game_id = b.id and h.player_num = g.player_num)
                  inner  join user_games i on (i.session_id = a.id and i.player_num = a.next_player and i.user_id = $4)
+                 left   join user_games x on (x.session_id = a.id and x.is_ai = 1)
                  where  a.status_id = 2 and a.closed is null
-                 group  by a.id, a.status_id, a.game_id, d.id, d.name, b.name, d.filename, b.filename, a.created, c.name, b.players_total, a.last_setup, h.suffix
+                 group  by a.id, a.status_id, a.game_id, d.id, d.name, b.name, d.filename, b.filename, a.created, c.name, b.players_total, a.last_setup, h.suffix, x.id
                  order  by a.changed desc`, [realm, realm, user, user]);
                  let l: Sess[] = x.map(x => {
                     let it = new Sess();
@@ -60,6 +65,7 @@ export class SessionService {
                     it.last_setup = x.last_setup;
                     it.last_turn = x.last_turn;
                     it.selector_value = x.selector_value;
+                    it.ai = x.ai;
                     return it;
                 });
                 return l;
@@ -120,18 +126,24 @@ export class SessionService {
                 `select a.id as id, a.status_id as status, a.game_id as game_id, d.id as variant_id,
                         coalesce(d.name, b.name) as game, coalesce(d.filename, b.filename) || coalesce(h.suffix, '') as filename, 
                         a.created as created, c.name as creator, b.players_total as players_total, a.last_setup as last_setup,
-                        string_agg(f.name || ' (' || e.player_num || ')', ' / ' order by e.player_num) as player_name,
-                        coalesce(a.last_turn, 0) as last_turn, coalesce(a.selector_value, 0) as selector_value
+                        string_agg(
+                            case
+                              when e.is_ai = 1 then 'AI'
+                              else f.name
+                            end || ' (' || e.player_num || 
+                        ')', ' / ' order by e.player_num) as player_name,
+                        coalesce(a.last_turn, 0) as last_turn, coalesce(a.selector_value, 0) as selector_value, x.id as ai
                  from   game_sessions a
                  inner  join games b on (b.id = a.game_id)
                  inner  join users c on (c.id = a.user_id and c.realm_id = $1)
                  left   join game_variants d on (d.id = a.variant_id)
                  inner  join user_games e on (e.session_id = a.id)
                  inner  join users f on (f.id = e.user_id and f.realm_id = $2)
-                 left   join user_games g on (g.session_id = a.id and g.user_id = $3)
+                 left   join user_games g on (g.session_id = a.id and g.user_id = $3 and g.is_ai = 0)
                  left   join game_styles h on (h.game_id = b.id and h.player_num = g.player_num)
+                 left   join user_games x on (x.session_id = a.id and x.is_ai = 1)
                  where  a.status_id = 2 and a.closed is null
-                 group  by a.id, a.status_id, a.game_id, d.id, d.name, b.name, d.filename, b.filename, a.created, c.name, b.players_total, a.last_setup, h.suffix
+                 group  by a.id, a.status_id, a.game_id, d.id, d.name, b.name, d.filename, b.filename, a.created, c.name, b.players_total, a.last_setup, h.suffix, x.id
                  order  by a.changed desc`, [realm, realm, user]);
                  let l: Sess[] = x.map(x => {
                     let it = new Sess();
@@ -147,6 +159,7 @@ export class SessionService {
                     it.last_setup = x.last_setup;
                     it.last_turn = x.last_turn;
                     it.selector_value = x.selector_value;
+                    it.ai = x.ai;
                     return it;
                 });
                 return l;
@@ -198,7 +211,7 @@ export class SessionService {
         return y[0].player_num;
     }
 
-    async joinToSession(user:number, s: Sess): Promise<number> {
+    async joinToSession(user:number, s: Sess, is_ai: boolean): Promise<number> {
         s.player_num = await this.getAvailPlayer(s.id, s.player_num);
         const t = await this.getMainTime(s.game_id);
         const y = await this.service.createQueryBuilder("user_games")
@@ -208,7 +221,8 @@ export class SessionService {
             user_id: user,
             session_id: s.id,
             player_num: s.player_num,
-            time_limit: t
+            time_limit: t,
+            is_ai: is_ai ? 1 : 0
         })
         .returning('*')
         .execute();
@@ -300,7 +314,7 @@ export class SessionService {
             if (!s.player_num) {
                 s.player_num = 1;
             }
-            const uid: number = await this.joinToSession(user, s);
+            const uid: number = await this.joinToSession(user, s, false);
             const num: number = await this.getPlayerNum(uid);
             if (!num) {
                 return null;
@@ -480,9 +494,10 @@ export class SessionService {
                 `select c.id as game_id, c.name as game, c.filename as filename,
                         c.players_total as players_total, a.last_setup as last_setup,
                         b.player_num as player_num, b.id as uid, b.user_id as user_id,
-                        a.status_id as status_id
+                        a.status_id as status_id, d.id as ai
                  from   game_sessions a
-                 inner  join user_games b on (b.session_id = a.id)
+                 inner  join user_games b on (b.session_id = a.id and b.is_ai = 0)
+                 left   join user_games d on (d.session_id = a.id and d.is_ai = 1)
                  inner  join games c on (c.id = a.game_id)
                  where  a.id = $1`, [s.id]);
             if (!x || x.length == 0) {
@@ -497,6 +512,9 @@ export class SessionService {
             if ((x.length == 1) && (x[0].status_id != 3)) {
                 s.player_num = x[0].player_num;
                 s.uid = x[0].uid;
+                if (x[0].ai) {
+                    s.ai = x[0].ai;
+                }
             }
             return s;
         } catch (error) {
@@ -541,9 +559,14 @@ export class SessionService {
             if (!x.player_num) {
                 x.player_num = 1;
             }
-            await this.joinToSession(user, x);
+            await this.joinToSession(user, x, false);
             if (suffix) {
                 x.filename = x.filename + suffix;
+            }
+            if (x.with_ai) {
+                const player_num = x.player_num;
+                await this.joinToSession(user, x, true);
+                x.player_num = player_num;
             }
             return x;
         } catch (error) {

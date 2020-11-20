@@ -28,4 +28,7 @@ export class Game {
 
     @ApiProperty()
     max_selector: number;
+
+    @ApiPropertyOptional()
+    bots: string;
 }
