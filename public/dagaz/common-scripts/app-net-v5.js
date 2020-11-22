@@ -23,6 +23,7 @@ var onceGameOver = true;
 var inProgress = false;
 var auth = null;
 var uid = null;
+var bot = null;
 var player_num = null;
 var setup = null;
 var last_move = null;
@@ -396,6 +397,9 @@ var recovery = function() {
      },
      success: function(data) {
          uid = data.uid;
+         if (data.ai) {
+             bot = data.ai;
+         }
          player_num = data.player_num;
          setup = data.last_setup;
          console.log('Recovery: Succeed [uid = ' + uid + ']');
@@ -505,9 +509,9 @@ var getConfirmed = function() {
   });
 }
 
-var addMove = function(move, setup) {
+var addMove = function(move, setup, id) {
   if (auth === null) return;
-  if (!uid) return;
+  if (!id) return;
   inProgress = true;
   var app = Dagaz.Controller.app;
   var design = app.design;
@@ -515,7 +519,7 @@ var addMove = function(move, setup) {
      url: SERVICE + "move",
      type: "POST",
      data: {
-         uid: uid,
+         uid: id,
          next_player: design.currPlayer(app.board.turn),
          move_str: move,
          setup_str: setup
@@ -627,6 +631,26 @@ var loseGame = function() {
   });
 }
 
+App.prototype.getContext = function(player, forced) {
+  if (_.isUndefined(this.context)) {
+      this.context = [];
+  }
+  if (_.isUndefined(this.context[player])) {
+      this.context[player] = Dagaz.AI.createContext(this.design);
+  }
+  return this.context[player];
+}
+
+App.prototype.getAI = function() {
+  if (_.isUndefined(this.ai)) {
+      this.ai = Dagaz.AI.findBot("random",  this.params, null);
+      this.ai = Dagaz.AI.findBot("common",  this.params, this.ai);
+      this.ai = Dagaz.AI.findBot("smart",   this.params, this.ai);
+      this.ai = Dagaz.AI.findBot("opening", this.params, this.ai);
+  }
+  return this.ai;
+}
+
 App.prototype.exec = function() {
   this.view.configure();
   this.view.draw(this.canvas);
@@ -707,8 +731,31 @@ App.prototype.exec = function() {
               }
           }
       } else {
-          this.state = STATE.BUZY;
-          this.timestamp = Date.now();
+          var ctx = this.getContext(this.getBoard().player);
+          var ai  = this.getAI();
+          if ((ctx !== null) && (ai !== null) && (bot !== null)) {
+              ai.setContext(ctx, this.board);
+              Canvas.style.cursor = "wait";
+              this.timestamp = Date.now();
+              var player = this.design.playerNames[this.board.player];
+              var result = this.getAI().getMove(ctx);
+              if (result && result.move) {
+                  console.log("Player: " + player);
+                  this.boardApply(result.move);
+                  var s = result.move.toString();
+                  if (!_.isUndefined(Dagaz.Model.getSetup)) {
+                      s = Dagaz.Model.getSetup(this.design, this.board);
+                      console.log("Setup: " + s);
+                  }
+                  Dagaz.Model.Done(this.design, this.board);
+                  addMove(result.move.toString(), s, bot);
+                  this.move = result.move;
+                  this.state = STATE.EXEC;
+              }
+          } else {
+              this.state = STATE.BUZY;
+              this.timestamp = Date.now();
+          }
       }
   }
   if (this.state == STATE.BUZY) {
@@ -794,11 +841,11 @@ App.prototype.exec = function() {
                       Dagaz.Model.PostProcessing(this.board, [m]);
                   }
                   this.boardApply(m);
-                  var s = null;
+                  var s = m.toString();
                   if (!_.isUndefined(Dagaz.Model.getSetup)) {
                       s = Dagaz.Model.getSetup(this.design, this.board);
                   }
-                  addMove(m.toString(), s);
+                  addMove(m.toString(), s, uid);
                   console.log("Debug: " + m.toString());
                   this.view.markPositions(Dagaz.View.markType.KO, []);
                   Dagaz.Model.Done(this.design, this.board);
