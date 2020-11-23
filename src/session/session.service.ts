@@ -578,9 +578,9 @@ export class SessionService {
                 if (x[0].ai) {
                     s.ai = x[0].ai;
                 }
-            }
-            if (x[0].last_user && s.uid && !s.ai && (x[0].last_user != s.uid)) {
-                s.last_setup = await this.rollbackSess(s.last_setup, s.id, s.uid);
+                if (x[0].last_user && s.uid && !s.ai && (x[0].last_user != s.uid)) {
+                    s.last_setup = await this.rollbackSess(s.last_setup, s.id, s.uid);
+                }
             }
             return s;
         } catch (error) {
