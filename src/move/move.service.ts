@@ -115,7 +115,7 @@ export class MoveService {
              where  a.session_id = $1 and a.uid <> $2 and a.turn_num >= $3
              and    not a.setup_str is null 
              and    a.accepted is null
-             order  by a.id desc`, [sid, uid, turn]);
+             order  by a.id`, [sid, uid, turn]);
             if (!x) {
                 return null;
             }

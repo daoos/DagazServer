@@ -37,7 +37,7 @@ export class SessionService {
                               when e.is_ai = 1 then 'AI'
                               else f.name
                             end || ' (' || e.player_num || ')', ' / ' order by e.player_num) as player_name,
-                        coalesce(a.last_turn, 0) as last_turn, coalesce(a.selector_value, 0) as selector_value, x.id as ai
+                        coalesce(a.last_turn, 0) as last_turn, coalesce(a.selector_value, 0) as selector_value, x.id as ai, a.changed as changed
                  from   game_sessions a
                  inner  join games b on (b.id = a.game_id)
                  inner  join users c on (c.id = a.user_id and c.realm_id = $1)
@@ -50,7 +50,30 @@ export class SessionService {
                  left   join user_games x on (x.session_id = a.id and x.is_ai = 1)
                  where  a.status_id = 2 and a.closed is null
                  group  by a.id, a.status_id, a.game_id, d.id, d.name, b.name, d.filename, b.filename, a.created, c.name, b.players_total, a.last_setup, h.suffix, x.id
-                 order  by a.changed desc`, [realm, realm, user, user]);
+                 union  all
+                 select a.id as id, a.status_id as status, a.game_id as game_id, d.id as variant_id,
+                        coalesce(d.name, e.name) as game, coalesce(d.filename, e.filename) || coalesce(h.suffix, '') as filename,
+                        a.created as created, j.name as creator, e.players_total as players_total, a.last_setup as last_setup,
+                        string_agg(
+                            case
+                              when k.is_ai = 1 then 'AI'
+                              else f.name
+                            end || ' (' || k.player_num || ')', ' / ' order by k.player_num) as player_name,
+                        coalesce(a.last_turn, 0) as last_turn, coalesce(a.selector_value, 0) as selector_value, x.id as ai, a.changed as changed
+                 from   game_sessions a
+                 inner  join user_games b on (b.session_id = a.id and b.player_num = 1 and b.user_id = $5)
+                 left   join game_moves c on (c.session_id = a.id)
+                 left   join game_variants d on (d.id = a.variant_id)
+                 inner  join games e on (e.id = a.game_id)
+                 left   join user_games g on (g.session_id = a.id and g.user_id = $6 and g.is_ai = 0)
+                 left   join game_styles h on (h.game_id = e.id and h.player_num = g.player_num)
+                 inner  join users j on (j.id = a.user_id and j.realm_id = $7)
+                 inner  join user_games k on (k.session_id = a.id)
+                 inner  join users f on (f.id = k.user_id and f.realm_id = $8)
+                 left   join user_games x on (x.session_id = a.id and x.is_ai = 1)
+                 where  c.id is null and a.closed is null
+                 group  by a.id, a.status_id, a.game_id, d.id, d.name, e.name, d.filename, e.filename, a.created, e.players_total, a.last_setup, h.suffix, x.id, j.name
+                 order  by changed desc`, [realm, realm, user, user, user, user, realm, realm]);
                  let l: Sess[] = x.map(x => {
                     let it = new Sess();
                     it.id = x.id;
@@ -488,13 +511,53 @@ export class SessionService {
         return true;
     }
 
+    async getLastId(sid: number, uid: number): Promise<number> {
+        let x = await this.service.query(
+            `select max(id) as last_id
+             from   game_moves
+             where  session_id = $1 and uid = $2`, [sid, uid]);
+        if (!x || x.length == 0) {
+             return null;
+        }
+        return x[0].last_id;
+    }
+
+    async rollbackSess(r: string, sid:number, uid: number): Promise<string> {
+        const last_id = await this.getLastId(sid, uid);
+        if (last_id) {
+            let x = await this.service.query(
+                `select setup_str, turn_num
+                 from   game_moves
+                 where  id = $1`, [last_id]);
+            if (!x || x.length == 0) {
+                 return null;
+            }
+            r = x[0].setup_str;
+            await this.service.createQueryBuilder("game_moves")
+            .update(game_moves)
+            .set({ 
+                accepted: null
+             })
+            .where("session_id = :sid and turn_num > :turn", {sid: sid, turn: x[0].turn_num})
+            .execute();
+            await this.service.createQueryBuilder("game_sessions")
+            .update(game_sessions)
+            .set({ 
+                last_turn: x[0].turn_num
+             })
+            .where("id = :sid", {sid: sid})
+            .execute();
+        }
+        return r;
+    }
+
     async recovery(user:number, s: Sess): Promise<Sess> {
         try {
             let x = await this.service.query(
                 `select c.id as game_id, c.name as game, c.filename as filename,
                         c.players_total as players_total, a.last_setup as last_setup,
                         b.player_num as player_num, b.id as uid, b.user_id as user_id,
-                        a.status_id as status_id, d.id as ai
+                        a.status_id as status_id, d.id as ai, a.last_user as last_user
                  from   game_sessions a
                  inner  join user_games b on (b.session_id = a.id and b.is_ai = 0)
                  left   join user_games d on (d.session_id = a.id and d.is_ai = 1)
@@ -515,6 +578,9 @@ export class SessionService {
                 if (x[0].ai) {
                     s.ai = x[0].ai;
                 }
+            }
+            if (x[0].last_user && s.uid && !s.ai && (x[0].last_user != s.uid)) {
+                s.last_setup = await this.rollbackSess(s.last_setup, s.id, s.uid);
             }
             return s;
         } catch (error) {

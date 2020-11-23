@@ -631,6 +631,46 @@ var loseGame = function() {
   });
 }
 
+var drawGame = function() {
+  if (auth === null) return;
+  if (!uid) return;
+  $.ajax({
+     url: SERVICE + "session/close",
+     type: "POST",
+     data: {
+         winner: uid,
+         loser: uid
+     },
+     dataType: "json",
+     beforeSend: function (xhr) {
+         xhr.setRequestHeader('Authorization', 'Bearer ' + auth);
+     },
+     success: function(data) {
+         console.log('Close: Succeed');
+         inProgress = false;
+         this.state = STATE.STOP;
+     },
+     error: function() {
+         Dagaz.Controller.app.state = STATE.STOP;
+         console.log('Close: Error!');
+     },
+     statusCode: {
+        401: function() {
+             Dagaz.Controller.app.state = STATE.STOP;
+             console.log('Close: Bad User!');
+        },
+        403: function() {
+             Dagaz.Controller.app.state = STATE.STOP;
+             console.log('Close: Not Found!');
+        },
+        500: function() {
+             Dagaz.Controller.app.state = STATE.STOP;
+             console.log('Close: Internal Error!');
+        }
+     }
+  });
+}
+
 App.prototype.getContext = function(player, forced) {
   if (_.isUndefined(this.context)) {
       this.context = [];
@@ -896,6 +936,7 @@ App.prototype.exec = function() {
                   this.doneMessage = player + " lose";
                   this.winPlayer   = -this.board.parent.player;
               } else {
+                  drawGame();
                   if (!_.isUndefined(Dagaz.Controller.play)) {
                       Dagaz.Controller.play(Dagaz.Sounds.draw);
                   }

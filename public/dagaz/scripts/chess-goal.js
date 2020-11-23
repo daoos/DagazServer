@@ -21,11 +21,7 @@ Dagaz.Model.checkGoals = function(design, board, player) {
           c++;
       });
       if (c < 3) {
-          if (player == 1) {
-              return -1;
-          } else {
-              return 1;
-          }
+          return 0;
       }
       return checkGoals(design, board, player);
   }
