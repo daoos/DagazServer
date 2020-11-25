@@ -5,6 +5,7 @@ import { game_sessions } from '../entity/game_sessions';
 import { user_games } from '../entity/user_games';
 import { game_moves } from '../entity/game_moves';
 import { challenge } from '../entity/challenge';
+import { game_alerts } from '../entity/game_alerts';
 
 @Injectable()
 export class SessionService {
@@ -438,6 +439,14 @@ export class SessionService {
 
     async clearWaiting(): Promise<boolean> {
         const dt = new Date();
+        await this.service.createQueryBuilder("game_alerts")
+        .delete()
+        .from(game_alerts)
+        .where(`session_id in (select id
+                               from   game_sessions
+                               where  status_id = 1 and is_protected = 0
+                               and    created + interval '1 week' < :dt)`, {dt: dt})
+        .execute();
         await this.service.createQueryBuilder("user_games")
         .delete()
         .from(user_games)
@@ -456,6 +465,19 @@ export class SessionService {
 
     async clearObsolete(): Promise<boolean> {
         const dt = new Date();
+        await this.service.createQueryBuilder("game_alerts")
+        .delete()
+        .from(game_alerts)
+        .where(`session_id in (select a.id
+                               from   game_sessions a
+                               where  a.status_id = 1 and a.is_protected = 0
+                               and    a.changed + interval '1 month' < :dt
+                               except
+                               select c.id
+                               from   bonuses a
+                               inner  join user_games b on (b.id = a.uid)
+                               inner  join game_sessions c on (c.id = b.session_id))`, {dt: dt})
+        .execute();
         await this.service.createQueryBuilder("game_moves")
         .delete()
         .from(game_moves)
