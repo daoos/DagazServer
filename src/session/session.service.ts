@@ -557,11 +557,13 @@ export class SessionService {
                 `select c.id as game_id, c.name as game, c.filename as filename,
                         c.players_total as players_total, a.last_setup as last_setup,
                         b.player_num as player_num, b.id as uid, b.user_id as user_id,
-                        a.status_id as status_id, d.id as ai, a.last_user as last_user
+                        a.status_id as status_id, d.id as ai, a.last_user as last_user,
+                        e.result_id as result_id
                  from   game_sessions a
                  inner  join user_games b on (b.session_id = a.id and b.is_ai = 0)
                  left   join user_games d on (d.session_id = a.id and d.is_ai = 1)
                  inner  join games c on (c.id = a.game_id)
+                 left   join game_alerts e on (e.session_id = a.id)
                  where  a.id = $1`, [s.id]);
             if (!x || x.length == 0) {
                  return null;
@@ -578,7 +580,7 @@ export class SessionService {
                 if (x[0].ai) {
                     s.ai = x[0].ai;
                 }
-                if (x[0].last_user && s.uid && !s.ai && (x[0].last_user != s.uid)) {
+                if (x[0].last_user && s.uid && !s.ai && !x[0].result_id && (x[0].last_user != s.uid)) {
                     s.last_setup = await this.rollbackSess(s.last_setup, s.id, s.uid);
                 }
             }

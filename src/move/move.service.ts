@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import { Move } from '../interfaces/move.interface';
 import { user_games } from '../entity/user_games';
 import { game_sessions } from '../entity/game_sessions';
+import { game_alerts } from '../entity/game_alerts';
 
 @Injectable()
 export class MoveService {
@@ -99,9 +100,33 @@ export class MoveService {
         return x[0].last_turn;
     }
 
+    async getSessionAlert(sid: number, uid: number): Promise<Move[]> {
+        const x = await this.service.query(
+            `select a.uid as uid, a.result_id as result_id, a.turn_number as turn_number
+             from   game_alerts a
+             inner  join user_games b on (b.id = a.uid)
+             where  a.session_id = $1`, [sid]);
+        if (!x || x.length == 0) {
+             return null;
+        }
+        return x.filter(it => {
+            return it.uid != uid;
+        }).map(it => {
+            let r = new Move();
+            r.session_id = it.session_id;
+            r.turn_num = it.turn_number;
+            r.result_id = it.result_id;
+            return r;
+        });
+    }
+
     async getConfirmedMove(uid: number): Promise<Move[]> {
         try {
             const sid: number = await this.getSession(uid);
+            const r = await this.getSessionAlert(sid, uid);
+            if (r !== null) {
+                return r;
+            }
             const turn: number = await this.getLastTurn(sid);
             const f = await this.checkSession(sid);
             if (!f) {
@@ -250,6 +275,52 @@ export class MoveService {
             return null;
         }
         return x[0].turn_num;
+    }
+
+    async acceptAlert(x: Move): Promise<Move> {
+        try {
+            await this.service.createQueryBuilder("game_alerts")
+            .delete()
+            .from(game_alerts)
+            .where("session_id = :sid", {sid: x.session_id})
+            .execute();
+            return x;
+        } catch (error) {
+          console.error(error);
+          throw new InternalServerErrorException({
+              status: HttpStatus.BAD_REQUEST,
+              error: error
+          });
+        }
+    }
+
+    async sendAlert(x: Move): Promise<Move> {
+        try {
+            const r = await this.getSessionAlert(x.session_id, x.uid);
+            if (r !== null) {
+                return x;
+            }
+            const turn_num = await this.getTurnNumber(x.session_id);
+            const y = await this.service.createQueryBuilder("game_alerts")
+            .insert()
+            .into(game_alerts)
+            .values({
+                session_id: x.session_id,
+                uid: x.uid,
+                result_id: x.result_id,
+                turn_number: turn_num
+            })
+            .returning('*')
+            .execute();
+            x.id = y.generatedMaps[0].id;
+            return x;
+        } catch (error) {
+          console.error(error);
+          throw new InternalServerErrorException({
+              status: HttpStatus.BAD_REQUEST,
+              error: error
+          });
+        }
     }
 
     async addMove(x: Move): Promise<Move> {

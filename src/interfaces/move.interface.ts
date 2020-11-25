@@ -14,7 +14,7 @@ export class Move {
     @ApiPropertyOptional()
     turn_num: number;
 
-    @ApiProperty()
+    @ApiPropertyOptional()
     move_str: string;
 
     @ApiPropertyOptional()
@@ -37,4 +37,7 @@ export class Move {
 
     @ApiPropertyOptional()
     next_player: number;
+
+    @ApiPropertyOptional()
+    result_id: number;
 }
