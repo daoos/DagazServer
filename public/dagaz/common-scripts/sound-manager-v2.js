@@ -70,7 +70,32 @@ Dagaz.Controller.stop = function() {
     }
 }
 
+Dagaz.Controller.sound = function() {
+    if (Dagaz.Controller.soundOff) {
+        sound.innerHTML = "no Sound";
+        Dagaz.Controller.soundOff = false;
+        localStorage.setItem('dagaz.sound', 'on');
+    } else {
+        sound.innerHTML = "Sound";
+        Dagaz.Controller.soundOff = true;
+        localStorage.setItem('dagaz.sound', 'off');
+    }
+}
+
+Dagaz.Controller.checkSound = function() {
+   var result = localStorage.getItem('dagaz.sound');
+   if (result == 'off') {
+       sound.innerHTML = "Sound";
+       Dagaz.Controller.soundOff = true;
+   } else {
+       sound.innerHTML = "no Sound";
+       Dagaz.Controller.soundOff = false;
+   }
+}
+
 })();
+
+Dagaz.Controller.checkSound();
 
 Dagaz.Controller.addSound(Dagaz.Sounds.move, "sounds/clack.wav", true);
 Dagaz.Controller.addSound(Dagaz.Sounds.drop, "sounds/on.wav", true);

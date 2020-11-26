@@ -664,8 +664,8 @@ var getConfirmed = function() {
                          Dagaz.Controller.play(Dagaz.Sounds.lose);
                      }
                      app.state = STATE.DONE;
-                     app.doneMessage = player + " lose";
-                     app.winPlayer   = -app.board.player;
+                     app.doneMessage = player + " won";
+                     app.winPlayer   = app.board.player;
                      gameOver(app.doneMessage, app, app.winPlayer);
                  } else if (r == 2) {
                      winGame();
@@ -673,8 +673,8 @@ var getConfirmed = function() {
                          Dagaz.Controller.play(Dagaz.Sounds.win);
                      }
                      app.state = STATE.DONE;
-                     app.doneMessage = player + " won";
-                     app.winPlayer   = app.board.player;
+                     app.doneMessage = player + " lose";
+                     app.winPlayer   = -app.board.player;
                      gameOver(app.doneMessage, app, app.winPlayer);
                  } else {
                      if (confirm("Do you agree to a draw?")) {
@@ -890,18 +890,25 @@ App.prototype.exec = function() {
               this.timestamp = Date.now();
               var player = this.design.playerNames[this.board.player];
               var result = this.getAI().getMove(ctx);
-              if (result && result.move) {
-                  console.log("Player: " + player);
-                  this.boardApply(result.move);
-                  var s = result.move.toString();
-                  if (!_.isUndefined(Dagaz.Model.getSetup)) {
-                      s = Dagaz.Model.getSetup(this.design, this.board);
-                      console.log("Setup: " + s);
+              if (result) {
+                  if (result.move) {
+                      console.log("Player: " + player);
+                      this.boardApply(result.move);
+                      var s = result.move.toString();
+                      if (!_.isUndefined(Dagaz.Model.getSetup)) {
+                          s = Dagaz.Model.getSetup(this.design, this.board);
+                          console.log("Setup: " + s);
+                      }
+                      Dagaz.Model.Done(this.design, this.board);
+                      addMove(result.move.toString(), s, bot);
+                      this.move = result.move;
+                      this.state = STATE.EXEC;
+                  } else {
+                      winGame();
+                      this.gameOver(player + " lose", -this.board.player);
+                      this.state = STATE.DONE;
+                      return;
                   }
-                  Dagaz.Model.Done(this.design, this.board);
-                  addMove(result.move.toString(), s, bot);
-                  this.move = result.move;
-                  this.state = STATE.EXEC;
               }
           } else {
               this.state = STATE.BUZY;
