@@ -183,6 +183,7 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_bots(id, game_id, variant_id, selector_value, player_num) values(16, 32, 91, null, null)`);
         await queryRunner.query(`insert into game_bots(id, game_id, variant_id, selector_value, player_num) values(17, 37, 92, null, 1)`);
         await queryRunner.query(`insert into game_bots(id, game_id, variant_id, selector_value, player_num) values(18, 22, 3, 2, 1)`);
+        await queryRunner.query(`insert into game_bots(id, game_id, variant_id, selector_value, player_num) values(19, 22, 48, null, null)`);
 
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(1, 'doubutsu-shogi', null, 'doubutsu-shogi')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(2, 'atari-go', null, 'atari-go')`);
@@ -354,7 +355,7 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(168, 'english-checkers', null, 'english-checkers')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(169, 'turkish-dama', null, 'turkish-dama')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(170, 'constitutional-checkers', null, 'international-checkers')`);
-        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(171, 'stavropol-checkers', null, 'russian-checkers')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(171, 'stavropol-checkers', null, 'russian-checkers-1')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(172, 'windmill', null, 'windmill')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(173, 'morris-8', null, '8-men')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(174, 'morris-7', null, '7-men')`);
