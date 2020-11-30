@@ -447,6 +447,22 @@ export class SessionService {
                                where  status_id = 1 and is_protected = 0
                                and    created + interval '1 week' < :dt)`, {dt: dt})
         .execute();
+        await this.service.createQueryBuilder("game_moves")
+        .delete()
+        .from(game_moves)
+        .where(`session_id in (select id
+                               from   game_sessions
+                               where  status_id = 1 and is_protected = 0
+                               and    created + interval '1 week' < :dt)`, {dt: dt})
+        .execute();
+        await this.service.createQueryBuilder("challenge")
+        .delete()
+        .from(challenge)
+        .where(`session_id in (select id
+                               from   game_sessions
+                               where  status_id = 1 and is_protected = 0
+                               and    created + interval '1 week' < :dt)`, {dt: dt})
+        .execute();
         await this.service.createQueryBuilder("user_games")
         .delete()
         .from(user_games)
