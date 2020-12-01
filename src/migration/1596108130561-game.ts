@@ -145,6 +145,7 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total, max_selector) values(105, 37, 'Rithmomachia', 'rithmomachia', 2, 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(106, 30, 'Momentum Chess', 'momentum-chess', 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(107, 22, 'Italian Damone', 'italian-damone', 2)`);
+        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(108, 25, 'Chu Shogi', 'chu-shogi', 2)`);
 
         await queryRunner.query(`insert into game_styles(id, game_id, name, suffix, player_num) values(1, 23, 'European', '', null)`);
         await queryRunner.query(`insert into game_styles(id, game_id, name, suffix, player_num) values(2, 23, 'Chinese', '-kanji', null)`);
@@ -438,6 +439,8 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(238, 'rithmomachia', 2, 'rithm-2')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(239, 'momentum-chess', null, 'chess-1')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(240, 'italian-damone', null, 'damone')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(241, 'chu-shogi', null, 'chu-shogi')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(242, 'chu-shogi-kanji', null, 'chu-shogi-kanji')`);
     }
 
     public async down(queryRunner: QueryRunner): Promise<any> {

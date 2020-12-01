@@ -40,6 +40,6 @@ export class user_games {
     @Column({ default: 0 })
     is_ai: number;
 
-    @Column({ nullable: true })
+    @Column({ type: "bigint", nullable: true })
     time_limit: number;
 }

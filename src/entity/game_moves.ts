@@ -37,7 +37,7 @@ export class game_moves {
     @Column({ type: "text", nullable: true })
     note: string;
 
-    @Column({ nullable: false })
+    @Column({ type: "bigint", nullable: false })
     time_delta: number;
 
     @Column({ nullable: true })

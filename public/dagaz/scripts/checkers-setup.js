@@ -87,7 +87,6 @@ var isDanger = function(design, board, pos, player) {
 var setup = Dagaz.Model.setup;
 
 Dagaz.Model.setup = function(board, init) {
-  console.log(init);
   if (getSetup(init)) {
       setup(board, init);
       return;
