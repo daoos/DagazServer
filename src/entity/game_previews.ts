@@ -13,4 +13,10 @@ export class game_previews {
 
     @Column({ type: "text", nullable: false})
     preview: string;
+
+    @Column({ type: "text", nullable: true})
+    rules: string;
+
+    @Column({ type: "text", nullable: true})
+    copyright: string;
 }

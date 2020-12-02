@@ -191,7 +191,7 @@ export class GameService {
         try {
             const suffix = await this.getSuffix(r.filename, r.style);
             const x = await this.service.query(
-                `select id, preview
+                `select id, preview, rules, copyright
                  from   game_previews
                  where  filename = $1 and coalesce(selector_value, 0) = $2`, [r.filename + suffix, r.selector_value]);
             if (!x || x.length == 0) {
@@ -199,6 +199,8 @@ export class GameService {
             }
             r.id = x[0].id;
             r.preview = x[0].preview;
+            r.rules = x[0].rules;
+            r.copyright = x[0].copyright;
             return r;
         } catch (error) {
             console.error(error);

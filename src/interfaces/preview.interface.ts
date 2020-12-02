@@ -16,4 +16,10 @@ export class Preview {
 
     @ApiProperty()
     preview: string;
+
+    @ApiPropertyOptional()
+    rules: string;
+
+    @ApiPropertyOptional()
+    copyright: string;
 }
