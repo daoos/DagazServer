@@ -260,8 +260,14 @@ App.prototype.mouseDown = function(view, pos) {
               if (this.list && this.list.canPass()) {
                   var moves = this.list.getMoves();
                   if (moves.length == 1) {
-                      this.boardApply(moves[0]);
-                      this.syncCaptures(moves[0]);
+                      var m = moves[0];
+                      this.boardApply(m);
+                      this.syncCaptures(m);
+                      var s = m.toString();
+                      if (!_.isUndefined(Dagaz.Model.getSetup)) {
+                          s = Dagaz.Model.getSetup(this.design, this.board);
+                      }
+                      addMove(m.toString(), s, uid);
                       this.state = STATE.IDLE;
                       delete this.list;
                       this.view.clearDrops();

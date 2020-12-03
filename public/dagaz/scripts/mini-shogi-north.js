@@ -102,6 +102,8 @@ Dagaz.Model.BuildDesign = function(design) {
     design.addPosition("J1", [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
     design.addPosition("Z1", [0, 1, 0, -10, -11, 0, 0, 0, 1, 0, 0]);
     design.addPosition("T1", [-1, 0, 0, 0, -11, 0, 0, -12, -12, -1, 0]);
+    design.addPosition("P1", [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
+    design.addPosition("P2", [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
 
     design.addZone("board-zone", 2, [47, 48, 49, 50, 51, 36, 37, 38, 39, 40, 25, 26, 27, 28, 29, 14, 15, 16, 17, 18, 3, 4, 5, 6, 7]);
     design.addZone("board-zone", 1, [47, 48, 49, 50, 51, 36, 37, 38, 39, 40, 25, 26, 27, 28, 29, 14, 15, 16, 17, 18, 3, 4, 5, 6, 7]);
@@ -331,4 +333,8 @@ Dagaz.View.configure = function(view) {
     view.defPosition("J1", 91, 15, 41, 46);
     view.defPosition("Z1", 50, 15, 41, 46);
     view.defPosition("T1", 9, 15, 41, 46);
+
+    view.defPopup("Promote", 182, 50);
+    view.defPopupPosition("P1", 12, 15, 39, 39);
+    view.defPopupPosition("P2", 52, 15, 39, 39);
 }

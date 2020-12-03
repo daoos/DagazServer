@@ -29,6 +29,24 @@ Dagaz.Model.checkVersion = function(design, name, value) {
   }
 }
 
+Dagaz.Model.moveToString = function(move) {
+  var r = "";
+  _.each(move.actions, function(a) {
+      if (r != "") {
+          r = r + " ";
+      }
+      if (a[0] != null) {
+          r = r + Dagaz.Model.posToString(a[0][0]) + '-' + Dagaz.Model.posToString(a[1][0]);
+      } else {
+          r = r + Dagaz.Model.posToString(a[1][0]);
+      }
+      if (a[2] !== null) {
+          r = r + " " + a[2][0].toString();
+      }
+  });
+  return r;
+}
+
 var CheckInvariants = Dagaz.Model.CheckInvariants;
 
 Dagaz.Model.CheckInvariants = function(board) {
