@@ -29,6 +29,7 @@ var setup = null;
 var last_move = null;
 var sid = null;
 var turn = 1;
+var netstamp = null;
 
 function App(canvas, params) {
   this.design = Dagaz.Model.getDesign();
@@ -668,6 +669,10 @@ var drawGame = function() {
 var getConfirmed = function() {
   var app = Dagaz.Controller.app;
   if (inProgress) return;
+  if (netstamp !== null) {
+      if (Date.now() - netstamp < 5000) return;
+      netstamp = null;
+  }
   if (auth === null) return;
   if (!uid) return;
   if (last_move !== null) return;
@@ -721,6 +726,8 @@ var getConfirmed = function() {
                  last_move = data[0].move_str;
                  console.log('Confirmed: Succeed [move = ' + last_move + ']');
              }
+         } else {
+             netstamp = Date.now();
          }
      },
      error: function() {
@@ -997,7 +1004,7 @@ App.prototype.exec = function() {
       isDrag = false;
       if (!_.isUndefined(this.list) && this.list.isDone()) {
           var moves = this.list.filterDrops(this.list.getMoves(), dropIndex);
-          if ((moves.length == 1) && (moves[0].isDropMove())) this.move = moves[0];
+          if (moves.length == 1) this.move = moves[0];
       }
       if (!this.move.isPass()) {
           this.move = this.clarify(this.move);
