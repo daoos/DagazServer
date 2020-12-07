@@ -150,6 +150,9 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(111, 37, 'Thud!', 'thud', 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(112, 37, 'Surakarta', 'surakarta', 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total, max_selector) values(113, 36, 'Altai Shatra', 'shatra', 2, 2)`);
+        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(114, 25, 'Micro Shogi', 'micro-shogi', 2)`);
+        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(115, 25, 'Kyoto Shogi', 'kyoto-shogi', 2)`);
+        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(116, 25, 'Hexagonal Kyoto Shogi', 'hex-kyoto-shogi', 2)`);
 
         await queryRunner.query(`insert into game_styles(id, game_id, name, suffix, player_num) values(1, 23, 'European', '', null)`);
         await queryRunner.query(`insert into game_styles(id, game_id, name, suffix, player_num) values(2, 23, 'Chinese', '-kanji', null)`);
@@ -203,7 +206,6 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_bots(id, game_id, variant_id, selector_value, player_num) values(29, 22, 107, null, null)`);
         await queryRunner.query(`insert into game_bots(id, game_id, variant_id, selector_value, player_num) values(30, 22, 67, null, null)`);
         await queryRunner.query(`insert into game_bots(id, game_id, variant_id, selector_value, player_num) values(31, 25, 109, null, null)`);
-        await queryRunner.query(`insert into game_bots(id, game_id, variant_id, selector_value, player_num) values(32, 36, 113, null, null)`);
 
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(1, 'doubutsu-shogi', null, 'doubutsu-shogi', 'https://en.wikipedia.org/wiki/D%C5%8Dbutsu_sh%C5%8Dgi', 'Madoka Kitao')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(2, 'atari-go', null, 'atari-go', 'https://en.wikipedia.org/wiki/Go_variants#First_Capture')`);
@@ -453,6 +455,12 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(246, 'surakarta', null, 'surakarta', 'https://en.wikipedia.org/wiki/Surakarta_(game)')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(247, 'shatra', 1, 'shatra-1')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(248, 'shatra', 2, 'shatra-2')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(249, 'micro-shogi', null, 'micro-shogi', 'https://en.wikipedia.org/wiki/Micro_shogi', '1982 Oyama Yasuharu')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(250, 'micro-shogi-kanji', null, 'micro-shogi-kanji', 'https://en.wikipedia.org/wiki/Micro_shogi', '1982 Oyama Yasuharu')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(251, 'kyoto-shogi', null, 'kyoto-shogi', 'https://en.wikipedia.org/wiki/Kyoto_shogi', '1976 Tamiya Katsuya')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(252, 'kyoto-shogi-kanji', null, 'kyoto-shogi-kanji', 'https://en.wikipedia.org/wiki/Kyoto_shogi', '1976 Tamiya Katsuya')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, copyright) values(253, 'hex-kyoto-shogi', null, 'hex-kyoto-shogi', '2000 Jochen Drechsler')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, copyright) values(254, 'hex-kyoto-shogi-kanji', null, 'hex-kyoto-shogi-kanji', '2000 Jochen Drechsler')`);
     }
 
     public async down(queryRunner: QueryRunner): Promise<any> {

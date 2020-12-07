@@ -8,10 +8,10 @@ export class Game {
     @ApiProperty()
     name: string;
 
-    @ApiProperty()
+    @ApiPropertyOptional()
     filename: string;
 
-    @ApiProperty()
+    @ApiPropertyOptional()
     players_total: number;
 
     @ApiPropertyOptional()
@@ -26,9 +26,21 @@ export class Game {
     @ApiPropertyOptional()
     realm_id: number;
 
-    @ApiProperty()
+    @ApiPropertyOptional()
     max_selector: number;
 
     @ApiPropertyOptional()
     bots: string;
+
+    @ApiPropertyOptional()
+    variant_id: number;
+
+    @ApiPropertyOptional()
+    preview: string;
+
+    @ApiPropertyOptional()
+    rules: string;
+
+    @ApiPropertyOptional()
+    copyright: string;
 }

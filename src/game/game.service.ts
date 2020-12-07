@@ -24,6 +24,36 @@ export class GameService {
         return x[0].realm_id;
       }
 
+      async getMap(): Promise<Game[]> {
+          try {
+            const x = await this.service.query(
+                `select a.id as id, b.id as variant_id, coalesce(b.name, a.name) as name,
+                        c.preview as preview, c.rules as rules, c.copyright as copyright
+                 from   games a
+                 left   join game_variants b on (b.game_id = a.id)
+                 inner  join game_previews c on (c.filename = coalesce(b.filename, a.filename) and coalesce(c.selector_value, 0) < 2)
+                 where  a.realm_id = 1
+                 order  by name`);
+                 let l: Game[] = x.map(x => {
+                    let it = new Game();
+                    it.id = x.id;
+                    it.variant_id = x.variant_id;
+                    it.name = x.name;
+                    it.preview = x.preview;
+                    it.rules = x.rules;
+                    it.copyright = x.copyright;
+                    return it;
+                });
+                return l;
+          } catch (error) {
+            console.error(error);
+            throw new InternalServerErrorException({
+                status: HttpStatus.BAD_REQUEST,
+                error: error
+            });
+          }
+      }
+
       async getGames(user: number): Promise<Game[]> {
         try {
             const realm: number = await this.getRealm(user);

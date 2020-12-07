@@ -22,10 +22,26 @@ export class GameController {
     @ApiUnauthorizedResponse({ description: 'Unauthorized.'})
     @ApiNotFoundResponse({ description: 'Not Found.'})
     @ApiInternalServerErrorResponse({ description: 'Internal Server error.'})
-    async allGames(@Req() request: Request, @Res() res): Promise<Game[]> {
+    async getGames(@Req() request: Request, @Res() res): Promise<Game[]> {
         const user: any = request.user;
         try {
             const r = await this.service.getGames(user.id);
+            if (!r) {
+                return res.status(HttpStatus.NOT_FOUND).json();
+            } else {
+                return res.status(HttpStatus.OK).json(r);
+            }
+        } catch(e) {
+            return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ error: e.message.error.toString(), stack: e.stack});
+        }
+    }
+
+    @Get('map')
+    @ApiOkResponse({ description: 'Successfully.'})
+    @ApiInternalServerErrorResponse({ description: 'Internal Server error.'})
+    async getAll(@Res() res): Promise<Game[]> {
+        try {
+            const r = await this.service.getMap();
             if (!r) {
                 return res.status(HttpStatus.NOT_FOUND).json();
             } else {
