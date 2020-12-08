@@ -38,6 +38,7 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into games(id, name, filename, players_total, main_time, additional_time) values(39, 'Four Field Kono', 'kono', 2, 0, 1000)`);
         await queryRunner.query(`insert into games(id, name, filename, players_total, main_time, additional_time) values(40, 'Tablut', 'tablut', 2, 0, 1000)`);
         await queryRunner.query(`insert into games(id, name, filename, players_total, main_time, additional_time) values(41, 'Halma', 'halma-10', 2, 0, 1000)`);
+        await queryRunner.query(`insert into games(id, name, filename, players_total, main_time, additional_time) values(42, 'Seega', 'seega', 2, 0, 1000)`);
 
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(1, 17, 'Go (9x9)', 'go-9x9', 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(2, 17, 'Go (19x19)', 'go-19x19', 2)`);
@@ -153,6 +154,9 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(114, 25, 'Micro Shogi', 'micro-shogi', 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(115, 25, 'Kyoto Shogi', 'kyoto-shogi', 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(116, 25, 'Hexagonal Kyoto Shogi', 'hex-kyoto-shogi', 2)`);
+        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(117, 41, 'Camelot', 'camelot', 2)`);
+        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(118, 42, 'Seega', 'seega', 2)`);
+        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(119, 42, 'Agon', 'agon', 2)`);
 
         await queryRunner.query(`insert into game_styles(id, game_id, name, suffix, player_num) values(1, 23, 'European', '', null)`);
         await queryRunner.query(`insert into game_styles(id, game_id, name, suffix, player_num) values(2, 23, 'Chinese', '-kanji', null)`);
@@ -461,6 +465,9 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(252, 'kyoto-shogi-kanji', null, 'kyoto-shogi-kanji', 'https://en.wikipedia.org/wiki/Kyoto_shogi', '1976 Tamiya Katsuya')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, copyright) values(253, 'hex-kyoto-shogi', null, 'hex-kyoto-shogi', '2000 Jochen Drechsler')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, copyright) values(254, 'hex-kyoto-shogi-kanji', null, 'hex-kyoto-shogi-kanji', '2000 Jochen Drechsler')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(255, 'camelot', null, 'camelot', 'https://en.wikipedia.org/wiki/Camelot_(board_game)', '1930 George S. Parker')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(256, 'seega', null, 'seega', 'http://www.cyningstan.com/game/120/seega')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(257, 'agon', null, 'agon', 'http://www.kruzno.com/Agon.html')`);
     }
 
     public async down(queryRunner: QueryRunner): Promise<any> {
