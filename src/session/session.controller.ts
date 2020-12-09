@@ -62,6 +62,36 @@ export class SessionController {
     }
 
     @UseGuards(JwtAuthGuard, TokenGuard)
+    @Get('archive')
+    @ApiOkResponse({ description: 'Successfully.'})
+    @ApiUnauthorizedResponse({ description: 'Unauthorized.'})
+    @ApiInternalServerErrorResponse({ description: 'Internal Server error.'})
+    async findArchive(@Req() request: Request, @Res() res): Promise<Sess[]> {
+        const user: any = request.user;
+        try {
+            const r = await this.service.getArchiveSessions(user.id);
+            return res.status(HttpStatus.OK).json(r);
+        } catch(e) {
+            return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ error: e.message.error.toString(), stack: e.stack});
+        }
+    }
+
+    @UseGuards(JwtAuthGuard, TokenGuard)
+    @Get('my')
+    @ApiOkResponse({ description: 'Successfully.'})
+    @ApiUnauthorizedResponse({ description: 'Unauthorized.'})
+    @ApiInternalServerErrorResponse({ description: 'Internal Server error.'})
+    async findMySessions(@Req() request: Request, @Res() res): Promise<Sess[]> {
+        const user: any = request.user;
+        try {
+            const r = await this.service.getMySessions(user.id);
+            return res.status(HttpStatus.OK).json(r);
+        } catch(e) {
+            return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ error: e.message.error.toString(), stack: e.stack});
+        }
+    }
+
+    @UseGuards(JwtAuthGuard, TokenGuard)
     @Post()
     @ApiBody({ type: [Sess] })
     @ApiCreatedResponse({ description: 'Successfully.'})
