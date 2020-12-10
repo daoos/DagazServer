@@ -160,6 +160,13 @@ export class game1596108130561 implements MigrationInterface {
 //      await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(119, 42, 'Agon', 'agon', 2)`);
 //      await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(120, 43, 'Quantum tic-tac-toe', 'qxo', 2)`);
 //      await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(121, 43, 'Quantum Morris', 'quantum-morris', 2)`);
+        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total, max_selector) values(122, 30, 'Troitzky Chess', 'troitzky-chess', 2, 3)`);
+        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(123, 30, 'Balbo''s Game', 'balbo-chess', 2)`);
+        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total, max_selector) values(124, 30, 'Gardner''s Chess', 'gardner-chess', 2, 4)`);
+        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total, max_selector) values(125, 30, 'Mini Chess', 'mini-chess', 2, 6)`);
+        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total, max_selector) values(126, 30, 'Micro Chess', 'micro-chess', 2, 2)`);
+        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(127, 30, 'Silverman''s Chess', 'silverman-chess', 2)`);
+        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(128, 30, 'Los Alamos Chess', 'los-alamos-chess', 2)`);
 
         await queryRunner.query(`insert into game_styles(id, game_id, name, suffix, player_num) values(1, 23, 'European', '', null)`);
         await queryRunner.query(`insert into game_styles(id, game_id, name, suffix, player_num) values(2, 23, 'Chinese', '-kanji', null)`);
@@ -214,6 +221,7 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_bots(id, game_id, variant_id, selector_value, player_num) values(30, 22, 67, null, null)`);
         await queryRunner.query(`insert into game_bots(id, game_id, variant_id, selector_value, player_num) values(31, 25, 109, null, null)`);
 //      await queryRunner.query(`insert into game_bots(id, game_id, variant_id, selector_value, player_num) values(32, 43, null, null, null)`);
+        await queryRunner.query(`insert into game_bots(id, game_id, variant_id, selector_value, player_num) values(33, 30, 122, 2, 1)`);
 
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(1, 'doubutsu-shogi', null, 'doubutsu-shogi', 'https://en.wikipedia.org/wiki/D%C5%8Dbutsu_sh%C5%8Dgi', 'Madoka Kitao')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(2, 'atari-go', null, 'atari-go', 'https://en.wikipedia.org/wiki/Go_variants#First_Capture')`);
@@ -474,7 +482,25 @@ export class game1596108130561 implements MigrationInterface {
 //      await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(257, 'agon', null, 'agon', 'http://www.kruzno.com/Agon.html')`);
 //      await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(258, 'qxo', null, 'qxo', 'https://en.wikipedia.org/wiki/Quantum_tic-tac-toe', 'Allan Goff')`);
 //      await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(259, 'quantum-morris', null, 'qxo', 'https://en.wikipedia.org/wiki/Quantum_tic-tac-toe', 'Allan Goff')`);
-    }
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(260, 'troitzky-chess', 1, 'troitzky-1', 'http://mlwi.magix.net/bg/troitzkychess.htm', 'Paul Byway')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(261, 'troitzky-chess', 2, 'troitzky-2', 'http://mlwi.magix.net/bg/troitzkychess.htm', 'Paul Byway')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(262, 'troitzky-chess', 3, 'troitzky-3', 'http://mlwi.magix.net/bg/troitzkychess.htm', 'Paul Byway')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(263, 'balbo-chess', null, 'balbo', 'https://en.wikipedia.org/wiki/Balbo%27s_Game', '1974 M. [Monsieur] G. Balbo')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(264, 'gardner-chess', 1, 'gardner-1', 'https://en.wikipedia.org/wiki/Minichess', '1969 Martin Gardner')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(265, 'gardner-chess', 2, 'gardner-2', 'https://en.wikipedia.org/wiki/Minichess', '1969 Martin Gardner')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(266, 'gardner-chess', 3, 'gardner-3', 'https://en.wikipedia.org/wiki/Minichess', '1969 Martin Gardner')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(267, 'gardner-chess', 4, 'gardner-4', 'https://en.wikipedia.org/wiki/Minichess', '1969 Martin Gardner')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(268, 'mini-chess', 1, 'mini-chess-1', 'https://en.wikipedia.org/wiki/Minichess')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(269, 'mini-chess', 2, 'mini-chess-2', 'https://en.wikipedia.org/wiki/Minichess')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(270, 'mini-chess', 3, 'mini-chess-3', 'https://en.wikipedia.org/wiki/Minichess')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(271, 'mini-chess', 4, 'mini-chess-4', 'https://en.wikipedia.org/wiki/Minichess')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(272, 'mini-chess', 5, 'mini-chess-5', 'https://en.wikipedia.org/wiki/Minichess')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(273, 'mini-chess', 6, 'mini-chess-6', 'https://en.wikipedia.org/wiki/Minichess')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(274, 'micro-chess', 1, 'micro-chess-1', 'https://en.wikipedia.org/wiki/Minichess', '1997 Glimne')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(275, 'micro-chess', 2, 'micro-chess-2', 'https://en.wikipedia.org/wiki/Minichess', '1997 Glimne')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(276, 'silverman-chess', null, 'silverman', 'https://en.wikipedia.org/wiki/Minichess', '1981 David Silverman')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(277, 'los-alamos-chess', null, 'los-alamos', 'https://en.wikipedia.org/wiki/Los_Alamos_chess', '1956 Paul Stein, Mark Wells')`);
+}
 
     public async down(queryRunner: QueryRunner): Promise<any> {
         await queryRunner.query(`delete from game_previews`);
