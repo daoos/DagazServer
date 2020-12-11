@@ -23,16 +23,16 @@ Dagaz.Model.CheckInvariants = function(board) {
       });
       if (captured.length == 1) {
           var pos = move.actions[0][1][0];
-          var v = board.getValue(0);
+          var v = board.getValue(2);
           if ((v !== null) && (v - 1 == pos)) {
               ko.push(pos);
               move.failed = true;
               return;
           }
-          move.setValue(0, +captured[0] + 1);
+          move.setValue(2, +captured[0] + 1);
           return;
       }
-      move.setValue(0, null);
+      move.setValue(2, null);
   });
   if (ko.length > 0) {
       board.ko = ko;

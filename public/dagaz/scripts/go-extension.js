@@ -73,10 +73,23 @@ var expand = function(design, board, player, group, dame, captured) {
    }
 }
 
-var capture = function(move, group) {
+var saveScore = function(move, board, ix, cnt) {
+   var v = board.getValue(ix);
+   if (v === null) {
+       v = 0;
+   }
+   if (board.player - 1 == ix) {
+       v += cnt;
+   }
+   move.setValue(ix, v);
+}
+
+var capture = function(move, group, board) {
    _.each(group, function(pos) {
         move.capturePiece(pos);
    });
+   saveScore(move, board, 0, group.length);
+   saveScore(move, board, 1, group.length);
 }
 
 var change = function(move, board, group, dame, stop) {
@@ -141,7 +154,7 @@ Dagaz.Model.CheckInvariants = function(board) {
            });
            expand(design, board, board.player, group, dame);
            if (captured.length > 0) {
-               capture(move, captured);
+               capture(move, captured, board);
            } else {
                if (dame.length <= 1) {
                    move.failed = true;
