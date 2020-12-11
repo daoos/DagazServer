@@ -167,6 +167,11 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total, max_selector) values(126, 30, 'Micro Chess', 'micro-chess', 2, 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(127, 30, 'Silverman''s Chess', 'silverman-chess', 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(128, 30, 'Los Alamos Chess', 'los-alamos-chess', 2)`);
+        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total, max_selector) values(129, 40, 'Hnefatafl', 'tafl', 2, 3)`);
+        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(130, 40, 'Alea Evangeli', 'alea-evangeli', 2)`);
+        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(131, 37, 'Three Crowns', 'three-crowns', 2)`);
+        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total, max_selector) values(132, 37, 'Lines of Action', 'loa', 2, 2)`);
+        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(133, 37, 'GESS', 'gess', 2)`);
 
         await queryRunner.query(`insert into game_styles(id, game_id, name, suffix, player_num) values(1, 23, 'European', '', null)`);
         await queryRunner.query(`insert into game_styles(id, game_id, name, suffix, player_num) values(2, 23, 'Chinese', '-kanji', null)`);
@@ -500,6 +505,14 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(275, 'micro-chess', 2, 'micro-chess-2', 'https://en.wikipedia.org/wiki/Minichess', '1997 Glimne')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(276, 'silverman-chess', null, 'silverman', 'https://en.wikipedia.org/wiki/Minichess', '1981 David Silverman')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(277, 'los-alamos-chess', null, 'los-alamos', 'https://en.wikipedia.org/wiki/Los_Alamos_chess', '1956 Paul Stein, Mark Wells')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(278, 'tafl', 1, 'tafl-1', 'https://en.wikipedia.org/wiki/Tafl_games')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(279, 'tafl', 2, 'tafl-2', 'https://en.wikipedia.org/wiki/Tafl_games')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(280, 'tafl', 3, 'tafl-3', 'https://en.wikipedia.org/wiki/Tafl_games')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(281, 'alea-evangeli', null, 'alea-evangeli', 'https://en.wikipedia.org/wiki/Alea_evangelii')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(282, 'three-crowns', null, 'three-crowns', 'http://www.di.fc.ul.pt/~jpn/gv/3crowns.htm', '2001 Larry Back')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(283, 'loa', 1, 'loa-1', 'http://www.iggamecenter.com/info/en/loa.html', 'Claude Soucie')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(284, 'loa', 2, 'loa-2', 'http://www.iggamecenter.com/info/en/loa.html', 'Claude Soucie')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(285, 'gess', null, 'gess', 'https://en.wikipedia.org/wiki/Gess', '1994 Puzzles and Games Ring of The Archimedeans')`);
 }
 
     public async down(queryRunner: QueryRunner): Promise<any> {
