@@ -176,6 +176,7 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(135, 30, 'Knight''s Court', 'knights-court', 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(136, 31, 'Mini Mancala', 'mini-mancala', 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(137, 30, 'Chessball', 'chessball', 2)`);
+        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(138, 35, 'Six Men''s Morris', 'morris-6', 2)`);
 
         await queryRunner.query(`insert into game_styles(id, game_id, name, suffix, player_num) values(1, 23, 'European', '', null)`);
         await queryRunner.query(`insert into game_styles(id, game_id, name, suffix, player_num) values(2, 23, 'Chinese', '-kanji', null)`);
@@ -524,6 +525,7 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, copyright) values(288, 'mini-mancala', null, 'mini-mancala', '1980 Christian Freeling')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, copyright) values(289, 'mini-mancala-alt', null, 'mini-mancala-alt', '1980 Christian Freeling')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(290, 'chessball', null, 'chessball', 'https://www.poznovatelno.ru/free/games/12489.html', '1957 Kamzolov J.N.')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(291, 'morris-6', null, '6-men', 'https://en.wikipedia.org/wiki/Nine_Men%27s_Morris')`);
 }
 
     public async down(queryRunner: QueryRunner): Promise<any> {
