@@ -172,6 +172,10 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(131, 37, 'Three Crowns', 'three-crowns', 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total, max_selector) values(132, 37, 'Lines of Action', 'loa', 2, 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(133, 37, 'GESS', 'gess', 2)`);
+        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(134, 30, 'Alapo', 'alapo', 2)`);
+        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(135, 30, 'Knight''s Court', 'knights-court', 2)`);
+        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(136, 31, 'Mini Mancala', 'mini-mancala', 2)`);
+        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(137, 30, 'Chessball', 'chessball', 2)`);
 
         await queryRunner.query(`insert into game_styles(id, game_id, name, suffix, player_num) values(1, 23, 'European', '', null)`);
         await queryRunner.query(`insert into game_styles(id, game_id, name, suffix, player_num) values(2, 23, 'Chinese', '-kanji', null)`);
@@ -227,6 +231,8 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_bots(id, game_id, variant_id, selector_value, player_num) values(31, 25, 109, null, null)`);
 //      await queryRunner.query(`insert into game_bots(id, game_id, variant_id, selector_value, player_num) values(32, 43, null, null, null)`);
         await queryRunner.query(`insert into game_bots(id, game_id, variant_id, selector_value, player_num) values(33, 30, 122, 2, 1)`);
+        await queryRunner.query(`insert into game_bots(id, game_id, variant_id, selector_value, player_num) values(34, 30, 135, null, null)`);
+        await queryRunner.query(`insert into game_bots(id, game_id, variant_id, selector_value, player_num) values(35, 30, 137, null, null)`);
 
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(1, 'doubutsu-shogi', null, 'doubutsu-shogi', 'https://en.wikipedia.org/wiki/D%C5%8Dbutsu_sh%C5%8Dgi', 'Madoka Kitao')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(2, 'atari-go', null, 'atari-go', 'https://en.wikipedia.org/wiki/Go_variants#First_Capture')`);
@@ -513,6 +519,11 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(283, 'loa', 1, 'loa-1', 'http://www.iggamecenter.com/info/en/loa.html', 'Claude Soucie')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(284, 'loa', 2, 'loa-2', 'http://www.iggamecenter.com/info/en/loa.html', 'Claude Soucie')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(285, 'gess', null, 'gess', 'https://en.wikipedia.org/wiki/Gess', '1994 Puzzles and Games Ring of The Archimedeans')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(286, 'alapo', null, 'alapo', 'https://www.chessvariants.com/small.dir/alapo.html', '1982 Johannes Tranelis')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, copyright) values(287, 'knights-court', null, 'knights-court', '2000 Jason D. Wittman')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, copyright) values(288, 'mini-mancala', null, 'mini-mancala', '1980 Christian Freeling')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, copyright) values(289, 'mini-mancala-alt', null, 'mini-mancala-alt', '1980 Christian Freeling')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(290, 'chessball', null, 'chessball', 'https://www.poznovatelno.ru/free/games/12489.html', '1957 Kamzolov J.N.')`);
 }
 
     public async down(queryRunner: QueryRunner): Promise<any> {
