@@ -506,6 +506,13 @@ export class SessionService {
             if (!s) {
                 return null;
             }
+            await this.service.createQueryBuilder("game_alerts")
+            .delete()
+            .from(game_alerts)
+            .where(`session_id in (select a.id
+                                   from   game_sessions a
+                                   where  a.id = :id)`, {id: id})
+            .execute();
             await this.service.createQueryBuilder("game_moves")
             .delete()
             .from(game_moves)

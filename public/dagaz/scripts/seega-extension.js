@@ -14,6 +14,7 @@ Dagaz.Model.CheckInvariants = function(board) {
   var design = Dagaz.Model.design;
   _.each(board.moves, function(move) {
       if (move.isSimpleMove()) {
+          var f = false;
           var pos = move.actions[0][1][0];
           _.each(design.allDirections(), function(dir) {
               var p = design.navigate(board.player, pos, dir);
@@ -25,11 +26,15 @@ Dagaz.Model.CheckInvariants = function(board) {
                           piece = board.getPiece(q);
                           if ((piece !== null) && (piece.player == board.player)) {
                               move.capturePiece(p);
+                              f = true;
                           }
                       }
                   }
               }
           });
+          if (f) {
+              move.goTo(board.turn);
+          }
       }
   });
   CheckInvariants(board);

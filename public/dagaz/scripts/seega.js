@@ -30,9 +30,6 @@ Dagaz.Model.BuildDesign = function(design) {
     design.checkVersion("show-hints", "false");
     design.checkVersion("pass-turn", "forced");
     design.checkVersion("advisor-wait", "5");
-    design.checkVersion("seega-extension", "true");
-    design.checkVersion("seega-invariant", "true");
-    design.checkVersion("seega-goal", "true");
 
     design.addDirection("w");
     design.addDirection("e");
@@ -41,29 +38,29 @@ Dagaz.Model.BuildDesign = function(design) {
 
     design.addPlayer("White", [1, 0, 3, 2]);
     design.addPlayer("Black", [0, 1, 2, 3]);
-    design.addTurn(1);
-    design.addTurn(1);
-    design.addTurn(2);
-    design.addTurn(2);
-    design.addTurn(1);
-    design.addTurn(1);
-    design.addTurn(2);
-    design.addTurn(2);
-    design.addTurn(1);
-    design.addTurn(1);
-    design.addTurn(2);
-    design.addTurn(2);
-    design.addTurn(1);
-    design.addTurn(1);
-    design.addTurn(2);
-    design.addTurn(2);
-    design.addTurn(1);
-    design.addTurn(1);
-    design.addTurn(2);
-    design.addTurn(2);
+    design.addTurn(1); // 0
+    design.addTurn(1); // 1
+    design.addTurn(2); // 2
+    design.addTurn(2); // 3
+    design.addTurn(1); // 4
+    design.addTurn(1); // 5
+    design.addTurn(2); // 6
+    design.addTurn(2); // 7
+    design.addTurn(1); // 8
+    design.addTurn(1); // 9
+    design.addTurn(2); // 10
+    design.addTurn(2); // 11
+    design.addTurn(1); // 12
+    design.addTurn(1); // 13
+    design.addTurn(2); // 14
+    design.addTurn(2); // 15
+    design.addTurn(1); // 16
+    design.addTurn(1); // 17
+    design.addTurn(2); // 18
+    design.addTurn(2); // 19
     design.repeatMark();
-    design.addTurn(2);
-    design.addTurn(1);
+    design.addTurn(2); // 20
+    design.addTurn(1); // 21
 
     design.addPosition("a5", [0, 1, 5, 0]);
     design.addPosition("b5", [-1, 1, 5, 0]);

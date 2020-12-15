@@ -89,17 +89,6 @@ export class MoveService {
         return x[0].user_id;
     }
 
-    async getLastTurn(sid: number): Promise<number> {
-        const x = await this.service.query(
-            `select last_turn
-             from   game_sessions
-             where  id = $1`, [sid]);
-        if (!x || x.length == 0) {
-             return null;
-        }
-        return x[0].last_turn;
-    }
-
     async getSessionAlert(sid: number, uid: number): Promise<Move[]> {
         const x = await this.service.query(
             `select a.uid as uid, a.result_id as result_id, a.turn_number as turn_number
@@ -127,7 +116,6 @@ export class MoveService {
             if (r !== null) {
                 return r;
             }
-            const turn: number = await this.getLastTurn(sid);
             const f = await this.checkSession(sid);
             if (!f) {
                 return null;
@@ -137,10 +125,10 @@ export class MoveService {
                     a.move_str, a.setup_str, a.note, a.time_delta, a.uid
              from   game_moves a
              inner  join game_sessions b on (b.id = a.session_id)
-             where  a.session_id = $1 and a.uid <> $2 and a.turn_num >= $3
+             where  a.session_id = $1 and a.uid <> $2
              and    not a.setup_str is null 
              and    a.accepted is null
-             order  by a.id`, [sid, uid, turn]);
+             order  by a.id`, [sid, uid]);
             if (!x) {
                 return null;
             }
