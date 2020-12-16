@@ -1,3 +1,4 @@
+Dagaz.Controller.NO_DROP_MOVES = true;
 Dagaz.Controller.persistense = "none";
 
 ZRF = {

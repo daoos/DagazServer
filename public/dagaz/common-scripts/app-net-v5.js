@@ -1002,7 +1002,7 @@ App.prototype.exec = function() {
   if (this.state == STATE.EXEC) {
       this.state = STATE.IDLE;
       isDrag = false;
-      if (!_.isUndefined(this.list) && this.list.isDone()) {
+      if (!Dagaz.Controller.NO_DROP_MOVES && !_.isUndefined(this.list) && this.list.isDone()) {
           var moves = this.list.filterDrops(this.list.getMoves(), dropIndex);
           if (moves.length == 1) this.move = moves[0];
       }
