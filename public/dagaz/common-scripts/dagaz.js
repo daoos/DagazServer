@@ -12,7 +12,6 @@ Dagaz.Controller.randomized  = false;
 Dagaz.Controller.noDropIndex = false;
 Dagaz.Controller.cyclicDropIndex = false;
 Dagaz.Controller.turnChanged = false;
-Dagaz.Controller.NO_DROP_MOVES = true;
 
 Dagaz.AI.selector = false;
 
