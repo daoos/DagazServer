@@ -180,6 +180,9 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total, max_selector) values(139, 42, 'Makyek', 'makyek', 2, 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(140, 37, 'Ultima', 'ultima', 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(141, 17, 'Dual Go (9x9)', 'dual-go-9x9', 2)`);
+        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(142, 30, 'Hoppel-Poppel Chess', 'hoppel-poppel', 2)`);
+//      await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(143, 31, 'Ohojichi', 'ohojichi', 2)`);
+        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(144, 42, 'Bizingo', 'bizingo', 2)`);
 
         await queryRunner.query(`insert into game_styles(id, game_id, name, suffix, player_num) values(1, 23, 'European', '', null)`);
         await queryRunner.query(`insert into game_styles(id, game_id, name, suffix, player_num) values(2, 23, 'Chinese', '-kanji', null)`);
@@ -533,6 +536,10 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(293, 'makyek', 2, 'makyek-2', 'https://en.wikipedia.org/wiki/Mak-yek')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(294, 'ultima', null, 'ultima', 'https://www.chessvariants.com/other.dir/ultima.html', '1962 Robert Abbott')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(295, 'dual-go-9x9', null, 'dual-go-9x9')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(296, 'hoppel-poppel', null, 'hoppel-poppel')`);
+//      await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(297, 'ohojichi', null, 'ohojichi', 'https://mancala.fandom.com/wiki/Ohojichi')`);
+//      await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(298, 'ohojichi-alt', null, 'ohojichi-alt', 'https://mancala.fandom.com/wiki/Ohojichi')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(299, 'bizingo', null, 'bizingo', 'https://en.wikipedia.org/wiki/Bizingo')`);
 }
 
     public async down(queryRunner: QueryRunner): Promise<any> {
