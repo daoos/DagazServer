@@ -101,7 +101,8 @@ var CheckInvariants = Dagaz.Model.CheckInvariants;
 Dagaz.Model.CheckInvariants = function(board) {
   var design = Dagaz.Model.design;
   var ko = [];
-  if (!_.isUndefined(board.move) && (board.move.mode == Dagaz.Model.PIECE_CNT)) {
+  var v = board.getValue(0);
+  if ((v !== null) && (v == Dagaz.Model.PIECE_CNT)) {
       board.moves = [];
   } else {
       var collision = getCollision(design, board);

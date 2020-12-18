@@ -38,11 +38,19 @@ var isUniq = function(design, board, piece) {
   return r;
 }
 
+var calcReserve = function(board, piece) {
+  if (!_.isUndefined(board.reserve) && !_.isUndefined(board.reserve[piece.type]) && !_.isUndefined(board.reserve[piece.type][piece.player])) {
+      return board.reserve[piece.type][piece.player];
+  }
+  return 0;
+}
+
 var CheckInvariants = Dagaz.Model.CheckInvariants;
 
 Dagaz.Model.CheckInvariants = function(board) {
   var design = Dagaz.Model.design;
-  if (!_.isUndefined(board.move) && (board.move.mode == 10)) {
+  var v = board.getValue(0);
+  if ((v !== null) && (v == Dagaz.Model.PIECE_CNT)) {
       board.moves = [];
   } else {
       _.each(board.moves, function(move) {
@@ -59,12 +67,17 @@ Dagaz.Model.CheckInvariants = function(board) {
                       move.capturePiece(pos);
                       if (isUniq(design, board, piece)) {
                           move.mode = 10;
+                          move.setValue(0, 10);
                       }
                       return;
                   }
                   p = design.navigate(1, p, 8);
               }
+              if (calcReserve(board, piece) == 2) {
+                  move.goTo(board.turn);
+              }
           }
+          move.setValue(0, move.mode);
       });
   }
   CheckInvariants(board);
