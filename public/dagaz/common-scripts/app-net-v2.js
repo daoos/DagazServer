@@ -940,7 +940,7 @@ App.prototype.exec = function() {
           var player = this.design.playerNames[this.board.player];
           this.gameOver(player + " lose", -this.board.player);
           if (bot === null) {
-              sendAlert(1);
+              winGame();
           }
           return;
       }
@@ -1042,33 +1042,21 @@ App.prototype.exec = function() {
               this.state = STATE.DONE;
               Canvas.style.cursor = "default";
               if (g > 0) {
-                  if (bot === null) {
-                      sendAlert(1);
-                  } else {
-                      winGame();
-                  }
+                  winGame();
                   if (!_.isUndefined(Dagaz.Controller.play)) {
                       Dagaz.Controller.play(Dagaz.Sounds.win);
                   }
                   this.doneMessage = player + " won";
                   this.winPlayer   = this.board.parent.player;
               } else if (g < 0) {
-                  if (bot === null) {
-                      sendAlert(2);
-                  } else {
-                      loseGame();
-                  }
+                  loseGame();
                   if (!_.isUndefined(Dagaz.Controller.play)) {
                       Dagaz.Controller.play(Dagaz.Sounds.lose);
                   }
                   this.doneMessage = player + " lose";
                   this.winPlayer   = -this.board.parent.player;
               } else {
-                  if (bot === null) {
-                      sendAlert(3);
-                  } else {
-                      drawGame();
-                  }
+                  drawGame();
                   if (!_.isUndefined(Dagaz.Controller.play)) {
                       Dagaz.Controller.play(Dagaz.Sounds.draw);
                   }

@@ -43,4 +43,10 @@ export class Game {
 
     @ApiPropertyOptional()
     copyright: string;
+
+    @ApiPropertyOptional()
+    waiting: number;
+
+    @ApiPropertyOptional()
+    all: number;
 }

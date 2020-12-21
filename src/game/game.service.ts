@@ -65,8 +65,10 @@ export class GameService {
                         a.players_total as players_total, a.created as created, 
                         a.main_time as main_time, a.additional_time as additional_time,
                         a.realm_id as realm_id, a.max_selector as max_selector,
-                        b.bots as bots
-                 from   games a
+                        b.bots as bots,
+                      ( select count(*) from game_sessions where game_id = a.id and status_id = 1 and user_id <> $1) waiting,
+                      ( select count(*) from game_sessions where game_id = a.id and status_id <> 1) all_games
+                   from   games a
                  left   join ( select game_id, variant_id, 
                                       string_agg(
                                           trim(to_char(coalesce(selector_value, 0), '999')) || ':' ||
@@ -75,8 +77,8 @@ export class GameService {
                                from   game_bots
                                group  by game_id, variant_id
                              ) b on (b.game_id = a.id and b.variant_id is null)
-                 where  a.realm_id = $1
-                 order  by lower(a.name)`, [realm]);
+                 where  a.realm_id = $2
+                 order  by lower(a.name)`, [user, realm]);
             let l: Game[] = x.map(x => {
                 let it = new Game();
                 it.id = x.id;
@@ -88,6 +90,8 @@ export class GameService {
                 it.additional_time = x.additional_time;
                 it.realm_id = x.realm_id;
                 it.max_selector = x.max_selector;
+                it.waiting = x.waiting;
+                it.all = x.all_games;
                 if (x.bots) {
                     it.bots = x.bots;
                 }
@@ -113,8 +117,10 @@ export class GameService {
                 `select a.id as id, a.name as name, a.filename as filename, 
                         a.players_total as players_total,
                         a.max_selector as max_selector,
-                        c.bots as bots
-                 from   game_variants a
+                        c.bots as bots,
+                      ( select count(*) from game_sessions where game_id = b.id and variant_id = a.id and status_id = 1 and user_id <> $1) waiting,
+                      ( select count(*) from game_sessions where game_id = b.id and variant_id = a.id and status_id <> 1) all_games
+                   from   game_variants a
                  inner  join games b on (b.id = a.game_id)
                  left   join ( select game_id, variant_id, 
                                       string_agg(
@@ -124,8 +130,8 @@ export class GameService {
                                from   game_bots
                                group  by game_id, variant_id
                              ) c on (c.game_id = b.id and c.variant_id = a.id)
-                 where  b.realm_id = $1 and b.id = $2
-                 order  by lower(a.name)`, [realm, game]);
+                 where  b.realm_id = $2 and b.id = $3
+                 order  by lower(a.name)`, [user, realm, game]);
             let l: Game[] = x.map(x => {
                 let it = new Game();
                 it.id = x.id;
@@ -134,6 +140,8 @@ export class GameService {
                 it.players_total = x.players_total;
                 it.realm_id = x.realm_id;
                 it.max_selector = x.max_selector;
+                it.waiting = x.waiting;
+                it.all = x.all_games;
                 if (x.bots) {
                     it.bots = x.bots;
                 }

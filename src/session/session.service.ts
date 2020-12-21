@@ -102,21 +102,75 @@ export class SessionService {
         }
     }
 
-    async getWaitingSessions(user: number): Promise<Sess[]> {
+    async getAllSessions(user: number, game: number, variant: number): Promise<Sess[]> {
+        try {
+            const realm = await this.getRealm(user);
+            const x = await this.service.query(
+                `select a.id as id, a.status_id as status, a.game_id as game_id, d.id as variant_id,
+                        coalesce(d.name, b.name) as game, coalesce(d.filename, b.filename) || coalesce(h.suffix, '') as filename, 
+                        a.created as created, c.name as creator, b.players_total as players_total, a.last_setup as last_setup,
+                        string_agg(
+                            case
+                              when e.is_ai = 1 then 'AI'
+                              else f.name
+                            end || ' (' || e.player_num || 
+                        ')', ' / ' order by e.player_num) as player_name,
+                        coalesce(a.last_turn, 0) as last_turn, coalesce(a.selector_value, 0) as selector_value, x.id as ai
+                 from   game_sessions a
+                 inner  join games b on (b.id = a.game_id and coalesce($1, b.id) = b.id)
+                 inner  join users c on (c.id = a.user_id and c.realm_id = $2)
+                 left   join game_variants d on (d.id = a.variant_id)
+                 inner  join user_games e on (e.session_id = a.id)
+                 inner  join users f on (f.id = e.user_id and f.realm_id = $3)
+                 left   join user_games g on (g.session_id = a.id and g.user_id = $4 and g.is_ai = 0)
+                 left   join game_styles h on (h.game_id = b.id and h.player_num = g.player_num)
+                 left   join user_games x on (x.session_id = a.id and x.is_ai = 1)
+                 where  coalesce($5, d.id) = d.id or d.id is null
+                 group  by a.id, a.status_id, a.game_id, d.id, d.name, b.name, d.filename, b.filename, a.created, c.name, b.players_total, a.last_setup, h.suffix, x.id
+                 order  by a.changed desc`, [game, realm, realm, user, variant]);
+                 let l: Sess[] = x.map(x => {
+                    let it = new Sess();
+                    it.id = x.id;
+                    it.status = x.status;
+                    it.game_id = x.game_id;
+                    it.game = x.game;
+                    it.variant_id = x.variant_id;
+                    it.filename = x.filename;
+                    it.created = x.created;
+                    it.players_total = x.players_total;
+                    it.player_name = x.player_name;
+                    it.last_setup = x.last_setup;
+                    it.last_turn = x.last_turn;
+                    it.selector_value = x.selector_value;
+                    it.ai = x.ai;
+                    return it;
+                });
+                return l;
+        } catch (error) {
+          console.error(error);
+          throw new InternalServerErrorException({
+              status: HttpStatus.BAD_REQUEST,
+              error: error
+          });
+        }
+    }
+
+    async getWaitingSessions(user: number, game: number, variant: number): Promise<Sess[]> {
         try {
             const realm = await this.getRealm(user);
             const x = await this.service.query(
                 `select a.id as id, a.status_id as status, a.game_id as game_id, d.id as variant_id,
                         coalesce(d.name, b.name) as game, coalesce(d.filename, b.filename) as filename, 
-                        a.created as created, c.name as creator, b.players_total as players_total,
+                        a.created as created, c.name  || ' (' || e.player_num || ')' as creator, b.players_total as players_total,
                         a.last_setup as last_setup, e.player_num as player_num, coalesce(a.selector_value, 0) as selector_value
                  from   game_sessions a
-                 inner  join games b on (b.id = a.game_id)
-                 inner  join users c on (c.id = a.user_id and c.realm_id = $1)
+                 inner  join games b on (b.id = a.game_id and coalesce($1, b.id) = b.id)
+                 inner  join users c on (c.id = a.user_id and c.realm_id = $2)
                  left   join game_variants d on (d.id = a.variant_id)
-                 inner  join user_games e on (e.session_id = a.id and e.user_id <> $2)
+                 inner  join user_games e on (e.session_id = a.id and e.user_id <> $3)
                  where  a.status_id = 1 and a.closed is null
-                 order  by a.created desc`, [realm, user]);
+                 and  ( coalesce($4, d.id) = d.id or d.id is null )
+                 order  by a.created desc`, [game, realm, user, variant]);
                  let l: Sess[] = x.map(x => {
                     let it = new Sess();
                     it.id = x.id;

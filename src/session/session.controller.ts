@@ -17,6 +17,36 @@ export class SessionController {
     ) {}
 
     @UseGuards(JwtAuthGuard, TokenGuard)
+    @Get('waiting/:game/:variant')
+    @ApiOkResponse({ description: 'Successfully.'})
+    @ApiUnauthorizedResponse({ description: 'Unauthorized.'})
+    @ApiInternalServerErrorResponse({ description: 'Internal Server error.'})
+    async findWaitingVar(@Req() request: Request, @Res() res, @Param('game') game, @Param('variant') variant): Promise<Sess[]> {
+        const user: any = request.user;
+        try {
+            const r = await this.service.getWaitingSessions(user.id, game, variant);
+            return res.status(HttpStatus.OK).json(r);
+        } catch(e) {
+            return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ error: e.message.error.toString(), stack: e.stack});
+        }
+    }
+
+    @UseGuards(JwtAuthGuard, TokenGuard)
+    @Get('waiting/:game')
+    @ApiOkResponse({ description: 'Successfully.'})
+    @ApiUnauthorizedResponse({ description: 'Unauthorized.'})
+    @ApiInternalServerErrorResponse({ description: 'Internal Server error.'})
+    async findWaitingGame(@Req() request: Request, @Res() res, @Param('game') game): Promise<Sess[]> {
+        const user: any = request.user;
+        try {
+            const r = await this.service.getWaitingSessions(user.id, game, null);
+            return res.status(HttpStatus.OK).json(r);
+        } catch(e) {
+            return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ error: e.message.error.toString(), stack: e.stack});
+        }
+    }
+
+    @UseGuards(JwtAuthGuard, TokenGuard)
     @Get('waiting')
     @ApiOkResponse({ description: 'Successfully.'})
     @ApiUnauthorizedResponse({ description: 'Unauthorized.'})
@@ -24,7 +54,52 @@ export class SessionController {
     async findWaiting(@Req() request: Request, @Res() res): Promise<Sess[]> {
         const user: any = request.user;
         try {
-            const r = await this.service.getWaitingSessions(user.id);
+            const r = await this.service.getWaitingSessions(user.id, null, null);
+            return res.status(HttpStatus.OK).json(r);
+        } catch(e) {
+            return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ error: e.message.error.toString(), stack: e.stack});
+        }
+    }
+
+    @UseGuards(JwtAuthGuard, TokenGuard)
+    @Get('all/:game/:variant')
+    @ApiOkResponse({ description: 'Successfully.'})
+    @ApiUnauthorizedResponse({ description: 'Unauthorized.'})
+    @ApiInternalServerErrorResponse({ description: 'Internal Server error.'})
+    async findAllVar(@Req() request: Request, @Res() res, @Param('game') game, @Param('variant') variant): Promise<Sess[]> {
+        const user: any = request.user;
+        try {
+            const r = await this.service.getAllSessions(user.id, game, variant);
+            return res.status(HttpStatus.OK).json(r);
+        } catch(e) {
+            return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ error: e.message.error.toString(), stack: e.stack});
+        }
+    }
+
+    @UseGuards(JwtAuthGuard, TokenGuard)
+    @Get('all/:game')
+    @ApiOkResponse({ description: 'Successfully.'})
+    @ApiUnauthorizedResponse({ description: 'Unauthorized.'})
+    @ApiInternalServerErrorResponse({ description: 'Internal Server error.'})
+    async findAllGame(@Req() request: Request, @Res() res, @Param('game') game): Promise<Sess[]> {
+        const user: any = request.user;
+        try {
+            const r = await this.service.getAllSessions(user.id, game, null);
+            return res.status(HttpStatus.OK).json(r);
+        } catch(e) {
+            return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ error: e.message.error.toString(), stack: e.stack});
+        }
+    }
+
+    @UseGuards(JwtAuthGuard, TokenGuard)
+    @Get('all')
+    @ApiOkResponse({ description: 'Successfully.'})
+    @ApiUnauthorizedResponse({ description: 'Unauthorized.'})
+    @ApiInternalServerErrorResponse({ description: 'Internal Server error.'})
+    async findAll(@Req() request: Request, @Res() res): Promise<Sess[]> {
+        const user: any = request.user;
+        try {
+            const r = await this.service.getAllSessions(user.id, null, null);
             return res.status(HttpStatus.OK).json(r);
         } catch(e) {
             return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ error: e.message.error.toString(), stack: e.stack});

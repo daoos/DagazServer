@@ -185,6 +185,8 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(144, 42, 'Bizingo', 'bizingo', 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(145, 30, 'Chessence', 'chessence', 2)`);
 //      await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(146, 24, 'Magyar Dama', 'magyar-dama', 2)`);
+        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(147, 30, 'Escalation', 'escalation', 2)`);
+        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(148, 37, 'Hanga Roa', 'hanga-roa', 2)`);
 
         await queryRunner.query(`insert into game_styles(id, game_id, name, suffix, player_num) values(1, 23, 'European', '', null)`);
         await queryRunner.query(`insert into game_styles(id, game_id, name, suffix, player_num) values(2, 23, 'Chinese', '-kanji', null)`);
@@ -548,6 +550,8 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(300, 'hoppel-poppel', 2, 'hoppel-poppel-2')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(301, 'chessence', null, 'chessence', 'https://en.wikipedia.org/wiki/Chessence', '2000 Jason D. Wittman')`);
 //      await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(302, 'magyar-dama', null, 'magyar')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, copyright) values(303, 'escalation', null, 'escalation', '1973 G. P. Jelliss')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(304, 'hanga-roa', null, 'hanga-roa', 'https://www.chessvariants.com/other.dir/hanga_roa/hanga_roa.html', 'Hernan Marcelo Dominguez Placencia and Juan Pablo Schweitzer Kirsinger')`);
 }
 
     public async down(queryRunner: QueryRunner): Promise<any> {
