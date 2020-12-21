@@ -125,7 +125,8 @@ export class SessionService {
                  left   join user_games g on (g.session_id = a.id and g.user_id = $4 and g.is_ai = 0)
                  left   join game_styles h on (h.game_id = b.id and h.player_num = g.player_num)
                  left   join user_games x on (x.session_id = a.id and x.is_ai = 1)
-                 where  coalesce($5, d.id) = d.id or d.id is null
+                 where  coalesce(a.last_turn, 0) > 0
+                 and  ( coalesce($5, d.id) = d.id or d.id is null )
                  group  by a.id, a.status_id, a.game_id, d.id, d.name, b.name, d.filename, b.filename, a.created, c.name, b.players_total, a.last_setup, h.suffix, x.id
                  order  by a.changed desc`, [game, realm, realm, user, variant]);
                  let l: Sess[] = x.map(x => {
