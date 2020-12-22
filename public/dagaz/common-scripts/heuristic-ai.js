@@ -33,7 +33,7 @@ Ai.prototype.getMove = function(ctx) {
   if (ctx.board.moves.length == 0) {
       return { done: true, ai: "nothing" };
   }
-  if (!Dagaz.AI.selector || (Dagaz.Model.getSetupSelector(2) == 1)) {
+//if (!Dagaz.AI.selector || (Dagaz.Model.getSetupSelector(2) == 1)) {
       var nodes = _.chain(ctx.board.moves)
          .map(function(m) {
               return {
@@ -62,7 +62,7 @@ Ai.prototype.getMove = function(ctx) {
                ai:  "heuristic"
           };
       }
-  }
+//}
   if (this.parent) {
       return this.parent.getMove(ctx);
   }

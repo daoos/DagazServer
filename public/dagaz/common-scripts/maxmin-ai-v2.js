@@ -221,9 +221,9 @@ MaxMinAi.prototype.setContext = function(ctx, board) {
       this.parent.setContext(ctx, board);
   }
   ctx.timestamp = Date.now();
-  if (!Dagaz.AI.selector || (Dagaz.Model.getSetupSelector(2) == 1)) {
+//if (!Dagaz.AI.selector || (Dagaz.Model.getSetupSelector(2) == 1)) {
       this.changeCache(ctx, board);
-  }
+//}
 }
 
 MaxMinAi.prototype.shedule = function(ctx, cache) {
@@ -346,7 +346,7 @@ MaxMinAi.prototype.getMove = function(ctx) {
            ai:  "once"
       };
   }
-  if (!Dagaz.AI.selector || (Dagaz.Model.getSetupSelector(2) == 1)) {
+//if (!Dagaz.AI.selector || (Dagaz.Model.getSetupSelector(2) == 1)) {
       Dagaz.AI.inProgress = true;
       for (var ix = 0; ix < ctx.cache.length; ix++) {
            var node = ctx.cache[ix];
@@ -391,7 +391,7 @@ MaxMinAi.prototype.getMove = function(ctx) {
       } else {
          ctx.cache = [];
       }
-  }
+//}
   if (this.parent) {
       return this.parent.getMove(ctx);
   }

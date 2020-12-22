@@ -478,7 +478,7 @@ Ai.prototype.setContext = function(ctx, board) {
   ctx.tNodeCount = 0;
   ctx.mLevel     = 0;
   ctx.qLevel     = 0;
-  if (!Dagaz.AI.selector || (Dagaz.Model.getSetupSelector(2) == 2)) {
+//if (!Dagaz.AI.selector || (Dagaz.Model.getSetupSelector(2) == 2)) {
       if (_.isUndefined(ctx.cache)) {
           ctx.cache = [];     
       }
@@ -487,7 +487,7 @@ Ai.prototype.setContext = function(ctx, board) {
           ctx.killer[0] = [];
           ctx.killer[1] = [];
       }
-  }
+//}
 }
 
 Ai.prototype.getMove = function(ctx) {
@@ -503,7 +503,7 @@ Ai.prototype.getMove = function(ctx) {
            ai:  "once"
       };
   }
-  if (!Dagaz.AI.selector || (Dagaz.Model.getSetupSelector(2) == 2)) {
+//if (!Dagaz.AI.selector || (Dagaz.Model.getSetupSelector(2) == 2)) {
       for (var i = 0; i < ctx.board.moves.length; i++) {
            var b = ctx.board.apply(ctx.board.moves[i]);
            if (Dagaz.Model.checkGoals(ctx.design, b, ctx.board.player) > 0)
@@ -555,7 +555,7 @@ Ai.prototype.getMove = function(ctx) {
                ai:  "ab"
           };
       }
-  }
+//}
   if (this.parent) {
       return this.parent.getMove(ctx);
   }

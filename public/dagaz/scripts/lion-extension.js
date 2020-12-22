@@ -125,7 +125,7 @@ Dagaz.Model.CheckInvariants = function(board) {
           }
           if (pos !== null) {
               if (isAttacked(design, board.apply(move), board.player, pos)) {
-                  move.failed = true;
+//                move.failed = true;
               }
           }
       }
