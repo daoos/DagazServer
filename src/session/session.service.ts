@@ -6,16 +6,17 @@ import { user_games } from '../entity/user_games';
 import { game_moves } from '../entity/game_moves';
 import { challenge } from '../entity/challenge';
 import { game_alerts } from '../entity/game_alerts';
+import { Exp } from '../interfaces/exp.interface';
 
 @Injectable()
 export class SessionService {
 
-    constructor(
-        @Inject('SESS_REPOSITORY')
-        private readonly service: Repository<game_sessions>
-    ) {}  
+       constructor(
+           @Inject('SESS_REPOSITORY')
+           private readonly service: Repository<game_sessions>
+       ) {}  
 
-    async getRealm(user: number): Promise<number> {
+       async getRealm(user: number): Promise<number> {
         const x = await this.service.query(
           `select realm_id
            from   users
@@ -26,12 +27,41 @@ export class SessionService {
         return x[0].realm_id;
       }
 
+      async exportSession(sid: number): Promise<Exp[]> {
+          try {
+            const x = await this.service.query(
+                `select a.turn_num as turn_num, b.player_num as player_num, 
+                        a.move_str as move_str
+                 from   game_moves a
+                 inner  join user_games b on (b.id = a.uid)
+                 where  a.session_id = $1
+                 order  by a.turn_num`, [sid]);
+            if (!x || x.length == 0) {
+                 return null;
+            }
+            let l: Exp[] = x.map(x => {
+                let it = new Exp();
+                it.turn = x.turn_num;
+                it.player = x.player_num;
+                it.move = x.move_str;
+                return it;
+            });
+            return l;
+      } catch (error) {
+              console.error(error);
+              throw new InternalServerErrorException({
+                  status: HttpStatus.BAD_REQUEST,
+                  error: error
+              });
+          }
+      }
+
       async getCurrentSessions(user: number): Promise<Sess[]> {
         try {
             const realm = await this.getRealm(user);
             const x = await this.service.query(
                 `select a.id as id, a.status_id as status, a.game_id as game_id, d.id as variant_id,
-                        coalesce(d.name, b.name) as game, coalesce(d.filename, b.filename) || coalesce(h.suffix, '') as filename, 
+                        coalesce(d.name, b.name) || ' (' || a.id || ')' as game, coalesce(d.filename, b.filename) || coalesce(h.suffix, '') as filename, 
                         a.created as created, c.name as creator, b.players_total as players_total, a.last_setup as last_setup,
                         string_agg(
                             case
@@ -53,7 +83,7 @@ export class SessionService {
                  group  by a.id, a.status_id, a.game_id, d.id, d.name, b.name, d.filename, b.filename, a.created, c.name, b.players_total, a.last_setup, h.suffix, x.id
                  union  all
                  select a.id as id, a.status_id as status, a.game_id as game_id, d.id as variant_id,
-                        coalesce(d.name, e.name) as game, coalesce(d.filename, e.filename) || coalesce(h.suffix, '') as filename,
+                        coalesce(d.name, e.name) || ' (' || a.id || ')' as game, coalesce(d.filename, e.filename) || coalesce(h.suffix, '') as filename,
                         a.created as created, j.name as creator, e.players_total as players_total, a.last_setup as last_setup,
                         string_agg(
                             case
@@ -107,7 +137,7 @@ export class SessionService {
             const realm = await this.getRealm(user);
             const x = await this.service.query(
                 `select a.id as id, a.status_id as status, a.game_id as game_id, d.id as variant_id,
-                        coalesce(d.name, b.name) as game, coalesce(d.filename, b.filename) || coalesce(h.suffix, '') as filename, 
+                        coalesce(d.name, b.name) || ' (' || a.id || ')' as game, coalesce(d.filename, b.filename) || coalesce(h.suffix, '') as filename, 
                         a.created as created, c.name as creator, b.players_total as players_total, a.last_setup as last_setup,
                         string_agg(
                             case
@@ -161,7 +191,7 @@ export class SessionService {
             const realm = await this.getRealm(user);
             const x = await this.service.query(
                 `select a.id as id, a.status_id as status, a.game_id as game_id, d.id as variant_id,
-                        coalesce(d.name, b.name) as game, coalesce(d.filename, b.filename) as filename, 
+                        coalesce(d.name, b.name) || ' (' || a.id || ')' as game, coalesce(d.filename, b.filename) as filename, 
                         a.created as created, c.name  || ' (' || e.player_num || ')' as creator, b.players_total as players_total,
                         a.last_setup as last_setup, e.player_num as player_num, coalesce(a.selector_value, 0) as selector_value
                  from   game_sessions a
@@ -203,7 +233,7 @@ export class SessionService {
             const realm = await this.getRealm(user);
             const x = await this.service.query(
                 `select a.id as id, a.status_id as status, a.game_id as game_id, d.id as variant_id,
-                        coalesce(d.name, b.name) as game, coalesce(d.filename, b.filename) || coalesce(h.suffix, '') as filename, 
+                        coalesce(d.name, b.name) || ' (' || a.id || ')' as game, coalesce(d.filename, b.filename) || coalesce(h.suffix, '') as filename, 
                         a.created as created, c.name as creator, b.players_total as players_total, a.last_setup as last_setup,
                         string_agg(
                             case
@@ -256,7 +286,7 @@ export class SessionService {
             const realm = await this.getRealm(user);
             const x = await this.service.query(
                 `select a.id as id, a.status_id as status, a.game_id as game_id, d.id as variant_id,
-                        coalesce(d.name, b.name) as game, coalesce(d.filename, b.filename) || coalesce(h.suffix, '') as filename, 
+                        coalesce(d.name, b.name) || ' (' || a.id || ')' as game, coalesce(d.filename, b.filename) || coalesce(h.suffix, '') as filename, 
                         a.created as created, c.name as creator, b.players_total as players_total, a.last_setup as last_setup,
                         string_agg(
                             case
@@ -309,7 +339,7 @@ export class SessionService {
             const realm = await this.getRealm(user);
             const x = await this.service.query(
                 `select a.id as id, a.status_id as status, a.game_id as game_id, d.id as variant_id,
-                        coalesce(d.name, b.name) as game, coalesce(d.filename, b.filename) || coalesce(h.suffix, '') as filename, 
+                        coalesce(d.name, b.name) || ' (' || a.id || ')' as game, coalesce(d.filename, b.filename) || coalesce(h.suffix, '') as filename, 
                         a.created as created, c.name as creator, b.players_total as players_total, a.last_setup as last_setup,
                         string_agg(
                             case

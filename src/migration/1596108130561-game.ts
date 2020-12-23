@@ -187,6 +187,8 @@ export class game1596108130561 implements MigrationInterface {
 //      await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(146, 24, 'Magyar Dama', 'magyar-dama', 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(147, 30, 'Escalation', 'escalation', 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(148, 37, 'Hanga Roa', 'hanga-roa', 2)`);
+//      await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(149, 37, 'Ordo', 'ordo', 2)`);
+        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(150, 37, 'Jasir', 'jasir', 2)`);
 
         await queryRunner.query(`insert into game_styles(id, game_id, name, suffix, player_num) values(1, 23, 'European', '', null)`);
         await queryRunner.query(`insert into game_styles(id, game_id, name, suffix, player_num) values(2, 23, 'Chinese', '-kanji', null)`);
@@ -260,6 +262,7 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_bots(id, game_id, variant_id, selector_value, player_num) values(49, 26, 85, null, null)`);
         await queryRunner.query(`insert into game_bots(id, game_id, variant_id, selector_value, player_num) values(50, 24, 36, null, null)`);
         await queryRunner.query(`insert into game_bots(id, game_id, variant_id, selector_value, player_num) values(51, 24, 35, null, null)`);
+//      await queryRunner.query(`insert into game_bots(id, game_id, variant_id, selector_value, player_num) values(52, 37, 149, null, null)`);
 
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(1, 'doubutsu-shogi', null, 'doubutsu-shogi', 'https://en.wikipedia.org/wiki/D%C5%8Dbutsu_sh%C5%8Dgi', 'Madoka Kitao')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(2, 'atari-go', null, 'atari-go', 'https://en.wikipedia.org/wiki/Go_variants#First_Capture')`);
@@ -565,6 +568,8 @@ export class game1596108130561 implements MigrationInterface {
 //      await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(302, 'magyar-dama', null, 'magyar')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, copyright) values(303, 'escalation', null, 'escalation', '1973 G. P. Jelliss')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(304, 'hanga-roa', null, 'hanga-roa', 'https://www.chessvariants.com/other.dir/hanga_roa/hanga_roa.html', 'Hernan Marcelo Dominguez Placencia and Juan Pablo Schweitzer Kirsinger')`);
+//      await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(305, 'ordo', null, 'ordo', 'http://www.iggamecenter.com/info/en/ordo.html', '2009 Dieter Stein')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(306, 'jasir', null, 'jasir', 'https://en.wikipedia.org/wiki/Jarmo_(game)')`);
 }
 
     public async down(queryRunner: QueryRunner): Promise<any> {
