@@ -670,7 +670,7 @@ var getConfirmed = function() {
   var app = Dagaz.Controller.app;
   if (inProgress) return;
   if (netstamp !== null) {
-      if (Date.now() - netstamp < 5000) return;
+      if (Date.now() - netstamp < 1000) return;
       netstamp = null;
   }
   if (auth === null) return;

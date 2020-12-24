@@ -1,5 +1,9 @@
 (function() {
 
+var WAIT_FRAME      = 100;
+var GAME_OVER_DELAY = 1000;
+var AI_WAIT         = 3000;
+
 var STATE = {
     INIT: 0,
     IDLE: 1,
@@ -12,10 +16,8 @@ var STATE = {
 
 var SERVICE = "/api/";
 
-var isDrag = false;
-var lastPosition = null;
-var determinated = null;
-var dropIndex = 0;
+var isPressed = false;
+var isOnce    = false;
 var onceGameOver = true;
 
 var inProgress = false;
@@ -29,25 +31,12 @@ var sid = null;
 var turn = 1;
 var netstamp = null;
 
-function App(canvas, params) {
-  this.design = Dagaz.Model.getDesign();
+function App(canvas) {
   this.canvas = canvas;
-  this.view   = Dagaz.View.getView();
   this.state  = STATE.INIT;
-  if (params) {
-      this.params = params;
-  } else {
-      this.params = [];
-  }
-  if (_.isUndefined(this.params.WAIT_FRAME)) {
-      this.params.WAIT_FRAME = 100;
-  }
-  if (_.isUndefined(this.params.SHOW_TARGETS)) {
-      this.params.SHOW_TARGETS = true;
-  }
-  if (_.isUndefined(this.params.SHOW_ATTACKING)) {
-      this.params.SHOW_ATTACKING = true;
-  }
+  this.design = Dagaz.Model.getDesign();
+  this.view   = Dagaz.View.getView();
+  this.params = [];
 }
 
 var gameOver = function(text, self, player) {
@@ -63,22 +52,22 @@ App.prototype.gameOver = function(text, player) {
   Dagaz.Controller.Done(this.board);
   this.view.markPositions(Dagaz.View.markType.KO, []);
   if (onceGameOver) {
-      _.delay(gameOver, 1000, text, this, player);
+      _.delay(gameOver, GAME_OVER_DELAY, text, this, player);
       onceGameOver = false;
   }
   if (this.board && Dagaz.Model.showLose) {
-     var captured = [];
-     _.each(this.design.allPositions(), function(pos) {
-        var piece = this.board.getPiece(pos);
-        if (piece !== null) {
-            if ((player == 0) || 
-                ((player < 0) && (piece.player == -player)) ||
-                ((player > 0) && (piece.player != player))) {
-                captured.push(pos);
-            }
-        }
-     }, this);
-     this.view.markPositions(Dagaz.View.markType.ATTACKING, captured);
+      var captured = [];
+      _.each(this.design.allPositions(), function(pos) {
+         var piece = this.board.getPiece(pos);
+         if (piece !== null) {
+             if ((player == 0) || 
+                 ((player < 0) && (piece.player == -player)) ||
+                 ((player > 0) && (piece.player != player))) {
+                 captured.push(pos);
+             }
+         }
+      }, this);
+      this.view.markPositions(Dagaz.View.markType.ATTACKING, captured);
   }
 }
 
@@ -99,48 +88,9 @@ App.prototype.done = function() {
   }
 }
 
-App.prototype.getStarts = function() {
-  if (_.isUndefined(this.starts)) {
-      if (_.isUndefined(this.list)) {
-          this.starts = [];
-      } else {
-          this.starts = this.list.getStarts();
-      }
-  }
-  return this.starts;
-}
-
-App.prototype.getStops = function() {
-  if (_.isUndefined(this.stops)) {
-      if (_.isUndefined(this.list)) {
-          this.stops = [];
-      } else {
-          this.stops = this.list.getStops();
-      }
-  }
-  return this.stops;
-}
-
 App.prototype.getTargets = function() {
-  if (_.isUndefined(this.targets)) {
-      if (_.isUndefined(this.list)) {
-          this.targets = [];
-      } else {
-          this.targets = this.list.getTargets();
-      }
-  }
-  return this.targets;
-}
-
-App.prototype.getDrops = function() {
-  if (_.isUndefined(this.list) || (Dagaz.Model.showDrops == 0)) {
-      this.drops = [];
-  } else {
-      if (_.isUndefined(this.drops) || (this.drops.length == 0)) {
-          this.drops = this.list.getDrops();
-      }
-  }
-  return this.drops;
+  if (_.isUndefined(this.list)) return [];
+      else return _.union(this.list.getStarts(), this.list.getStops());
 }
 
 App.prototype.clearPositions = function() {
@@ -153,89 +103,47 @@ App.prototype.clearPositions = function() {
 
 App.prototype.setPosition = function(pos) {
   this.move = this.list.setPosition(pos);
-  this.clearPositions();
-  if (this.params.SHOW_TARGETS) {
-      this.view.markPositions(Dagaz.View.markType.TARGET, this.getTargets());
-  }
-  if (this.params.SHOW_ATTACKING && Dagaz.Model.showCaptures && _.isUndefined(Dagaz.Model.getMarked)) {
-      this.view.markPositions(Dagaz.View.markType.ATTACKING, this.list.getCaptures());
-  }
+  this.view.markPositions(Dagaz.View.markType.TARGET, this.list.getStops());
+  this.view.markPositions(Dagaz.View.markType.CURRENT, this.list.getCurrent());
+  this.canvas.style.cursor = "default";
   this.state = STATE.EXEC;
-  Canvas.style.cursor = "default";
-  this.view.markPositions(Dagaz.View.markType.CURRENT, [ pos ]);
 }
 
-App.prototype.syncCaptures = function(move) {
-  var m = Dagaz.Model.createMove(move.mode, move.sound);
-  _.each(move.actions, function(a) {
-      if ((a[0] !== null) && (a[1] === null)) {
-          m.actions.push(a);
-      }
-  });
-  m.applyAll(this.view);
-}
-
-App.prototype.mouseWheel = function(view, delta) {
-  dropIndex += delta;
-  if (dropIndex < 0) dropIndex = 0;
-  var pos = this.currPos;
-  this.currPos = -1;
-  this.mouseLocate(view, pos);
-}
-
-App.prototype.mouseLocate = function(view, pos) {
-  if (this.currPos != pos) {
-      this.getDrops();
-      if ((Dagaz.Model.showDrops == -1) || (!_.isUndefined(this.drops) && (Dagaz.Model.showDrops > 0) && (this.drops.length > Dagaz.Model.showDrops))) {
-          if (!_.isUndefined(this.list) && (_.intersection(this.getDrops(), pos).length >= 0)) {
-              var p = _.intersection(this.getDrops(), pos)[0];
-              var pieces = this.list.getDropPieces(p);
-              if (!_.isUndefined(Dagaz.View.getDropPieces)) {
-                  pieces = Dagaz.View.getDropPieces(this.design, this.board, p);
-              }
-              if ((pieces !== null) && (pieces.length > 0)) {
-                  if (dropIndex >= pieces.length) {
-                     if (Dagaz.Controller.cyclicDropIndex){
-                         dropIndex = 0;
-                     } else {
-                         dropIndex = pieces.length - 1;
-                     }
-                  }
-                  this.view.setDrops(pieces[dropIndex].toString(), [p]);
-              }
-          } else {
-              this.view.clearDrops();
-          }
-      }
+App.prototype.mouseLocate = function(view, positions) {
+  if (positions.length != 1) return;
+  var pos = positions[0];
+  if ((_.isUndefined(this.currPos)) || (this.currPos != pos)) {
       if ((this.state == STATE.IDLE) && !_.isUndefined(this.list)) {
-          if (isDrag) {
-              if (_.intersection(this.getStops(), pos).length > 0) {
-                  Canvas.style.cursor = "pointer";
-              } else {
-                  Canvas.style.cursor = "move";
-              }
+          if (_.intersection(this.getTargets(), positions).length > 0) {
+              Canvas.style.cursor = "pointer";
           } else {
-              if (_.intersection(this.getStarts(), pos).length > 0) {
-                  Canvas.style.cursor = "pointer";
-              } else {
-                  Canvas.style.cursor = "default";
-              }
+              Canvas.style.cursor = "default";
           }
       }
-      this.view.markPositions(Dagaz.View.markType.GOAL, []);
-      if (!isDrag && !_.isUndefined(this.board)) {
-          var piece = this.board.getPiece(pos);
-          if (piece !== null) {
-              var types = Dagaz.Model.getPieceTypes(piece, this.board);
-              if (Dagaz.Model.showGoals) {
-                  var positions = this.design.getGoalPositions(this.board.player, types);
-                  this.view.markPositions(Dagaz.View.markType.GOAL, positions);
-              }
-          }
+      if (isPressed && !_.isUndefined(this.list)) {
+          this.list.markPosition(pos);
+          this.view.markPositions(Dagaz.View.markType.TARGET, this.list.getStops());
+          this.view.markPositions(Dagaz.View.markType.CURRENT, this.list.getCurrent());
       }
   }
   this.currPos = pos;
 }
+
+App.prototype.mouseUp = function(view, positions) {
+  isPressed = false;
+}
+
+App.prototype.mouseDown = function(view, pos) {
+  if ((this.state == STATE.IDLE) && !_.isUndefined(this.list)) {
+      var positions = _.intersection(this.getTargets(), pos);
+      if (positions.length > 0) {
+          this.setPosition(positions[0]);
+      }
+  }
+  isPressed = true;
+}
+
+App.prototype.mouseWheel = function(view, delta) {}
 
 App.prototype.boardApply = function(move) {
   this.board = this.board.apply(move);
@@ -244,82 +152,12 @@ App.prototype.boardApply = function(move) {
   }
 }
 
-App.prototype.mouseDown = function(view, pos) {
-  this.view.markPositions(Dagaz.View.markType.GOAL, []);
-  if ((this.state == STATE.IDLE) && !_.isUndefined(this.list)) {
-      var positions = _.intersection(this.getTargets(), pos);
-      if (positions.length == 0) {
-          positions = _.intersection(this.getStops(), pos);
-      }
-      if (positions.length == 0) {
-          positions = _.intersection(this.getStarts(), pos);
-      }
-      if (positions.length > 0) {
-          Canvas.style.cursor = "move";
-          this.setPosition(positions[0]);
-          if (this.move && this.move.isPass() && (lastPosition == positions[0])) {
-              if (this.list && this.list.canPass()) {
-                  var moves = this.list.getMoves();
-                  if (moves.length == 1) {
-                      var m = moves[0];
-                      this.boardApply(m);
-                      this.syncCaptures(m);
-                      var s = m.toString();
-                      if (!_.isUndefined(Dagaz.Model.getSetup)) {
-                          s = Dagaz.Model.getSetup(this.design, this.board);
-                      }
-                      addMove(m.toString(), s, uid);
-                      this.state = STATE.IDLE;
-                      delete this.list;
-                      this.view.clearDrops();
-                      lastPosition = null;
-                      if (_.isUndefined(Dagaz.Model.getMarked)) {
-                          this.view.markPositions(Dagaz.View.markType.ATTACKING, []);
-                      }
-                      this.view.markPositions(Dagaz.View.markType.CURRENT, []);
-                      this.view.markPositions(Dagaz.View.markType.TARGET, []);
-                      return;
-                  }
-              }
-          }
-          lastPosition = positions[0];
-          isDrag = true;
-      }
-  }
-}
-
-App.prototype.mouseUp = function(view, pos) {
-  if ((this.state == STATE.IDLE) && !_.isUndefined(this.list) && Dagaz.Model.dragNdrop) {
-      var positions = _.intersection(this.getTargets(), pos);
-      if (positions.length > 0) {
-          this.setPosition(positions[0]);
-      }
-  }
-  Canvas.style.cursor = "default";
-  isDrag = false;
-}
-
 App.prototype.getBoard = function() {
   if (_.isUndefined(this.board)) {
       this.board = Dagaz.Model.getInitBoard();
       Dagaz.Model.Done(this.design, this.board);
   }
   return this.board;
-}
-
-App.prototype.determinate = function(move) {
-  var moves = move.determinate();
-  determinated = null;
-  if (moves.length > 1) {
-      var promote = confirm("Promote piece?");
-      if (promote) {
-          move = moves[1];
-      } else {
-          move = moves[0];
-      }
-      determinated = move;
-  }
-  return move;
 }
 
 App.prototype.isReady = function() {
@@ -835,8 +673,8 @@ App.prototype.exec = function() {
       recovery();
       if (setup && uid) {
           Dagaz.Model.setup(this.board, setup);
-          this.view.reInit(this.board);
           Dagaz.Model.Done(this.design, this.board);
+          this.view.reInit(this.board);
           setup = null;
       }
       if (player_num === null) return;
@@ -844,56 +682,29 @@ App.prototype.exec = function() {
   }
   if (this.state == STATE.IDLE) {
       if (player_num == this.board.player) {
-          if (_.isUndefined(this.list)) {
-              var player = this.design.playerNames[this.board.player];
-              console.log("Player: " + player);
-              if (!_.isUndefined(Dagaz.Model.getSetup)) {
-                  console.log("Setup: " + Dagaz.Model.getSetup(this.design, this.board));
-              }
-              if (!Dagaz.Controller.noDropIndex) {
-                  dropIndex = 0;
-              }
-              this.list = Dagaz.Model.getMoveList(this.board);
-              var ko = [];
-              if (!_.isUndefined(this.board.ko)) {
-                  ko = this.board.ko;
-              }
-              this.view.markPositions(Dagaz.View.markType.KO, ko);
-              if (!_.isUndefined(Dagaz.Model.getMarked)) {
-                  this.view.markPositions(Dagaz.View.markType.ATTACKING, Dagaz.Model.getMarked(this.list));
-              } else {
-                  if (this.params.SHOW_ATTACKING && Dagaz.Model.showCaptures) {
-                      this.view.markPositions(Dagaz.View.markType.ATTACKING, this.list.getCaptures());
-                  }
-              }
-              var drops = this.getDrops();
-              if ((Dagaz.Model.showDrops == -2) || (!_.isUndefined(this.drops) && (Dagaz.Model.showDrops > 0) && (this.drops.length <= Dagaz.Model.showDrops))) {
-                  if (drops.length > 0) {
-                      var pieces = this.list.getDropPieces(drops[0]);
-                      if ((pieces !== null) && (pieces.length > 0)) {
-                          if (dropIndex >= pieces.length) {
-                              if (Dagaz.Controller.cyclicDropIndex){
-                                  dropIndex = 0;
-                              } else {
-                                  dropIndex = pieces.length - 1;
-                              }
-                          }
-                          this.view.setDrops(pieces[dropIndex].toString(), drops);
-                      }
-                  }
-                  this.view.invalidate();
-              }
-              if (this.list.isEmpty()) {
-                  this.state = STATE.DONE;
-                  Canvas.style.cursor = "default";
-                  if (!_.isUndefined(Dagaz.Controller.play)) {
-                      Dagaz.Controller.play(Dagaz.Sounds.lose);
-                  }
-                  loseGame();
-                  this.gameOver(player + " lose", -this.board.player);
-                  return;
-              }
-          }
+         if (_.isUndefined(this.list)) {
+             var player = this.design.playerNames[this.board.player];
+             console.log("Player: " + player);
+             if (!_.isUndefined(Dagaz.Model.getSetup)) {
+                 console.log("Setup: " + Dagaz.Model.getSetup(this.design, this.board));
+             }
+             this.list = Dagaz.Model.getMoveList(this.board);
+             var ko = [];
+             if (!_.isUndefined(this.board.ko)) {
+                 ko = this.board.ko;
+             }
+             this.view.markPositions(Dagaz.View.markType.KO, ko);
+             if (this.list.isEmpty()) {
+                 this.state = STATE.DONE;
+                 Canvas.style.cursor = "default";
+                 if (!_.isUndefined(Dagaz.Controller.play)) {
+                     Dagaz.Controller.play(Dagaz.Sounds.lose);
+                 }
+                 loseGame();
+                 this.gameOver(player + " lose", -this.board.player);
+                 return;
+             }
+         }
       } else {
           var ctx = this.getContext(this.getBoard().player);
           var ai  = this.getAI();
@@ -906,6 +717,7 @@ App.prototype.exec = function() {
               if (result) {
                   if (result.move) {
                       console.log("Player: " + player);
+                      result.move.applyAll(this.view);
                       this.boardApply(result.move);
                       var s = result.move.toString();
                       if (!_.isUndefined(Dagaz.Model.getSetup)) {
@@ -915,7 +727,7 @@ App.prototype.exec = function() {
                       Dagaz.Model.Done(this.design, this.board);
                       addMove(result.move.toString(), s, bot);
                       this.move = result.move;
-                      this.state = STATE.EXEC;
+                      this.state = STATE.WAIT;
                   } else {
                       winGame();
                       this.gameOver(player + " lose", -this.board.player);
@@ -931,6 +743,7 @@ App.prototype.exec = function() {
   }
   if (this.state == STATE.BUZY) {
       this.board.generate(this.design);
+      this.board.moves = Dagaz.Model.Determinate(this.board.moves);
       if (this.board.moves.length == 0) {
           this.state = STATE.DONE;
           Canvas.style.cursor = "default";
@@ -972,61 +785,28 @@ App.prototype.exec = function() {
       if (!_.isUndefined(Dagaz.Model.getSetup)) {
           console.log("Setup: " + Dagaz.Model.getSetup(this.design, this.board));
       }
-      this.boardApply(this.move);
-      Dagaz.Model.Done(this.design, this.board);
       this.state = STATE.EXEC;
       last_move = null;
   }
   if (this.state == STATE.EXEC) {
       this.state = STATE.IDLE;
-      isDrag = false;
-      if (!_.isUndefined(this.list) && this.list.isDone()) {
-          var moves = this.list.filterDrops(this.list.getMoves(), dropIndex);
-          if ((moves.length == 1) && (moves[0].isDropMove())) this.move = moves[0];
-      }
       if (!this.move.isPass()) {
-          if (Dagaz.View.CLEAR_KO) {
-              this.view.markPositions(Dagaz.View.markType.KO, []);
-          }
           this.view.markPositions(Dagaz.View.markType.TARGET, []);
           this.view.markPositions(Dagaz.View.markType.CURRENT, []);
-          lastPosition = null;
           if (Dagaz.Model.showMoves) {
               console.log(this.move.toString());
           }
-          this.move = this.determinate(this.move);
           this.move.applyAll(this.view);
+          this.boardApply(this.move);
           if (!_.isUndefined(this.list)) {
-              this.view.markPositions(Dagaz.View.markType.CURRENT, [ this.move.getTarget() ]);
-          }
-          this.state = STATE.WAIT;
-      }
-      if (!_.isUndefined(this.list)) {
-          if (this.list.isDone() || (Dagaz.Model.completePartial && !this.move.isPass())) {
-              this.view.markPositions(Dagaz.View.markType.CURRENT, []);
-              var moves = this.list.filterDrops(this.list.getMoves(), dropIndex);
-              delete this.list;
-              this.view.clearDrops();
-              var m = this.move;
-              if (!Dagaz.Model.completePartial && ((moves.length > 0) || (determinated !== null))) {
-                  m = moves[0];
-                  if (determinated !== null) {
-                      m.clarify(determinated);
-                      determinated = null;
-                  }
-              }
-              this.boardApply(m);
-              var s = m.toString();
+              var s = this.move.toString();
               if (!_.isUndefined(Dagaz.Model.getSetup)) {
                   s = Dagaz.Model.getSetup(this.design, this.board);
               }
-              addMove(m.toString(), s, uid);
-              Dagaz.Model.Done(this.design, this.board);
-              console.log("Debug: " + m.toString());
-              this.view.markPositions(Dagaz.View.markType.KO, []);
+              addMove(this.move.toString(), s, uid);
+              delete this.list;
           }
-      }
-      if (!this.move.isPass()) {
+          this.state = STATE.WAIT;
           if (!_.isUndefined(Dagaz.Controller.play)) {
               var sound = Dagaz.Sounds.move;
               if (!_.isUndefined(this.move.sound)) {
@@ -1064,12 +844,12 @@ App.prototype.exec = function() {
                   this.winPlayer   = 0;
               }
           }
-     }
+      }
   }
 }
 
 Dagaz.Model.InitGame();
-Dagaz.Controller.app = Dagaz.Controller.createApp(Canvas);
+Dagaz.Controller.createApp(Canvas);
 
 App.prototype.run = function() {
   var timestamp = Date.now();
@@ -1077,10 +857,10 @@ App.prototype.run = function() {
   var delta = Date.now() - timestamp;
   _.delay(function() {
      Dagaz.Controller.app.run();
-  }, (delta > this.params.WAIT_FRAME) ? 0 : this.params.WAIT_FRAME - delta);
+  }, (delta > WAIT_FRAME) ? 0 : WAIT_FRAME - delta);
 }
 
-Dagaz.Controller.app.view.init(Dagaz.Controller.app.canvas, Dagaz.Controller.app);
+Dagaz.View.getView().init(Canvas, Dagaz.Controller.app);
 Dagaz.Controller.app.run();
 
 })();
