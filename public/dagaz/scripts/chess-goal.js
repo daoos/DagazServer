@@ -23,7 +23,6 @@ Dagaz.Model.checkGoals = function(design, board, player) {
       if (c < 3) {
           return 0;
       }
-      return checkGoals(design, board, player);
   }
   var king = design.getPieceType("King");
   board.generate(design);
