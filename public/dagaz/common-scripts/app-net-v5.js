@@ -1084,6 +1084,7 @@ App.prototype.exec = function() {
                   this.doneMessage = "Draw";
                   this.winPlayer   = 0;
               }
+              this.gameOver(this.doneMessage, this.winPlayer);
           }
      }
   }

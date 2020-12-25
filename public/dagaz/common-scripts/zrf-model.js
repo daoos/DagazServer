@@ -30,7 +30,7 @@ Dagaz.Model.passForcedDraw  = true;
 Dagaz.Model.animateRedo     = false;
 Dagaz.Model.completePartial = false;
 Dagaz.Model.zrfCompatible   = false;
-Dagaz.Model.showLose        = true;
+Dagaz.Model.showLose        = false;
 
 Dagaz.Model.checkVersion = function(design, name, value) {  
   if (name == "z2j") {
