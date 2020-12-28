@@ -256,6 +256,12 @@ var watchMove = function() {
   if (auth === null) return;
   if (sid === null) return;
   if (turn === null) return;
+  if (netstamp !== null) {
+      if (Date.now() - netstamp < 1000) return;
+      netstamp = null;
+  } else {
+      netstamp = Date.now();
+  }
   inProgress = true;
   $.ajax({
      url: SERVICE + "move/all/" + sid + "/" + turn,

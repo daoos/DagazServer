@@ -1,4 +1,5 @@
 import { Column, Entity, Index, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { game_moves } from "./game_moves";
 import { game_results } from "./game_results";
 import { game_sessions } from "./game_sessions";
 import { user_games } from "./user_games";
@@ -34,4 +35,11 @@ export class game_alerts {
 
     @Column({default: () => "now()"})
     created: Date;
+
+    @Index()
+    @Column({ nullable: true })
+    move_id: number;
+    @ManyToOne(type => game_moves)
+    @JoinColumn({ name: "move_id" })
+    move: game_moves;
 }

@@ -66,4 +66,7 @@ export class game_sessions {
 
     @Column({ nullable: true })
     next_player: number;
+
+    @Column({ default: 1, nullable: false })
+    branch_num: number;
 }

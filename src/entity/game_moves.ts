@@ -42,4 +42,7 @@ export class game_moves {
 
     @Column({ nullable: true })
     accepted: Date;
+
+    @Column({ default: 1, nullable: false })
+    branch_num: number;
 }

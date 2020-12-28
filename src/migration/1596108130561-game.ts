@@ -83,7 +83,7 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total, is_hidden) values(40, 33, 'Banqi (Taiwanese)', 'banqi-taiwanese', 2, 1)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total, is_hidden) values(41, 33, 'Banqi (10x9)', 'banqi-large', 2, 1)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(42, 32, 'Kolowisi Awithlaknannai', 'serpents', 2)`);
-//      await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(44, 37, 'Littera Chinese Chess', 'litter-chess', 2)`);
+        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(44, 37, 'Littera Chinese Chess', 'litter-chess', 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(45, 22, 'English Checkers', 'english-checkers', 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(46, 22, 'Turkish Dama', 'turkish-dama', 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(47, 22, 'Constitutional Checkers', 'constitutional-checkers', 2)`);
@@ -268,6 +268,7 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_bots(id, game_id, variant_id, selector_value, player_num) values(52, 37, 149, null, null)`);
         await queryRunner.query(`insert into game_bots(id, game_id, variant_id, selector_value, player_num) values(53, 37, 152, null, null)`);
         await queryRunner.query(`insert into game_bots(id, game_id, variant_id, selector_value, player_num) values(54, 37, 153, null, null)`);
+        await queryRunner.query(`insert into game_bots(id, game_id, variant_id, selector_value, player_num) values(55, 37, 44, null, null)`);
 
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(1, 'doubutsu-shogi', null, 'doubutsu-shogi', 'https://en.wikipedia.org/wiki/D%C5%8Dbutsu_sh%C5%8Dgi', 'Madoka Kitao')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(2, 'atari-go', null, 'atari-go', 'https://en.wikipedia.org/wiki/Go_variants#First_Capture')`);
@@ -432,7 +433,7 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(161, 'banqi-large', null, 'banqi-large', 'https://en.wikipedia.org/wiki/Banqi')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(162, 'banqi-large-kanji', null, 'banqi-large', 'https://en.wikipedia.org/wiki/Banqi')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(163, 'serpents', null, 'serpents', 'https://www.bead.game/games/traditional/fighting-serpents')`);
-//      await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(164, 'litter-chess', null, 'litter')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(164, 'litter-chess', null, 'litter')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, copyright) values(165, 'passive-chess', null, 'passive', '2018 Valentin Chelnokov')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(166, 'morris-9', null, '9-men', 'https://en.wikipedia.org/wiki/Nine_Men%27s_Morris')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(167, 'triangle', null, '3-men', 'https://en.wikipedia.org/wiki/Nine_Men%27s_Morris')`);

@@ -41,7 +41,7 @@ Dagaz.Model.BuildDesign = function(design) {
     design.addPlayer("Red", [6, 7, 5, 4, 3, 2, 0, 1]);
     design.addPlayer("Black", [6, 7, 5, 4, 3, 2, 0, 1]);
     design.addTurn(1);
-    design.addTurn(2);
+    design.addTurn(1);
     design.addTurn(2);
 
     design.addPosition("a10", [10, 9, 0, 1, 0, 0, 0, 0]);
@@ -298,31 +298,31 @@ Dagaz.Model.BuildDesign = function(design) {
     design.addMove(7, 6, [4], 0);
     design.addMove(7, 6, [3], 0);
 
-    design.setup("Red", "Soldier", 54);
-    design.setup("Red", "Soldier", 56);
-    design.setup("Red", "Soldier", 58);
-    design.setup("Red", "Soldier", 60);
-    design.setup("Red", "Soldier", 62);
-    design.setup("Red", "Horse", 82);
-    design.setup("Red", "Horse", 88);
+    design.setup("Red", "Tiger", 54);
+    design.setup("Red", "Tiger", 56);
+    design.setup("Red", "Tiger", 58);
+    design.setup("Red", "Tiger", 60);
+    design.setup("Red", "Tiger", 62);
     design.setup("Red", "Elephant", 83);
     design.setup("Red", "Elephant", 87);
-    design.setup("Red", "Chariot", 81);
-    design.setup("Red", "Chariot", 89);
     design.setup("Red", "Mandarin", 84);
     design.setup("Red", "Mandarin", 86);
-    design.setup("Red", "Cannon", 64);
-    design.setup("Red", "Cannon", 70);
     design.setup("Red", "General", 85);
-    design.setup("Black", "Tiger", 27);
-    design.setup("Black", "Tiger", 29);
-    design.setup("Black", "Tiger", 31);
-    design.setup("Black", "Tiger", 33);
-    design.setup("Black", "Tiger", 35);
+    design.setup("Black", "Soldier", 27);
+    design.setup("Black", "Soldier", 29);
+    design.setup("Black", "Soldier", 31);
+    design.setup("Black", "Soldier", 33);
+    design.setup("Black", "Soldier", 35);
+    design.setup("Black", "Horse", 1);
+    design.setup("Black", "Horse", 7);
     design.setup("Black", "Elephant", 2);
     design.setup("Black", "Elephant", 6);
+    design.setup("Black", "Chariot", 0);
+    design.setup("Black", "Chariot", 8);
     design.setup("Black", "Mandarin", 3);
     design.setup("Black", "Mandarin", 5);
+    design.setup("Black", "Cannon", 19);
+    design.setup("Black", "Cannon", 25);
     design.setup("Black", "General", 4);
 }
 
