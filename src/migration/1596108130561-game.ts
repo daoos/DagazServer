@@ -192,6 +192,7 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(151, 37, 'Dodgem', 'dodgem', 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(152, 37, 'Archimedes', 'archimedes', 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total, max_selector) values(153, 37, 'Abalone', 'abalone', 2, 60)`);
+        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(154, 38, 'Captain''s Mistress', 'connect-four', 2)`);
 
         await queryRunner.query(`insert into game_styles(id, game_id, name, suffix, player_num) values(1, 23, 'European', '', null)`);
         await queryRunner.query(`insert into game_styles(id, game_id, name, suffix, player_num) values(2, 23, 'Chinese', '-kanji', null)`);
@@ -269,6 +270,7 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_bots(id, game_id, variant_id, selector_value, player_num) values(53, 37, 152, null, null)`);
         await queryRunner.query(`insert into game_bots(id, game_id, variant_id, selector_value, player_num) values(54, 37, 153, null, null)`);
         await queryRunner.query(`insert into game_bots(id, game_id, variant_id, selector_value, player_num) values(55, 37, 44, null, null)`);
+        await queryRunner.query(`insert into game_bots(id, game_id, variant_id, selector_value, player_num) values(56, 38, 154, null, null)`);
 
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(1, 'doubutsu-shogi', null, 'doubutsu-shogi', 'https://en.wikipedia.org/wiki/D%C5%8Dbutsu_sh%C5%8Dgi', 'Madoka Kitao')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(2, 'atari-go', null, 'atari-go', 'https://en.wikipedia.org/wiki/Go_variants#First_Capture')`);
@@ -638,6 +640,7 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(434, 'abalone', 58, 'abalone-58', 'https://en.wikipedia.org/wiki/Abalone_(board_game)', '1987 Michel Lalet and Laurent Levi')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(435, 'abalone', 59, 'abalone-59', 'https://en.wikipedia.org/wiki/Abalone_(board_game)', '1987 Michel Lalet and Laurent Levi')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(436, 'abalone', 60, 'abalone-60', 'https://en.wikipedia.org/wiki/Abalone_(board_game)', '1987 Michel Lalet and Laurent Levi')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(437, 'connect-four', null, 'connect-four', 'https://en.wikipedia.org/wiki/Connect_Four', '1974 Milton Bradley')`);
 }
 
     public async down(queryRunner: QueryRunner): Promise<any> {

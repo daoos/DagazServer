@@ -22,8 +22,8 @@ Dagaz.Model.checkVersion = function(design, name, value) {
       promote[36] = 26; // Silver General -> Vertical mover!
       promote[34] =  5; // Gold General -> Rook!
       promote[32] = 30; // Drunk Elephant -> Crowned prince
-      promote[20] = 15; // Kirin -> Lion
-      promote[21] =  6; // Phoenix -> Free king
+      promote[20] = 15; // Kirin -> Lion!
+      promote[21] = 38; // Phoenix -> Free king!
   } else {
       checkVersion(design, name, value);
   }

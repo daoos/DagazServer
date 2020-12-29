@@ -614,6 +614,16 @@ Dagaz.Model.BuildDesign = function(design) {
     design.addMove(37, 0, [6], 0);
     design.addMove(37, 0, [5], 0);
 
+    design.addPiece("Free-King!", 38, 22);
+    design.addMove(6, 1, [7, 7], 0);
+    design.addMove(6, 1, [1, 1], 0);
+    design.addMove(6, 1, [4, 4], 0);
+    design.addMove(6, 1, [3, 3], 0);
+    design.addMove(6, 1, [6, 6], 0);
+    design.addMove(6, 1, [2, 2], 0);
+    design.addMove(6, 1, [5, 5], 0);
+    design.addMove(6, 1, [0, 0], 0);
+
     design.setup("White", "Go-Between", 51);
     design.setup("White", "Go-Between", 56);
     design.setup("White", "Pawn", 47);
@@ -786,6 +796,8 @@ Dagaz.View.configure = function(view) {
     view.defPiece("BlackSilver-General", "Black Silver-General");
     view.defPiece("WhiteCopper-General", "White Copper-General");
     view.defPiece("BlackCopper-General", "Black Copper-General");
+    view.defPiece("WhiteFree-King!", "White Free-King!");
+    view.defPiece("BlackFree-King!", "Black Free-King!");
  
     view.defPosition("12a", 460, 460, 40, 40);
     view.defPosition("11a", 420, 460, 40, 40);

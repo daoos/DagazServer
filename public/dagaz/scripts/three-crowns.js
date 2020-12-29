@@ -28,7 +28,6 @@ Dagaz.Model.BuildDesign = function(design) {
     design.checkVersion("show-hints", "false");
     design.checkVersion("show-blink", "false");
     design.checkVersion("three-crowns-extension", "strict");
-//  design.checkVersion("three-crowns-invariant", "strict");
 
     design.addDirection("w");
     design.addDirection("e");
