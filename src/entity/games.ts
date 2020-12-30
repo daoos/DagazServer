@@ -1,5 +1,6 @@
 import { Entity, Column, Index, ManyToOne, JoinColumn, PrimaryColumn } from "typeorm";
 import { realms } from "./realms";
+import { users } from "./users";
 
 @Entity()
 export class games {
@@ -36,4 +37,11 @@ export class games {
 
     @Column({ default: 0, nullable: false })
     is_hidden: number;
+
+    @Index()
+    @Column({ nullable: true })
+    external_ai: number;
+    @ManyToOne(type => users)
+    @JoinColumn({ name: "external_ai" })
+    ai: users;
 }

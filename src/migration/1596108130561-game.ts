@@ -193,6 +193,9 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(152, 37, 'Archimedes', 'archimedes', 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total, max_selector) values(153, 37, 'Abalone', 'abalone', 2, 60)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(154, 38, 'Captain''s Mistress', 'connect-four', 2)`);
+        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(155, 30, 'Neutral King Chess', 'neutral-king', 2)`);
+        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(156, 30, 'Anti King Chess', 'anti-king', 2)`);
+        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total, max_selector) values(157, 30, 'Resurrection Chess', 'resurrection-chess', 2, 2)`);
 
         await queryRunner.query(`insert into game_styles(id, game_id, name, suffix, player_num) values(1, 23, 'European', '', null)`);
         await queryRunner.query(`insert into game_styles(id, game_id, name, suffix, player_num) values(2, 23, 'Chinese', '-kanji', null)`);
@@ -641,6 +644,10 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(435, 'abalone', 59, 'abalone-59', 'https://en.wikipedia.org/wiki/Abalone_(board_game)', '1987 Michel Lalet and Laurent Levi')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(436, 'abalone', 60, 'abalone-60', 'https://en.wikipedia.org/wiki/Abalone_(board_game)', '1987 Michel Lalet and Laurent Levi')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(437, 'connect-four', null, 'connect-four', 'https://en.wikipedia.org/wiki/Connect_Four', '1974 Milton Bradley')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(438, 'neutral-king', null, 'neutral-king', 'https://www.chessvariants.com/winning.dir/neutral-king.html', '1953 V.R. Parton')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(439, 'anti-king', null, 'anti-king', 'https://www.chessvariants.com/diffobjective.dir/anti-king-chess.html', 'Peter Aronson')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(440, 'resurrection-chess', 1, 'chess-1')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(441, 'resurrection-chess', 2, 'soulbringer')`);
 }
 
     public async down(queryRunner: QueryRunner): Promise<any> {
