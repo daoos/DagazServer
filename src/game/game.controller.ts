@@ -7,6 +7,7 @@ import { TokenGuard } from '../auth/token.guard';
 import { Request } from 'express';
 import { Preview } from '../interfaces/preview.interface';
 import { Style } from '../interfaces/style.interface';
+import { Debut } from '../interfaces/debut.interface';
 
 @ApiSecurity('bearer')
 @Controller('api/game')
@@ -36,17 +37,25 @@ export class GameController {
         }
     }
 
+    @Get('debut/:id')
+    @ApiOkResponse({ description: 'Successfully.'})
+    @ApiInternalServerErrorResponse({ description: 'Internal Server error.'})
+    async getDebuts(@Res() res, @Param('id') id): Promise<Debut[]> {
+        try {
+            const r = await this.service.getDebuts(id);
+            return res.status(HttpStatus.OK).json(r);
+        } catch(e) {
+            return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ error: e.message.error.toString(), stack: e.stack});
+        }
+    }
+
     @Get('map')
     @ApiOkResponse({ description: 'Successfully.'})
     @ApiInternalServerErrorResponse({ description: 'Internal Server error.'})
     async getAll(@Res() res): Promise<Game[]> {
         try {
             const r = await this.service.getMap();
-            if (!r) {
-                return res.status(HttpStatus.NOT_FOUND).json();
-            } else {
-                return res.status(HttpStatus.OK).json(r);
-            }
+            return res.status(HttpStatus.OK).json(r);
         } catch(e) {
             return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ error: e.message.error.toString(), stack: e.stack});
         }

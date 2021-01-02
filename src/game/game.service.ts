@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import { Game } from '../interfaces/game.interface';
 import { Preview } from '../interfaces/preview.interface';
 import { Style } from '../interfaces/style.interface';
+import { Debut } from '../interfaces/debut.interface';
 
 @Injectable()
 export class GameService {
@@ -22,6 +23,28 @@ export class GameService {
             return null;
         }
         return x[0].realm_id;
+      }
+
+      async getDebuts(variant: number): Promise<Debut[]> {
+        try {
+            const x = await this.service.query(
+                `select setup_prefix, move_list
+                 from   game_debuts
+                 where  variant_id = $1`, [variant]);
+                 let l: Debut[] = x.map(x => {
+                    let it = new Debut();
+                    it.setup_prefix = x.setup_prefix;
+                    it.move_list = x.move_list;
+                    return it;
+                });
+                return l;
+          } catch (error) {
+            console.error(error);
+            throw new InternalServerErrorException({
+                status: HttpStatus.BAD_REQUEST,
+                error: error
+            });
+          }
       }
 
       async getMap(): Promise<Game[]> {

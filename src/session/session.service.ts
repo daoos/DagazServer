@@ -354,7 +354,7 @@ export class SessionService {
                  left   join game_variants d on (d.id = a.variant_id)
                  inner  join user_games e on (e.session_id = a.id)
                  inner  join users f on (f.id = e.user_id and f.realm_id = $2)
-                 inner  join user_games g on (g.session_id = a.id and g.user_id = $3 and g.is_ai = 0)
+                 inner  join user_games g on (g.session_id = a.id and g.user_id = $3)
                  left   join game_styles h on (h.game_id = b.id and h.player_num = g.player_num)
                  left   join user_games x on (x.session_id = a.id and x.is_ai = 1)
                  group  by a.id, a.status_id, a.game_id, d.id, d.name, b.name, d.filename, b.filename, a.created, c.name, b.players_total, a.last_setup, h.suffix, x.id
@@ -795,11 +795,11 @@ export class SessionService {
                         a.status_id as status_id, d.id as ai, a.last_user as last_user,
                         e.result_id as result_id
                  from   game_sessions a
-                 inner  join user_games b on (b.session_id = a.id and b.is_ai = 0)
+                 inner  join user_games b on (b.session_id = a.id and b.user_id = $1)
                  left   join user_games d on (d.session_id = a.id and d.is_ai = 1)
                  inner  join games c on (c.id = a.game_id)
                  left   join game_alerts e on (e.session_id = a.id)
-                 where  a.id = $1`, [s.id]);
+                 where  a.id = $2`, [user, s.id]);
             if (!x || x.length == 0) {
                  return null;
             }
@@ -862,7 +862,7 @@ export class SessionService {
             if (!x.player_num) {
                 x.player_num = 1;
             }
-            await this.joinToSession(user, x, false);
+            await this.joinToSession(user, x, x.ai == 1);
             if (suffix) {
                 x.filename = x.filename + suffix;
             }
