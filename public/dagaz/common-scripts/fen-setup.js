@@ -87,6 +87,13 @@ var createPiece = function(c) {
   return null;
 }
 
+var checkCastling = function(board, pos, m) {
+  if (m != '-') return;
+  piece = board.getPiece(pos);
+  if (piece === null) return;
+  piece.setValue(0, true);
+}
+
 Dagaz.Model.setup = function(board, init) {
   var design = Dagaz.Model.design;
   var setup  = getSetup(init);
@@ -106,6 +113,15 @@ Dagaz.Model.setup = function(board, init) {
                }
                if (pos >= Dagaz.Model.WIDTH * Dagaz.Model.HEIGHT) break;
            }
+      }
+      var r = setup.match(/\s([kqKQ-]{1,4})\s/);
+      if (r) {
+          var mask = r[1];
+          if (mask == '-') mask = '----';
+          checkCastling(board,  7, mask[0]);
+          checkCastling(board,  0, mask[1]);
+          checkCastling(board, 63, mask[2]);
+          checkCastling(board, 56, mask[3]);
       }
       var turn = getTurn(init);
       if (turn) {
