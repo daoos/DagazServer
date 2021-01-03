@@ -803,6 +803,15 @@ export class SessionService {
             if (!x || x.length == 0) {
                  return null;
             }
+            if (!x[0].last_setup && s.last_setup) {
+                await this.service.createQueryBuilder("game_sessions")
+                .update(game_sessions)
+                .set({ 
+                    last_setup: s.last_setup
+                 })
+                .where("id = :id", {id: s.id})
+                .execute();
+            }
             s.game_id = x[0].game_id;
             s.game = x[0].game;
             s.filename = x[0].filename;
