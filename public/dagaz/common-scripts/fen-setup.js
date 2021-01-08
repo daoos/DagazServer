@@ -118,10 +118,10 @@ Dagaz.Model.setup = function(board, init) {
       if (r) {
           var mask = r[1];
           if (mask == '-') mask = '----';
-          checkCastling(board,  7, mask[0]);
-          checkCastling(board,  0, mask[1]);
-          checkCastling(board, 63, mask[2]);
-          checkCastling(board, 56, mask[3]);
+          checkCastling(board, 63, mask[0]);
+          checkCastling(board, 56, mask[1]);
+          checkCastling(board,  7, mask[2]);
+          checkCastling(board,  0, mask[3]);
       }
       var turn = getTurn(init);
       if (turn) {
@@ -154,20 +154,6 @@ var isMoved = function(design, board, pos, type) {
 var getCastling = function(design, board) {
   if ((Dagaz.Model.WIDTH != 8) || (Dagaz.Model.HEIGHT != 8)) return "----";
   var r = "";
-  if (isMoved(design, board, 4, 5)) {
-      r += "--";
-  } else {
-      if (isMoved(design, board, 7, 1)) {
-          r += "-";
-      } else {
-          r += "k";
-      }
-      if (isMoved(design, board, 0, 1)) {
-          r += "-";
-      } else {
-          r += "q";
-      }
-  }
   if (isMoved(design, board, 60, 5)) {
       r += "--";
   } else {
@@ -180,6 +166,20 @@ var getCastling = function(design, board) {
           r += "-";
       } else {
           r += "Q";
+      }
+  }
+  if (isMoved(design, board, 4, 5)) {
+      r += "--";
+  } else {
+      if (isMoved(design, board, 7, 1)) {
+          r += "-";
+      } else {
+          r += "k";
+      }
+      if (isMoved(design, board, 0, 1)) {
+          r += "-";
+      } else {
+          r += "q";
       }
   }
   return r;
