@@ -4,7 +4,7 @@ import { game_variants } from "./game_variants";
 
 @Entity()
 @Unique(["variant_id", "setup_prefix"])
-export class game_debuts {
+export class game_openings {
     @PrimaryGeneratedColumn()
     id: number;
 

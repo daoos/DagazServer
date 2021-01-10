@@ -25,11 +25,11 @@ export class GameService {
         return x[0].realm_id;
       }
 
-      async getDebuts(variant: number): Promise<Debut[]> {
+      async getOpenings(variant: number): Promise<Debut[]> {
         try {
             const x = await this.service.query(
                 `select setup_prefix, move_list
-                 from   game_debuts
+                 from   game_openings
                  where  variant_id = $1`, [variant]);
                  let l: Debut[] = x.map(x => {
                     let it = new Debut();

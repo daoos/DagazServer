@@ -71,7 +71,7 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(28, 32, 'Dablot Dares', 'dablot-dares', 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(29, 32, 'Dablot Frostviken', 'dablot-frostviken', 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(30, 32, 'Dablot Prejjesne', 'dablot-prejjesne', 2)`);
-        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total, max_selector) values(31, 30, 'Chess', 'chess', 2, 8)`);
+        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total, max_selector) values(31, 30, 'Chess', 'chess', 2, 9)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total, max_selector) values(32, 30, 'Courier Chess', 'courier-chess', 2, 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(33, 30, 'Fighting Chess', 'fighting-chess', 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(34, 30, 'Makruk', 'makruk', 2)`);

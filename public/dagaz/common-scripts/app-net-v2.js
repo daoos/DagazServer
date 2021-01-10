@@ -965,7 +965,8 @@ App.prototype.exec = function() {
       if (last_move === null) return;
       this.move = null;
       _.each(this.board.moves, function(move) {
-          if (move.toString().startsWith(last_move)) {
+          var m = move.toString() + ' ';
+          if (m.startsWith(last_move + ' ')) {
               this.move = move;
           }
       }, this);

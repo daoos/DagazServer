@@ -40,9 +40,9 @@ export class GameController {
     @Get('debut/:id')
     @ApiOkResponse({ description: 'Successfully.'})
     @ApiInternalServerErrorResponse({ description: 'Internal Server error.'})
-    async getDebuts(@Res() res, @Param('id') id): Promise<Debut[]> {
+    async getOpenings(@Res() res, @Param('id') id): Promise<Debut[]> {
         try {
-            const r = await this.service.getDebuts(id);
+            const r = await this.service.getOpenings(id);
             return res.status(HttpStatus.OK).json(r);
         } catch(e) {
             return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ error: e.message.error.toString(), stack: e.stack});
