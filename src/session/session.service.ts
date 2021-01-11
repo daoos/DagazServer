@@ -793,7 +793,7 @@ export class SessionService {
                         c.players_total as players_total, a.last_setup as last_setup,
                         b.player_num as player_num, b.id as uid, b.user_id as user_id,
                         a.status_id as status_id, d.id as ai, a.last_user as last_user,
-                        e.result_id as result_id
+                        e.result_id as result_id, b.is_ai as is_ai
                  from   game_sessions a
                  inner  join user_games b on (b.session_id = a.id and b.user_id = $1)
                  left   join user_games d on (d.session_id = a.id and d.is_ai = 1)
@@ -817,7 +817,7 @@ export class SessionService {
             s.filename = x[0].filename;
             s.players_total = x[0].players_total;
             s.last_setup = x[0].last_setup;
-            x = x.filter((it) => { return it.user_id == user; });
+            x = x.filter((it) => { return (it.user_id == user) && (it.is_ai == 0); });
             if ((x.length == 1) && (x[0].status_id != 3)) {
                 s.player_num = x[0].player_num;
                 s.uid = x[0].uid;
@@ -847,6 +847,19 @@ export class SessionService {
              return "";
         }
         return x[0].suffix;
+    }
+
+    async isInternalAi(game_id: number, variant_id: number, selector_value: number, player_num: number): Promise<boolean> {
+        let x = await this.service.query(
+            `select count(*) as cnt
+             from   game_bots
+             where  game_id = $1 and coalesce(variant_id, $2) = $3
+             and    coalesce(selector_value, $4) = $5
+             and    coalesce(player_num, $6) = $7`, [game_id, variant_id, variant_id, selector_value, selector_value, player_num, player_num]);
+        if (!x || x.length == 0) {
+             return false;
+        }
+        return x[0].cnt > 0;
     }
 
     async getExternalAI(game_id: number, variant_id: number): Promise<number> {
@@ -897,11 +910,12 @@ export class SessionService {
             }
             if (x.with_ai) {
                 const player_num = x.player_num;
+                const f = await this.isInternalAi(x.game_id, x.variant_id, x.selector_value, x.player_num);
                 const external_ai = await this.getExternalAI(x.game_id, x.variant_id);
-                if (external_ai) {
-                    await this.joinToSession(external_ai, x, false);
-                } else {
+                if (f || !external_ai) {
                     await this.joinToSession(user, x, true);
+                } else {
+                    await this.joinToSession(external_ai, x, false);
                 }
                 x.player_num = player_num;
             }
