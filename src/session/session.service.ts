@@ -916,6 +916,7 @@ export class SessionService {
                     await this.joinToSession(user, x, true);
                 } else {
                     await this.joinToSession(external_ai, x, false);
+                    x.with_ai = false;
                 }
                 x.player_num = player_num;
             }
