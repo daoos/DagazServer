@@ -7,7 +7,7 @@ import { TokenGuard } from '../auth/token.guard';
 import { Request } from 'express';
 import { Preview } from '../interfaces/preview.interface';
 import { Style } from '../interfaces/style.interface';
-import { Debut } from '../interfaces/debut.interface';
+import { Opening } from '../interfaces/opening.interface';
 
 @ApiSecurity('bearer')
 @Controller('api/game')
@@ -37,10 +37,10 @@ export class GameController {
         }
     }
 
-    @Get('debut/:id')
+    @Get('openings/:id')
     @ApiOkResponse({ description: 'Successfully.'})
     @ApiInternalServerErrorResponse({ description: 'Internal Server error.'})
-    async getOpenings(@Res() res, @Param('id') id): Promise<Debut[]> {
+    async getOpenings(@Res() res, @Param('id') id): Promise<Opening[]> {
         try {
             const r = await this.service.getOpenings(id);
             return res.status(HttpStatus.OK).json(r);

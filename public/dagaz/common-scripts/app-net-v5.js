@@ -807,11 +807,7 @@ var addMove = function(move, setup, id) {
 
 Dagaz.Controller.resign = function() {
   if (uid && !confirm("Resign?")) return;
-  if (bot === null) {
-      sendAlert(2);
-  } else {
-      loseGame();
-  }
+  loseGame();
 }
 
 Dagaz.Controller.drawOffer = function() {

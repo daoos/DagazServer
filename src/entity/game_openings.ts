@@ -1,11 +1,11 @@
-import { Column, Entity, Index, JoinColumn, ManyToOne, PrimaryGeneratedColumn, Unique } from "typeorm";
+import { Column, Entity, Index, JoinColumn, ManyToOne, PrimaryColumn, Unique } from "typeorm";
 import { games } from "./games";
 import { game_variants } from "./game_variants";
 
 @Entity()
 @Unique(["variant_id", "setup_prefix"])
 export class game_openings {
-    @PrimaryGeneratedColumn()
+    @PrimaryColumn()
     id: number;
 
     @Index()

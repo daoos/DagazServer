@@ -849,6 +849,26 @@ export class SessionService {
         return x[0].suffix;
     }
 
+    async getExternalAI(game_id: number, variant_id: number): Promise<number> {
+        if (variant_id) {
+            let x = await this.service.query(
+                `select a.external_ai
+                 from   game_variants a
+                 where  a.id = $1`, [variant_id]);
+            if (x && x.length > 0) {
+                return x[0].external_ai;
+            }
+        }
+        let x = await this.service.query(
+            `select a.external_ai
+             from   games a
+             where  a.id = $1`, [game_id]);
+        if (x && x.length > 0) {
+             return x[0].external_ai;
+        }
+        return null;
+    }
+
     async createSession(user:number, x: Sess): Promise<Sess> {
         try {
             const suffix = await this.getSuffix(x.game_id, x.player_num);
@@ -877,7 +897,12 @@ export class SessionService {
             }
             if (x.with_ai) {
                 const player_num = x.player_num;
-                await this.joinToSession(user, x, true);
+                const external_ai = await this.getExternalAI(x.game_id, x.variant_id);
+                if (external_ai) {
+                    await this.joinToSession(external_ai, x, false);
+                } else {
+                    await this.joinToSession(user, x, true);
+                }
                 x.player_num = player_num;
             }
             return x;

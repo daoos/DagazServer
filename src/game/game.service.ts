@@ -4,7 +4,7 @@ import { Repository } from 'typeorm';
 import { Game } from '../interfaces/game.interface';
 import { Preview } from '../interfaces/preview.interface';
 import { Style } from '../interfaces/style.interface';
-import { Debut } from '../interfaces/debut.interface';
+import { Opening } from '../interfaces/opening.interface';
 
 @Injectable()
 export class GameService {
@@ -25,14 +25,14 @@ export class GameService {
         return x[0].realm_id;
       }
 
-      async getOpenings(variant: number): Promise<Debut[]> {
+      async getOpenings(variant: number): Promise<Opening[]> {
         try {
             const x = await this.service.query(
                 `select setup_prefix, move_list
                  from   game_openings
                  where  variant_id = $1`, [variant]);
-                 let l: Debut[] = x.map(x => {
-                    let it = new Debut();
+                 let l: Opening[] = x.map(x => {
+                    let it = new Opening();
                     it.setup_prefix = x.setup_prefix;
                     it.move_list = x.move_list;
                     return it;
@@ -88,7 +88,7 @@ export class GameService {
                         a.players_total as players_total, a.created as created, 
                         a.main_time as main_time, a.additional_time as additional_time,
                         a.realm_id as realm_id, a.max_selector as max_selector,
-                        b.bots as bots,
+                        b.bots as bots, a.external_ai as external_ai,
                       ( select count(*) from game_sessions where game_id = a.id and status_id = 1 and user_id <> $1) waiting,
                       ( select count(*) from game_sessions where game_id = a.id and status_id <> 1) all_games
                    from   games a
@@ -115,6 +115,7 @@ export class GameService {
                 it.max_selector = x.max_selector;
                 it.waiting = x.waiting;
                 it.all = x.all_games;
+                it.external_ai = x.external_ai;
                 if (x.bots) {
                     it.bots = x.bots;
                 }
@@ -140,7 +141,7 @@ export class GameService {
                 `select a.id as id, a.name as name, a.filename as filename, 
                         a.players_total as players_total,
                         a.max_selector as max_selector,
-                        c.bots as bots,
+                        c.bots as bots, a.external_ai as external_ai,
                       ( select count(*) from game_sessions where game_id = b.id and variant_id = a.id and status_id = 1 and user_id <> $1) waiting,
                       ( select count(*) from game_sessions where game_id = b.id and variant_id = a.id and status_id <> 1) all_games
                    from   game_variants a
@@ -165,6 +166,7 @@ export class GameService {
                 it.max_selector = x.max_selector;
                 it.waiting = x.waiting;
                 it.all = x.all_games;
+                it.external_ai = x.external_ai;
                 if (x.bots) {
                     it.bots = x.bots;
                 }

@@ -648,6 +648,7 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(439, 'anti-king', null, 'anti-king', 'https://www.chessvariants.com/diffobjective.dir/anti-king-chess.html', 'Peter Aronson')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(440, 'resurrection-chess', 1, 'chess-1')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(441, 'resurrection-chess', 2, 'soulbringer')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(442, 'chess', 9, 'chess-9', 'https://en.wikipedia.org/wiki/Chess')`);
 }
 
     public async down(queryRunner: QueryRunner): Promise<any> {
