@@ -52,4 +52,7 @@ export class Game {
 
     @ApiPropertyOptional()
     external_ai: number;
+
+    @ApiPropertyOptional()
+    no_ai: string;
 }

@@ -35,4 +35,7 @@ export class game_variants {
     @ManyToOne(type => users)
     @JoinColumn({ name: "external_ai" })
     ai: users;
+
+    @Column({ type: "text", nullable: true})
+    no_ai: string;
 }

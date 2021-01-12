@@ -795,11 +795,11 @@ export class SessionService {
                         a.status_id as status_id, d.id as ai, a.last_user as last_user,
                         e.result_id as result_id, b.is_ai as is_ai
                  from   game_sessions a
-                 inner  join user_games b on (b.session_id = a.id and b.user_id = $1)
+                 inner  join user_games b on (b.session_id = a.id and b.is_ai = 0)
                  left   join user_games d on (d.session_id = a.id and d.is_ai = 1)
                  inner  join games c on (c.id = a.game_id)
                  left   join game_alerts e on (e.session_id = a.id)
-                 where  a.id = $2`, [user, s.id]);
+                 where  a.id = $1`, [s.id]);
             if (!x || x.length == 0) {
                  return null;
             }

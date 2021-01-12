@@ -88,7 +88,7 @@ export class GameService {
                         a.players_total as players_total, a.created as created, 
                         a.main_time as main_time, a.additional_time as additional_time,
                         a.realm_id as realm_id, a.max_selector as max_selector,
-                        b.bots as bots, a.external_ai as external_ai,
+                        b.bots as bots, a.external_ai as external_ai, a.no_ai as no_ai,
                       ( select count(*) from game_sessions where game_id = a.id and status_id = 1 and user_id <> $1) waiting,
                       ( select count(*) from game_sessions where game_id = a.id and status_id <> 1) all_games
                    from   games a
@@ -115,6 +115,7 @@ export class GameService {
                 it.max_selector = x.max_selector;
                 it.waiting = x.waiting;
                 it.all = x.all_games;
+                it.no_ai = x.no_ai;
                 it.external_ai = x.external_ai;
                 if (x.bots) {
                     it.bots = x.bots;
@@ -141,7 +142,7 @@ export class GameService {
                 `select a.id as id, a.name as name, a.filename as filename, 
                         a.players_total as players_total,
                         a.max_selector as max_selector,
-                        c.bots as bots, a.external_ai as external_ai,
+                        c.bots as bots, a.external_ai as external_ai, a.no_ai as no_ai,
                       ( select count(*) from game_sessions where game_id = b.id and variant_id = a.id and status_id = 1 and user_id <> $1) waiting,
                       ( select count(*) from game_sessions where game_id = b.id and variant_id = a.id and status_id <> 1) all_games
                    from   game_variants a
@@ -166,6 +167,7 @@ export class GameService {
                 it.max_selector = x.max_selector;
                 it.waiting = x.waiting;
                 it.all = x.all_games;
+                it.no_ai = x.no_ai;
                 it.external_ai = x.external_ai;
                 if (x.bots) {
                     it.bots = x.bots;
