@@ -196,6 +196,7 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(155, 30, 'Neutral King Chess', 'neutral-king', 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(156, 30, 'Anti King Chess', 'anti-king', 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total, max_selector) values(157, 30, 'Resurrection Chess', 'resurrection-chess', 2, 2)`);
+        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(158, 30, 'Chess960', 'fisher-chess', 2)`);
 
         await queryRunner.query(`insert into game_styles(id, game_id, name, suffix, player_num) values(1, 23, 'European', '', null)`);
         await queryRunner.query(`insert into game_styles(id, game_id, name, suffix, player_num) values(2, 23, 'Chinese', '-kanji', null)`);
@@ -649,6 +650,7 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(440, 'resurrection-chess', 1, 'chess-1')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(441, 'resurrection-chess', 2, 'soulbringer')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(442, 'chess', 9, 'chess-9', 'https://en.wikipedia.org/wiki/Chess')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(443, 'fisher-chess', null, 'fisher-chess', 'https://en.wikipedia.org/wiki/Fischer_random_chess', '1996 Bobby Fischer')`);
 }
 
     public async down(queryRunner: QueryRunner): Promise<any> {
