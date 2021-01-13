@@ -197,6 +197,8 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(156, 30, 'Anti King Chess', 'anti-king', 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total, max_selector) values(157, 30, 'Resurrection Chess', 'resurrection-chess', 2, 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(158, 30, 'Chess960', 'fisher-chess', 2)`);
+        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total, max_selector) values(159, 37, 'Mana', 'mana', 2, 2)`);
+        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(160, 38, 'Three Musketeers', 'musketeers', 2)`);
 
         await queryRunner.query(`insert into game_styles(id, game_id, name, suffix, player_num) values(1, 23, 'European', '', null)`);
         await queryRunner.query(`insert into game_styles(id, game_id, name, suffix, player_num) values(2, 23, 'Chinese', '-kanji', null)`);
@@ -275,6 +277,7 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_bots(id, game_id, variant_id, selector_value, player_num) values(54, 37, 153, null, null)`);
         await queryRunner.query(`insert into game_bots(id, game_id, variant_id, selector_value, player_num) values(55, 37, 44, null, null)`);
         await queryRunner.query(`insert into game_bots(id, game_id, variant_id, selector_value, player_num) values(56, 38, 154, null, null)`);
+        await queryRunner.query(`insert into game_bots(id, game_id, variant_id, selector_value, player_num) values(57, 38, 160, null, 1)`);
 
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(1, 'doubutsu-shogi', null, 'doubutsu-shogi', 'https://en.wikipedia.org/wiki/D%C5%8Dbutsu_sh%C5%8Dgi', 'Madoka Kitao')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(2, 'atari-go', null, 'atari-go', 'https://en.wikipedia.org/wiki/Go_variants#First_Capture')`);
@@ -651,6 +654,9 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(441, 'resurrection-chess', 2, 'soulbringer')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(442, 'chess', 9, 'chess-9', 'https://en.wikipedia.org/wiki/Chess')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(443, 'fisher-chess', null, 'fisher-chess', 'https://en.wikipedia.org/wiki/Fischer_random_chess', '1996 Bobby Fischer')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(444, 'mana', 1, 'mana-1', 'http://www.zillions-of-games.com/cgi-bin/zilligames/submissions.cgi?do=show;id=2462', '2005 Claude Leroy')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(445, 'mana', 2, 'mana-2', 'http://www.zillions-of-games.com/cgi-bin/zilligames/submissions.cgi?do=show;id=2462', '2005 Claude Leroy')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(446, 'musketeers', null, 'musketeers', 'http://www.di.fc.ul.pt/~jpn/gv/3musketeers.htm', 'Haar Hoolim')`);
 }
 
     public async down(queryRunner: QueryRunner): Promise<any> {
