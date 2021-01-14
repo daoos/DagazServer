@@ -199,6 +199,7 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(158, 30, 'Chess960', 'fisher-chess', 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total, max_selector) values(159, 37, 'Mana', 'mana', 2, 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(160, 38, 'Three Musketeers', 'musketeers', 2)`);
+//      await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(161, 37, 'Terrace', 'terrace', 2)`);
 
         await queryRunner.query(`insert into game_styles(id, game_id, name, suffix, player_num) values(1, 23, 'European', '', null)`);
         await queryRunner.query(`insert into game_styles(id, game_id, name, suffix, player_num) values(2, 23, 'Chinese', '-kanji', null)`);
@@ -278,6 +279,7 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_bots(id, game_id, variant_id, selector_value, player_num) values(55, 37, 44, null, null)`);
         await queryRunner.query(`insert into game_bots(id, game_id, variant_id, selector_value, player_num) values(56, 38, 154, null, null)`);
         await queryRunner.query(`insert into game_bots(id, game_id, variant_id, selector_value, player_num) values(57, 38, 160, null, 1)`);
+//      await queryRunner.query(`insert into game_bots(id, game_id, variant_id, selector_value, player_num) values(58, 37, 161, null, null)`);
 
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(1, 'doubutsu-shogi', null, 'doubutsu-shogi', 'https://en.wikipedia.org/wiki/D%C5%8Dbutsu_sh%C5%8Dgi', 'Madoka Kitao')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(2, 'atari-go', null, 'atari-go', 'https://en.wikipedia.org/wiki/Go_variants#First_Capture')`);
@@ -657,6 +659,7 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(444, 'mana', 1, 'mana-1', 'http://www.zillions-of-games.com/cgi-bin/zilligames/submissions.cgi?do=show;id=2462', '2005 Claude Leroy')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(445, 'mana', 2, 'mana-2', 'http://www.zillions-of-games.com/cgi-bin/zilligames/submissions.cgi?do=show;id=2462', '2005 Claude Leroy')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(446, 'musketeers', null, 'musketeers', 'http://www.di.fc.ul.pt/~jpn/gv/3musketeers.htm', 'Haar Hoolim')`);
+//      await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(447, 'terrace', null, 'terrace', 'https://en.wikipedia.org/wiki/Terrace_(board_game)', '1991 Silver Ventures')`);
 }
 
     public async down(queryRunner: QueryRunner): Promise<any> {

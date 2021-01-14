@@ -1,7 +1,7 @@
 (function() {
 
 var WAIT_FRAME      = 100;
-var GAME_OVER_DELAY = 1000;
+var GAME_OVER_DELAY = 2000;
 var AI_WAIT         = 3000;
 
 var STATE = {

@@ -65,7 +65,7 @@ App.prototype.gameOver = function(text, player) {
   Dagaz.Controller.Done(this.board);
   this.view.markPositions(Dagaz.View.markType.KO, []);
   if (onceGameOver) {
-      _.delay(gameOver, 1000, text, this, player);
+      _.delay(gameOver, 2000, text, this, player);
       onceGameOver = false;
   }
   if (this.board && Dagaz.Model.showLose) {

@@ -12,14 +12,7 @@ var CheckInvariants = Dagaz.Model.CheckInvariants;
 
 Dagaz.Model.CheckInvariants = function(board) {
   var design = Dagaz.Model.design;
-  var f = false;
-/*for (var b = board;!_.isUndefined(b.move); b = b.parent) {
-      if (b.move.mode < 3) {
-          f = true;
-          break;
-      }
-      if (b.parent === null) break;
-  }*/
+  var f = (board.turn >= 13);
   _.each(board.moves, function(move) {
       if (_.isUndefined(move.failed)) {
           var action = null;

@@ -1,0 +1,66 @@
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>Terrace</title>
+</head>
+<body>
+
+<img id="Board" style="display:none" src="images/terrace/board.png">
+<img id="BlackT" style="display:none" src="images/terrace/bt.png">
+<img id="WhiteT" style="display:none" src="images/terrace/wt.png">
+<img id="BlackS" style="display:none" src="images/terrace/bs.png">
+<img id="WhiteS" style="display:none" src="images/terrace/ws.png">
+<img id="BlackM" style="display:none" src="images/terrace/bm.png">
+<img id="WhiteM" style="display:none" src="images/terrace/wm.png">
+<img id="BlackL" style="display:none" src="images/terrace/bl.png">
+<img id="WhiteL" style="display:none" src="images/terrace/wl.png">
+
+<table style="margin:auto; font-family:sans-serif; font-size:14px" id="Table">
+<tr><td>
+Copyright (c) 1991 Silver Ventures
+<a target="_blank" href="https://en.wikipedia.org/wiki/Terrace_(board_game)">Rules</a>
+<a href="javascript:Dagaz.Controller.resign()">I Resign</a>
+<a href="javascript:Dagaz.Controller.sound()" id="sound">no Sound</a>
+</td></tr>
+<tr style="height:566px; vertical-align:top">
+<td id="CanvasCell" style="width:549px">
+<canvas id="Canvas" width="549" height="566" style="cursor:default">Broken canvas...</canvas>
+</td><td style="width:300px;">
+<div style="height:510px; overflow:auto" id="ScrollDiv">
+<img id="GlyphImage"><p id="HelpText"></p>
+<p id="GameSession"></p>
+</div>
+</td>
+</tr>
+<tr>
+<td>
+<div style="height:100px; width:500px; margin-left:auto; margin-right:auto">
+<table>
+<tr style="display:none" id="PieceInfo">
+<td><img id="PieceInfoImage"></td><td id="PieceInfoText"></td>
+</tr>
+</table>
+</div>
+</td>
+</tr>
+</table>
+
+<script src="vendor/underscore-min.js"></script>
+<script src="vendor/jquery-3.5.1.min.js"></script>
+<script src="common-scripts/dagaz.js"></script>
+<script src="common-scripts/zrf-model.js"></script>
+<script src="common-scripts/zobrist.js"></script>
+<script src="common-scripts/common-setup-v2.js"></script>
+<script src="common-scripts/2d-view-v2.js"></script>
+<script src="common-scripts/move-list-v2.js"></script>
+<script src="common-scripts/sound-manager-v2.js"></script>
+<script src="scripts/terrace-ai-fast.js"></script>
+<script src="scripts/terrace-ai.js"></script>
+<script src="scripts/terrace-goal.js"></script>
+<script src="scripts/terrace-extension.js"></script>
+<script src="scripts/terrace-restriction.js"></script>
+<script src="scripts/terrace.js"></script>
+<script src="common-scripts/app-net-v5.js"></script>
+
+</body>
+</html>

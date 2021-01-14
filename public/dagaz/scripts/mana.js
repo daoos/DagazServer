@@ -41,21 +41,21 @@ Dagaz.Model.BuildDesign = function(design) {
     design.addPlayer("White", [0, 2, 1, 4, 3, 5, 6]);
     design.addPlayer("Black", [0, 1, 2, 3, 4, 6, 5]);
 
-    design.addTurn(1, [4]);
-    design.addTurn(1, [4]);
-    design.addTurn(1, [4]);
-    design.addTurn(1, [4]);
-    design.addTurn(1, [4]);
-    design.addTurn(1, [4]);
-    design.addTurn(2, [4]);
-    design.addTurn(2, [4]);
-    design.addTurn(2, [4]);
-    design.addTurn(2, [4]);
-    design.addTurn(2, [4]);
-    design.addTurn(2, [4]);
+    design.addTurn(1, [4]); // 0
+    design.addTurn(1, [4]); // 1
+    design.addTurn(1, [4]); // 2
+    design.addTurn(1, [4]); // 3
+    design.addTurn(1, [4]); // 4
+    design.addTurn(1, [4]); // 5
+    design.addTurn(2, [4]); // 6
+    design.addTurn(2, [4]); // 7
+    design.addTurn(2, [4]); // 8
+    design.addTurn(2, [4]); // 9
+    design.addTurn(2, [4]); // 10
+    design.addTurn(2, [4]); // 11
     design.repeatMark();
-    design.addTurn(1);
-    design.addTurn(2);
+    design.addTurn(1); // 12
+    design.addTurn(2); // 13
 
     design.addPosition("a7", [1, 1, 0, 0, 0, 1, 0]);
     design.addPosition("b7", [1, 1, -1, 0, 0, 1, 0]);
