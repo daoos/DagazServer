@@ -40,6 +40,7 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into games(id, name, filename, players_total, main_time, additional_time) values(41, 'Halma', 'halma-10', 2, 0, 1000)`);
         await queryRunner.query(`insert into games(id, name, filename, players_total, main_time, additional_time) values(42, 'Seega', 'seega', 2, 0, 1000)`);
 //      await queryRunner.query(`insert into games(id, name, filename, players_total, main_time, additional_time) values(43, 'Quantum tic-tac-toe', 'qxo', 2, 0, 1000)`);
+        await queryRunner.query(`insert into games(id, name, filename, players_total, main_time, additional_time) values(44, 'Tibetian checkers', 'tibetian-checkers', 2, 0, 1000)`);
 
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(1, 17, 'Go (9x9)', 'go-9x9', 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(2, 17, 'Go (19x19)', 'go-19x19', 2)`);
@@ -660,6 +661,7 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(445, 'mana', 2, 'mana-2', 'http://www.zillions-of-games.com/cgi-bin/zilligames/submissions.cgi?do=show;id=2462', '2005 Claude Leroy')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(446, 'musketeers', null, 'musketeers', 'http://www.di.fc.ul.pt/~jpn/gv/3musketeers.htm', 'Haar Hoolim')`);
 //      await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(447, 'terrace', null, 'terrace', 'https://en.wikipedia.org/wiki/Terrace_(board_game)', '1991 Silver Ventures')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(448, 'tibetian-checkers', null, 'tibetian-checkers')`);
 }
 
     public async down(queryRunner: QueryRunner): Promise<any> {
