@@ -201,6 +201,7 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total, max_selector) values(159, 37, 'Mana', 'mana', 2, 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(160, 38, 'Three Musketeers', 'musketeers', 2)`);
 //      await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(161, 37, 'Terrace', 'terrace', 2)`);
+//      await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(162, 30, 'Bomb Chess', 'bomb-chess', 2)`);
 
         await queryRunner.query(`insert into game_styles(id, game_id, name, suffix, player_num) values(1, 23, 'European', '', null)`);
         await queryRunner.query(`insert into game_styles(id, game_id, name, suffix, player_num) values(2, 23, 'Chinese', '-kanji', null)`);
@@ -662,6 +663,7 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(446, 'musketeers', null, 'musketeers', 'http://www.di.fc.ul.pt/~jpn/gv/3musketeers.htm', 'Haar Hoolim')`);
 //      await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(447, 'terrace', null, 'terrace', 'https://en.wikipedia.org/wiki/Terrace_(board_game)', '1991 Silver Ventures')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(448, 'tibetian-checkers', null, 'tibetian-checkers')`);
+//      await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(449, 'bomb-chess', null, 'bomb-chess')`);
 }
 
     public async down(queryRunner: QueryRunner): Promise<any> {

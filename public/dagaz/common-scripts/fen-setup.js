@@ -84,6 +84,7 @@ var createPiece = function(c) {
   if (c == 'q') return Dagaz.Model.createPiece(4, 2);
   if (c == 'K') return Dagaz.Model.createPiece(5, 1);
   if (c == 'k') return Dagaz.Model.createPiece(5, 2);
+  if (c == 'm') return Dagaz.Model.createPiece(6, 3);
   return null;
 }
 
@@ -138,6 +139,7 @@ var getPieceNotation = function(piece) {
   if (piece.type > 2)  r = 'B';
   if (piece.type > 3)  r = 'Q';
   if (piece.type > 4)  r = 'K';
+  if (piece.type > 5)  r = 'M';
   if (piece.player > 1) {
       return r.toLowerCase();
   }
