@@ -399,6 +399,7 @@ var recovery = function() {
         401: function() {
              Dagaz.Controller.app.state = STATE.STOP;
              console.log('Recovery: Bad User!');
+             window.location = '/';
         },
         404: function() {
              Dagaz.Controller.app.state = STATE.STOP;
