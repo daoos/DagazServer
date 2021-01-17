@@ -42,6 +42,8 @@ function View2D() {
   this.ready   = false;
   this.done    = false;
   this.valid   = false;
+  this.popups  = [];
+  this.stack   = [];
 }
 
 Dagaz.View.getView = function() {
@@ -59,11 +61,26 @@ Dagaz.View.inRect = function(view, pos, x, y) {
 }
 
 Dagaz.View.pointToPositions = function(view, x, y) {
-  return _.chain(_.range(view.pos.length))
-   .filter(function(pos) {
-      return Dagaz.View.inRect(view, pos, x, y);
-    })
-   .value();
+  if (view.stack.length > 0) {
+      var frame = view.stack[ view.stack.length - 1 ];
+      var popup = view.popups[ frame.popup ];
+      for (var i = 0; i < popup.g.length; i++) {
+           var pos = popup.g[i];
+           var sx  = frame.x + pos.x;
+           var sy  = frame.y + pos.y;
+           if ((x > sx) && (y > sy) &&
+               (x < sx + pos.dx) && (y < sy + pos.dy)) {
+               return [ Dagaz.Model.stringToPos(pos.name) ];
+           }
+      }
+      return [];
+  } else {
+      return _.chain(_.range(view.pos.length))
+       .filter(function(pos) {
+          return Dagaz.View.inRect(view, pos, x, y);
+        })
+       .value();
+  }
 }
 
 View2D.prototype.pointToPositions = function(x, y) {
@@ -108,6 +125,81 @@ View2D.prototype.defBoard = function(res, x, y, selector, turns) {
   };
   this.res.push(board);
   this.back.push(board);
+}
+
+View2D.prototype.defPopup = function(img, x, y, selector) {
+  if (!_.isUndefined(selector) && (selector != Dagaz.Model.getResourceSelector())) return;
+  var res = {
+     h: document.getElementById(img),
+     g: [],
+     x: x ? x : 0,
+     y: y ? y : 0
+  };
+  this.popups.push(res);
+  this.res.push(res);
+}
+
+View2D.prototype.defPopupPosition = function(name, x, y, dx, dy) {
+  if (this.popups.length > 0) {
+      var popup = this.popups[this.popups.length - 1];
+      popup.g.push({
+          name: name,
+          x:    x,
+          y:    y,
+          dx:   dx,
+          dy:   dy
+      });
+  }
+}
+
+View2D.prototype.findPopup = function(n) {
+  for (var i = 0; i < this.popups.length; i++) {
+       if (this.popups[i].g.length == n) {
+           return i;
+       }
+  }
+  return 0;
+}
+
+View2D.prototype.openPopup = function(ix, pieces, x, y) {
+  if (ix < this.popups.length) {
+      this.stack.push({
+          popup: ix,
+          list:  pieces,
+          x: x ? x : this.popups[ix].x,
+          y: y ? y : this.popups[ix].y
+      });
+  }
+}
+
+View2D.prototype.closePopup = function() {
+  if (this.stack.length > 0) {
+      this.stack.pop();
+  }
+}
+
+View2D.prototype.getPopupPositions = function(ix) {
+  var r = [];
+  if (ix < this.popups.length) {
+      _.each(this.popups[ix].g, function(f) {
+           r.push(Dagaz.Model.stringToPos(f.name));
+      });
+  }
+  return r;
+}
+
+View2D.prototype.getSelected = function(pos) {
+  var r = null;
+  if (this.stack.length > 0) {
+      var frame = this.stack[ this.stack.length - 1 ];
+      var popup = frame.popup;
+      var positions = this.getPopupPositions(popup);
+      var ix = _.indexOf(positions, pos);
+      if ((ix >= 0) && (ix < frame.list.length)) {
+          r = frame.list[ix];
+      }
+  }
+  return r;
 }
 
 View2D.prototype.defPiece = function(img, name, help, glyph) {
@@ -407,6 +499,27 @@ View2D.prototype.showDrops = function(ctx) {
   }
 }
 
+View2D.prototype.drawPopups = function(ctx) {
+  for (var i = 0; i < this.stack.length; i++) {
+       var popup = this.popups[ this.stack[i].popup ];
+       ctx.drawImage(popup.h, popup.x, popup.y);
+       for (var p = 0; p < popup.g.length; p++) {
+            if (p < this.stack[i].list.length) {
+                var pos = popup.g[p];
+                var model = this.stack[i].list[p];
+                var piece = this.piece[model.toString()];
+                var x = this.stack[i].x + pos.x;
+                var y = this.stack[i].y + pos.y;
+                if (piece) {
+                    x += (pos.dx - piece.dx) / 2 | 0;
+                    y += (pos.dy - piece.dy) / 2 | 0;
+                    ctx.drawImage(piece.h, x, y, piece.dx, piece.dy);
+                }
+            }
+       }
+  }
+}
+
 View2D.prototype.configure = function() {
   if (!isConfigured) {
       Dagaz.View.configure(this);
@@ -457,6 +570,7 @@ View2D.prototype.draw = function(canvas) {
            var board = this.controller.getBoard();
            Dagaz.View.showBoard(board, ctx);
       }
+      this.drawPopups(ctx);
   }
 }
 

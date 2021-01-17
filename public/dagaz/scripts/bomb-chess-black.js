@@ -174,6 +174,10 @@ Dagaz.Model.BuildDesign = function(design) {
     design.addCommand(2, ZRF.FUNCTION,	22);	// navigate
     design.addCommand(2, ZRF.FUNCTION,	2);	// enemy?
     design.addCommand(2, ZRF.FUNCTION,	20);	// verify
+    design.addCommand(2, ZRF.LITERAL,	6);	// Bomb
+    design.addCommand(2, ZRF.FUNCTION,	10);	// piece?
+    design.addCommand(2, ZRF.FUNCTION,	0);	// not
+    design.addCommand(2, ZRF.FUNCTION,	20);	// verify
     design.addCommand(2, ZRF.IN_ZONE,	0);	// last-rank
     design.addCommand(2, ZRF.FUNCTION,	0);	// not
     design.addCommand(2, ZRF.IF,	4);
@@ -209,6 +213,13 @@ Dagaz.Model.BuildDesign = function(design) {
     design.addCommand(4, ZRF.PARAM,	0);	// $1
     design.addCommand(4, ZRF.FUNCTION,	22);	// navigate
     design.addCommand(4, ZRF.FUNCTION,	1);	// empty?
+    design.addCommand(4, ZRF.IF,	6);
+    design.addCommand(4, ZRF.LITERAL,	6);	// Bomb
+    design.addCommand(4, ZRF.FUNCTION,	10);	// piece?
+    design.addCommand(4, ZRF.IF,	3);
+    design.addCommand(4, ZRF.LITERAL,	0);	// false
+    design.addCommand(4, ZRF.JUMP,	2);
+    design.addCommand(4, ZRF.LITERAL,	1);	// true
     design.addCommand(4, ZRF.FUNCTION,	0);	// not
     design.addCommand(4, ZRF.IF,	7);
     design.addCommand(4, ZRF.FORK,	3);
@@ -216,7 +227,7 @@ Dagaz.Model.BuildDesign = function(design) {
     design.addCommand(4, ZRF.FUNCTION,	28);	// end
     design.addCommand(4, ZRF.PARAM,	1);	// $2
     design.addCommand(4, ZRF.FUNCTION,	22);	// navigate
-    design.addCommand(4, ZRF.JUMP,	-8);
+    design.addCommand(4, ZRF.JUMP,	-15);
     design.addCommand(4, ZRF.FUNCTION,	3);	// friend?
     design.addCommand(4, ZRF.FUNCTION,	0);	// not
     design.addCommand(4, ZRF.FUNCTION,	20);	// verify
@@ -238,6 +249,10 @@ Dagaz.Model.BuildDesign = function(design) {
     design.addCommand(6, ZRF.PARAM,	0);	// $1
     design.addCommand(6, ZRF.FUNCTION,	22);	// navigate
     design.addCommand(6, ZRF.FUNCTION,	3);	// friend?
+    design.addCommand(6, ZRF.FUNCTION,	0);	// not
+    design.addCommand(6, ZRF.FUNCTION,	20);	// verify
+    design.addCommand(6, ZRF.LITERAL,	6);	// Bomb
+    design.addCommand(6, ZRF.FUNCTION,	10);	// piece?
     design.addCommand(6, ZRF.FUNCTION,	0);	// not
     design.addCommand(6, ZRF.FUNCTION,	20);	// verify
     design.addCommand(6, ZRF.FUNCTION,	25);	// to
