@@ -203,6 +203,7 @@ export class game1596108130561 implements MigrationInterface {
 //      await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(161, 37, 'Terrace', 'terrace', 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(162, 30, 'Bomb Chess', 'bomb-chess', 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(163, 37, 'Not Chess', 'not-chess', 2)`);
+        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total, max_selector) values(164, 37, 'Pasang', 'pasang', 2, 10)`);
 
         await queryRunner.query(`insert into game_styles(id, game_id, name, suffix, player_num) values(1, 23, 'European', '', null)`);
         await queryRunner.query(`insert into game_styles(id, game_id, name, suffix, player_num) values(2, 23, 'Chinese', '-kanji', null)`);
@@ -283,6 +284,7 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_bots(id, game_id, variant_id, selector_value, player_num) values(56, 38, 154, null, null)`);
         await queryRunner.query(`insert into game_bots(id, game_id, variant_id, selector_value, player_num) values(57, 38, 160, null, 1)`);
 //      await queryRunner.query(`insert into game_bots(id, game_id, variant_id, selector_value, player_num) values(58, 37, 161, null, null)`);
+        await queryRunner.query(`insert into game_bots(id, game_id, variant_id, selector_value, player_num) values(59, 37, 164, null, null)`);
 
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(1, 'doubutsu-shogi', null, 'doubutsu-shogi', 'https://en.wikipedia.org/wiki/D%C5%8Dbutsu_sh%C5%8Dgi', 'Madoka Kitao')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(2, 'atari-go', null, 'atari-go', 'https://en.wikipedia.org/wiki/Go_variants#First_Capture')`);
@@ -666,7 +668,18 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(448, 'tibetian-checkers', null, 'tibetian-checkers')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(449, 'bomb-chess', null, 'bomb-chess')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(450, 'not-chess', null, 'not-chess', 'http://www.di.fc.ul.pt/~jpn/gv/notchess.htm', '2003 Ronald Brierley')`);
-}
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(451, 'pasang', 1, 'pasang-1', 'https://en.wikipedia.org/wiki/Pasang_(game)')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(452, 'pasang', 2, 'pasang-2', 'https://en.wikipedia.org/wiki/Pasang_(game)')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(453, 'pasang', 3, 'pasang-3', 'https://en.wikipedia.org/wiki/Pasang_(game)')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(454, 'pasang', 4, 'pasang-4', 'https://en.wikipedia.org/wiki/Pasang_(game)')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(455, 'pasang', 5, 'pasang-5', 'https://en.wikipedia.org/wiki/Pasang_(game)')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(456, 'pasang', 6, 'pasang-6', 'https://en.wikipedia.org/wiki/Pasang_(game)')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(457, 'pasang', 7, 'pasang-7', 'https://en.wikipedia.org/wiki/Pasang_(game)')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(458, 'pasang', 8, 'pasang-8', 'https://en.wikipedia.org/wiki/Pasang_(game)')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(459, 'pasang', 9, 'pasang-9', 'https://en.wikipedia.org/wiki/Pasang_(game)')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(460, 'pasang', 10, 'pasang-10', 'https://en.wikipedia.org/wiki/Pasang_(game)')`);
+    }
+        
 
     public async down(queryRunner: QueryRunner): Promise<any> {
         await queryRunner.query(`delete from game_previews`);
