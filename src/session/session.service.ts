@@ -7,6 +7,7 @@ import { game_moves } from '../entity/game_moves';
 import { challenge } from '../entity/challenge';
 import { game_alerts } from '../entity/game_alerts';
 import { Exp } from '../interfaces/exp.interface';
+import { ai_settings } from '../entity/ai_settings';
 
 @Injectable()
 export class SessionService {
@@ -786,6 +787,28 @@ export class SessionService {
         return r;
     }
 
+    async getAiTimeout(sid: number): Promise<number> {
+        let x = await this.service.query(
+            `select b.curr_value as ai_timeout
+             from   game_sessions a
+             inner  join games c on (c.id = a.game_id)
+             left   join game_variants d on (d.id = a.variant_id)
+             inner  join user_games e on (e.session_id = a.id and e.user_id <> coalesce(d.external_ai, c.external_ai))
+             inner  join user_games f on (f.session_id = a.id and f.user_id = coalesce(d.external_ai, c.external_ai))
+             inner  join ai_settings b on (
+                    b.game_id = a.game_id and 
+                    coalesce(b.variant_id, 0) = coalesce(a.variant_id, 0) and
+                    coalesce(b.selector_value, 0) = coalesce(a.selector_value, 0) and
+                    b.user_id = e.user_id and
+                    b.external_ai = f.user_id
+             )
+             where  a.id = $1`, [sid]);
+        if (!x || x.length == 0) {
+             return 1000;
+        }
+        return x[0].ai_timeout;
+    }
+
     async recovery(user:number, s: Sess): Promise<Sess> {
         try {
             let x = await this.service.query(
@@ -803,6 +826,9 @@ export class SessionService {
             if (!x || x.length == 0) {
                  return null;
             }
+            if (s.setup_required && !x[0].last_setup) {
+                return null;
+            }
             if (!x[0].last_setup && s.last_setup) {
                 await this.service.createQueryBuilder("game_sessions")
                 .update(game_sessions)
@@ -817,6 +843,7 @@ export class SessionService {
             s.filename = x[0].filename;
             s.players_total = x[0].players_total;
             s.last_setup = x[0].last_setup;
+            s.ai_timeout = await this.getAiTimeout(s.id);
             x = x.filter((it) => { return (it.user_id == user) && (it.is_ai == 0); });
             if ((x.length == 1) && (x[0].status_id != 3)) {
                 s.player_num = x[0].player_num;
@@ -961,6 +988,75 @@ export class SessionService {
         return x[0].session_id;
     }
 
+    async changeAiSettings(sid, winner, loser): Promise<boolean> {
+        const x = await this.service.query(
+            `select e.id as uid, d.user_id as ai, e.user_id as user, 
+                    a.game_id as game_id, a.variant_id as variant_id,
+                    a.selector_value as selector_value
+             from   game_sessions a
+             inner  join games b on (b.id = a.game_id)
+             left   join game_variants c on (c.id = a.variant_id)
+             inner  join user_games d on (d.session_id = a.id and d.user_id = coalesce(c.external_ai, b.external_ai))
+             inner  join user_games e on (e.session_id = a.id and e.user_id <> coalesce(c.external_ai, b.external_ai))
+             where  a.id = $1`, [sid]);
+        if (!x || x.length == 0) {
+             return false;
+        }
+        let is_win = true;
+        if (winner && (winner != x[0].uid)) {
+            is_win = false;
+        }
+        if (loser && (loser == x[0].uid)) {
+            is_win = false;
+        }
+        const y = await this.service.query(
+            `select d.id, d.curr_value, d.max_value, d.inc_value, d.dec_value
+             from   game_sessions a
+             inner  join games b on (b.id = a.game_id)
+             left   join game_variants c on (c.id = a.variant_id)
+             inner  join ai_settings d on (
+                    d.game_id = b.id and
+                    coalesce(d.variant_id, 0) = coalesce(c.id, 0) and
+                    coalesce(d.selector_value, 0) = coalesce(a.selector_value, 0) and
+                    d.external_ai = $1 and d.user_id = $2
+             )
+             where  a.id = $3`, [x[0].ai, x[0].user, sid]);
+        if (!y || y.length == 0) {
+            this.service.createQueryBuilder("ai_settings")
+            .insert()
+            .into(ai_settings)
+            .values({
+                game_id: x[0].game_id,
+                variant_id: x[0].variant_id,
+                selector_value: x[0].selector_value,
+                user_id: x[0].user,
+                external_ai: x[0].ai
+            })
+            .execute();
+        } else {
+            let v = y[0].curr_value;
+            if (is_win) {
+                v -= y[0].dec_value;
+                if (v < 0) {
+                    v = 0;
+                }
+            } else {
+                v += y[0].inc_value;
+                if (v > y[0].max_value) {
+                    v = y[0].max_value;
+                }
+            }
+            await this.service.createQueryBuilder("ai_settings")
+            .update(ai_settings)
+            .set({ 
+                curr_value: v
+             })
+            .where("id = :id", {id: y[0].id})
+            .execute();
+        }
+        return true;
+    }
+
     async closeSession(x: Sess): Promise<Sess> {
         try {
             if (!x.id) {
@@ -989,6 +1085,8 @@ export class SessionService {
                 .where("session_id = :id", {id: x.id})
                 .execute();
                 return x;
+            } else {
+                await this.changeAiSettings(x.id, x.winner, x.loser);
             }
             if (x.winner) {
                 await this.service.createQueryBuilder("user_games")

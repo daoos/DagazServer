@@ -70,4 +70,10 @@ export class Sess {
 
     @ApiPropertyOptional()
     ai: number;
+
+    @ApiPropertyOptional()
+    setup_required: boolean;
+
+    @ApiPropertyOptional()
+    ai_timeout: number;
 }

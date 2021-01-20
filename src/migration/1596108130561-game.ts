@@ -203,7 +203,7 @@ export class game1596108130561 implements MigrationInterface {
 //      await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(161, 37, 'Terrace', 'terrace', 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(162, 30, 'Bomb Chess', 'bomb-chess', 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(163, 37, 'Not Chess', 'not-chess', 2)`);
-        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total, max_selector) values(164, 37, 'Pasang', 'pasang', 2, 10)`);
+        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total, max_selector) values(164, 37, 'Pasang', 'pasang', 2, 20)`);
 
         await queryRunner.query(`insert into game_styles(id, game_id, name, suffix, player_num) values(1, 23, 'European', '', null)`);
         await queryRunner.query(`insert into game_styles(id, game_id, name, suffix, player_num) values(2, 23, 'Chinese', '-kanji', null)`);
@@ -678,6 +678,16 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(458, 'pasang', 8, 'pasang-8', 'https://en.wikipedia.org/wiki/Pasang_(game)')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(459, 'pasang', 9, 'pasang-9', 'https://en.wikipedia.org/wiki/Pasang_(game)')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(460, 'pasang', 10, 'pasang-10', 'https://en.wikipedia.org/wiki/Pasang_(game)')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(461, 'pasang', 11, 'pasang-11', 'https://en.wikipedia.org/wiki/Pasang_(game)')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(462, 'pasang', 12, 'pasang-12', 'https://en.wikipedia.org/wiki/Pasang_(game)')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(463, 'pasang', 13, 'pasang-13', 'https://en.wikipedia.org/wiki/Pasang_(game)')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(464, 'pasang', 14, 'pasang-14', 'https://en.wikipedia.org/wiki/Pasang_(game)')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(465, 'pasang', 15, 'pasang-15', 'https://en.wikipedia.org/wiki/Pasang_(game)')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(466, 'pasang', 16, 'pasang-16', 'https://en.wikipedia.org/wiki/Pasang_(game)')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(467, 'pasang', 17, 'pasang-17', 'https://en.wikipedia.org/wiki/Pasang_(game)')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(468, 'pasang', 18, 'pasang-18', 'https://en.wikipedia.org/wiki/Pasang_(game)')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(469, 'pasang', 19, 'pasang-19', 'https://en.wikipedia.org/wiki/Pasang_(game)')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(470, 'pasang', 20, 'pasang-20', 'https://en.wikipedia.org/wiki/Pasang_(game)')`);
     }
         
 
