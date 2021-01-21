@@ -1036,14 +1036,14 @@ export class SessionService {
         } else {
             let v = y[0].curr_value;
             if (is_win) {
-                v -= y[0].dec_value;
-                if (v < 0) {
-                    v = 0;
-                }
-            } else {
                 v += y[0].inc_value;
                 if (v > y[0].max_value) {
                     v = y[0].max_value;
+                }
+            } else {
+                v -= y[0].dec_value;
+                if (v < 0) {
+                    v = 0;
                 }
             }
             await this.service.createQueryBuilder("ai_settings")

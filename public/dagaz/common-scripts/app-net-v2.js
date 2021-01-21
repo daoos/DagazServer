@@ -1046,16 +1046,30 @@ App.prototype.exec = function() {
               this.state = STATE.DONE;
               Canvas.style.cursor = "default";
               if (g > 0) {
-                  winGame();
-                  if (!_.isUndefined(Dagaz.Controller.play)) {
-                      Dagaz.Controller.play(Dagaz.Sounds.win);
+                  if (player_num == this.board.parent.player) {
+                      winGame();
+                      if (!_.isUndefined(Dagaz.Controller.play)) {
+                          Dagaz.Controller.play(Dagaz.Sounds.win);
+                      }
+                  } else {
+                      loseGame();
+                      if (!_.isUndefined(Dagaz.Controller.play)) {
+                          Dagaz.Controller.play(Dagaz.Sounds.lose);
+                      }
                   }
                   this.doneMessage = player + " won";
                   this.winPlayer   = this.board.parent.player;
               } else if (g < 0) {
-                  loseGame();
-                  if (!_.isUndefined(Dagaz.Controller.play)) {
-                      Dagaz.Controller.play(Dagaz.Sounds.lose);
+                  if (player_num == this.board.parent.player) {
+                      loseGame();
+                      if (!_.isUndefined(Dagaz.Controller.play)) {
+                          Dagaz.Controller.play(Dagaz.Sounds.lose);
+                      }
+                  } else {
+                      winGame();
+                      if (!_.isUndefined(Dagaz.Controller.play)) {
+                          Dagaz.Controller.play(Dagaz.Sounds.win);
+                      }
                   }
                   this.doneMessage = player + " lose";
                   this.winPlayer   = -this.board.parent.player;
