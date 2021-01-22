@@ -204,6 +204,7 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(162, 30, 'Bomb Chess', 'bomb-chess', 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(163, 37, 'Not Chess', 'not-chess', 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total, max_selector) values(164, 37, 'Pasang', 'pasang', 2, 39)`);
+        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(165, 23, 'Xiangqi 42', 'mini-xiangqi', 2)`);
 
         await queryRunner.query(`insert into game_styles(id, game_id, name, suffix, player_num) values(1, 23, 'European', '', null)`);
         await queryRunner.query(`insert into game_styles(id, game_id, name, suffix, player_num) values(2, 23, 'Chinese', '-kanji', null)`);
@@ -707,6 +708,8 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(487, 'pasang', 37, 'pasang-37', 'https://en.wikipedia.org/wiki/Pasang_(game)')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(488, 'pasang', 38, 'pasang-38', 'https://en.wikipedia.org/wiki/Pasang_(game)')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(489, 'pasang', 39, 'pasang-39', 'https://en.wikipedia.org/wiki/Pasang_(game)')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(490, 'mini-xiangqi', null, 'mini-xiangqi', 'https://www.chessvariants.com/42.dir/xiangqi42.html', 'Robert Price')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(491, 'mini-xiangqi-kanji', null, 'mini-xiangqi-kanji', 'https://www.chessvariants.com/42.dir/xiangqi42.html', 'Robert Price')`);
     }
         
 
