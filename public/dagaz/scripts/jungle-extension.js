@@ -17,8 +17,8 @@ Dagaz.Model.checkVersion = function(design, name, value) {
 }
 
 var isGe = function(a, b) {
-  if (a == 1) {
-      return b == 8;
+  if ((a == 1) && (b == 8)) {
+      return true;
   }
   if (Dagaz.AI.strictMode) {
       if ((a == 8) && (b == 1)) return false;

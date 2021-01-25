@@ -1,0 +1,90 @@
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>Gate</title>
+</head>
+<body>
+
+<img id="Board" style="display:none" src="images/gate/board.png">
+<img id="WhiteStone" style="display:none" src="images/gate/wstone.png">
+<img id="BlackStone" style="display:none" src="images/gate/bstone.png">
+<img id="WhiteT1" style="display:none" src="images/gate/t01.png">
+<img id="BlackT1" style="display:none" src="images/gate/t01.png">
+<img id="WhiteT2" style="display:none" src="images/gate/t02.png">
+<img id="BlackT2" style="display:none" src="images/gate/t02.png">
+<img id="WhiteT3" style="display:none" src="images/gate/t03.png">
+<img id="BlackT3" style="display:none" src="images/gate/t03.png">
+<img id="WhiteT4" style="display:none" src="images/gate/t04.png">
+<img id="BlackT4" style="display:none" src="images/gate/t04.png">
+<img id="WhiteT5" style="display:none" src="images/gate/t05.png">
+<img id="BlackT5" style="display:none" src="images/gate/t05.png">
+<img id="WhiteT6" style="display:none" src="images/gate/t06.png">
+<img id="BlackT6" style="display:none" src="images/gate/t06.png">
+<img id="WhiteT7" style="display:none" src="images/gate/t07.png">
+<img id="BlackT7" style="display:none" src="images/gate/t07.png">
+<img id="WhiteT8" style="display:none" src="images/gate/t08.png">
+<img id="BlackT8" style="display:none" src="images/gate/t08.png">
+<img id="WhiteT9" style="display:none" src="images/gate/t09.png">
+<img id="BlackT9" style="display:none" src="images/gate/t09.png">
+<img id="WhiteT10" style="display:none" src="images/gate/t10.png">
+<img id="BlackT10" style="display:none" src="images/gate/t10.png">
+<img id="WhiteT11" style="display:none" src="images/gate/t11.png">
+<img id="BlackT11" style="display:none" src="images/gate/t11.png">
+<img id="WhiteT12" style="display:none" src="images/gate/t12.png">
+<img id="BlackT12" style="display:none" src="images/gate/t12.png">
+<img id="WhiteT13" style="display:none" src="images/gate/t13.png">
+<img id="BlackT13" style="display:none" src="images/gate/t13.png">
+<img id="WhiteT14" style="display:none" src="images/gate/t14.png">
+<img id="BlackT14" style="display:none" src="images/gate/t14.png">
+<img id="WhiteT15" style="display:none" src="images/gate/t15.png">
+<img id="BlackT15" style="display:none" src="images/gate/t15.png">
+<img id="WhiteT16" style="display:none" src="images/gate/t16.png">
+<img id="BlackT16" style="display:none" src="images/gate/t16.png">
+
+<table style="margin:auto; font-family:sans-serif; font-size:14px" id="Table">
+<tr><td>
+Copyright (c) 2010 Gregory Keith Van Patten
+<a target="_blank" href="http://www.iggamecenter.com/info/en/gate.html">Rules</a>
+<a href="javascript:Dagaz.Controller.resign()">I Resign</a>
+<a href="javascript:Dagaz.Controller.drawOffer()">Offer Draw</a>
+<a href="javascript:Dagaz.Controller.sound()" id="sound">no Sound</a>
+</td></tr>
+<tr style="height:370px; vertical-align:top">
+<td id="CanvasCell" style="width:370px">
+<canvas id="Canvas" width="370" height="370" style="cursor:default">Broken canvas...</canvas>
+</td><td style="width:300px;">
+<div style="height:510px; overflow:auto" id="ScrollDiv">
+<img id="GlyphImage"><p id="HelpText"></p>
+<p id="GameSession"></p>
+</div>
+</td>
+</tr>
+<tr>
+<td>
+<div style="height:100px; width:500px; margin-left:auto; margin-right:auto">
+<table>
+<tr style="display:none" id="PieceInfo">
+<td><img id="PieceInfoImage"></td><td id="PieceInfoText"></td>
+</tr>
+</table>
+</div>
+</td>
+</tr>
+</table>
+
+<script src="vendor/underscore-min.js"></script>
+<script src="vendor/jquery-3.5.1.min.js"></script>
+<script src="common-scripts/dagaz.js"></script>
+<script src="common-scripts/zrf-model.js"></script>
+<script src="common-scripts/zobrist.js"></script>
+<script src="common-scripts/common-setup-v2.js"></script>
+<script src="common-scripts/2d-view-v2.js"></script>
+<script src="common-scripts/move-list-v1.js"></script>
+<script src="common-scripts/sound-manager-v2.js"></script>
+<script src="scripts/gate-goal.js"></script>
+<script src="scripts/gate-extension.js"></script>
+<script src="scripts/gate.js"></script>
+<script src="common-scripts/app-net-v2.js"></script>
+
+</body>
+</html>

@@ -205,6 +205,8 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(163, 37, 'Not Chess', 'not-chess', 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total, max_selector) values(164, 37, 'Pasang', 'pasang', 2, 39)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(165, 23, 'Xiangqi 42', 'mini-xiangqi', 2)`);
+        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(166, 39, 'Liuzi ChongQi', 'liuzi-chongqi', 2)`);
+        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(173, 37, 'Gate', 'gate', 2)`);
 
         await queryRunner.query(`insert into game_styles(id, game_id, name, suffix, player_num) values(1, 23, 'European', '', null)`);
         await queryRunner.query(`insert into game_styles(id, game_id, name, suffix, player_num) values(2, 23, 'Chinese', '-kanji', null)`);
@@ -286,6 +288,7 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_bots(id, game_id, variant_id, selector_value, player_num) values(57, 38, 160, null, 1)`);
 //      await queryRunner.query(`insert into game_bots(id, game_id, variant_id, selector_value, player_num) values(58, 37, 161, null, null)`);
         await queryRunner.query(`insert into game_bots(id, game_id, variant_id, selector_value, player_num) values(59, 37, 164, null, null)`);
+        await queryRunner.query(`insert into game_bots(id, game_id, variant_id, selector_value, player_num) values(60, 39, 166, null, null)`);
 
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(1, 'doubutsu-shogi', null, 'doubutsu-shogi', 'https://en.wikipedia.org/wiki/D%C5%8Dbutsu_sh%C5%8Dgi', 'Madoka Kitao')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(2, 'atari-go', null, 'atari-go', 'https://en.wikipedia.org/wiki/Go_variants#First_Capture')`);
@@ -710,6 +713,8 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(489, 'pasang', 39, 'pasang-39', 'https://en.wikipedia.org/wiki/Pasang_(game)')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(490, 'mini-xiangqi', null, 'mini-xiangqi', 'https://www.chessvariants.com/42.dir/xiangqi42.html', 'Robert Price')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(491, 'mini-xiangqi-kanji', null, 'mini-xiangqi-kanji', 'https://www.chessvariants.com/42.dir/xiangqi42.html', 'Robert Price')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(492, 'liuzi-chongqi', null, 'liuzi-chongqi', 'https://en.wikipedia.org/wiki/Cinc_Camins')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(493, 'gate', null, 'gate', 'http://www.iggamecenter.com/info/en/gate.html', '2010 Gregory Keith Van Patten')`);
     }
         
 
