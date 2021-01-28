@@ -1,6 +1,6 @@
 Dagaz.Controller.persistense = "none";
-Dagaz.Model.WIDTH  = 8;
-Dagaz.Model.HEIGHT = 8;
+Dagaz.Model.WIDTH  = 9;
+Dagaz.Model.HEIGHT = 10;
 
 (function() {
 
@@ -72,27 +72,21 @@ var getTurn = function(setup) {
 }
 
 var createPiece = function(c) {
-  if (c == 'P') return Dagaz.Model.createPiece(0, 1);
-  if (c == 'p') return Dagaz.Model.createPiece(0, 2);
-  if (c == 'R') return Dagaz.Model.createPiece(1, 1);
-  if (c == 'r') return Dagaz.Model.createPiece(1, 2);
-  if (c == 'N') return Dagaz.Model.createPiece(2, 1);
-  if (c == 'n') return Dagaz.Model.createPiece(2, 2);
-  if (c == 'B') return Dagaz.Model.createPiece(3, 1);
-  if (c == 'b') return Dagaz.Model.createPiece(3, 2);
-  if (c == 'Q') return Dagaz.Model.createPiece(4, 1);
-  if (c == 'q') return Dagaz.Model.createPiece(4, 2);
-  if (c == 'K') return Dagaz.Model.createPiece(5, 1);
-  if (c == 'k') return Dagaz.Model.createPiece(5, 2);
-  if (c == 'm') return Dagaz.Model.createPiece(6, 3);
+  if (c == 'S') return Dagaz.Model.createPiece(0, 1);
+  if (c == 's') return Dagaz.Model.createPiece(0, 2);
+  if (c == 'H') return Dagaz.Model.createPiece(1, 1);
+  if (c == 'h') return Dagaz.Model.createPiece(1, 2);
+  if (c == 'E') return Dagaz.Model.createPiece(2, 1);
+  if (c == 'e') return Dagaz.Model.createPiece(2, 2);
+  if (c == 'R') return Dagaz.Model.createPiece(3, 1);
+  if (c == 'r') return Dagaz.Model.createPiece(3, 2);
+  if (c == 'C') return Dagaz.Model.createPiece(4, 1);
+  if (c == 'c') return Dagaz.Model.createPiece(4, 2);
+  if (c == 'A') return Dagaz.Model.createPiece(5, 1);
+  if (c == 'a') return Dagaz.Model.createPiece(5, 2);
+  if (c == 'G') return Dagaz.Model.createPiece(6, 1);
+  if (c == 'g') return Dagaz.Model.createPiece(6, 2);
   return null;
-}
-
-var checkCastling = function(board, pos, m) {
-  if (m != '-') return;
-  piece = board.getPiece(pos);
-  if (piece === null) return;
-  piece.setValue(0, true);
 }
 
 Dagaz.Model.setup = function(board, init) {
@@ -115,15 +109,6 @@ Dagaz.Model.setup = function(board, init) {
                if (pos >= Dagaz.Model.WIDTH * Dagaz.Model.HEIGHT) break;
            }
       }
-      var r = setup.match(/\s([kqKQ-]{1,4})\s/);
-      if (r) {
-          var mask = r[1];
-          if (mask == '-') mask = '----';
-          checkCastling(board, 63, mask[0]);
-          checkCastling(board, 56, mask[1]);
-          checkCastling(board,  7, mask[2]);
-          checkCastling(board,  0, mask[3]);
-      }
       var turn = getTurn(init);
       if (turn) {
           board.turn   = +turn;
@@ -133,72 +118,15 @@ Dagaz.Model.setup = function(board, init) {
 }
 
 var getPieceNotation = function(piece) {
-  var r = 'P';
-  if (piece.type > 0)  r = 'R';
-  if (piece.type > 1)  r = 'N';
-  if (piece.type > 2)  r = 'B';
-  if (piece.type > 3)  r = 'Q';
-  if (piece.type > 4)  r = 'K';
-  if (piece.type > 5)  r = 'M';
+  var r = 'S';
+  if (piece.type > 0)  r = 'H';
+  if (piece.type > 1)  r = 'E';
+  if (piece.type > 2)  r = 'R';
+  if (piece.type > 3)  r = 'C';
+  if (piece.type > 4)  r = 'A';
+  if (piece.type > 5)  r = 'G';
   if (piece.player > 1) {
       return r.toLowerCase();
-  }
-  return r;
-}
-
-var isMoved = function(design, board, pos, type) {
-  var piece = board.getPiece(pos);
-  if (piece === null) return true;
-  if (piece.type != type) return true;
-  return piece.getValue(0) !== null;
-}
-
-var getCastling = function(design, board) {
-  if ((Dagaz.Model.WIDTH != 8) || (Dagaz.Model.HEIGHT != 8)) return "----";
-  var r = "";
-  if (isMoved(design, board, 60, 5)) {
-      r += "--";
-  } else {
-      if (isMoved(design, board, 63, 1)) {
-          r += "-";
-      } else {
-          r += "K";
-      }
-      if (isMoved(design, board, 56, 1)) {
-          r += "-";
-      } else {
-          r += "Q";
-      }
-  }
-  if (isMoved(design, board, 4, 5)) {
-      r += "--";
-  } else {
-      if (isMoved(design, board, 7, 1)) {
-          r += "-";
-      } else {
-          r += "k";
-      }
-      if (isMoved(design, board, 0, 1)) {
-          r += "-";
-      } else {
-          r += "q";
-      }
-  }
-  return r;
-}
-
-var getEnPassant = function(design, board) {
-  var r = " -";
-  if (board.lastt) {
-      var piece = board.getPiece(board.lastt);
-      if (piece === null) return r;
-      if (piece.type != 0) return r;
-      var pos = design.navigate(piece.player, board.lastt, 2);
-      if (pos === null) return r;
-      if (board.getPiece(pos) !== null) return r;
-      var p = design.navigate(piece.player, pos, 2);
-      if (p === null) return r;
-      if (p == board.lastf) r = " " + Dagaz.Model.posToString(pos, design);
   }
   return r;
 }
@@ -231,13 +159,10 @@ Dagaz.Model.getSetup = function(design, board) {
       str += c;
   }
   if (board.turn == 0) {
-      str += " w ";
+      str += " w";
   } else {
-      str += " b ";
+      str += " b";
   }
-  str += getCastling(design, board);
-  str += getEnPassant(design, board);
-  str += " 0 1";
   if (Dagaz.Controller.persistense == "setup") {
       var s = str + "&game=" + getName() + "*";
       localStorage.setItem('dagaz.setup', s);
