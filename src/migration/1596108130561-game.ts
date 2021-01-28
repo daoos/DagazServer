@@ -51,7 +51,7 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(7, 23, 'XiangQi', 'xiangqi', 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(8, 23, 'YitongQi', 'yitongqi', 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(9, 23, 'Five Tigers', 'tigers', 2)`);
-        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(10, 25, 'Shogi', 'shogi', 2)`);
+        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total, max_selector) values(10, 25, 'Shogi', 'shogi', 2, 11)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(11, 25, 'Mini Shogi', 'mini-shogi', 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total, is_hidden) values(12, 23, 'Dark XiangQi', 'dark-chinese-chess', 2, 1)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(13, 17, 'Paper Go', 'paper-go', 2)`);
@@ -207,6 +207,8 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(165, 23, 'Xiangqi 42', 'mini-xiangqi', 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(166, 39, 'Liuzi ChongQi', 'liuzi-chongqi', 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(173, 37, 'Gate', 'gate', 2)`);
+        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(174, 37, 'Jeson Mor', 'jeson-mor', 2)`);
+        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(175, 37, 'Asalto', 'asalto', 2)`);
 
         await queryRunner.query(`insert into game_styles(id, game_id, name, suffix, player_num) values(1, 23, 'European', '', null)`);
         await queryRunner.query(`insert into game_styles(id, game_id, name, suffix, player_num) values(2, 23, 'Chinese', '-kanji', null)`);
@@ -289,6 +291,7 @@ export class game1596108130561 implements MigrationInterface {
 //      await queryRunner.query(`insert into game_bots(id, game_id, variant_id, selector_value, player_num) values(58, 37, 161, null, null)`);
         await queryRunner.query(`insert into game_bots(id, game_id, variant_id, selector_value, player_num) values(59, 37, 164, null, null)`);
         await queryRunner.query(`insert into game_bots(id, game_id, variant_id, selector_value, player_num) values(60, 39, 166, null, null)`);
+        await queryRunner.query(`insert into game_bots(id, game_id, variant_id, selector_value, player_num) values(61, 37, 175, null, 1)`);
 
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(1, 'doubutsu-shogi', null, 'doubutsu-shogi', 'https://en.wikipedia.org/wiki/D%C5%8Dbutsu_sh%C5%8Dgi', 'Madoka Kitao')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(2, 'atari-go', null, 'atari-go', 'https://en.wikipedia.org/wiki/Go_variants#First_Capture')`);
@@ -305,7 +308,7 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(13, '80-cells-checkers', null, '80-cells-checkers', 'https://en.wikipedia.org/wiki/Russian_draughts', 'Nikolay Spancireti (1916-1991)')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(14, 'xiangqi', null, 'xiangqi', 'https://en.wikipedia.org/wiki/Xiangqi')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(15, 'column-checkers', null, 'column-checkers', 'https://en.wikipedia.org/wiki/Bashni')`);
-        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(16, 'shogi', null, 'shogi', 'https://en.wikipedia.org/wiki/Shogi')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(16, 'shogi', 1, 'shogi-1', 'https://en.wikipedia.org/wiki/Shogi')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(17, 'reversi', 1, 'reversi-1', 'https://en.wikipedia.org/wiki/Reversi')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(18, 'reversi', 2, 'reversi-2', 'https://en.wikipedia.org/wiki/Reversi')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(19, 'reversi', 3, 'reversi-3', 'https://en.wikipedia.org/wiki/Reversi')`);
@@ -322,7 +325,7 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(30, 'yitongqi-kanji', null, 'yitongqi-kanji', 'https://en.wikipedia.org/wiki/Manchu_chess')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(31, 'tigers', null, 'tigers', 'https://www.chessvariants.com/xiangqivariants.dir/tigers.html')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(32, 'tigers-kanji', null, 'tigers-kanji', 'https://www.chessvariants.com/xiangqivariants.dir/tigers.html')`);
-        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(33, 'shogi-kanji', null, 'shogi-kanji', 'https://en.wikipedia.org/wiki/Shogi')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(33, 'shogi-kanji', 1, 'shogi-1-kanji', 'https://en.wikipedia.org/wiki/Shogi')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(34, 'mini-shogi', null, 'mini-shogi', 'https://en.wikipedia.org/wiki/Minishogi', '1970 Shigeo Kusumoto')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(35, 'mini-shogi-kanji', null, 'mini-shogi-kanji', 'https://en.wikipedia.org/wiki/Minishogi', '1970 Shigeo Kusumoto')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(36, 'dark-chinese-chess', null, 'dark-chinese-chess')`);
@@ -715,6 +718,28 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(491, 'mini-xiangqi-kanji', null, 'mini-xiangqi-kanji', 'https://www.chessvariants.com/42.dir/xiangqi42.html', 'Robert Price')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(492, 'liuzi-chongqi', null, 'liuzi-chongqi', 'https://en.wikipedia.org/wiki/Cinc_Camins')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(493, 'gate', null, 'gate', 'http://www.iggamecenter.com/info/en/gate.html', '2010 Gregory Keith Van Patten')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(494, 'shogi', 2, 'shogi-2', 'https://en.wikipedia.org/wiki/Shogi')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(495, 'shogi-kanji', 2, 'shogi-2-kanji', 'https://en.wikipedia.org/wiki/Shogi')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(496, 'shogi', 3, 'shogi-3', 'https://en.wikipedia.org/wiki/Shogi')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(497, 'shogi-kanji', 3, 'shogi-3-kanji', 'https://en.wikipedia.org/wiki/Shogi')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(498, 'shogi', 4, 'shogi-4', 'https://en.wikipedia.org/wiki/Shogi')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(499, 'shogi-kanji', 4, 'shogi-4-kanji', 'https://en.wikipedia.org/wiki/Shogi')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(500, 'shogi', 5, 'shogi-5', 'https://en.wikipedia.org/wiki/Shogi')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(501, 'shogi-kanji', 5, 'shogi-5-kanji', 'https://en.wikipedia.org/wiki/Shogi')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(502, 'shogi', 6, 'shogi-6', 'https://en.wikipedia.org/wiki/Shogi')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(503, 'shogi-kanji', 6, 'shogi-6-kanji', 'https://en.wikipedia.org/wiki/Shogi')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(504, 'shogi', 7, 'shogi-7', 'https://en.wikipedia.org/wiki/Shogi')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(505, 'shogi-kanji', 7, 'shogi-7-kanji', 'https://en.wikipedia.org/wiki/Shogi')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(506, 'shogi', 8, 'shogi-8', 'https://en.wikipedia.org/wiki/Shogi')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(507, 'shogi-kanji', 8, 'shogi-8-kanji', 'https://en.wikipedia.org/wiki/Shogi')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(508, 'shogi', 9, 'shogi-9', 'https://en.wikipedia.org/wiki/Shogi')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(509, 'shogi-kanji', 9, 'shogi-9-kanji', 'https://en.wikipedia.org/wiki/Shogi')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(510, 'shogi', 10, 'shogi-10', 'https://en.wikipedia.org/wiki/Shogi')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(511, 'shogi-kanji', 10, 'shogi-10-kanji', 'https://en.wikipedia.org/wiki/Shogi')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(512, 'shogi', 11, 'shogi-11', 'https://en.wikipedia.org/wiki/Shogi')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(513, 'shogi-kanji', 11, 'shogi-11-kanji', 'https://en.wikipedia.org/wiki/Shogi')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(514, 'jeson-mor', null, 'jeson-mor', 'https://en.wikipedia.org/wiki/Jeson_Mor')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(515, 'asalto', null, 'asalto', 'https://en.wikipedia.org/wiki/Asalto')`);
     }
         
 
