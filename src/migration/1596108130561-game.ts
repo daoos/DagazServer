@@ -209,6 +209,8 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(173, 37, 'Gate', 'gate', 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(174, 37, 'Jeson Mor', 'jeson-mor', 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(175, 37, 'Asalto', 'asalto', 2)`);
+        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(176, 25, 'Ikusa Shogi', 'ikusa-shogi', 2)`);
+        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(177, 25, 'Rocket Shogi', 'rocket-shogi', 2)`);
 
         await queryRunner.query(`insert into game_styles(id, game_id, name, suffix, player_num) values(1, 23, 'European', '', null)`);
         await queryRunner.query(`insert into game_styles(id, game_id, name, suffix, player_num) values(2, 23, 'Chinese', '-kanji', null)`);
@@ -292,6 +294,18 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_bots(id, game_id, variant_id, selector_value, player_num) values(59, 37, 164, null, null)`);
         await queryRunner.query(`insert into game_bots(id, game_id, variant_id, selector_value, player_num) values(60, 39, 166, null, null)`);
         await queryRunner.query(`insert into game_bots(id, game_id, variant_id, selector_value, player_num) values(61, 37, 175, null, 1)`);
+
+        await queryRunner.query(`insert into game_setups(id, game_id, variant_id, selector_value, name) values(1, 25, 10, 1, 'Without Handicap')`);
+        await queryRunner.query(`insert into game_setups(id, game_id, variant_id, selector_value, name) values(2, 25, 10, 2, 'Left-Kyo Handicap')`);
+        await queryRunner.query(`insert into game_setups(id, game_id, variant_id, selector_value, name) values(3, 25, 10, 3, 'Kaku Handicap')`);
+        await queryRunner.query(`insert into game_setups(id, game_id, variant_id, selector_value, name) values(4, 25, 10, 4, 'Hisha Handicap')`);
+        await queryRunner.query(`insert into game_setups(id, game_id, variant_id, selector_value, name) values(5, 25, 10, 5, 'Hisha and Left-Kyo Handicap')`);
+        await queryRunner.query(`insert into game_setups(id, game_id, variant_id, selector_value, name) values(6, 25, 10, 6, 'Two-Piece Handicap')`);
+        await queryRunner.query(`insert into game_setups(id, game_id, variant_id, selector_value, name) values(7, 25, 10, 7, 'Three-Piece Handicap')`);
+        await queryRunner.query(`insert into game_setups(id, game_id, variant_id, selector_value, name) values(8, 25, 10, 8, 'Four-Piece Handicap')`);
+        await queryRunner.query(`insert into game_setups(id, game_id, variant_id, selector_value, name) values(9, 25, 10, 9, 'Five-Piece Handicap')`);
+        await queryRunner.query(`insert into game_setups(id, game_id, variant_id, selector_value, name) values(10, 25, 10, 10, 'Six-Piece Handicap')`);
+        await queryRunner.query(`insert into game_setups(id, game_id, variant_id, selector_value, name) values(11, 25, 10, 11, 'Eight-Piece Handicap')`);
 
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(1, 'doubutsu-shogi', null, 'doubutsu-shogi', 'https://en.wikipedia.org/wiki/D%C5%8Dbutsu_sh%C5%8Dgi', 'Madoka Kitao')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(2, 'atari-go', null, 'atari-go', 'https://en.wikipedia.org/wiki/Go_variants#First_Capture')`);
@@ -740,8 +754,11 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(513, 'shogi-kanji', 11, 'shogi-11-kanji', 'https://en.wikipedia.org/wiki/Shogi')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(514, 'jeson-mor', null, 'jeson-mor', 'https://en.wikipedia.org/wiki/Jeson_Mor')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(515, 'asalto', null, 'asalto', 'https://en.wikipedia.org/wiki/Asalto')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, copyright) values(516, 'ikusa-shogi', null, 'ikusa-shogi', '2011 Yamamoto Mitsuo')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, copyright) values(517, 'ikusa-shogi-kanji', null, 'ikusa-shogi-kanji', '2011 Yamamoto Mitsuo')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, copyright) values(518, 'rocket-shogi', null, 'rocket-shogi', '2012 Itsubaki Yoshihisa')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, copyright) values(519, 'rocket-shogi-kanji', null, 'rocket-shogi-kanji', '2012 Itsubaki Yoshihisa')`);
     }
-        
 
     public async down(queryRunner: QueryRunner): Promise<any> {
         await queryRunner.query(`delete from game_previews`);

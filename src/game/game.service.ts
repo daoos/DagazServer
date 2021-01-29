@@ -5,6 +5,7 @@ import { Game } from '../interfaces/game.interface';
 import { Preview } from '../interfaces/preview.interface';
 import { Style } from '../interfaces/style.interface';
 import { Opening } from '../interfaces/opening.interface';
+import { Setup } from '../interfaces/setup.interface';
 
 @Injectable()
 export class GameService {
@@ -183,6 +184,33 @@ export class GameService {
           });
         }
     }
+
+    async getSetups(game: number, variant: number): Promise<Setup[]> {
+        try {
+            const x = await this.service.query(
+                `select game_id, variant_id, selector_value, name
+                 from   game_setups
+                 where  game_id = $1
+                 and    coalesce(variant_id, 0) = coalesce($2, 0)
+                 order  by selector_value`, [game, variant]);
+            let l: Setup[] = x.map(x => {
+                let it = new Setup();
+                it.game_id = x.game_id;
+                it.variant_id = x.variant_id;
+                it.selector_value = x.selector_value;
+                it.name = x.name;
+                return it;
+            });
+            return l;
+        } catch (error) {
+          console.error(error);
+          throw new InternalServerErrorException({
+              status: HttpStatus.BAD_REQUEST,
+              error: error
+          });
+        }
+    }
+
 
     async getAllStyles(): Promise<Style[]> {
         try {

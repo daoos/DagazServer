@@ -8,6 +8,7 @@ import { Request } from 'express';
 import { Preview } from '../interfaces/preview.interface';
 import { Style } from '../interfaces/style.interface';
 import { Opening } from '../interfaces/opening.interface';
+import { Setup } from '../interfaces/setup.interface';
 
 @ApiSecurity('bearer')
 @Controller('api/game')
@@ -81,10 +82,32 @@ export class GameController {
         }
     }
 
-    @UseGuards(JwtAuthGuard, TokenGuard)
+    @Get('setups/:game')
+    @ApiOkResponse({ description: 'Successfully.'})
+    @ApiInternalServerErrorResponse({ description: 'Internal Server error.'})
+    async getGameSetups(@Res() res, @Param('game') game): Promise<Setup[]> {
+        try {
+            const r = await this.service.getSetups(game, null);
+            return res.status(HttpStatus.OK).json(r);
+        } catch(e) {
+            return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ error: e.message.error.toString(), stack: e.stack});
+        }
+    }
+
+    @Get('setups/:game/:variant')
+    @ApiOkResponse({ description: 'Successfully.'})
+    @ApiInternalServerErrorResponse({ description: 'Internal Server error.'})
+    async getVariantSetups(@Res() res, @Param('game') game, @Param('variant') variant): Promise<Setup[]> {
+        try {
+            const r = await this.service.getSetups(game, variant);
+            return res.status(HttpStatus.OK).json(r);
+        } catch(e) {
+            return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ error: e.message.error.toString(), stack: e.stack});
+        }
+    }
+
     @Get('styles')
     @ApiOkResponse({ description: 'Successfully.'})
-    @ApiUnauthorizedResponse({ description: 'Unauthorized.'})
     @ApiInternalServerErrorResponse({ description: 'Internal Server error.'})
     async getAllStyles(@Res() res): Promise<Style[]> {
         try {
