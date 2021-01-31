@@ -368,6 +368,14 @@ Dagaz.Model.BuildDesign = function(design) {
 
     design.addPiece("Bomb", 6);
 
+    design.setup("White", "Pawn", 48);
+    design.setup("White", "Pawn", 49);
+    design.setup("White", "Pawn", 50);
+    design.setup("White", "Pawn", 51);
+    design.setup("White", "Pawn", 52);
+    design.setup("White", "Pawn", 53);
+    design.setup("White", "Pawn", 54);
+    design.setup("White", "Pawn", 55);
     design.setup("White", "Rook", 56);
     design.setup("White", "Rook", 63);
     design.setup("White", "Knight", 57);
@@ -388,16 +396,23 @@ Dagaz.Model.BuildDesign = function(design) {
     design.setup("Black", "Rook", 7);
     design.setup("Black", "Knight", 1);
     design.setup("Black", "Knight", 6);
-    design.setup("Black", "Queen", 2);
+    design.setup("Black", "Bishop", 2);
+    design.setup("Black", "Bishop", 5);
+    design.setup("Black", "Queen", 3);
     design.setup("Black", "King", 4);
-    design.setup("Neutral", "Bomb", 27);
-    design.setup("Neutral", "Bomb", 28);
-    design.setup("Neutral", "Bomb", 34);
-    design.setup("Neutral", "Bomb", 37);
-    design.setup("Neutral", "Bomb", 41);
-    design.setup("Neutral", "Bomb", 43);
-    design.setup("Neutral", "Bomb", 44);
-    design.setup("Neutral", "Bomb", 46);
+
+    design.setupSelector(2);
+
+    design.setup("Neutral", "Bomb", 27, 1);
+    design.setup("Neutral", "Bomb", 28, 1);
+    design.setup("Neutral", "Bomb", 34, 1);
+    design.setup("Neutral", "Bomb", 37, 1);
+    design.setup("Neutral", "Bomb", 41, 1);
+    design.setup("Neutral", "Bomb", 43, 1);
+    design.setup("Neutral", "Bomb", 44, 1);
+    design.setup("Neutral", "Bomb", 46, 1);
+
+    design.reserve("Neutral", "Bomb", 5, 2);
 }
 
 Dagaz.View.configure = function(view) {

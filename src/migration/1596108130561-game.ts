@@ -201,7 +201,7 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total, max_selector) values(159, 37, 'Mana', 'mana', 2, 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(160, 38, 'Three Musketeers', 'musketeers', 2)`);
 //      await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(161, 37, 'Terrace', 'terrace', 2)`);
-        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(162, 30, 'Bomb Chess', 'bomb-chess', 2)`);
+        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total, max_selector) values(162, 30, 'Bomb Chess', 'bomb-chess', 2, 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(163, 37, 'Not Chess', 'not-chess', 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total, max_selector) values(164, 37, 'Pasang', 'pasang', 2, 39)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(165, 23, 'Xiangqi 42', 'mini-xiangqi', 2)`);
@@ -306,6 +306,10 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_setups(id, game_id, variant_id, selector_value, name) values(9, 25, 10, 9, 'Five-Piece Handicap')`);
         await queryRunner.query(`insert into game_setups(id, game_id, variant_id, selector_value, name) values(10, 25, 10, 10, 'Six-Piece Handicap')`);
         await queryRunner.query(`insert into game_setups(id, game_id, variant_id, selector_value, name) values(11, 25, 10, 11, 'Eight-Piece Handicap')`);
+        await queryRunner.query(`insert into game_setups(id, game_id, variant_id, selector_value, name) values(12, 30, 162, 1, 'Point of No Return')`);
+        await queryRunner.query(`insert into game_setups(id, game_id, variant_id, selector_value, name) values(13, 30, 162, 2, 'Random Setup')`);
+        await queryRunner.query(`insert into game_setups(id, game_id, variant_id, selector_value, name) values(14, 30, 157, 1, 'Resurrection Chess')`);
+        await queryRunner.query(`insert into game_setups(id, game_id, variant_id, selector_value, name) values(15, 30, 157, 2, 'Soulbringer')`);
 
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(1, 'doubutsu-shogi', null, 'doubutsu-shogi', 'https://en.wikipedia.org/wiki/D%C5%8Dbutsu_sh%C5%8Dgi', 'Madoka Kitao')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(2, 'atari-go', null, 'atari-go', 'https://en.wikipedia.org/wiki/Go_variants#First_Capture')`);
@@ -687,7 +691,7 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(446, 'musketeers', null, 'musketeers', 'http://www.di.fc.ul.pt/~jpn/gv/3musketeers.htm', 'Haar Hoolim')`);
 //      await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(447, 'terrace', null, 'terrace', 'https://en.wikipedia.org/wiki/Terrace_(board_game)', '1991 Silver Ventures')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(448, 'tibetian-checkers', null, 'tibetian-checkers')`);
-        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(449, 'bomb-chess', null, 'bomb-chess')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(449, 'bomb-chess', 1, 'bomb-chess-1')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(450, 'not-chess', null, 'not-chess', 'http://www.di.fc.ul.pt/~jpn/gv/notchess.htm', '2003 Ronald Brierley')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(451, 'pasang', 1, 'pasang-1', 'https://en.wikipedia.org/wiki/Pasang_(game)')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(452, 'pasang', 2, 'pasang-2', 'https://en.wikipedia.org/wiki/Pasang_(game)')`);
@@ -758,6 +762,7 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, copyright) values(517, 'ikusa-shogi-kanji', null, 'ikusa-shogi-kanji', '2011 Yamamoto Mitsuo')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, copyright) values(518, 'rocket-shogi', null, 'rocket-shogi', '2012 Itsubaki Yoshihisa')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, copyright) values(519, 'rocket-shogi-kanji', null, 'rocket-shogi-kanji', '2012 Itsubaki Yoshihisa')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(520, 'bomb-chess', 2, 'bomb-chess-2')`);
     }
 
     public async down(queryRunner: QueryRunner): Promise<any> {
