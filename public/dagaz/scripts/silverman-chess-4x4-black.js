@@ -1,5 +1,8 @@
 Dagaz.Controller.persistense = "none";
 
+Dagaz.Model.WIDTH  = 4;
+Dagaz.Model.HEIGHT = 4;
+
 ZRF = {
     JUMP:          0,
     IF:            1,

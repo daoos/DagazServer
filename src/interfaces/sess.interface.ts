@@ -76,4 +76,13 @@ export class Sess {
 
     @ApiPropertyOptional()
     ai_timeout: number;
+
+    @ApiPropertyOptional()
+    ai_flags: number;
+
+    @ApiPropertyOptional()
+    width: number;
+
+    @ApiPropertyOptional()
+    height: number;
 }

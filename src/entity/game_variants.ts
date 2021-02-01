@@ -38,4 +38,13 @@ export class game_variants {
 
     @Column({ type: "text", nullable: true})
     no_ai: string;
+
+    @Column({ nullable: true })
+    ai_flags: number;
+
+    @Column({ nullable: true })
+    width: number;
+
+    @Column({ nullable: true })
+    height: number;
 }

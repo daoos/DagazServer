@@ -816,12 +816,14 @@ export class SessionService {
                         c.players_total as players_total, a.last_setup as last_setup,
                         b.player_num as player_num, b.id as uid, b.user_id as user_id,
                         a.status_id as status_id, d.id as ai, a.last_user as last_user,
-                        e.result_id as result_id, b.is_ai as is_ai
+                        e.result_id as result_id, b.is_ai as is_ai, a.variant_id as variant_id,
+                        v.ai_flags as ai_flags, v.width as width, v.height as height
                  from   game_sessions a
                  inner  join user_games b on (b.session_id = a.id and b.is_ai = 0)
                  left   join user_games d on (d.session_id = a.id and d.is_ai = 1)
                  inner  join games c on (c.id = a.game_id)
                  left   join game_alerts e on (e.session_id = a.id)
+                 left   join game_variants v on (v.id = a.variant_id)
                  where  a.id = $1`, [s.id]);
             if (!x || x.length == 0) {
                  return null;
@@ -839,6 +841,10 @@ export class SessionService {
                 .execute();
             }
             s.game_id = x[0].game_id;
+            s.variant_id = x[0].variant_id;
+            s.ai_flags = x[0].ai_flags;
+            s.width = x[0].width;
+            s.height = x[0].height;
             s.game = x[0].game;
             s.filename = x[0].filename;
             s.players_total = x[0].players_total;
