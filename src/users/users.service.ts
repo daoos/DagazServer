@@ -4,6 +4,7 @@ import { users } from '../entity/users';
 import { User } from '../interfaces/user.interface';
 import { tokens } from '../entity/tokens';
 import { realms } from '../entity/realms';
+import { Token } from '../interfaces/token.interface';
 
 @Injectable()
 export class UsersService {
@@ -133,6 +134,25 @@ export class UsersService {
         .where("users.id = :id", {id: id})
         .execute();
         return true;
+      }
+
+      async recoveryPass(token: string): Promise<User> {
+        let x = await this.service.query(
+          `select a.user_id as id, b.is_admin as is_admin, b.realm_id as realm_id,
+                  b.login as username, a.device_str as device
+           from   tokens a
+           inner  join users b on (b.id = a.user_id)
+           where  a.value_str = $1`, [token]);
+           if (!x || x.length == 0) {
+                return null;
+        }
+        let it = new User();
+        it.id = x[0].id;
+        it.realm = x[0].realm_id;
+        it.is_admin = x[0].is_admin;
+        it.username = x[0].username;
+        it.device = x[0].device;
+        return it;
       }
 
       async findOneByLoginAndPass(name: string, pass: string): Promise<User> {

@@ -2,6 +2,7 @@ import { Injectable, InternalServerErrorException, HttpStatus } from '@nestjs/co
 import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
 import { jwtConstants } from './constants';
+import { Token } from '../interfaces/token.interface';
 
 @Injectable()
 export class AuthService {
@@ -18,6 +19,32 @@ export class AuthService {
           return result;
         }
         return null;
+    }
+
+    async recoveryPass(x: Token): Promise<Token> {
+      try {
+        const u = await this.usersService.recoveryPass(x.access_token);
+        if (!u) {
+          return null;
+        }
+        const payload = { username: u.username, sub: u.id };
+        const a = this.jwtService.sign(payload, { expiresIn: jwtConstants.access + "s" });
+        const r = this.jwtService.sign(payload, { expiresIn: jwtConstants.refresh + "s" });
+        await this.usersService.clearTokens(u.id, u.device);
+        await this.usersService.addToken(u.id, u.device, 1, a, jwtConstants.access);
+        await this.usersService.addToken(u.id, u.device, 2, r, jwtConstants.refresh);
+        x.access_token = a;
+        x.refresh_token = r;
+        x.role = u.is_admin;
+        x.realm = u.realm;
+        return x;
+      } catch (error) {
+        console.error(error);
+        throw new InternalServerErrorException({
+            status: HttpStatus.BAD_REQUEST,
+            error: error
+        });
+      }
     }
 
     async login(user: any, device: string) {

@@ -24,6 +24,7 @@ export class tokens {
     @Column({ type: "varchar", length: 100 })
     device_str: string;
 
+    @Index()
     @Column({ type: "text" })
     value_str: string;
 

@@ -1,10 +1,11 @@
-import { Controller, UseGuards, Request, Post, Get, Param } from '@nestjs/common';
-import { ApiSecurity, ApiBody, ApiCreatedResponse, ApiUnauthorizedResponse } from '@nestjs/swagger';
+import { Controller, UseGuards, Request, Post, Get, Param, Res, Body, HttpStatus } from '@nestjs/common';
+import { ApiSecurity, ApiBody, ApiCreatedResponse, ApiUnauthorizedResponse, ApiOkResponse, ApiNotFoundResponse, ApiInternalServerErrorResponse } from '@nestjs/swagger';
 import { AuthService } from './auth/auth.service';
 import { LocalAuthGuard } from './auth/local-auth.guard';
 import { User } from './interfaces/user.interface';
 import { JwtAuthGuard } from './auth/jwt-auth.guard';
 import { TokenGuard } from './auth/token.guard';
+import { Token } from './interfaces/token.interface';
 
 @ApiSecurity('basic')
 @Controller()
@@ -34,6 +35,25 @@ export class AppController {
     const r = await this.authService.login(req.user, device);
     return r;
   }
+
+  @Post('api/auth/recovery')
+  @ApiBody({ type: [Token] })
+  @ApiOkResponse({ description: 'Successfully.'})
+  @ApiNotFoundResponse({ description: 'Not Found.'})
+  @ApiInternalServerErrorResponse({ description: 'Internal Server error.'})
+  async updateCurrent(@Res() res, @Body() x: Token): Promise<Token> {
+      try {
+          const r = await this.authService.recoveryPass(x);
+          if (!r) {
+              return res.status(HttpStatus.NOT_FOUND).json();
+          } else {
+              return res.status(HttpStatus.OK).json(r);
+          }
+      } catch (e) {
+          return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ error: e.message.error.toString(), stack: e.stack});
+      }
+  }
+
 
   @Get('api/auth/anonymous')
   @ApiCreatedResponse({ description: 'Successfully.'})

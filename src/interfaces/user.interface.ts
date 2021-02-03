@@ -31,4 +31,7 @@ export class User {
 
     @ApiProperty()
     last_actived: Date;
+
+    @ApiPropertyOptional()
+    device: string;
 }
