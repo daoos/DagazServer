@@ -11,6 +11,7 @@ Dagaz.Model.checkVersion = function(design, name, value) {
 Dagaz.Model.moveToString = function(move) {
   var r = "";
   _.each(move.actions, function(a) {
+      if (a[1] === null) return;
       if (r != "") {
           r = r + " ";
       }
