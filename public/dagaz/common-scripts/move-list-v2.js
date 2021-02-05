@@ -229,6 +229,40 @@ MoveList.prototype.copyActions = function(move, actions, mode, sound) {
   }
 }
 
+Dagaz.Controller.SelectPiece = function(move, piece, part) {
+  _.each(move.actions, function(a) {
+      if ((a[3] != part) || (a[2] === null)) return;
+      for (var i = 0; i < a[2].length; i++) {
+           if (a[2][i].type == piece.type) {
+               a[2] = [piece];
+           }
+      }
+  });
+  return false;
+}
+
+MoveList.prototype.setPiece = function(piece) {
+  var result = Dagaz.Model.createMove();
+  if (this.level == 0) return result;
+  var moves = [];
+  var f = false;
+  _.each(this.moves, function(move) {
+      if (f) return;
+      f = Dagaz.Controller.SelectPiece(move, piece, this.level);
+      moves.push(move);
+      if (result.isPass()) {
+          _.each(move.actions, function(a) {
+              if (a[3] != this.level) return;
+              result.actions.push([a[0], a[1], a[2], 1]);
+          }, this);
+      }
+  }, this);
+  if (moves.length > 0) {
+      this.moves = moves;
+  }
+  return result;
+}
+
 MoveList.prototype.setPosition = function(pos) {
   if (Dagaz.Model.completePartial) {
       var r = null;

@@ -273,7 +273,11 @@ App.prototype.mouseDown = function(view, pos) {
       if (positions.length > 0) {
           this.selected = this.view.getSelected(positions[0]);
           if (!_.isUndefined(this.list) && !_.isUndefined(Dagaz.Controller.SelectPiece)) {
-              this.move = this.list.setPiece(this.selected.changeOwner(this.board.player));
+              var piece = this.selected;
+              if (Dagaz.Model.remapPromote) {
+                  piece = piece.changeOwner(this.board.player);
+              }
+              this.move = this.list.setPiece(piece);
           }
           if (this.selected === null) {
               delete this.selected;

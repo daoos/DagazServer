@@ -212,6 +212,7 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(176, 25, 'Ikusa Shogi', 'ikusa-shogi', 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(177, 25, 'Rocket Shogi', 'rocket-shogi', 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(178, 30, 'Demi Chess', 'demi-chess', 2)`);
+        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total, max_selector) values(179, 30, 'Andernach Chess', 'andernach-chess', 2, 2)`);
 
         await queryRunner.query(`insert into game_styles(id, game_id, name, suffix, player_num) values(1, 23, 'European', '', null)`);
         await queryRunner.query(`insert into game_styles(id, game_id, name, suffix, player_num) values(2, 23, 'Chinese', '-kanji', null)`);
@@ -765,6 +766,8 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, copyright) values(519, 'rocket-shogi-kanji', null, 'rocket-shogi-kanji', '2012 Itsubaki Yoshihisa')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(520, 'bomb-chess', 2, 'bomb-chess-2')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(521, 'demi-chess', null, 'demi-chess', 'https://en.wikipedia.org/wiki/Minichess', '1986 Peter Krystufek')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(522, 'andernach-chess', 1, 'chess-1', 'https://en.wikipedia.org/wiki/Andernach_chess')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(523, 'andernach-chess', 2, 'andernach-chess', 'https://en.wikipedia.org/wiki/Andernach_chess')`);
     }
 
     public async down(queryRunner: QueryRunner): Promise<any> {
