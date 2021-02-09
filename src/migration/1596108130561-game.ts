@@ -213,6 +213,11 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(177, 25, 'Rocket Shogi', 'rocket-shogi', 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(178, 30, 'Demi Chess', 'demi-chess', 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total, max_selector) values(179, 30, 'Andernach Chess', 'andernach-chess', 2, 2)`);
+        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(180, 22, 'Fighting Checkers', 'fighting-checkers', 2)`);
+        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(181, 25, 'Le Shogi', 'le-shogi', 2)`);
+        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(182, 25, 'REN Shogi', 'ren-shogi', 2)`);
+        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(183, 25, 'Simple Shogi', 'simple-shogi', 2)`);
+        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(184, 25, 'Treasure Shogi', 'treasure-shogi', 2)`);
 
         await queryRunner.query(`insert into game_styles(id, game_id, name, suffix, player_num) values(1, 23, 'European', '', null)`);
         await queryRunner.query(`insert into game_styles(id, game_id, name, suffix, player_num) values(2, 23, 'Chinese', '-kanji', null)`);
@@ -768,6 +773,15 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(521, 'demi-chess', null, 'demi-chess', 'https://en.wikipedia.org/wiki/Minichess', '1986 Peter Krystufek')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(522, 'andernach-chess', 1, 'chess-1', 'https://en.wikipedia.org/wiki/Andernach_chess')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(523, 'andernach-chess', 2, 'andernach-chess', 'https://en.wikipedia.org/wiki/Andernach_chess')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(524, 'fighting-checkers', null, 'fighting-checkers', 'https://www.thegamecrafter.com/games/Fighting-Checkers', '2018 Tony Berard')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, copyright) values(525, 'le-shogi', null, 'le-shogi', '2009 Yamamoto Mitsuo')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, copyright) values(526, 'le-shogi-kanji', null, 'le-shogi-kanji', '2009 Yamamoto Mitsuo')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(527, 'ren-shogi', null, 'ren-shogi')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(528, 'ren-shogi-kanji', null, 'ren-shogi-kanji')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, copyright) values(529, 'simple-shogi', null, 'simple-shogi', '2012 Itsubaki Yoshihisa')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, copyright) values(530, 'simple-shogi-kanji', null, 'simple-shogi-kanji', '2012 Itsubaki Yoshihisa')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, copyright) values(531, 'treasure-shogi', null, 'treasure-shogi', '2010 Yamamoto Mitsuo')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, copyright) values(532, 'treasure-shogi-kanji', null, 'treasure-shogi-kanji', '2010 Yamamoto Mitsuo')`);
     }
 
     public async down(queryRunner: QueryRunner): Promise<any> {
