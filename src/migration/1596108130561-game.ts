@@ -220,6 +220,7 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(184, 25, 'Treasure Shogi', 'treasure-shogi', 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total, max_selector) values(185, 17, 'Watermelon Chess', 'watermelon', 2, 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(186, 25, 'Renge Shogi', 'renge-shogi', 2)`);
+        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(187, 41, 'Fangyuan TiaoQi', 'fangyuan-tiaoqi', 2)`);
 
         await queryRunner.query(`insert into game_styles(id, game_id, name, suffix, player_num) values(1, 23, 'European', '', null)`);
         await queryRunner.query(`insert into game_styles(id, game_id, name, suffix, player_num) values(2, 23, 'Chinese', '-kanji', null)`);
@@ -788,6 +789,7 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(534, 'watermelon', 2, 'watermelon-2', 'https://sites.google.com/site/boardandpieces/list-of-games/watermelon-chess')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, copyright) values(535, 'renge-shogi', null, 'renge-shogi', '1999 Michel Sandeman')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, copyright) values(536, 'renge-shogi-kanji', null, 'renge-shogi-kanji', '1999 Michel Sandeman')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(537, 'fangyuan-tiaoqi', null, 'fangyuan-tiaoqi')`);
     }
 
     public async down(queryRunner: QueryRunner): Promise<any> {
