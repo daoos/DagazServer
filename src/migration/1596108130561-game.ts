@@ -222,7 +222,7 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(186, 25, 'Renge Shogi', 'renge-shogi', 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(187, 41, 'Fangyuan TiaoQi', 'fangyuan-tiaoqi', 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(188, 17, 'Go (13x13)', 'go-13x13', 2)`);
-        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(189, 37, 'Neutron', 'neutron', 2)`);
+        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total, max_selector) values(189, 37, 'Neutron', 'neutron', 2, 4)`);
 
         await queryRunner.query(`insert into game_styles(id, game_id, name, suffix, player_num) values(1, 23, 'European', '', null)`);
         await queryRunner.query(`insert into game_styles(id, game_id, name, suffix, player_num) values(2, 23, 'Chinese', '-kanji', null)`);
@@ -323,6 +323,10 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_setups(id, game_id, variant_id, selector_value, name) values(13, 30, 162, 2, 'Random Setup')`);
         await queryRunner.query(`insert into game_setups(id, game_id, variant_id, selector_value, name) values(14, 30, 157, 1, 'Resurrection Chess')`);
         await queryRunner.query(`insert into game_setups(id, game_id, variant_id, selector_value, name) values(15, 30, 157, 2, 'Soulbringer')`);
+        await queryRunner.query(`insert into game_setups(id, game_id, variant_id, selector_value, name) values(16, 37, 189, 1, '5x5')`);
+        await queryRunner.query(`insert into game_setups(id, game_id, variant_id, selector_value, name) values(17, 37, 189, 2, '7x5')`);
+        await queryRunner.query(`insert into game_setups(id, game_id, variant_id, selector_value, name) values(18, 37, 189, 3, '5x7')`);
+        await queryRunner.query(`insert into game_setups(id, game_id, variant_id, selector_value, name) values(19, 37, 189, 4, '7x7')`);
 
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(1, 'doubutsu-shogi', null, 'doubutsu-shogi', 'https://en.wikipedia.org/wiki/D%C5%8Dbutsu_sh%C5%8Dgi', 'Madoka Kitao')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(2, 'atari-go', null, 'atari-go', 'https://en.wikipedia.org/wiki/Go_variants#First_Capture')`);
@@ -794,7 +798,10 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, copyright) values(536, 'renge-shogi-kanji', null, 'renge-shogi-kanji', '1999 Michel Sandeman')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(537, 'fangyuan-tiaoqi', null, 'fangyuan-tiaoqi')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(538, 'go-13x13', null, 'go-13x13', 'https://en.wikipedia.org/wiki/Rules_of_Go')`);
-        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(539, 'neutron', null, 'neutron', 'https://en.wikipedia.org/wiki/Neutron_(game)', '1978 Robert A. Kraus')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(539, 'neutron', 1, 'neutron-1', 'https://en.wikipedia.org/wiki/Neutron_(game)', '1978 Robert A. Kraus')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(540, 'neutron', 2, 'neutron-2', 'https://en.wikipedia.org/wiki/Neutron_(game)', '1978 Robert A. Kraus')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(541, 'neutron', 3, 'neutron-3', 'https://en.wikipedia.org/wiki/Neutron_(game)', '1978 Robert A. Kraus')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(542, 'neutron', 4, 'neutron-4', 'https://en.wikipedia.org/wiki/Neutron_(game)', '1978 Robert A. Kraus')`);
     }
 
     public async down(queryRunner: QueryRunner): Promise<any> {

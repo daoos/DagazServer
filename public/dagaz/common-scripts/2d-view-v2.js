@@ -126,7 +126,8 @@ View2D.prototype.clearDrops = function() {
   this.drops = [];
 }
 
-View2D.prototype.defPosition = function(name, x, y, dx, dy) {
+View2D.prototype.defPosition = function(name, x, y, dx, dy, selector) {
+  if (!_.isUndefined(selector) && (selector != Dagaz.Model.getResourceSelector())) return;
   this.pos.push({
       name: name,
       x:    x,
