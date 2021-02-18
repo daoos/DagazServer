@@ -915,8 +915,32 @@ export class SessionService {
         return null;
     }
 
+    async findPairSession(user: number, sess: Sess): Promise<Sess> {
+        let x = await this.service.query(
+            `select a.id
+             from   game_sessions a
+             inner  join user_games b on (b.session_id = a.id and b.user_id <> $1 and b.is_ai = 0 and b.player_num <> coalesce($2, b.player_num + 1))
+             left   join game_variants c on (c.external_ai = b.user_id)
+             left   join games d on (d.external_ai = b.user_id)
+             where  a.status_id = 1 and a.game_id = $3 and coalesce(a.variant_id, 0) = coalesce($4, 0)
+             and    coalesce(a.selector_value, 0) = coalesce($5, 0) and c.id is null and d.id is null`, 
+             [user, sess.player_num, sess.game_id, sess.variant_id, sess.selector_value]);
+        if (!x || x.length == 0) {
+            return null;
+        }
+        sess.id = x[0].id;
+        await this.joinToSession(user, sess, false);
+        return sess;
+    }
+
     async createSession(user:number, x: Sess): Promise<Sess> {
         try {
+            if (!x.with_ai) {
+                const r = await this.findPairSession(user, x);
+                if (r) {
+                    return r;
+                }
+            }
             const suffix = await this.getSuffix(x.game_id, x.player_num);
             await this.clearWaiting();
             await this.clearObsolete();
