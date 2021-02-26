@@ -21,6 +21,7 @@ Dagaz.Model.CheckInvariants = function(board) {
       var piece = board.getPiece(pos);
       if (piece === null) return;
       if (piece.type == bomb) {
+          move.sound = 10;
           move.capturePiece(pos);
       }
   });
