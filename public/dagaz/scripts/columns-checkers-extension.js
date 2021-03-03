@@ -134,6 +134,12 @@ Dagaz.View.showPiece = function(view, ctx, frame, pos, piece, model, x, y) {
       blink = -blink;
   }
   if (value !== null) {
+      var offset = 8;
+      if (value.length > 10) offset = 7;
+      if (value.length > 12) offset = 6;
+      if (value.length > 14) offset = 5;
+      if (value.length > 16) offset = 4;
+      if (value.length > 20) offset = 3;
       var s = value.length * 5;
       if (s > 15) s = 15;
       y += s;
@@ -161,7 +167,7 @@ Dagaz.View.showPiece = function(view, ctx, frame, pos, piece, model, x, y) {
           if (p !== null) {
               ctx.drawImage(p.h, x + dx, y, piece.dx, piece.dy);
           }
-          y -= 5;
+          y -= offset;
       }
   }
 }
