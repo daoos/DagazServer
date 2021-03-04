@@ -200,9 +200,15 @@ export class SessionService {
                  inner  join users c on (c.id = a.user_id and c.realm_id = $2)
                  left   join game_variants d on (d.id = a.variant_id)
                  inner  join user_games e on (e.session_id = a.id and e.user_id <> $3)
+                 left   join black_list f on (
+                        f.user_id = a.user_id and f.restricted_id = $4 and
+                        coalesce(f.game_id, b.id) = b.id and
+                      ( d.id is null or coalesce(f.variant_id, d.id) = d.id)
+                 )
                  where  a.status_id = 1 and a.closed is null
-                 and  ( coalesce($4, d.id) = d.id or d.id is null )
-                 order  by a.created desc`, [game, realm, user, variant]);
+                 and  ( coalesce($5, d.id) = d.id or d.id is null )
+                 and    f.id is null
+                 order  by a.created desc`, [game, realm, user, user, variant]);
                  let l: Sess[] = x.map(x => {
                     let it = new Sess();
                     it.id = x.id;
