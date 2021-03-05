@@ -30,17 +30,17 @@ Dagaz.Model.BuildDesign = function(design) {
     design.checkVersion("show-hints", "false");
     design.checkVersion("advisor-wait", "5");
 
-    design.addDirection("se");
-    design.addDirection("s");
-    design.addDirection("sw");
-    design.addDirection("e");
-    design.addDirection("w");
-    design.addDirection("ne");
-    design.addDirection("nw");
-    design.addDirection("nx");
-    design.addDirection("n");
-    design.addDirection("sr");
-    design.addDirection("nr");
+    design.addDirection("se"); // 0
+    design.addDirection("s");  // 1
+    design.addDirection("sw"); // 2
+    design.addDirection("e");  // 3
+    design.addDirection("w");  // 4
+    design.addDirection("ne"); // 5
+    design.addDirection("nw"); // 6
+    design.addDirection("nx"); // 7
+    design.addDirection("n");  // 8
+    design.addDirection("sr"); // 9
+    design.addDirection("nr"); // 10
 
     design.addPlayer("South", [6, 8, 5, 4, 3, 2, 0, 7, 1, 9, 10]);
     design.addPlayer("North", [6, 8, 5, 4, 3, 2, 0, 7, 1, 10, 9]);
@@ -60,9 +60,9 @@ Dagaz.Model.BuildDesign = function(design) {
     design.addPosition("Y6", [0, 11, 10, 0, -1, 0, -12, -11, -11, 0, -1]);
     design.addPosition("I6", [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
     design.addPosition("a6", [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
-    design.addPosition("b6", [12, 11, 10, 1, 0, -10, 0, 56, -11, 60, -14]);
+    design.addPosition("b6", [12, 11, 10, 1, 0, -10, 0, 56, 0, 60, -14]);
     design.addPosition("c6", [12, 11, 10, 1, -1, 0, 0, -11, -11, 59, -15]);
-    design.addPosition("d6", [12, 11, 10, 0, -1, 0, -12, 34, -11, 58, -16]);
+    design.addPosition("d6", [12, 11, 10, 0, -1, 0, -12, 34, 0, 58, -16]);
     design.addPosition("e6", [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
     design.addPosition("J6", [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
     design.addPosition("Z6", [12, 11, 0, 1, 0, -10, 0, -11, -11, 1, 0]);
@@ -70,11 +70,11 @@ Dagaz.Model.BuildDesign = function(design) {
     design.addPosition("X5", [12, 11, 0, 1, 0, -10, 0, -11, -11, 0, 12]);
     design.addPosition("Y5", [0, 11, 10, 0, -1, 0, -12, -11, -11, 0, -1]);
     design.addPosition("I5", [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
-    design.addPosition("a5", [12, 11, 0, 1, 0, -10, 0, 34, -11, 50, -24]);
+    design.addPosition("a5", [12, 11, 0, 1, 0, -10, 0, 34, 0, 50, -24]);
     design.addPosition("b5", [12, 11, 10, 1, -1, -10, 0, -11, -11, 49, -25]);
     design.addPosition("c5", [12, 11, 10, 1, -1, -10, -12, -11, -11, 48, -26]);
     design.addPosition("d5", [12, 11, 10, 1, -1, 0, -12, -11, -11, 47, -27]);
-    design.addPosition("e5", [0, 11, 10, 0, -1, 0, -12, 0, -11, 46, -28]);
+    design.addPosition("e5", [0, 11, 10, 0, -1, 0, -12, 0, 0, 46, -28]);
     design.addPosition("J5", [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
     design.addPosition("Z5", [12, 11, 0, 1, 0, -10, 0, -11, -11, 1, 0]);
     design.addPosition("T5", [0, 11, 10, 0, -1, 0, -12, -11, -11, -12, 0]);
