@@ -37,10 +37,6 @@ Dagaz.Model.CheckInvariants = function(board) {
           target = target.changeOwner(board.player);
       }
       if ((target !== null) && isLocked(design, board, target.player, src, dst, piece)) return;
-      if (isLocked(design, board, piece.player, dst, src, target)) {
-          move.failed = true;
-          return;
-      }
       if (target === null) return;
       move.movePiece(dst, src, target);
   });

@@ -215,16 +215,13 @@ Dagaz.Model.BuildDesign = function(design) {
     design.addCommand(4, ZRF.JUMP,	2);
     design.addCommand(4, ZRF.LITERAL,	1);	// true
     design.addCommand(4, ZRF.FUNCTION,	0);	// not
-    design.addCommand(4, ZRF.IF,	10);
-    design.addCommand(4, ZRF.FUNCTION,	1);	// empty?
-    design.addCommand(4, ZRF.FUNCTION,	0);	// not
-    design.addCommand(4, ZRF.IF,	4);
+    design.addCommand(4, ZRF.IF,	7);
     design.addCommand(4, ZRF.FORK,	3);
     design.addCommand(4, ZRF.FUNCTION,	25);	// to
     design.addCommand(4, ZRF.FUNCTION,	28);	// end
     design.addCommand(4, ZRF.PARAM,	1);	// $2
     design.addCommand(4, ZRF.FUNCTION,	22);	// navigate
-    design.addCommand(4, ZRF.JUMP,	-18);
+    design.addCommand(4, ZRF.JUMP,	-15);
     design.addCommand(4, ZRF.PARAM,	2);	// $3
     design.addCommand(4, ZRF.FUNCTION,	22);	// navigate
     design.addCommand(4, ZRF.FUNCTION,	1);	// empty?
