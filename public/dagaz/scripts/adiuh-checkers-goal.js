@@ -19,7 +19,7 @@ Dagaz.AI.eval = function(design, params, board, player) {
       } else {
           v++;
       }
-      if (pos >= 32) {
+      if (pos >= Dagaz.Model.BOARD_SIZE / 2) {
           v = -v;
       }
       if (player == 1) {
@@ -42,7 +42,7 @@ Dagaz.Model.checkGoals = function(design, board, player) {
   board.generate(design);
   if (board.moves.length == 0) {
       var w = 0; var b = 0;
-      for (var pos = 0; pos < 64; pos++) {
+      for (var pos = 0; pos < Dagaz.Model.BOARD_SIZE; pos++) {
            var piece = board.getPiece(pos);
            if (piece !== null) {
                var c = 1;
@@ -50,7 +50,7 @@ Dagaz.Model.checkGoals = function(design, board, player) {
                if (s !== null) {
                    c += s.length;
                }
-               if (pos < 32) {
+               if (pos < Dagaz.Model.BOARD_SIZE / 2) {
                    w += c;
                } else {
                    b += c;

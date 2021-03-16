@@ -1,5 +1,7 @@
 Dagaz.Controller.persistense = "none";
 Dagaz.View.TARGET_COLOR = "#FFC44E";
+Dagaz.Model.BOARD_SIZE = 80;
+Dagaz.Model.WIDTH = 10;
 
 ZRF = {
     JUMP:          0,

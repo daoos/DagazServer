@@ -21,7 +21,7 @@ var showDigits = function(view, ctx, x, y, v) {
 Dagaz.View.showBoard = function(board, ctx) {
   var design = Dagaz.Model.design;
   var w = 0; var b = 0;
-  for (var pos = 0; pos < 64; pos++) {
+  for (var pos = 0; pos < Dagaz.Model.BOARD_SIZE; pos++) {
        var piece = board.getPiece(pos);
        if (piece !== null) {
            var c = 1;
@@ -29,7 +29,7 @@ Dagaz.View.showBoard = function(board, ctx) {
            if (s !== null) {
                c += s.length;
            }
-           if (pos < 32) {
+           if (pos < Dagaz.Model.BOARD_SIZE / 2) {
                w += c;
            } else {
                b += c;
