@@ -120,8 +120,8 @@ Dagaz.Model.BuildDesign = function(design) {
     design.addPosition("i1", [0, 0, -9, -11]);
     design.addPosition("j1", [0, 0, 0, -11]);
 
-    design.addZone("promotion", 1, [1, 3, 5, 7]);
-    design.addZone("promotion", 2, [70, 72, 74, 76]);
+    design.addZone("promotion", 1, [1, 3, 5, 7, 9]);
+    design.addZone("promotion", 2, [70, 72, 74, 76, 78]);
 
     design.addCommand(0, ZRF.FUNCTION,	24);	// from
     design.addCommand(0, ZRF.PARAM,	0);	// $1
