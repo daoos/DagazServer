@@ -17,7 +17,7 @@ Dagaz.Model.CheckInvariants = function(board) {
       var b = board.apply(move);
       var pos = move.actions[0][1][0];
       var isSuicide = true;
-      var done = [];
+      var done = []; var captured = [];
       _.each([1, 3, 4, 7], function(dir) {
           var p = design.navigate(board.player, pos, dir);
           if ((p === null) || (_.indexOf(done, p) >= 0)) return;
@@ -47,6 +47,7 @@ Dagaz.Model.CheckInvariants = function(board) {
           if (dame.length == 0) {
                _.each(group, function(pos) {
                     move.capturePiece(pos);
+                    captured.push(pos);
                });
                isSuicide = false;
           }
@@ -68,7 +69,7 @@ Dagaz.Model.CheckInvariants = function(board) {
                              var q = design.navigate(board.player, group[i], dir);
                              if ((q === null) || (_.indexOf(group, q) >= 0)) return;
                              var x = b.getPiece(q);
-                             if (x === null) {
+                             if ((x === null) || (_.indexOf(captured, q) >= 0)) {
                                  if (_.indexOf(dame, q)) dame.push(q);
                                  return;
                              }
