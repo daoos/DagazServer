@@ -1,8 +1,9 @@
 ﻿(function() {
 
-var root = null; // Дерево состояний
-var curr = null; // Текущий узел
-var branch = 1;  // Текущий бранч (меньший или равный)
+var root   = null;
+var curr   = null;
+var top    = null;
+var branch = 1;
 
 Dagaz.Controller.init = function(setup, player) {
   root = {
@@ -14,10 +15,11 @@ Dagaz.Controller.init = function(setup, player) {
       nodes:  []
   };
   curr = root;
+  top = curr;
 }
 
 var findNode = function(turn) {
-  var r = curr;
+  var r = top;
   while (r !== null) {
       if (r.turn == turn) return r;
       r = r.parent;
@@ -25,7 +27,6 @@ var findNode = function(turn) {
   return null;
 }
 
-// TODO: Кнопки перемотки в начало и конец (и кнопка включения анимации)
 var checkButtons = function() {
   if (curr.parent) {
       undo.style.display = "inline";
@@ -39,7 +40,6 @@ var checkButtons = function() {
   }
 }
 
-// TODO: Автоматическая анимация ходов полученных в текущий узел
 Dagaz.Controller.addMoves = function(moves) {
   _.each(moves, function(move) {
       var node = findNode(move.turn_num - 1);
@@ -49,44 +49,41 @@ Dagaz.Controller.addMoves = function(moves) {
           if (n.branch <= branch) return;
           branch = n.branch;
       });
-      // Добавить branch_num
       if (move.branch_num <= branch) return;
-      nodes.push({
+      top = {
           parent: node,
           turn: move.turn_num,
-          branch: move.branch_num, // TODO: Добавить
+          branch: move.branch_num,
           player: move.next_player,
           move: move.move_str,
           setup: move.setup_str,
           nodes:  []
-      });   
+      };
+      node.nodes.push(top);   
   });
   checkButtons();
 }
 
-// TODO: Переопределить в app
-// true - если коалиция или режим разбора партии
 Dagaz.Controller.isStable = function(player) {
   return true;
 }
 
-// TODO: Согласование отката
 Dagaz.Controller.undo = function() {
+  if (!Dagaz.Controller.isBuzy()) return;
   var node = curr.parent;
   while (node.parent) {
-      // Если перемотка может быть завершена на этом игроке
       if (Dagaz.Controller.isStable(node.player)) break;
       node = node.parent;
   }
   if (!node) return false;
   curr = node;
   checkButtons();
-  // TODO: Определить в app (установка состояния игры)
   Dagaz.Controller.setup(node.setup, node.player);
   return true;
 }
 
 Dagaz.Controller.redo = function() {
+  if (!Dagaz.Controller.isBuzy()) return;
   var node = null;
   _.each(curr.nodes, function(n) {
       if (n.branch > branch) return;
@@ -94,14 +91,12 @@ Dagaz.Controller.redo = function() {
       node = n;
   });
   if (!node) return false;
-  // TODO: Определить в app (воспроизведение хода)
   Dagaz.Controller.apply(node.move);
   curr = node;
   checkButtons();
   return true;
 }
 
-// Переключиться на branch хода
 Dagaz.Controller.switch = function(move, setup, player) {
   var node = null; var mx = branch;
   _.each(curr.nodes, function(n) {
@@ -120,7 +115,6 @@ Dagaz.Controller.switch = function(move, setup, player) {
           nodes:  []
       };
       curr.nodes.push(node);
-      // TODO: Сохранить новый branch в БД
       Dagaz.Controller.save(node.turn, node.move, node.setup, node.player, node.branch);
   }
   if (!node) return false;
@@ -128,6 +122,29 @@ Dagaz.Controller.switch = function(move, setup, player) {
   curr = node;
   checkButtons();
   return true;
+}
+
+var DIR_NAMES   = {
+    "PageUp":    "u",
+    "PageDown":  "d"
+};
+
+var onkeyup = window.onkeyup;
+
+window.onkeyup = function(event) {
+  var name = DIR_NAMES[event.key];
+  if (_.isUndefined(event.key)) {
+      name = DIR_NAMES[event.keyIdentifier];
+  }
+  if (curr.parent && (name == 'd')) {
+      Dagaz.Controller.undo();
+  }
+  if (curr.nodes.length && (name == 'u')) {
+      Dagaz.Controller.redo();
+  }
+  if (onkeyup) {
+      onkeyup(event);
+  }
 }
 
 })();
