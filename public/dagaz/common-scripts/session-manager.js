@@ -1,9 +1,11 @@
 ﻿(function() {
 
-var root   = null;
-var curr   = null;
-var top    = null;
-var branch = 1;
+var root      = null;
+var curr      = null;
+var top       = null;
+var branch    = 1;
+var isAuto    = true;
+var isStarted = false;
 
 Dagaz.Controller.init = function(setup, player) {
   root = {
@@ -30,14 +32,83 @@ var findNode = function(turn) {
 var checkButtons = function() {
   if (curr.parent) {
       undo.style.display = "inline";
+      home.style.display = "inline";
   } else {
       undo.style.display = "none";
+      home.style.display = "none";
   }
   if (curr.nodes.length) {
       redo.style.display = "inline";
   } else {
       redo.style.display = "none";
   }
+}
+
+Dagaz.Controller.isStable = function(player) {
+  return true;
+}
+
+Dagaz.Controller.home = function() {
+  Dagaz.Controller.system = true;
+  if (!curr.parent) return;
+  if (!Dagaz.Controller.isBuzy()) return;
+  var node = curr.parent;
+  while (node.parent) {
+      node = node.parent;
+  }
+  curr = node;
+  checkButtons();
+  Dagaz.Controller.setup(node.setup, node.player);
+  console.log('undo: ' + node.setup);
+  if (!_.isUndefined(Dagaz.Controller.play)) {
+      Dagaz.Controller.play(Dagaz.Sounds.page);
+  }
+  isAuto = false;
+  return true;
+}
+
+Dagaz.Controller.undo = function() {
+  Dagaz.Controller.system = true;
+  if (!curr.parent) return;
+  if (!Dagaz.Controller.isBuzy()) return;
+  var node = curr.parent;
+  while (node.parent) {
+      if (Dagaz.Controller.isStable(node.player)) break;
+      node = node.parent;
+  }
+  if (!node) return false;
+  curr = node;
+  checkButtons();
+  Dagaz.Controller.setup(node.setup, node.player);
+  console.log('undo: ' + node.setup);
+  if (!_.isUndefined(Dagaz.Controller.play)) {
+      Dagaz.Controller.play(Dagaz.Sounds.page);
+  }
+  isAuto = false;
+  return true;
+}
+
+Dagaz.Controller.redo = function() {
+  Dagaz.Controller.system = true;
+  if (!curr.nodes.length) return;
+  if (!Dagaz.Controller.isBuzy()) return;
+  var node = null;
+  _.each(curr.nodes, function(n) {
+      if (n.branch > branch) return;
+      if ((node !== null) && (node.branch >= n.branch)) return;
+      node = n;
+  });
+  if (!node) return false;
+  Dagaz.Controller.apply(node.move);
+  curr = node;
+  checkButtons();
+  return true;
+}
+
+var animate = function() {
+  if (!isAuto) return;
+  Dagaz.Controller.redo();
+  _.delay(animate, 2000);
 }
 
 Dagaz.Controller.addMoves = function(moves) {
@@ -62,39 +133,10 @@ Dagaz.Controller.addMoves = function(moves) {
       node.nodes.push(top);   
   });
   checkButtons();
-}
-
-Dagaz.Controller.isStable = function(player) {
-  return true;
-}
-
-Dagaz.Controller.undo = function() {
-  if (!Dagaz.Controller.isBuzy()) return;
-  var node = curr.parent;
-  while (node.parent) {
-      if (Dagaz.Controller.isStable(node.player)) break;
-      node = node.parent;
+  if (!isStarted) {
+      isStarted = true;
+      _.delay(animate, 1000);
   }
-  if (!node) return false;
-  curr = node;
-  checkButtons();
-  Dagaz.Controller.setup(node.setup, node.player);
-  return true;
-}
-
-Dagaz.Controller.redo = function() {
-  if (!Dagaz.Controller.isBuzy()) return;
-  var node = null;
-  _.each(curr.nodes, function(n) {
-      if (n.branch > branch) return;
-      if ((node !== null) && (node.branch >= n.branch)) return;
-      node = n;
-  });
-  if (!node) return false;
-  Dagaz.Controller.apply(node.move);
-  curr = node;
-  checkButtons();
-  return true;
 }
 
 Dagaz.Controller.switch = function(move, setup, player) {
@@ -125,6 +167,7 @@ Dagaz.Controller.switch = function(move, setup, player) {
 }
 
 var DIR_NAMES   = {
+    "Home":      "h",
     "PageUp":    "u",
     "PageDown":  "d"
 };
@@ -141,6 +184,9 @@ window.onkeyup = function(event) {
   }
   if (curr.nodes.length && (name == 'u')) {
       Dagaz.Controller.redo();
+  }
+  if (curr.nodes.length && (name == 'h')) {
+      Dagaz.Controller.home();
   }
   if (onkeyup) {
       onkeyup(event);

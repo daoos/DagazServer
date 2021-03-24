@@ -17,7 +17,10 @@
 
 <table style="margin:auto; font-family:sans-serif; font-size:14px" id="Table">
 <tr><td>
-Copyright (c) 1957 Kamzolov J.N.<br>
+<a href="javascript:Dagaz.Controller.home()" style="display:none" id="home"><img src="images/home.png"/></a>
+<a href="javascript:Dagaz.Controller.undo()" style="display:none" id="undo"><img src="images/undo.png"/></a>
+Copyright (c) 1957 Kamzolov J.N.
+<a href="javascript:Dagaz.Controller.redo()" style="display:none" id="redo"><img src="images/redo.png"/></a><br>
 <a target="_blank" href="https://www.poznovatelno.ru/free/games/12489.html">Rules</a>
 <a href="javascript:Dagaz.Controller.resign()">I Resign</a>
 <a href="javascript:Dagaz.Controller.sound()" id="sound">no Sound</a>
@@ -54,6 +57,7 @@ Copyright (c) 1957 Kamzolov J.N.<br>
 <script src="common-scripts/2d-view-v4.js"></script>
 <script src="common-scripts/move-list-v1.js"></script>
 <script src="common-scripts/sound-manager-v2.js"></script>
+<script src="common-scripts/session-manager.js"></script>
 <script src="common-scripts/random-ai.js"></script>
 <script src="common-scripts/uct-ai.js"></script>
 <script src="scripts/chessball-goal.js"></script>

@@ -400,7 +400,7 @@ var authorize = function() {
   }
 }
 
-var recovery = function() {
+var recovery = function(s) {
   if (auth === null) return;
   if (sid === null) return;
   if (setup !== null) return;
@@ -410,7 +410,8 @@ var recovery = function() {
      url: SERVICE + "session/recovery",
      type: "POST",
      data: {
-         id: sid
+         id: sid,
+         last_setup: s
      },
      dataType: "json",
      beforeSend: function (xhr) {
@@ -897,10 +898,14 @@ App.prototype.exec = function() {
               window.location = '/';
           }
       }
+      var s = null;
+      if (!_.isUndefined(Dagaz.Model.getSetup)) {
+          s = Dagaz.Model.getSetup(this.design, this.board);
+      }
       if (!_.isUndefined(Dagaz.Controller.init)) {
           Dagaz.Controller.init(s, this.board.player);
       }
-      recovery();
+      recovery(s);
       if (setup && uid) {
           Dagaz.Model.setup(this.board, setup);
           this.view.reInit(this.board);

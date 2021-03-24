@@ -13,11 +13,14 @@
 
 <table style="margin:auto; font-family:sans-serif; font-size:14px" id="Table">
 <tr><td>
+<a href="javascript:Dagaz.Controller.home()" style="display:none" id="home"><img src="images/home.png"/></a>
+<a href="javascript:Dagaz.Controller.undo()" style="display:none" id="undo"><img src="images/undo.png"/></a>
 Copyright (c) 1911 Emanuel Lasker
 <a target="_blank" href="https://en.wikipedia.org/wiki/Lasca">Rules</a>
 <a href="javascript:Dagaz.Controller.resign()">I Resign</a>
 <a href="javascript:Dagaz.Controller.drawOffer()">Offer Draw</a>
 <a href="javascript:Dagaz.Controller.sound()" id="sound">no Sound</a>
+<a href="javascript:Dagaz.Controller.redo()" style="display:none" id="redo"><img src="images/redo.png"/></a>
 </td></tr>
 <tr style="height:480px; vertical-align:top">
 <td id="CanvasCell" style="width:480px">
@@ -51,6 +54,7 @@ Copyright (c) 1911 Emanuel Lasker
 <script src="common-scripts/2d-view-v2.js"></script>
 <script src="common-scripts/move-list-v1.js"></script>
 <script src="common-scripts/sound-manager-v2.js"></script>
+<script src="common-scripts/session-manager.js"></script>
 <script src="scripts/laska-checkers-extension.js"></script>
 <script src="scripts/laska-black.js"></script>
 <script src="common-scripts/app-net-v2.js"></script>

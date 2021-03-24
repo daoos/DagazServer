@@ -1,5 +1,7 @@
 (function() {
 
+Dagaz.Controller.system = false;
+
 var checkVersion = Dagaz.Model.checkVersion;
 var superKo = null;
 var numKo = 1;
@@ -39,6 +41,10 @@ Dagaz.Model.zplayer = function(value, player) {
 var CheckInvariants = Dagaz.Model.CheckInvariants;
 
 Dagaz.Model.CheckInvariants = function(board) {
+  if (Dagaz.Controller.system) {
+      CheckInvariants(board);
+      return;
+  }
   if ((superKo !== null) && (!asymmetric || (board.player > 1))) {
       for (var i = 0; i < board.moves.length; i++) {
            var r = 0;
