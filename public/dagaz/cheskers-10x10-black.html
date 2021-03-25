@@ -22,11 +22,14 @@
 
 <table style="margin:auto; font-family:sans-serif; font-size:14px" id="Table">
 <tr><td>
+<a href="javascript:Dagaz.Controller.home()" title="Home" style="display:none" id="home"><img src="images/home.png"/></a>
+<a href="javascript:Dagaz.Controller.undo()" title="PgDown" style="display:none" id="undo"><img src="images/undo.png"/></a>
 Copyright (c) Peter Aronson 
 <a target="_blank" href="https://en.wikipedia.org/wiki/Cheskers">Rules</a>
 <a href="javascript:Dagaz.Controller.resign()">I Resign</a>
 <a href="javascript:Dagaz.Controller.drawOffer()">Offer Draw</a>
 <a href="javascript:Dagaz.Controller.sound()" id="sound">no Sound</a>
+<a href="javascript:Dagaz.Controller.redo()" title="PgUp" style="display:none" id="redo"><img src="images/redo.png"/></a>
 </td></tr>
 <tr style="height:504px; vertical-align:top">
 <td id="CanvasCell" style="width:504px">
@@ -60,6 +63,7 @@ Copyright (c) Peter Aronson
 <script src="common-scripts/2d-view-v3.js"></script>
 <script src="common-scripts/move-list-v1.js"></script>
 <script src="common-scripts/sound-manager-v2.js"></script>
+<script src="common-scripts/session-manager.js"></script>
 <script src="scripts/cheskers-promotion.js"></script>
 <script src="scripts/cheskers-extension.js"></script>
 <script src="scripts/cheskers-invariant.js"></script>
