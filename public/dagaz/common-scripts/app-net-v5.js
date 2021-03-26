@@ -1082,6 +1082,22 @@ App.prototype.exec = function() {
               this.move = move;
           }
       }, this);
+      if ((this.move === null) && (this.board.parent !== null)) {
+          var b = this.board.parent;
+          _.each(b, function(move) {
+              if (move.toString() == last_move) {
+                  this.move = move;
+              }
+          }, this);
+          if (this.move !== null) {
+              var s = '';
+              if (!_.isUndefined(Dagaz.Model.getSetup)) {
+                  s = ', setup=' + Dagaz.Model.getSetup(this.design, this.board);
+              }         
+              console.log('Gotcha: Move [' + last_move + ']' + s);
+              Dagaz.Controller.setup(s, b.player);
+          }
+      }
       if (this.move === null) {
           this.state = STATE.STOP;
           var s = '';
