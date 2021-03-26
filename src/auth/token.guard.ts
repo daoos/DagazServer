@@ -11,8 +11,10 @@ export class TokenGuard implements CanActivate {
     async canActivate(context: ExecutionContext): Promise<boolean> {
         const request = context.switchToHttp().getRequest();
         const headers: string[] = request.rawHeaders;
-        const device: string = request.headers['x-forwarded-for'] || request.connection.remoteAddress;
         const user = request.user;
+        if (user.id == 0) {
+            return true;
+        }
         const u = await this.usersService.findOneByLogin(user.username);
         if (!u) {
             return false;

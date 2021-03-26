@@ -15,6 +15,12 @@ export class AppController {
     private readonly authService: AuthService
   ) {}
 
+  @Get('api/auth/guest')
+  @ApiCreatedResponse({ description: 'Successfully.'})
+  async guest(@Request() req) {
+    return await this.authService.guest();
+  }
+
   @UseGuards(LocalAuthGuard)
   @Post('api/auth/login')
   @ApiBody({ type: [User] })

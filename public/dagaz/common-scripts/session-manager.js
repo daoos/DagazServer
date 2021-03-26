@@ -64,7 +64,6 @@ Dagaz.Controller.home = function() {
       Dagaz.Controller.play(Dagaz.Sounds.page);
   }
   isAuto = false;
-  return true;
 }
 
 Dagaz.Controller.undo = function() {
@@ -85,7 +84,6 @@ Dagaz.Controller.undo = function() {
       Dagaz.Controller.play(Dagaz.Sounds.page);
   }
   isAuto = false;
-  return true;
 }
 
 Dagaz.Controller.redo = function() {
@@ -102,7 +100,6 @@ Dagaz.Controller.redo = function() {
   Dagaz.Controller.apply(node.move);
   curr = node;
   checkButtons();
-  return true;
 }
 
 var animate = function() {

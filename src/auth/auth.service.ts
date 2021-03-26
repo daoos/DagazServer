@@ -47,6 +47,26 @@ export class AuthService {
       }
     }
 
+    async guest() {
+      try {
+        const payload = { username: 'guest', sub: 0 };
+        const a = this.jwtService.sign(payload, { expiresIn: jwtConstants.access + "s" });
+        const r = this.jwtService.sign(payload, { expiresIn: jwtConstants.refresh + "s" });
+        return {
+          access_token: a,
+          refresh_token: r,
+          role: 0,
+          realm: 1
+        };
+      } catch (error) {
+        console.error(error);
+        throw new InternalServerErrorException({
+            status: HttpStatus.BAD_REQUEST,
+            error: error
+        });
+      }
+    }
+
     async login(user: any, device: string) {
       try {
         const payload = { username: user.username, sub: user.id };

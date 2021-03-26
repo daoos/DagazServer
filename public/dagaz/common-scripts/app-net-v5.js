@@ -419,10 +419,29 @@ var getSid = function() {
 var authorize = function() {
   if (auth !== null) return;
   auth = localStorage.getItem('myAuthToken');
-  console.log(auth);
-  if (!auth) {
-      window.location = '/';
+  if (auth) {
+      console.log(auth);
+      return;
   }
+  $.ajax({
+     url: SERVICE + "auth/guest",
+     type: "GET",
+     dataType: "json",
+     success: function(data) {
+         auth = data.access_token;
+         inProgress = false;
+     },
+     error: function() {
+         console.log('Auth: Error!');
+         window.location = '/';
+     },
+     statusCode: {
+        500: function() {
+             console.log('Auth: Internal Error!');
+             window.location = '/';
+        }
+     }
+  });
 }
 
 var recovery = function(s) {
@@ -1065,7 +1084,11 @@ App.prototype.exec = function() {
       }, this);
       if (this.move === null) {
           this.state = STATE.STOP;
-          console.log('Buzy: Bad move [' + last_move + ']');
+          var s = '';
+          if (!_.isUndefined(Dagaz.Model.getSetup)) {
+              s = ', setup=' + Dagaz.Model.getSetup(this.design, this.board);
+          }         
+          console.log('Buzy: Bad move [' + last_move + ']' + s);
       }
       var player = this.design.playerNames[this.board.player];
       console.log("Player: " + player);
