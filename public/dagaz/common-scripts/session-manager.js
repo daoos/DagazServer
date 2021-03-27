@@ -97,7 +97,7 @@ Dagaz.Controller.redo = function() {
       node = n;
   });
   if (!node) return false;
-  Dagaz.Controller.apply(node.move);
+  Dagaz.Controller.apply(node.move, node.setup);
   curr = node;
   checkButtons();
 }
