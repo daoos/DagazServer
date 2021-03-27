@@ -1089,6 +1089,7 @@ App.prototype.exec = function() {
               Dagaz.Controller.setup(recovery_setup);
               console.log('Buzy: Setup recovered [' + recovery_setup + ']');
               recovery_setup = null;
+              last_move = null;
               return;
           }
           this.state = STATE.STOP;
