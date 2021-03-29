@@ -42,4 +42,7 @@ export class user_ratings {
 
     @Column({ nullable: true })
     changed: Date;
+
+    @Column({ default: 1400, nullable: false })
+    rating: number;
 }

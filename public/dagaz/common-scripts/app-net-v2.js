@@ -405,7 +405,7 @@ var authorize = function() {
      type: "GET",
      dataType: "json",
      success: function(data) {
-         auth = data.access_token;
+         auth = data.refresh_token;
          inProgress = false;
      },
      error: function() {
