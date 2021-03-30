@@ -14,7 +14,7 @@ export class Tourn {
     @ApiPropertyOptional()
     selector_value: number;
 
-    @ApiProperty()
+    @ApiPropertyOptional()
     game: string;
 
     @ApiPropertyOptional()
@@ -33,5 +33,14 @@ export class Tourn {
     closed: Date;
 
     @ApiPropertyOptional()
+    user_id: number;
+
+    @ApiPropertyOptional()
     creator: string;
+
+    @ApiPropertyOptional()
+    all: number;
+
+    @ApiPropertyOptional()
+    completed: number;
 }

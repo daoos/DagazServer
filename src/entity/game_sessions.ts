@@ -34,7 +34,7 @@ export class game_sessions {
     selector_value: number;
 
     @Index()
-    @Column({ nullable: false })
+    @Column({ default: 1, nullable: false })
     status_id: number;
     @ManyToOne(type => game_statuses)
     @JoinColumn({ name: "status_id" })

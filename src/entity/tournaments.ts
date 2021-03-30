@@ -1,6 +1,7 @@
 import { Column, Entity, Index, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { games } from "./games";
 import { game_variants } from "./game_variants";
+import { rating_types } from "./rating_types";
 import { users } from "./users";
 
 @Entity()
@@ -46,4 +47,11 @@ export class tournaments {
     @ManyToOne(type => users)
     @JoinColumn({ name: "user_id" })
     user: users;
+
+    @Index()
+    @Column({ default: 1, nullable: false })
+    ratingtype_id: number;
+    @ManyToOne(type => rating_types)
+    @JoinColumn({ name: "ratingtype_id" })
+    ratingtype: rating_types;
 }

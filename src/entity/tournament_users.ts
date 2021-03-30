@@ -23,4 +23,13 @@ export class tournament_users {
 
     @Column({ default: 0, nullable: false })
     score: number;
+
+    @Column({ default: 0, nullable: false })
+    all: number;
+
+    @Column({ default: 0, nullable: false })
+    win: number;
+
+    @Column({ default: 0, nullable: false })
+    lose: number;
 }
