@@ -43,4 +43,22 @@ export class Tourn {
 
     @ApiPropertyOptional()
     completed: number;
+
+    @ApiPropertyOptional()
+    win_scores: number;
+
+    @ApiPropertyOptional()
+    lose_scores: number;
+
+    @ApiPropertyOptional()
+    draw_scores: number;
+
+    @ApiPropertyOptional()
+    player_a: number;
+
+    @ApiPropertyOptional()
+    player_b: number;
+
+    @ApiPropertyOptional()
+    ratingtype_id: number;
 }

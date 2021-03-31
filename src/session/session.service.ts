@@ -8,6 +8,10 @@ import { challenge } from '../entity/challenge';
 import { game_alerts } from '../entity/game_alerts';
 import { Exp } from '../interfaces/exp.interface';
 import { ai_settings } from '../entity/ai_settings';
+import { Tourn } from '../interfaces/tourn.interface';
+import { tournament_games } from '../entity/tournament_games';
+import { tournament_users } from '../entity/tournament_users';
+import { user_ratings } from '../entity/user_ratings';
 
 @Injectable()
 export class SessionService {
@@ -1093,6 +1097,145 @@ export class SessionService {
         return true;
     }
 
+    async getTournament(sess: number): Promise<Tourn> {
+        const x = await this.service.query(
+            `select b.id, coalesce(c.scores, 0) as win_scores, coalesce(d.scores, 0) as lose_scores, coalesce(e.scores, 0) as draw_scores,
+                    a.player_a, a.player_b, b.ratingtype_id
+             from   tournament_games a
+             inner  join tournaments b on (b.id = a.tournament_id)
+             left   join game_scores c on (c.game_id = b.game_id and (b.variant_id is null or coalesce(c.variant_id, b.variant_id) = b.variant_id) and c.result_id = 1)
+             left   join game_scores d on (d.game_id = b.game_id and (b.variant_id is null or coalesce(d.variant_id, b.variant_id) = b.variant_id) and d.result_id = 2)
+             left   join game_scores e on (e.game_id = b.game_id and (b.variant_id is null or coalesce(e.variant_id, b.variant_id) = b.variant_id) and e.result_id = 3)
+             where  a.session_id = $1`, [sess]);
+        if (!x || x.length == 0) return null;
+        let r = new Tourn();
+        r.id = x[0].id;
+        r.win_scores  = x[0].win_scores;
+        r.lose_scores = x[0].lose_scores;
+        r.draw_scores = x[0].draw_scores;
+        r.player_a = x[0].player_a;
+        r.player_b = x[0].player_b;
+        r.ratingtype_id = x[0].ratingtype_id;
+        return r;
+    }
+
+    async getResult(sess: number): Promise<number> {
+        const x = await this.service.query(
+            `select c.result_id
+             from   tournament_games a
+             inner  join tournament_users b on (b.id = a.player_a)
+             inner  join user_games c on (c.session_id = a.session_id and c.user_id = b.user_id)
+             where  a.session_id = $1`, [sess]);
+        if (!x || x.length == 0) return null;
+        return x[0].result_id;
+    }
+
+    async updateScores(id: number, score: number, res: number): Promise<void> {
+        const x = await this.service.query(
+            `select score, all, win, lose
+             from   tournament_users
+             where  id = $1`, [id]);
+        if (!x || x.length == 0) return;
+        await this.service.createQueryBuilder("tournament_users")
+        .update(tournament_users)
+        .set({ 
+            score: x[0].score + score,
+            all:   x[0].all   + 1,
+            win:   x[0].win   + (res == 1 ? 1 : 0),
+            lose:  x[0].lose  + (res == 2 ? 1 : 0)
+         })
+        .where("id = :id", {id: id})
+        .execute();
+    }
+
+    async getRating(id: number): Promise<any> {
+        const x = await this.service.query(
+            `select coalesce(c.rating, 1400) as rating, c.id
+             from   tournament_users a
+             inner  join tournaments b on (b.id = a.tournament_id)
+             left   join user_ratings c on (
+                    c.user_id = a.user_id and c.type_id = b.ratingtype_id and
+                    c.game_id = b.game_id and coalesce(c.variant_id, 0) = coalesce(b.variant_id, 0) )
+             where  a.id = $1`, [id]);
+        if (!x || x.length == 0) return null;
+        return {
+            id: x[0].id,
+            rating: x[0].rating
+        }
+    }
+
+    getK(r: number): number {
+        let x = 40;
+        if (r > 1400) x = 20;
+        if (r > 2400) x = 10;
+        return x;
+    }
+
+    async updateRating(id: number, old: number, delta: number): Promise<void> {
+        if (id) {
+            await this.service.createQueryBuilder("user_ratings")
+            .update(user_ratings)
+            .set({ 
+                rating: old + delta
+             })
+            .where("id = :id", {id: id})
+            .execute();
+        }
+    }
+
+    async updateElo(a: number, b: number, sa: number, sb: number): Promise<void> {
+        const ra = await this.getRating(a); 
+        const rb = await this.getRating(b); 
+        const ea = 1 / (Math.pow(10, (rb.rating - ra.rating) / 400) + 1);
+        const eb = 1 / (Math.pow(10, (ra.rating - rb.rating) / 400) + 1);
+        const ka = this.getK(ra.rating); const kb = this.getK(rb.rating);
+        const da = ka * (sa - ea); const db = kb * (sb - eb);
+        await this.updateRating(ra.id, ra.rating, da);
+        await this.updateRating(rb.id, rb.rating, db);
+    }
+
+    async supportTournament(sess: number): Promise<void> {
+        const t = await this.getTournament(sess);
+        const r = await this.getResult(sess);
+        if (!t || !r) return;
+        if ((r == 3) && (t.draw_scores > 0)) {
+            await this.updateScores(t.player_a, t.draw_scores, 3);
+            await this.updateScores(t.player_b, t.draw_scores, 3);
+            if (t.ratingtype_id == 1) {
+                await this.updateElo(t.player_a, t.player_b, t.draw_scores, t.draw_scores);
+            }
+        }
+        if (r == 1) {
+            if (t.win_scores > 0) {
+                await this.updateScores(t.player_a, t.win_scores, 1);
+            }
+            if (t.lose_scores > 0) {
+                await this.updateScores(t.player_b, t.lose_scores, 2);
+            }
+            if (t.ratingtype_id == 1) {
+                await this.updateElo(t.player_a, t.player_b, t.win_scores, t.lose_scores);
+            }
+        }
+        if (r == 2) {
+            if (t.lose_scores > 0) {
+                await this.updateScores(t.player_a, t.lose_scores, 2);
+            }
+            if (t.win_scores > 0) {
+                await this.updateScores(t.player_b, t.win_scores, 1);
+            }
+            if (t.ratingtype_id == 1) {
+                await this.updateElo(t.player_b, t.player_a, t.win_scores, t.lose_scores);
+            }
+        }
+        await this.service.createQueryBuilder("tournament_games")
+        .update(tournament_games)
+        .set({ 
+            result_id: r
+         })
+        .where("session_id = :id", {id: sess})
+        .execute();
+    }
+
     async closeSession(x: Sess): Promise<Sess> {
         try {
             if (!x.id) {
@@ -1161,6 +1304,7 @@ export class SessionService {
                 .where("session_id = :id and id <> :uid", {id: x.id, uid: x.loser})
                 .execute();
             }
+//          await this.supportTournament(x.id);
             return x;
         } catch (error) {
           console.error(error);

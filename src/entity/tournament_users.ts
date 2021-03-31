@@ -21,7 +21,7 @@ export class tournament_users {
     @JoinColumn({ name: "user_id" })
     user: users;
 
-    @Column({ default: 0, nullable: false })
+    @Column({ type: "numeric", default: 0, nullable: false })
     score: number;
 
     @Column({ default: 0, nullable: false })

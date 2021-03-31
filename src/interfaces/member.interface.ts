@@ -14,6 +14,9 @@ export class Member {
     @ApiProperty()
     score: number;
 
+    @ApiPropertyOptional()
+    berger: number;
+
     @ApiProperty()
     rating: number;
 

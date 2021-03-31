@@ -55,4 +55,7 @@ export class Game {
 
     @ApiPropertyOptional()
     no_ai: string;
+
+    @ApiPropertyOptional()
+    is_tournament: boolean;
 }

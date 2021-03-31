@@ -1,4 +1,4 @@
-import { Column, Entity, Index, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, Index, JoinColumn, ManyToOne, PrimaryGeneratedColumn, Unique } from "typeorm";
 import { game_results } from "./game_results";
 import { game_sessions } from "./game_sessions";
 import { tournaments } from "./tournaments";
@@ -30,7 +30,7 @@ export class tournament_games {
     @JoinColumn({ name: "player_b" })
     b: tournament_users;
 
-    @Index()
+    @Index({unique: true})
     @Column({ nullable: true })
     session_id: number;
     @ManyToOne(type => game_sessions)

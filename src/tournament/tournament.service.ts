@@ -128,7 +128,29 @@ export class TournamentService {
     async getTournMembers(id: number): Promise<Member[]> {
         try {
             const x = await this.service.query(
-                `select a.id, a.user_id, b.name as user, a.score as score, d.rating, d.all, d.win, d.lose
+                `select a.id, a.user_id, b.name as user, a.score as score, d.rating, d.all, d.win, d.lose,
+                      ( select sum(score)
+                        from (
+                            select y.score
+                            from   tournament_games x
+                            inner  join tournament_users y on (y.id = x.player_b)
+                            where  x.player_a = a.id and x.result_id = 1
+                            union  all
+                            select y.score
+                            from   tournament_games x
+                            inner  join tournament_users y on (y.id = x.player_a)
+                            where  x.player_b = a.id and x.result_id = 2
+                            union  all
+                            select y.score / 2
+                            from   tournament_games x
+                            inner  join tournament_users y on (y.id = x.player_b)
+                            where  x.player_a = a.id and x.result_id = 3
+                            union  all
+                            select y.score / 2
+                            from   tournament_games x
+                            inner  join tournament_users y on (y.id = x.player_a)
+                            where  x.player_b = a.id and x.result_id = 3
+                        ) ) as berger
                  from   tournament_users a
                  inner  join users b on (b.id = a.user_id)
                  inner  join tournaments c on (c.id = a.tournament_id)
@@ -136,13 +158,14 @@ export class TournamentService {
                         d.user_id = b.id and d.type_id = c.ratingtype_id and
                         d.game_id = c.game_id and coalesce(d.variant_id, 0) = coalesce(c.variant_id, 0) )
                  where  a.tournament_id = $1
-                 order  by a.score desc`, [id]);
+                 order  by a.score desc, a.berger desc`, [id]);
                  let l: Member[] = x.map(x => {
                     let it = new Member();
                     it.id = x.id;
                     it.user_id = x.user_id;
                     it.user = x.user;
                     it.score = x.score;
+                    it.berger = x.berger;
                     it.rating = x.rating;
                     it.all = x.all;
                     it.win = x.win;
@@ -312,6 +335,9 @@ export class TournamentService {
                 let first = (Math.random() < 0.5) ? true : false;
                 if (r < x.rating) {
                     first = true;
+                }
+                if (r > x.rating) {
+                    first = false;
                 }
                 const z = await this.service.createQueryBuilder("game_sessions")
                 .insert()

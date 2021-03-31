@@ -91,7 +91,7 @@ export class GameService {
                         a.realm_id as realm_id, a.max_selector as max_selector,
                         b.bots as bots, a.external_ai as external_ai, a.no_ai as no_ai,
                       ( select count(*) from game_sessions where game_id = a.id and status_id = 1 and user_id <> $1) waiting,
-                      ( select count(*) from game_sessions where game_id = a.id and status_id <> 1) all_games
+                      ( select count(*) from game_sessions where game_id = a.id and status_id <> 1) all_games, c.id as is_tourn
                    from   games a
                  left   join ( select game_id, variant_id, 
                                       string_agg(
@@ -101,6 +101,7 @@ export class GameService {
                                from   game_bots
                                group  by game_id, variant_id
                              ) b on (b.game_id = a.id and b.variant_id is null)
+                 left   join game_scores c on (c.game_id = a.id and c.variant_id is null and c.result_id = 1)
                  where  a.realm_id = $2
                  order  by lower(a.name)`, [user, realm]);
             let l: Game[] = x.map(x => {
@@ -118,6 +119,7 @@ export class GameService {
                 it.all = x.all_games;
                 it.no_ai = x.no_ai;
                 it.external_ai = x.external_ai;
+                it.is_tournament = !!x.is_tourn;
                 if (x.bots) {
                     it.bots = x.bots;
                 }
@@ -145,7 +147,7 @@ export class GameService {
                         a.max_selector as max_selector,
                         c.bots as bots, a.external_ai as external_ai, a.no_ai as no_ai,
                       ( select count(*) from game_sessions where game_id = b.id and variant_id = a.id and status_id = 1 and user_id <> $1) waiting,
-                      ( select count(*) from game_sessions where game_id = b.id and variant_id = a.id and status_id <> 1) all_games
+                      ( select count(*) from game_sessions where game_id = b.id and variant_id = a.id and status_id <> 1) all_games, d.id as is_tourn
                    from   game_variants a
                  inner  join games b on (b.id = a.game_id)
                  left   join ( select game_id, variant_id, 
@@ -156,6 +158,7 @@ export class GameService {
                                from   game_bots
                                group  by game_id, variant_id
                              ) c on (c.game_id = b.id and c.variant_id = a.id)
+                 left   join game_scores d on (d.game_id = a.id and coalesce(d.variant_id, a.id) = a.id and d.result_id = 1)
                  where  b.realm_id = $2 and b.id = $3
                  order  by lower(a.name)`, [user, realm, game]);
             let l: Game[] = x.map(x => {
@@ -170,6 +173,7 @@ export class GameService {
                 it.all = x.all_games;
                 it.no_ai = x.no_ai;
                 it.external_ai = x.external_ai;
+                it.is_tournament = !!x.is_tourn;
                 if (x.bots) {
                     it.bots = x.bots;
                 }
