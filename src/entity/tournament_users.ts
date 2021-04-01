@@ -25,7 +25,7 @@ export class tournament_users {
     score: number;
 
     @Column({ default: 0, nullable: false })
-    all: number;
+    total: number;
 
     @Column({ default: 0, nullable: false })
     win: number;

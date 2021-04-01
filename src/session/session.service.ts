@@ -1019,9 +1019,10 @@ export class SessionService {
 
     async getSession(uid: number): Promise<number> {
         const x = await this.service.query(
-            `select session_id
-             from   user_games
-             where  id = $1`, [uid]);
+            `select a.session_id
+             from   user_games a
+             inner  join game_sessions b on (b.id = a.session_id and b.closed is null)
+             where  a.id = $1`, [uid]);
         if (!x || x.length != 1) {
              return null;
         }
@@ -1132,17 +1133,17 @@ export class SessionService {
 
     async updateScores(id: number, score: number, res: number): Promise<void> {
         const x = await this.service.query(
-            `select score, all, win, lose
+            `select score, total, win, lose
              from   tournament_users
              where  id = $1`, [id]);
         if (!x || x.length == 0) return;
         await this.service.createQueryBuilder("tournament_users")
         .update(tournament_users)
         .set({ 
-            score: x[0].score + score,
-            all:   x[0].all   + 1,
-            win:   x[0].win   + (res == 1 ? 1 : 0),
-            lose:  x[0].lose  + (res == 2 ? 1 : 0)
+            score: +x[0].score + score,
+            total: +x[0].total + 1,
+            win:   +x[0].win   + (res == 1 ? 1 : 0),
+            lose:  +x[0].lose  + (res == 2 ? 1 : 0)
          })
         .where("id = :id", {id: id})
         .execute();
@@ -1176,7 +1177,7 @@ export class SessionService {
             await this.service.createQueryBuilder("user_ratings")
             .update(user_ratings)
             .set({ 
-                rating: old + delta
+                rating: +old + delta
              })
             .where("id = :id", {id: id})
             .execute();
@@ -1206,23 +1207,15 @@ export class SessionService {
             }
         }
         if (r == 1) {
-            if (t.win_scores > 0) {
-                await this.updateScores(t.player_a, t.win_scores, 1);
-            }
-            if (t.lose_scores > 0) {
-                await this.updateScores(t.player_b, t.lose_scores, 2);
-            }
+            await this.updateScores(t.player_a, t.win_scores, 1);
+            await this.updateScores(t.player_b, t.lose_scores, 2);
             if (t.ratingtype_id == 1) {
                 await this.updateElo(t.player_a, t.player_b, t.win_scores, t.lose_scores);
             }
         }
         if (r == 2) {
-            if (t.lose_scores > 0) {
-                await this.updateScores(t.player_a, t.lose_scores, 2);
-            }
-            if (t.win_scores > 0) {
-                await this.updateScores(t.player_b, t.win_scores, 1);
-            }
+            await this.updateScores(t.player_a, t.lose_scores, 2);
+            await this.updateScores(t.player_b, t.win_scores, 1);
             if (t.ratingtype_id == 1) {
                 await this.updateElo(t.player_b, t.player_a, t.win_scores, t.lose_scores);
             }
@@ -1246,6 +1239,7 @@ export class SessionService {
                     x.id = await this.getSession(x.loser);
                 }
             }
+            if (!x.id) return null;
             await this.service.createQueryBuilder("game_sessions")
             .update(game_sessions)
             .set({ 
@@ -1304,7 +1298,7 @@ export class SessionService {
                 .where("session_id = :id and id <> :uid", {id: x.id, uid: x.loser})
                 .execute();
             }
-//          await this.supportTournament(x.id);
+            await this.supportTournament(x.id);
             return x;
         } catch (error) {
           console.error(error);
