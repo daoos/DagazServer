@@ -41,12 +41,12 @@ export class RatingController {
         }
     }
 
-    @Get('game/:id')
+    @Get('game/:g/:v')
     @ApiOkResponse({ description: 'Successfully.'})
     @ApiInternalServerErrorResponse({ description: 'Internal Server error.'})
-    async gameRatings(@Res() res, @Param('id') id): Promise<Rate[]> {
+    async gameRatings(@Res() res, @Param('g') g, @Param('v') v): Promise<Rate[]> {
         try {
-            const r = await this.service.getGameRatings(id);
+            const r = await this.service.getGameRatings(g, v);
             return res.status(HttpStatus.OK).json(r);
         } catch(e) {
             return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ error: e.message.error.toString(), stack: e.stack});

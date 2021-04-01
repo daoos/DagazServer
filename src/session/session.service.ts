@@ -1200,22 +1200,22 @@ export class SessionService {
         const r = await this.getResult(sess);
         if (!t || !r) return;
         if ((r == 3) && (t.draw_scores > 0)) {
-            await this.updateScores(t.player_a, t.draw_scores, 3);
-            await this.updateScores(t.player_b, t.draw_scores, 3);
+            await this.updateScores(t.player_a, +t.draw_scores, 3);
+            await this.updateScores(t.player_b, +t.draw_scores, 3);
             if (t.ratingtype_id == 1) {
                 await this.updateElo(t.player_a, t.player_b, t.draw_scores, t.draw_scores);
             }
         }
         if (r == 1) {
-            await this.updateScores(t.player_a, t.win_scores, 1);
-            await this.updateScores(t.player_b, t.lose_scores, 2);
+            await this.updateScores(t.player_a, +t.win_scores, 1);
+            await this.updateScores(t.player_b, +t.lose_scores, 2);
             if (t.ratingtype_id == 1) {
                 await this.updateElo(t.player_a, t.player_b, t.win_scores, t.lose_scores);
             }
         }
         if (r == 2) {
-            await this.updateScores(t.player_a, t.lose_scores, 2);
-            await this.updateScores(t.player_b, t.win_scores, 1);
+            await this.updateScores(t.player_a, +t.lose_scores, 2);
+            await this.updateScores(t.player_b, +t.win_scores, 1);
             if (t.ratingtype_id == 1) {
                 await this.updateElo(t.player_b, t.player_a, t.win_scores, t.lose_scores);
             }

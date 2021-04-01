@@ -43,16 +43,17 @@ export class RatingService {
         }
     }
 
-    async getGameRatings(game: number): Promise<Rate[]> {
-        const x = await this.service.query(
+    async getGameRatings(game: number, variant: number): Promise<Rate[]> {
+        try {
+            const x = await this.service.query(
             `select a.type_id, a.game_id, a.variant_id, a.user_id, d.name as user,
                     coalesce(c.name, b.name) as game, a.rating
              from   user_ratings a
              inner  join games b on (b.id = a.game_id)
              left   join game_variants c on (c.id = a.variant_id)
              inner  join users d on (d.id = user_id)
-             where  a.game_id = $1 or a.variant_id = $1
-             order  by a.rating desc`, [game, game]);
+             where  a.game_id = $1 and a.variant_id = $2
+             order  by a.rating desc`, [game, variant]);
              let l: Rate[] = x.map(x => {
                 let it = new Rate();
                 it.type_id = x.type_id;
@@ -65,12 +66,13 @@ export class RatingService {
                 return it;
             });
             return l;
-    } catch (error) {
-        console.error(error);
-        throw new InternalServerErrorException({
-            status: HttpStatus.BAD_REQUEST,
-            error: error
-        });
+        } catch (error) {
+            console.error(error);
+            throw new InternalServerErrorException({
+                status: HttpStatus.BAD_REQUEST,
+                error: error
+            });
+        }
     }
 }
 

@@ -158,7 +158,7 @@ export class TournamentService {
                         d.user_id = b.id and d.type_id = c.ratingtype_id and
                         d.game_id = c.game_id and coalesce(d.variant_id, 0) = coalesce(c.variant_id, 0) )
                  where  a.tournament_id = $1
-                 order  by a.score desc, berger desc`, [id]);
+                 order  by a.score desc, berger desc, rating desc`, [id]);
                  let l: Member[] = x.map(x => {
                     let it = new Member();
                     it.id = x.id;
@@ -248,8 +248,8 @@ export class TournamentService {
                 game_id: x.game_id,
                 variant_id: x.variant_id,
                 selector_value: x.selector_value,
-                main_time: x.main_time,
-                additional_time: x.additional_time,
+                main_time: x.main_time ? x.main_time : 0,
+                additional_time: x.additional_time ? x.additional_time : 0,
                 is_hidden: x.is_hidden ? 1 : 0,
                 user_id: user
             })
