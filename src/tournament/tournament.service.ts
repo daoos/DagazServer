@@ -49,23 +49,31 @@ export class TournamentService {
                         where  tournament_id = a.id ) as total,
                       ( select count(*) 
                         from   tournament_games x
-                        inner  join game_sessions y on (y.id = x.session_id and not y.closed is null)
-                        where  tournament_id = a.id ) as completed
+                        left   join game_sessions y on (y.id = x.session_id)
+                        where  tournament_id = a.id 
+                        and  ( y.id is null or not y.closed is null ) ) as completed,
+                        d.name as creator, a.title, e.id as is_joined
                  from   tournaments a
                  inner  join games b on (b.id = a.game_id)
                  left   join game_variants c on (c.id = a.variant_id)
-                 where  a.closed is null and (a.is_hidden = 0 or a.user_id = $1
-                        or a.id in (select tournament_id from tournament_users where user_id = $2))
-                 order  by a.created desc`, [user, user]);
+                 inner  join users d on (d.id = a.user_id)
+                 left   join tournament_users e on (e.tournament_id = a.id and e.user_id = $1)
+                 where  a.closed is null and (a.is_hidden = 0 or a.user_id = $2
+                        or a.id in (select tournament_id from tournament_users where user_id = $3))
+                 order  by a.created desc`, [user, user, user]);
                  let l: Tourn[] = x.map(x => {
                     let it = new Tourn();
                     it.id = x.id;
+                    it.is_owner = x.user_id == user;
+                    it.is_joined = !!x.is_joined;
+                    it.title = x.title;
                     it.game_id = x.game_id;
                     it.variant_id = x.variant_id;
                     it.game = x.game;
                     it.main_time = x.main_time;
                     it.additional_time = x.additional_time;
-                    it.created = x.created;
+                    it.creator = x.creator;
+                    it.created = x.created;                    
                     it.closed = x.closed;
                     it.user_id = x.user_id;
                     it.all = x.total;
@@ -92,22 +100,30 @@ export class TournamentService {
                         where  tournament_id = a.id ) as total,
                       ( select count(*) 
                         from   tournament_games x
-                        inner  join game_sessions y on (y.id = x.session_id and not y.closed is null)
-                        where  tournament_id = a.id ) as completed
+                        left   join game_sessions y on (y.id = x.session_id)
+                        where  tournament_id = a.id 
+                        and  ( y.id is null or not y.closed is null ) ) as completed,
+                        d.name as creator, a.title, e.id as is_joined
                  from   tournaments a
                  inner  join games b on (b.id = a.game_id)
                  left   join game_variants c on (c.id = a.variant_id)
-                 where  not a.closed is null and (a.is_hidden = 0 or a.user_id = $1
-                        or a.id in (select tournament_id from tournament_users where user_id = $2))
-                 order  by a.created desc`, [user, user]);
+                 inner  join users d on (d.id = a.user_id)
+                 left   join tournament_users e on (e.tournament_id = a.id and e.user_id = $1)
+                 where  not a.closed is null and (a.is_hidden = 0 or a.user_id = $2
+                        or a.id in (select tournament_id from tournament_users where user_id = $3))
+                 order  by a.created desc`, [user, user, user]);
                  let l: Tourn[] = x.map(x => {
                     let it = new Tourn();
                     it.id = x.id;
+                    it.is_owner = x.user_id == user;
+                    it.is_joined = !!x.is_joined;
+                    it.title = x.title;
                     it.game_id = x.game_id;
                     it.variant_id = x.variant_id;
                     it.game = x.game;
                     it.main_time = x.main_time;
                     it.additional_time = x.additional_time;
+                    it.creator = x.creator;
                     it.created = x.created;
                     it.closed = x.closed;
                     it.user_id = x.user_id;
@@ -245,6 +261,7 @@ export class TournamentService {
             .insert()
             .into(tournaments)
             .values({
+                title: x.title,
                 game_id: x.game_id,
                 variant_id: x.variant_id,
                 selector_value: x.selector_value,
@@ -312,7 +329,7 @@ export class TournamentService {
     async joinTourn(user: number,t: Tourn): Promise<Tourn> {
         try {
             const s = await this.findOneById(t.id);
-            if (!s) {
+            if (!s || s.closed) {
                 return null;
             }
             const f = await this.isJoined(s.id, user);
@@ -348,6 +365,7 @@ export class TournamentService {
                     variant_id: s.variant_id,
                     selector_value: s.selector_value,
                     status_id: 2,
+                    is_protected: 1,
                     last_time: Date.now()
                 })
                 .returning('*')
@@ -376,6 +394,17 @@ export class TournamentService {
         }
     }
 
+    async calcUsers(id: number): Promise<number> {
+        const x = await this.service.query(
+            `select count(*) as cnt
+             from   tournament_users
+             where  tournament_id = $1`, [id]);
+        if (!x || x.length != 1) {
+             return 0;
+        }
+        return x[0].cnt;
+    }
+
     async delTourn(user: number,id: number): Promise<Tourn> {
         try {
             const s = await this.findOneById(id);
@@ -388,11 +417,22 @@ export class TournamentService {
                     return null;
                 }
             }
-            await this.service.createQueryBuilder("tournaments")
-            .delete()
-            .from(tournaments)
-            .where(`id = :id`, {id: id})
-            .execute();
+            const c = await this.calcUsers(id);
+            if (c) {
+                await this.service.createQueryBuilder("tournaments")
+                .update(tournaments)
+                .set({ 
+                    closed: new Date()
+                 })
+                .where("id = :id", {id: id})
+                .execute();
+            } else {
+                await this.service.createQueryBuilder("tournaments")
+                .delete()
+                .from(tournaments)
+                .where(`id = :id`, {id: id})
+                .execute();
+            }
             return s;
         } catch (error) {
             console.error(error);

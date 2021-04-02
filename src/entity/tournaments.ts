@@ -9,6 +9,9 @@ export class tournaments {
     @PrimaryGeneratedColumn()
     id: number;
 
+    @Column({ nullable: true })
+    title: string;
+
     @Index()
     @Column({ nullable: false })
     game_id: number;

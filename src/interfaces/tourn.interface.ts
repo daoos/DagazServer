@@ -4,6 +4,15 @@ export class Tourn {
 
     @ApiPropertyOptional()
     id: number;
+
+    @ApiProperty()
+    title: string;
+
+    @ApiPropertyOptional()
+    is_owner: boolean;
+    
+    @ApiPropertyOptional()
+    is_joined: boolean;
     
     @ApiProperty()
     game_id: number;

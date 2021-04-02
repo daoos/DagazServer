@@ -602,6 +602,13 @@ export class SessionService {
             if (!s) {
                 return null;
             }
+            await this.service.createQueryBuilder("tournament_games")
+            .update(tournament_games)
+            .set({ 
+                session_id: null
+             })
+            .where(`session_id = :id`, {id: id})
+            .execute();
             await this.service.createQueryBuilder("game_alerts")
             .delete()
             .from(game_alerts)
@@ -647,6 +654,16 @@ export class SessionService {
 
     async clearWaiting(): Promise<boolean> {
         const dt = new Date();
+        await this.service.createQueryBuilder("tournament_games")
+        .update(tournament_games)
+        .set({ 
+            session_id: null
+         })
+        .where(`session_id = in (select id
+            from   game_sessions
+            where  status_id = 1 and is_protected = 0
+            and    created + interval '1 week' < :dt)`, {dt: dt})
+        .execute();
         await this.service.createQueryBuilder("game_alerts")
         .delete()
         .from(game_alerts)
@@ -689,6 +706,16 @@ export class SessionService {
 
     async clearObsolete(): Promise<boolean> {
         const dt = new Date();
+        await this.service.createQueryBuilder("tournament_games")
+        .update(tournament_games)
+        .set({ 
+            session_id: null
+         })
+        .where(`session_id = in (select id
+            from   game_sessions
+            where  status_id = 1 and is_protected = 0
+            and    created + interval '1 week' < :dt)`, {dt: dt})
+        .execute();
         await this.service.createQueryBuilder("game_alerts")
         .delete()
         .from(game_alerts)
