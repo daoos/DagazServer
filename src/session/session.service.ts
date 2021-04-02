@@ -659,7 +659,7 @@ export class SessionService {
         .set({ 
             session_id: null
          })
-        .where(`session_id = in (select id
+        .where(`session_id in (select id
             from   game_sessions
             where  status_id = 1 and is_protected = 0
             and    created + interval '1 week' < :dt)`, {dt: dt})
@@ -711,7 +711,7 @@ export class SessionService {
         .set({ 
             session_id: null
          })
-        .where(`session_id = in (select id
+        .where(`session_id in (select id
             from   game_sessions
             where  status_id = 1 and is_protected = 0
             and    created + interval '1 week' < :dt)`, {dt: dt})
