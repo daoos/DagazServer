@@ -255,13 +255,38 @@ export class TournamentService {
         return r;
     }
 
-    async createTourn(user: number, x: Tourn): Promise<Tourn> {
+    async getTournSettings(t: Tourn): Promise<Tourn> {
+        const x = await this.service.query(
+            `select a.tournamenttype_id, a.ratingtype_id, a.main_time, a.additional_time
+             from   game_settings a
+             where  a.game_id = $1 and coalesce(a.variant_id, 0) coalesce($2, 0)`, [t.game_id, t.variant_id]);
+        if (x && x.length > 0) {
+            if (!t.tournamenttype_id) {
+                 t.tournamenttype_id = x[0].tournamenttype_id;
+            }
+            if (!t.ratingtype_id) {
+                 t.ratingtype_id = x[0].ratingtype_id;
+            }
+            if (!t.main_time) {
+                t.main_time = x[0].main_time;
+            }
+            if (!t.additional_time) {
+                t.additional_time = x[0].additional_time;
+            }
+        }
+        return t;
+    }
+
+    async createTourn(user: number, t: Tourn): Promise<Tourn> {
         try {
+            const x = await this.getTournSettings(t);
             const y = await this.service.createQueryBuilder("tournaments")
             .insert()
             .into(tournaments)
             .values({
                 title: x.title,
+                tournamenttype_id: x.tournamenttype_id,
+                ratingtype_id: x.ratingtype_id,
                 game_id: x.game_id,
                 variant_id: x.variant_id,
                 selector_value: x.selector_value,

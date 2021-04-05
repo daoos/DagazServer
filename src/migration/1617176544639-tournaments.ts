@@ -10,9 +10,12 @@ export class tournaments1617176544639 implements MigrationInterface {
         await queryRunner.query(`insert into game_scores(id, game_id, variant_id, result_id, scores) values(1, 30, null, 1, 1)`);
         await queryRunner.query(`insert into game_scores(id, game_id, variant_id, result_id, scores) values(2, 30, null, 2, 0)`);
         await queryRunner.query(`insert into game_scores(id, game_id, variant_id, result_id, scores) values(3, 30, null, 3, 0.5)`);
+
+        await queryRunner.query(`insert into game_settings(id, game_id, variant_id, tournamenttype_id, ratingtype_id, main_time, additional_time) values(3, 30, null, 1, 1, 7200, 0)`);
     }
 
     public async down(queryRunner: QueryRunner): Promise<any> {
+        await queryRunner.query(`delete from game_settings`);
         await queryRunner.query(`delete from game_scores`);
         await queryRunner.query(`delete from rating_types`);
         await queryRunner.query(`delete from tournament_types`);

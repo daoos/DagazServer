@@ -1167,7 +1167,7 @@ export class SessionService {
         await this.service.createQueryBuilder("tournament_users")
         .update(tournament_users)
         .set({ 
-            score: +x[0].score + score,
+            score: +x[0].score + +score,
             total: +x[0].total + 1,
             win:   +x[0].win   + (res == 1 ? 1 : 0),
             lose:  +x[0].lose  + (res == 2 ? 1 : 0)

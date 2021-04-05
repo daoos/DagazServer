@@ -69,5 +69,8 @@ export class Tourn {
     player_b: number;
 
     @ApiPropertyOptional()
+    tournamenttype_id: number;
+
+    @ApiPropertyOptional()
     ratingtype_id: number;
 }
