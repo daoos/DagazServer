@@ -29,9 +29,12 @@
 
 <table style="margin:auto; font-family:sans-serif; font-size:14px" id="Table">
 <tr><td>
+<a href="javascript:Dagaz.Controller.home()" title="Home" style="display:none" id="home"><img src="images/home.png"/></a>
+<a href="javascript:Dagaz.Controller.undo()" title="PgDown" style="display:none" id="undo"><img src="images/undo.png"/></a>
 <a href="javascript:Dagaz.Controller.resign()">I Resign</a>
 <a href="javascript:Dagaz.Controller.drawOffer()">Offer Draw</a>
 <a href="javascript:Dagaz.Controller.sound()" id="sound">no Sound</a>
+<a href="javascript:Dagaz.Controller.redo()" title="PgUp" style="display:none" id="redo"><img src="images/redo.png"/></a>
 </td></tr>
 <tr style="height:352px; vertical-align:top">
 <td id="CanvasCell" style="width:387px">
@@ -65,6 +68,7 @@
 <script src="common-scripts/2d-view-v2.js"></script>
 <script src="common-scripts/move-list-v2.js"></script>
 <script src="common-scripts/sound-manager-v2.js"></script>
+<script src="common-scripts/session-manager.js"></script>
 <script src="scripts/mini-shogi-invariant.js"></script>
 <script src="scripts/mini-shogi-extension.js"></script>
 <script src="scripts/mini-shogi-promotion.js"></script>

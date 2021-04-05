@@ -2,6 +2,7 @@ import { Column, Entity, Index, JoinColumn, ManyToOne, PrimaryGeneratedColumn } 
 import { games } from "./games";
 import { game_variants } from "./game_variants";
 import { rating_types } from "./rating_types";
+import { tournament_types } from "./tournament_types";
 import { users } from "./users";
 
 @Entity()
@@ -11,6 +12,13 @@ export class tournaments {
 
     @Column({ nullable: true })
     title: string;
+
+    @Index()
+    @Column({ default: 1, nullable: false })
+    tournamenttype_id: number;
+    @ManyToOne(type => tournament_types)
+    @JoinColumn({ name: "tournamenttype_id" })
+    tournamenttype: tournament_types;
 
     @Index()
     @Column({ nullable: false })
