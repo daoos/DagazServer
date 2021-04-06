@@ -6,6 +6,7 @@ import { tournament_games } from '../entity/tournament_games';
 import { tournament_users } from '../entity/tournament_users';
 import { user_games } from '../entity/user_games';
 import { user_ratings } from '../entity/user_ratings';
+import { GameInfo } from '../interfaces/gameinfo.interface';
 import { Member } from '../interfaces/member.interface';
 import { Tourn } from '../interfaces/tourn.interface';
 
@@ -39,10 +40,41 @@ export class TournamentService {
         return x[0].cnt > 0;
     }
 
+    async getInfo(): Promise<GameInfo[]> {
+        try {
+            const x = await this.service.query(
+                `select id, name, game_id, selector_value, 
+                        tournamenttype_id, ratingtype_id,
+                        main_time, additional_time
+                 from   game_settings
+                 order  by name`);
+                 let l: GameInfo[] = x.map(x => {
+                    let it = new GameInfo();
+                    it.id = x.id;
+                    it.name = x.name;
+                    it.game_id = x.game_id;
+                    it.variant_id = x.variant_id;
+                    it.selector_value = x.selector_value;
+                    it.tournamenttype_id = x.tournamenttype_id;
+                    it.ratingtype_id = x.ratingtype_id;
+                    it.main_time = x.main_time;
+                    it.additional_time = x.additional_time;
+                    return it;
+                });
+                return l;
+        } catch (error) {
+            console.error(error);
+            throw new InternalServerErrorException({
+                status: HttpStatus.BAD_REQUEST,
+                error: error
+            });
+        }
+    }
+
     async getActiveTourns(user: number): Promise<Tourn[]> {
         try {
             const x = await this.service.query(
-                `select a.id, a.game_id, a.variant_id, coalesce(c.name, b.name) as game,
+                `select a.id, a.game_id, a.variant_id, a.selector_value, f.name as game,
                         a.main_time, a.additional_time, a.created, a.closed, a.user_id,
                       ( select count(*) 
                         from   tournament_games x
@@ -52,12 +84,18 @@ export class TournamentService {
                         left   join game_sessions y on (y.id = x.session_id)
                         where  tournament_id = a.id 
                         and  ( y.id is null or not y.closed is null ) ) as completed,
-                        d.name as creator, a.title, e.id as is_joined
+                        d.name as creator, a.title, e.id as is_joined,
+                        f.id as setting_id
                  from   tournaments a
                  inner  join games b on (b.id = a.game_id)
                  left   join game_variants c on (c.id = a.variant_id)
                  inner  join users d on (d.id = a.user_id)
                  left   join tournament_users e on (e.tournament_id = a.id and e.user_id = $1)
+                 inner  join game_settings f on (
+                        f.game_id = a.game_id and 
+                        coalesce(f.variant_id, 0) = coalesce(a.variant_id, 0) and
+                        coalesce(f.selector_value, 0) = coalesce(a.selector_value, 0)
+                 )
                  where  a.closed is null and (a.is_hidden = 0 or a.user_id = $2
                         or a.id in (select tournament_id from tournament_users where user_id = $3))
                  order  by a.created desc`, [user, user, user]);
@@ -69,6 +107,7 @@ export class TournamentService {
                     it.title = x.title;
                     it.game_id = x.game_id;
                     it.variant_id = x.variant_id;
+                    it.selector_value = x.selector_value;
                     it.game = x.game;
                     it.main_time = x.main_time;
                     it.additional_time = x.additional_time;
@@ -78,6 +117,7 @@ export class TournamentService {
                     it.user_id = x.user_id;
                     it.all = x.total;
                     it.completed = x.completed;
+                    it.setting_id = x.setting_id;
                     return it;
                 });
                 return l;
@@ -93,7 +133,7 @@ export class TournamentService {
     async getClosedTourns(user: number): Promise<Tourn[]> {
         try {
             const x = await this.service.query(
-                `select a.id, a.game_id, a.variant_id, coalesce(c.name, b.name) as game,
+                `select a.id, a.game_id, a.variant_id, a.selector_value, f.name as game,
                         a.main_time, a.additional_time, a.created, a.closed, a.user_id,
                       ( select count(*) 
                         from   tournament_games x
@@ -103,12 +143,18 @@ export class TournamentService {
                         left   join game_sessions y on (y.id = x.session_id)
                         where  tournament_id = a.id 
                         and  ( y.id is null or not y.closed is null ) ) as completed,
-                        d.name as creator, a.title, e.id as is_joined
+                        d.name as creator, a.title, e.id as is_joined,
+                        f.id as setting_id
                  from   tournaments a
                  inner  join games b on (b.id = a.game_id)
                  left   join game_variants c on (c.id = a.variant_id)
                  inner  join users d on (d.id = a.user_id)
                  left   join tournament_users e on (e.tournament_id = a.id and e.user_id = $1)
+                 inner  join game_settings f on (
+                    f.game_id = a.game_id and 
+                    coalesce(f.variant_id, 0) = coalesce(a.variant_id, 0) and
+                    coalesce(f.selector_value, 0) = coalesce(a.selector_value, 0)
+                 )
                  where  not a.closed is null and (a.is_hidden = 0 or a.user_id = $2
                         or a.id in (select tournament_id from tournament_users where user_id = $3))
                  order  by a.created desc`, [user, user, user]);
@@ -120,6 +166,7 @@ export class TournamentService {
                     it.title = x.title;
                     it.game_id = x.game_id;
                     it.variant_id = x.variant_id;
+                    it.selector_value = x.selector_value;
                     it.game = x.game;
                     it.main_time = x.main_time;
                     it.additional_time = x.additional_time;
@@ -129,6 +176,7 @@ export class TournamentService {
                     it.user_id = x.user_id;
                     it.all = x.total;
                     it.completed = x.completed;
+                    it.setting_id = x.setting_id;
                     return it;
                 });
                 return l;
@@ -257,55 +305,20 @@ export class TournamentService {
 
     async getTournSettings(t: Tourn): Promise<Tourn> {
         const x = await this.service.query(
-            `select a.tournamenttype_id, a.ratingtype_id, a.main_time, a.additional_time
-             from   game_settings a
-             where  a.game_id = $1 and coalesce(a.variant_id, 0) coalesce($2, 0)`, [t.game_id, t.variant_id]);
+            `select game_id, variant_id, selector_value,
+                    tournamenttype_id, ratingtype_id, main_time, additional_time
+             from   game_settings
+             where  id = $1`, [t.setting_id]);
         if (x && x.length > 0) {
-            if (!t.tournamenttype_id) {
-                 t.tournamenttype_id = x[0].tournamenttype_id;
-            }
-            if (!t.ratingtype_id) {
-                 t.ratingtype_id = x[0].ratingtype_id;
-            }
-            if (!t.main_time) {
-                t.main_time = x[0].main_time;
-            }
-            if (!t.additional_time) {
-                t.additional_time = x[0].additional_time;
-            }
+            t.game_id = x[0].game_id;
+            t.variant_id = x[0].variant_id;
+            t.selector_value = x[0].selector_value;
+            t.tournamenttype_id = x[0].tournamenttype_id;
+            t.ratingtype_id = x[0].ratingtype_id;
+            t.main_time = x[0].main_time;
+            t.additional_time = x[0].additional_time;
         }
         return t;
-    }
-
-    async createTourn(user: number, t: Tourn): Promise<Tourn> {
-        try {
-            const x = await this.getTournSettings(t);
-            const y = await this.service.createQueryBuilder("tournaments")
-            .insert()
-            .into(tournaments)
-            .values({
-                title: x.title,
-                tournamenttype_id: x.tournamenttype_id,
-                ratingtype_id: x.ratingtype_id,
-                game_id: x.game_id,
-                variant_id: x.variant_id,
-                selector_value: x.selector_value,
-                main_time: x.main_time ? x.main_time : 0,
-                additional_time: x.additional_time ? x.additional_time : 0,
-                is_hidden: x.is_hidden ? 1 : 0,
-                user_id: user
-            })
-            .returning('*')
-            .execute();
-            x.id = y.generatedMaps[0].id;
-            return x;
-        } catch (error) {
-            console.error(error);
-            throw new InternalServerErrorException({
-                status: HttpStatus.BAD_REQUEST,
-                error: error
-            });
-        }
     }
 
     async findOneById(id: number): Promise<Tourn> {
@@ -334,6 +347,48 @@ export class TournamentService {
               status: HttpStatus.BAD_REQUEST,
               error: error
           });
+        }
+    }
+
+    async createTourn(user: number, t: Tourn): Promise<Tourn> {
+        try {
+            let x = await this.findOneById(t.id);
+            if (x) {
+                await this.service.createQueryBuilder("tournaments")
+                .update(tournaments)
+                .set({ 
+                    title: t.title
+                 })
+                .where("id = :id", {id: t.id})
+                .execute();
+                return x;
+            }
+            x = await this.getTournSettings(t);
+            const y = await this.service.createQueryBuilder("tournaments")
+            .insert()
+            .into(tournaments)
+            .values({
+                title: x.title,
+                tournamenttype_id: x.tournamenttype_id,
+                ratingtype_id: x.ratingtype_id,
+                game_id: x.game_id,
+                variant_id: x.variant_id,
+                selector_value: x.selector_value,
+                main_time: x.main_time ? x.main_time : 0,
+                additional_time: x.additional_time ? x.additional_time : 0,
+                is_hidden: x.is_hidden ? 1 : 0,
+                user_id: user
+            })
+            .returning('*')
+            .execute();
+            x.id = y.generatedMaps[0].id;
+            return x;
+        } catch (error) {
+            console.error(error);
+            throw new InternalServerErrorException({
+                status: HttpStatus.BAD_REQUEST,
+                error: error
+            });
         }
     }
 
@@ -443,7 +498,7 @@ export class TournamentService {
                 }
             }
             const c = await this.calcUsers(id);
-            if (c) {
+            if (c > 0) {
                 await this.service.createQueryBuilder("tournaments")
                 .update(tournaments)
                 .set({ 

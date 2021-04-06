@@ -73,4 +73,7 @@ export class Tourn {
 
     @ApiPropertyOptional()
     ratingtype_id: number;
+
+    @ApiPropertyOptional()
+    setting_id: number;
 }

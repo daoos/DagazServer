@@ -9,6 +9,9 @@ export class game_settings {
     @PrimaryColumn()
     id: number;
 
+    @Column({ nullable: false })
+    name: string;
+
     @Index()
     @Column({ nullable: false })
     game_id: number;
@@ -22,6 +25,9 @@ export class game_settings {
     @ManyToOne(type => game_variants)
     @JoinColumn({ name: "variant_id" })
     variant: game_variants;
+
+    @Column({ nullable: true })
+    selector_value: number;
 
     @Index()
     @Column({ default: 1, nullable: false })

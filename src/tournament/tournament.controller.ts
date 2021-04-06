@@ -6,6 +6,7 @@ import { TournamentService } from './tournament.service';
 import { Request } from 'express';
 import { Tourn } from '../interfaces/tourn.interface';
 import { Member } from '../interfaces/member.interface';
+import { GameInfo } from '../interfaces/gameinfo.interface';
 
 @ApiSecurity('bearer')
 @Controller('api/tournament')
@@ -14,6 +15,19 @@ export class TournamentController {
     constructor(
         private readonly service: TournamentService
     ) {}
+
+    @Get('info')
+    @ApiOkResponse({ description: 'Successfully.'})
+    @ApiUnauthorizedResponse({ description: 'Unauthorized.'})
+    @ApiInternalServerErrorResponse({ description: 'Internal Server error.'})
+    async getInfo(@Res() res): Promise<GameInfo[]> {
+        try {
+            const r = await this.service.getInfo();
+            return res.status(HttpStatus.OK).json(r);
+        } catch(e) {
+            return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ error: e.message.error.toString(), stack: e.stack});
+        }
+    }
 
     @UseGuards(JwtAuthGuard, TokenGuard)
     @Get('active')
