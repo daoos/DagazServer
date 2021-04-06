@@ -30,6 +30,7 @@ var last_move = null;
 var sid = null;
 var turn = 1;
 var netstamp = null;
+var recovery_setup = null;
 
 function App(canvas) {
   this.canvas = canvas;
@@ -85,6 +86,14 @@ App.prototype.done = function() {
       if (this.doneMessage) {
           this.gameOver(this.doneMessage, this.winPlayer);
       }
+  }
+}
+
+App.prototype.setDone = function() {
+  if (uid) {
+      this.state = STATE.DONE;
+  } else {
+      this.state = STATE.IDLE;
   }
 }
 
@@ -164,6 +173,34 @@ App.prototype.isReady = function() {
   return this.state == STATE.IDLE;
 }
 
+Dagaz.Controller.isBuzy = function() {
+  var self = Dagaz.Controller.app;
+  return self.state == STATE.BUZY;
+}
+
+Dagaz.Controller.apply = function(move, setup) {
+  var self = Dagaz.Controller.app;
+  if (self.state == STATE.BUZY) {
+      recovery_setup = setup;
+      last_move = move;
+      delete self.list;
+      self.clearPositions();
+      self.view.markPositions(Dagaz.View.markType.TARGET, []);
+  }
+}
+
+Dagaz.Controller.setup = function(setup) {
+  var self = Dagaz.Controller.app;
+  if (self.state == STATE.BUZY) {
+      Dagaz.Model.setup(self.board, setup);
+      delete self.board.moves;
+      self.view.reInit(self.board);
+      delete self.list;
+      self.clearPositions();
+      self.view.markPositions(Dagaz.View.markType.TARGET, []);
+  }
+}
+
 App.prototype.setBoard = function(board, isForced) {
   if (this.isReady() || isForced) {
       this.board = board;
@@ -197,13 +234,32 @@ var getSid = function() {
 var authorize = function() {
   if (auth !== null) return;
   auth = localStorage.getItem('myAuthToken');
-  console.log(auth);
-  if (!auth) {
-      window.location = '/';
+  if (auth) {
+      console.log(auth);
+      return;
   }
+  $.ajax({
+     url: SERVICE + "auth/guest",
+     type: "GET",
+     dataType: "json",
+     success: function(data) {
+         auth = data.refresh_token;
+         inProgress = false;
+     },
+     error: function() {
+         console.log('Auth: Error!');
+         window.location = '/';
+     },
+     statusCode: {
+        500: function() {
+             console.log('Auth: Internal Error!');
+             window.location = '/';
+        }
+     }
+  });
 }
 
-var recovery = function() {
+var recovery = function(s) {
   if (auth === null) return;
   if (sid === null) return;
   if (setup !== null) return;
@@ -213,7 +269,8 @@ var recovery = function() {
      url: SERVICE + "session/recovery",
      type: "POST",
      data: {
-         id: sid
+         id: sid,
+         last_setup: s
      },
      dataType: "json",
      beforeSend: function (xhr) {
@@ -252,6 +309,33 @@ var recovery = function() {
   });
 }
 
+App.prototype.acceptMove = function(move) {
+  if (_.isUndefined(Dagaz.Controller.addMoves)) {
+      last_move = move;
+  } else {
+      if (_.isUndefined(this.top)) {
+          this.top = this.board;
+      }
+      this.top.generate(this.design);
+      var r = null;
+      _.each(this.top.moves, function(m) {
+          var x = m.toString() + ' ';
+          if (x.startsWith(move + ' ')) {
+              r = m;
+          }
+      });
+      if (r === null) return;
+      this.top = this.top.apply(r);
+      Dagaz.Controller.addMoves([{
+          turn_num: turn,
+          branch_num: 1,
+          next_player: this.top.player,
+          move_str: r,
+          setup_str: Dagaz.Model.getSetup(this.design, this.top)
+      }]);
+  }
+}
+
 var watchMove = function() {
   if (inProgress) return;
   if (auth === null) return;
@@ -273,7 +357,7 @@ var watchMove = function() {
      },
      success: function(data) {
          if (data.length > 0) {
-             last_move = data[0].move_str;
+             Dagaz.Controller.app.acceptMove(data[0].move_str);
              turn++;
              console.log('Watch Move: Succeed [move = ' + last_move + ']');
          }
@@ -519,7 +603,7 @@ var getConfirmed = function() {
                      if (!_.isUndefined(Dagaz.Controller.play)) {
                          Dagaz.Controller.play(Dagaz.Sounds.lose);
                      }
-                     app.state = STATE.DONE;
+                     App.prototype.setDone();
                      app.doneMessage = player + " won";
                      app.winPlayer   = app.board.player;
                      gameOver(app.doneMessage, app, app.winPlayer);
@@ -528,7 +612,7 @@ var getConfirmed = function() {
                      if (!_.isUndefined(Dagaz.Controller.play)) {
                          Dagaz.Controller.play(Dagaz.Sounds.win);
                      }
-                     app.state = STATE.DONE;
+                     App.prototype.setDone();
                      app.doneMessage = player + " lose";
                      app.winPlayer   = -app.board.player;
                      gameOver(app.doneMessage, app, app.winPlayer);
@@ -538,7 +622,7 @@ var getConfirmed = function() {
                          if (!_.isUndefined(Dagaz.Controller.play)) {
                              Dagaz.Controller.play(Dagaz.Sounds.draw);
                          }
-                         app.state = STATE.DONE;
+                         App.prototype.setDone();
                          app.doneMessage = "Draw";
                          app.winPlayer   = 0;
                          gameOver(app.doneMessage, app, app.winPlayer);
@@ -673,7 +757,14 @@ App.prototype.exec = function() {
               window.location = '/';
           }
       }
-      recovery();
+      var s = null;
+      if (!_.isUndefined(Dagaz.Model.getSetup)) {
+          s = Dagaz.Model.getSetup(this.design, this.board);
+      }
+      if (!_.isUndefined(Dagaz.Controller.init)) {
+          Dagaz.Controller.init(s, this.board.player);
+      }
+      recovery(s);
       if (setup && uid) {
           Dagaz.Model.setup(this.board, setup);
           Dagaz.Model.Done(this.design, this.board);
@@ -698,7 +789,7 @@ App.prototype.exec = function() {
              }
              this.view.markPositions(Dagaz.View.markType.KO, ko);
              if (this.list.isEmpty()) {
-                 this.state = STATE.DONE;
+                 App.prototype.setDone();
                  Canvas.style.cursor = "default";
                  if (!_.isUndefined(Dagaz.Controller.play)) {
                      Dagaz.Controller.play(Dagaz.Sounds.lose);
@@ -734,7 +825,7 @@ App.prototype.exec = function() {
                   } else {
                       winGame();
                       this.gameOver(player + " lose", -this.board.player);
-                      this.state = STATE.DONE;
+                      App.prototype.setDone();
                       return;
                   }
               }
@@ -748,7 +839,7 @@ App.prototype.exec = function() {
       this.board.generate(this.design);
       this.board.moves = Dagaz.Model.Determinate(this.board.moves);
       if (this.board.moves.length == 0) {
-          this.state = STATE.DONE;
+          App.prototype.setDone();
           Canvas.style.cursor = "default";
           if (!_.isUndefined(Dagaz.Controller.play)) {
               Dagaz.Controller.play(Dagaz.Sounds.win);
@@ -780,8 +871,19 @@ App.prototype.exec = function() {
           }
       }, this);
       if (this.move === null) {
+          if (recovery_setup !== null) {
+              Dagaz.Controller.setup(recovery_setup);
+              console.log('Buzy: Setup recovered [' + recovery_setup + ']');
+              recovery_setup = null;
+              last_move = null;
+              return;
+          }
           this.state = STATE.STOP;
-          console.log('Buzy: Bad move [' + last_move + ']');
+          var s = '';
+          if (!_.isUndefined(Dagaz.Model.getSetup)) {
+              s = ', setup=' + Dagaz.Model.getSetup(this.design, this.board);
+          }         
+          console.log('Buzy: Bad move [' + last_move + ']' + s);
       }
       var player = this.design.playerNames[this.board.player];
       console.log("Player: " + player);
@@ -822,7 +924,7 @@ App.prototype.exec = function() {
           var g = this.board.checkGoals(this.design, this.board.parent.player);
           if (g !== null) {
               var player = this.design.playerNames[this.board.parent.player];
-              this.state = STATE.DONE;
+              App.prototype.setDone();
               Canvas.style.cursor = "default";
               if (g > 0) {
                   if (player_num == this.board.parent.player) {
