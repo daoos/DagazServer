@@ -71,6 +71,64 @@ export class TournamentService {
         }
     }
 
+    async getTournById(user: number, id: number): Promise<Tourn> {
+        try {
+            const x = await this.service.query(
+                `select a.id, a.game_id, a.variant_id, a.selector_value, f.name as game,
+                        a.main_time, a.additional_time, a.created, a.closed, a.user_id,
+                      ( select count(*) 
+                        from   tournament_games x
+                        where  tournament_id = a.id ) as total,
+                      ( select count(*) 
+                        from   tournament_games x
+                        left   join game_sessions y on (y.id = x.session_id)
+                        where  tournament_id = a.id 
+                        and  ( y.id is null or not y.closed is null ) ) as completed,
+                        d.name as creator, a.title, e.id as is_joined,
+                        f.id as setting_id
+                 from   tournaments a
+                 inner  join games b on (b.id = a.game_id)
+                 left   join game_variants c on (c.id = a.variant_id)
+                 inner  join users d on (d.id = a.user_id)
+                 left   join tournament_users e on (e.tournament_id = a.id and e.user_id = $1)
+                 inner  join game_settings f on (
+                    f.game_id = a.game_id and 
+                    coalesce(f.variant_id, 0) = coalesce(a.variant_id, 0) and
+                    coalesce(f.selector_value, 0) = coalesce(a.selector_value, 0)
+                 )
+                 where  a.id = $2
+                 order  by a.created desc`, [user, id]);
+                 if (!x || x.length != 1) {
+                    return null;
+                 }
+                 let it = new Tourn();
+                 it.id = x[0].id;
+                 it.is_owner = x[0].user_id == user;
+                 it.is_joined = !!x[0].is_joined;
+                 it.title = x[0].title;
+                 it.game_id = x[0].game_id;
+                 it.variant_id = x[0].variant_id;
+                 it.selector_value = x[0].selector_value;
+                 it.game = x[0].game;
+                 it.main_time = x[0].main_time;
+                 it.additional_time = x[0].additional_time;
+                 it.creator = x[0].creator;
+                 it.created = x[0].created;
+                 it.closed = x[0].closed;
+                 it.user_id = x[0].user_id;
+                 it.all = x[0].total;
+                 it.completed = x[0].completed;
+                 it.setting_id = x[0].setting_id;
+                 return it;
+        } catch (error) {
+            console.error(error);
+            throw new InternalServerErrorException({
+                status: HttpStatus.BAD_REQUEST,
+                error: error
+            });
+        }
+    }
+
     async getActiveTourns(user: number): Promise<Tourn[]> {
         try {
             const x = await this.service.query(
@@ -193,7 +251,7 @@ export class TournamentService {
         try {
             const x = await this.service.query(
                 `select a.id, a.user_id, b.name as user, a.score as score, d.rating, a.total, a.win, a.lose,
-                      ( select sum(z.score)
+                      ( select coalesce(sum(z.score), 0)
                         from (
                             select y.score
                             from   tournament_games x
