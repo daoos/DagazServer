@@ -28,4 +28,7 @@ export class Member {
 
     @ApiPropertyOptional()
     lose: number;
+
+    @ApiPropertyOptional()
+    is_inc: boolean;
 }

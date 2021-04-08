@@ -35,6 +35,34 @@ export class SessionController {
     }
 
     @UseGuards(JwtAuthGuard, TokenGuard)
+    @Get('tournament/:tourn')
+    @ApiOkResponse({ description: 'Successfully.'})
+    @ApiUnauthorizedResponse({ description: 'Unauthorized.'})
+    @ApiInternalServerErrorResponse({ description: 'Internal Server error.'})
+    async findTournSessions(@Res() res, @Param('tourn') tourn): Promise<Sess[]> {
+        try {
+            const r = await this.service.getTournSessions(tourn, 0);
+            return res.status(HttpStatus.OK).json(r);
+        } catch(e) {
+            return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ error: e.message.error.toString(), stack: e.stack});
+        }
+    }
+
+    @UseGuards(JwtAuthGuard, TokenGuard)
+    @Get('tournament/:tourn/:user')
+    @ApiOkResponse({ description: 'Successfully.'})
+    @ApiUnauthorizedResponse({ description: 'Unauthorized.'})
+    @ApiInternalServerErrorResponse({ description: 'Internal Server error.'})
+    async findTournUserSessions(@Res() res, @Param('tourn') tourn, @Param('user') user): Promise<Sess[]> {
+        try {
+            const r = await this.service.getTournSessions(tourn, user);
+            return res.status(HttpStatus.OK).json(r);
+        } catch(e) {
+            return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ error: e.message.error.toString(), stack: e.stack});
+        }
+    }
+
+    @UseGuards(JwtAuthGuard, TokenGuard)
     @Get('waiting/:game/:variant')
     @ApiOkResponse({ description: 'Successfully.'})
     @ApiUnauthorizedResponse({ description: 'Unauthorized.'})

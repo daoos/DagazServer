@@ -61,6 +61,59 @@ export class SessionService {
           }
       }
 
+      async getTournSessions(tourn: number, user: number): Promise<Sess[]> {
+        try {
+            const x = await this.service.query(
+                `select distinct a.id as id, a.status_id as status, a.game_id as game_id, d.id as variant_id,
+                        coalesce(d.name, b.name) || ' (' || a.id || ')' as game, coalesce(d.filename, b.filename) as filename, 
+                        a.created as created, c.name as creator, b.players_total as players_total, a.last_setup as last_setup, 
+                        string_agg(
+                            case
+                              when e.is_ai = 1 then 'AI'
+                              else f.name
+                            end || ' (' || e.player_num || 
+                        ')', ' / ' order by e.player_num) as player_name,
+                        coalesce(a.last_turn, 0) as last_turn, coalesce(a.selector_value, 0) as selector_value, x.id as ai
+                 from   game_sessions a
+                 inner  join games b on (b.id = a.game_id)
+                 inner  join users c on (c.id = a.user_id)
+                 left   join game_variants d on (d.id = a.variant_id)
+                 inner  join user_games e on (e.session_id = a.id)
+                 inner  join users f on (f.id = e.user_id)
+                 left   join user_games g on (g.session_id = a.id and g.is_ai = 0)
+                 left   join game_styles h on (h.game_id = b.id and h.player_num = g.player_num)
+                 left   join user_games x on (x.session_id = a.id and x.is_ai = 1)
+                 inner  join tournament_games i on (i.session_id = a.id and i.tournament_id = $1)
+                 left   join user_games j on (j.session_id = a.id and j.user_id = $2)
+                 where  coalesce(j.user_id, 0) = $3
+                 group  by a.id, a.status_id, a.game_id, d.id, d.name, b.name, d.filename, b.filename, a.created, c.name, b.players_total, a.last_setup, h.suffix, x.id`, [tourn, user, user]);
+                 let l: Sess[] = x.map(x => {
+                    let it = new Sess();
+                    it.id = x.id;
+                    it.status = x.status;
+                    it.game_id = x.game_id;
+                    it.game = x.game;
+                    it.variant_id = x.variant_id;
+                    it.filename = x.filename;
+                    it.created = x.created;
+                    it.players_total = x.players_total;
+                    it.player_name = x.player_name;
+                    it.last_setup = x.last_setup;
+                    it.last_turn = x.last_turn;
+                    it.selector_value = x.selector_value;
+                    it.ai = x.ai;
+                    return it;
+                });
+                return l;
+        } catch (error) {
+          console.error(error);
+          throw new InternalServerErrorException({
+              status: HttpStatus.BAD_REQUEST,
+              error: error
+          });
+        }
+      }
+
       async getCurrentSessions(user: number): Promise<Sess[]> {
         try {
             const realm = await this.getRealm(user);
@@ -1204,7 +1257,8 @@ export class SessionService {
             await this.service.createQueryBuilder("user_ratings")
             .update(user_ratings)
             .set({ 
-                rating: +old + delta
+                rating: +old + delta,
+                is_inc: delta > 0
              })
             .where("id = :id", {id: id})
             .execute();

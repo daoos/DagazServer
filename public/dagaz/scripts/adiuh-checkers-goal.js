@@ -65,7 +65,8 @@ Dagaz.Model.checkGoals = function(design, board, player) {
           } else {
               r = -1;
           }
-      } else {
+      } 
+      if (w < b) {
           if (player == 1) {
               r = -1;
           } else {

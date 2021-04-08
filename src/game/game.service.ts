@@ -101,7 +101,7 @@ export class GameService {
                                from   game_bots
                                group  by game_id, variant_id
                              ) b on (b.game_id = a.id and b.variant_id is null)
-                 left   join game_scores c on (c.game_id = a.id and c.variant_id is null and c.result_id = 1)
+                 left   join game_settings c on (c.game_id = a.id and c.variant_id is null)
                  where  a.realm_id = $2
                  order  by lower(a.name)`, [user, realm]);
             let l: Game[] = x.map(x => {
@@ -158,7 +158,7 @@ export class GameService {
                                from   game_bots
                                group  by game_id, variant_id
                              ) c on (c.game_id = b.id and c.variant_id = a.id)
-                 left   join game_scores d on (d.game_id = a.id and coalesce(d.variant_id, a.id) = a.id and d.result_id = 1)
+                 left   join game_settings d on (d.game_id = b.id and coalesce(d.variant_id, a.id) = a.id)
                  where  b.realm_id = $2 and b.id = $3
                  order  by lower(a.name)`, [user, realm, game]);
             let l: Game[] = x.map(x => {
