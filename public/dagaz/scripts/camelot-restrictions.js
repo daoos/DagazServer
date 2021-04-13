@@ -52,6 +52,21 @@ Dagaz.Model.CheckInvariants = function(board) {
           }
       }
   });
+  var moves = [];
+  _.each(board.moves, function(move) {
+      if (!_.isUndefined(move.failed)) return;
+      var c = 0;
+      _.each(move.actions, function(a) {
+          if (a[0] === null) return;
+          if (a[1] !== null) return;
+          c++;
+      });
+      if (c == 0) return;
+      moves.push(move);
+  });
+  if (moves.length > 0) {
+      board.moves = moves;
+  }
   CheckInvariants(board);
 }
 
