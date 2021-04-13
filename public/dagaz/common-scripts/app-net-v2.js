@@ -905,12 +905,12 @@ App.prototype.getAI = function() {
 App.prototype.exec = function() {
   this.view.configure();
   this.view.draw(this.canvas);
+  if (inProgress) return;
   if (this.state == STATE.STOP) {
       this.state = STATE.IDLE;
       return;
   }
   if (this.state == STATE.INIT) {
-      if (inProgress) return;
       authorize();
       if (auth === null) return;
       if (sid === null) {

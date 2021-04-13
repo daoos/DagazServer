@@ -3,7 +3,7 @@
 Dagaz.AI.AI_FRAME      = 2000;
 Dagaz.AI.MIN_DEEP      = 6;
 
-var MAX_FORCED_FACTOR  = 2;
+var MAX_FORCED_FACTOR  = 1;
 
 var inversed = false;
 var blink = 1;
