@@ -85,4 +85,10 @@ export class Sess {
 
     @ApiPropertyOptional()
     height: number;
+
+    @ApiPropertyOptional()
+    time_limit: number;
+
+    @ApiPropertyOptional()
+    additional_time: number;
 }

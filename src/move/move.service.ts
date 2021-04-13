@@ -51,7 +51,7 @@ export class MoveService {
             last_user: uid,
             last_time: Date.now()
         })
-        .where("id = :id and last_user <> :uid", {id: sess, uid: uid})
+        .where("id = :id and last_user <> :uid and last_time is null", {id: sess, uid: uid})
         .execute();
         return true;
     }
@@ -161,26 +161,33 @@ export class MoveService {
     }
 
     async getTimeLimit(uid: number): Promise<number> {
-        const x = await this.service.query(
-            `select time_limit 
-             from   user_games 
-             where  id = $1`, [uid]);
-        if (!x || x.length != 1) {
-            return null;
+        let x = await this.service.query(
+            `select a.time_limit, b.last_time
+             from   user_games a
+             inner  join game_sessions b on (b.id = a.session_id)
+             where  a.id = $1`, [uid]);
+        if (!x || x.length == 0) {
+             return null;
         }
-        return x[0].time_limit;
+        let time_limit  = x[0].time_limit;
+        if (time_limit !== null) {
+            const last_time = x[0].last_time;
+            if (last_time && (Date.now() > last_time)) {
+                time_limit -= Date.now() - last_time;
+            }
+        }
+        return time_limit;
     }
 
-    async getAdditionalTime(sess: number): Promise<number> {
-        const x = await this.service.query(
-            `select b.additional_time * 1000 as additional_time
-             from  game_sessions a
-             inner join games b on (b.id = a.game_id)
-             where a.id = $1`, [sess]);
-        if (!x || x.length != 1) {
-            return null;
+    async getAdditionalTime(sid: number): Promise<number> {
+        let x = await this.service.query(
+            `select additional_time
+             from   game_sessions
+             where  id = $1`, [sid]);
+        if (!x || x.length == 0) {
+             return null;
         }
-        return x[0].additional_time;
+        return x[0].additional_time * 1000;
     }
 
     async getUnconfirmedMove(sess: number): Promise<Move[]> {
@@ -320,10 +327,10 @@ export class MoveService {
                 return null;
             }
             const last_time = await this.getLastTime(x.session_id);
-            const time_delta = Date.now() - last_time;
+            let time_delta = last_time ? Date.now() - last_time : null;
             let time_limit = await this.getTimeLimit(x.uid);
-            if (time_limit === null) {
-                return null;
+            if (!time_limit) {
+                time_delta = null;
             }
             const turn_num = await this.getTurnNumber(x.session_id);
             const y = await this.service.createQueryBuilder("game_moves")
@@ -342,22 +349,25 @@ export class MoveService {
             .returning('*')
             .execute();
             x.id = y.generatedMaps[0].id;
-            if (time_limit < 0) {
-                time_limit = 0;
+            if (time_limit && time_delta) {
+                if (time_limit < 0) {
+                    time_limit = 0;
+                }
+                time_limit -= time_delta;
+                await this.service.createQueryBuilder("user_games")
+                .update(user_games)
+                .set({ 
+                    time_limit: time_limit
+                 })
+                .where("id = :uid", {uid: x.uid})
+                .execute();
             }
-            time_limit -= time_delta;
-            await this.service.createQueryBuilder("user_games")
-            .update(user_games)
-            .set({ 
-                time_limit: time_limit
-             })
-            .where("id = :uid", {uid: x.uid})
-            .execute();
             if (x.setup_str) {
                 await this.service.createQueryBuilder("game_sessions")
                 .update(game_sessions)
                 .set({ 
                     changed: new Date(),
+                    last_time: null,
                     last_setup: x.setup_str,
                     last_turn: turn_num,
                     last_user: x.uid,

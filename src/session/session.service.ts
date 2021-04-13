@@ -519,7 +519,7 @@ export class SessionService {
             await this.service.createQueryBuilder("game_sessions")
             .update(game_sessions)
             .set({ 
-                last_time: Date.now()
+                last_time: null
              })
             .where("id = :id", {id: s.id})
             .execute();
@@ -899,6 +899,46 @@ export class SessionService {
         return x[0].ai_timeout;
     }
 
+    async setLastTime(sid: number): Promise<void> {
+        await this.service.createQueryBuilder("game_sessions")
+        .update(game_sessions)
+        .set({ 
+            last_time: Date.now()
+         })
+        .where("id = :id and last_time is null", {id: sid})
+        .execute();
+    }
+
+    async getTimeLimit(uid: number): Promise<number> {
+        let x = await this.service.query(
+            `select a.time_limit, b.last_time
+             from   user_games a
+             inner  join game_sessions b on (b.id = a.session_id)
+             where  a.id = $1`, [uid]);
+        if (!x || x.length == 0) {
+             return null;
+        }
+        let time_limit  = x[0].time_limit;
+        if (time_limit !== null) {
+            const last_time = x[0].last_time;
+            if (last_time && (Date.now() > last_time)) {
+                time_limit -= Date.now() - last_time;
+            }
+        }
+        return time_limit;
+    }
+
+    async getAdditionalTime(sid: number): Promise<number> {
+        let x = await this.service.query(
+            `select additional_time
+             from   game_sessions
+             where  id = $1`, [sid]);
+        if (!x || x.length == 0) {
+             return null;
+        }
+        return x[0].additional_time * 1000;
+    }
+
     async recovery(user:number, s: Sess): Promise<Sess> {
         try {
             let x = await this.service.query(
@@ -947,8 +987,15 @@ export class SessionService {
                 if (x[0].ai) {
                     s.ai = x[0].ai;
                 }
-                if (x[0].last_user && s.uid && !s.ai && !x[0].result_id && (x[0].last_user != s.uid)) {
-                    s.last_setup = await this.rollbackSess(s.last_setup, s.id, s.uid);
+                if (x[0].last_user && s.uid) {
+                    if (x[0].last_user == s.uid) {
+                        await this.setLastTime(s.id);
+                    }
+                    s.time_limit = await this.getTimeLimit(s.uid);
+                    s.additional_time = await this.getAdditionalTime(s.id);
+                    if (!s.ai && !x[0].result_id && (x[0].last_user != s.uid)) {
+                        s.last_setup = await this.rollbackSess(s.last_setup, s.id, s.uid);
+                    }
                 }
             }
             return s;
@@ -1043,7 +1090,7 @@ export class SessionService {
                 status_id: 1,
                 variant_id: x.variant_id,
                 selector_value: x.selector_value,
-                last_time: Date.now()
+                last_time: null
             })
             .returning('*')
             .execute();

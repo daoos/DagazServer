@@ -58,12 +58,11 @@ export class JoinService {
         return y[0].player_num;
     }
 
-    async getMainTime(id: number): Promise<number> {
+    async getMainTime(sid: number): Promise<number> {
         const x = await this.service.query(
-            `select b.main_time * 1000 as main_time
-             from game_sessions a
-             inner join games b on (b.id = a.game_id)
-             where a.id = $1`, [id]);
+            `select main_time * 1000 as main_time
+             from   game_sessions
+             where  id = $1`, [sid]);
         if (!x || x.length != 1) {
             return null;
         }

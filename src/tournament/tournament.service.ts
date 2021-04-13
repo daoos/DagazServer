@@ -491,8 +491,8 @@ export class TournamentService {
                 game_id: x.game_id,
                 variant_id: x.variant_id,
                 selector_value: x.selector_value,
-                main_time: x.main_time ? x.main_time : 0,
-                additional_time: x.additional_time ? x.additional_time : 0,
+                main_time: x.main_time,
+                additional_time: x.additional_time,
                 is_hidden: x.is_hidden ? 1 : 0,
                 user_id: user
             })
@@ -517,7 +517,7 @@ export class TournamentService {
             user_id: u,
             session_id: s,
             player_num: p,
-            time_limit: t,
+            time_limit: t * 1000,
             is_ai: 0
         })
         .execute();
@@ -563,7 +563,9 @@ export class TournamentService {
                     selector_value: s.selector_value,
                     status_id: 2,
                     is_protected: 1,
-                    last_time: Date.now()
+                    main_time: s.main_time,
+                    additional_time: s.additional_time,
+                    last_time: null
                 })
                 .returning('*')
                 .execute();

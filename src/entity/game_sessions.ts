@@ -55,7 +55,7 @@ export class game_sessions {
     @Column({ nullable: true })
     last_turn: number;
 
-    @Column({ type: "bigint", nullable: false })
+    @Column({ type: "bigint", nullable: true })
     last_time: number;
 
     @Column({ nullable: true })
@@ -69,4 +69,10 @@ export class game_sessions {
 
     @Column({ default: 1, nullable: false })
     branch_num: number;
+
+    @Column({ nullable: true })
+    main_time: number;
+
+    @Column({ nullable: true })
+    additional_time: number;
 }
