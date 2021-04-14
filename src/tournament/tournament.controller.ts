@@ -7,6 +7,9 @@ import { Request } from 'express';
 import { Tourn } from '../interfaces/tourn.interface';
 import { Member } from '../interfaces/member.interface';
 import { GameInfo } from '../interfaces/gameinfo.interface';
+import { RolesGuard } from '../auth/roles.guard';
+import { Roles } from '../auth/roles.decorator';
+import { GameTime } from '../interfaces/gametime.interface';
 
 @ApiSecurity('bearer')
 @Controller('api/tournament')
@@ -23,6 +26,19 @@ export class TournamentController {
     async getInfo(@Res() res): Promise<GameInfo[]> {
         try {
             const r = await this.service.getInfo();
+            return res.status(HttpStatus.OK).json(r);
+        } catch(e) {
+            return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ error: e.message.error.toString(), stack: e.stack});
+        }
+    }
+
+    @Get('time')
+    @ApiOkResponse({ description: 'Successfully.'})
+    @ApiUnauthorizedResponse({ description: 'Unauthorized.'})
+    @ApiInternalServerErrorResponse({ description: 'Internal Server error.'})
+    async getTime(@Res() res): Promise<GameTime[]> {
+        try {
+            const r = await this.service.getTime();
             return res.status(HttpStatus.OK).json(r);
         } catch(e) {
             return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ error: e.message.error.toString(), stack: e.stack});
@@ -156,15 +172,36 @@ export class TournamentController {
     }
 
     @UseGuards(JwtAuthGuard, TokenGuard)
+    @Post('close')
+    @ApiBody({ type: [Tourn] })
+    @ApiOkResponse({ description: 'Successfully.'})
+    @ApiUnauthorizedResponse({ description: 'Unauthorized.'})
+    @ApiNotFoundResponse({ description: 'Not Found.'})
+    @ApiInternalServerErrorResponse({ description: 'Internal Server error.'})
+    async close(@Req() request: Request, @Res() res, @Body() x: Tourn): Promise<Tourn> {
+        const user: any = request.user;
+        try {
+            const r = await this.service.closeTourn(user.id, x);
+            if (!r) {
+                return res.status(HttpStatus.NOT_FOUND).json();
+            } else {
+                return res.status(HttpStatus.OK).json(r);
+            }
+        } catch (e) {
+            return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ error: e.message.error.toString(), stack: e.stack});
+        }
+    }
+
+    @UseGuards(JwtAuthGuard, RolesGuard, TokenGuard)
+    @Roles('admin')
     @Delete(':id')
     @ApiOkResponse({ description: 'Successfully.'})
     @ApiUnauthorizedResponse({ description: 'Unauthorized.'})
     @ApiNotFoundResponse({ description: 'Not Found.'})
     @ApiInternalServerErrorResponse({ description: 'Internal Server error.'})
-    async delete(@Req() request: Request, @Res() res, @Param('id') id): Promise<Tourn> {
-        const user: any = request.user;
+    async delete(@Res() res, @Param('id') id): Promise<Tourn> {
         try {
-            const r = await this.service.delTourn(user.id, id);
+            const r = await this.service.delTourn(id);
             if (!r) {
                 return res.status(HttpStatus.NOT_FOUND).json();
             } else {

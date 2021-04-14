@@ -42,10 +42,4 @@ export class game_settings {
     @ManyToOne(type => rating_types)
     @JoinColumn({ name: "ratingtype_id" })
     ratingtype: rating_types;
-
-    @Column({ nullable: true })
-    main_time: number;
-
-    @Column({ nullable: true })
-    additional_time: number;
 }

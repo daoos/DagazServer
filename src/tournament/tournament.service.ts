@@ -7,6 +7,7 @@ import { tournament_users } from '../entity/tournament_users';
 import { user_games } from '../entity/user_games';
 import { user_ratings } from '../entity/user_ratings';
 import { GameInfo } from '../interfaces/gameinfo.interface';
+import { GameTime } from '../interfaces/gametime.interface';
 import { Member } from '../interfaces/member.interface';
 import { Tourn } from '../interfaces/tourn.interface';
 
@@ -44,8 +45,7 @@ export class TournamentService {
         try {
             const x = await this.service.query(
                 `select id, name, game_id, selector_value, 
-                        tournamenttype_id, ratingtype_id,
-                        main_time, additional_time
+                        tournamenttype_id, ratingtype_id
                  from   game_settings
                  order  by name`);
                  let l: GameInfo[] = x.map(x => {
@@ -57,6 +57,30 @@ export class TournamentService {
                     it.selector_value = x.selector_value;
                     it.tournamenttype_id = x.tournamenttype_id;
                     it.ratingtype_id = x.ratingtype_id;
+                    return it;
+                });
+                return l;
+        } catch (error) {
+            console.error(error);
+            throw new InternalServerErrorException({
+                status: HttpStatus.BAD_REQUEST,
+                error: error
+            });
+        }
+    }
+
+    async getTime(): Promise<GameTime[]> {
+        try {
+            const x = await this.service.query(
+                `select id, name, main_time, additional_time, order_num
+                 from   time_controls
+                 union  all
+                 select 0 as id, 'No', null::integer, null::integer, 0
+                 order  by order_num`);
+                 let l: GameTime[] = x.map(x => {
+                    let it = new GameTime();
+                    it.id = x.id;
+                    it.name = x.name;
                     it.main_time = x.main_time;
                     it.additional_time = x.additional_time;
                     return it;
@@ -75,7 +99,8 @@ export class TournamentService {
         try {
             const x = await this.service.query(
                 `select a.id, a.game_id, a.variant_id, a.selector_value, f.name as game,
-                        a.main_time, a.additional_time, a.created, a.closed, a.user_id,
+                        g.main_time, g.additional_time, a.created, a.closed, a.user_id,
+                        a.timecontrol_id, g.name as timecontrol,
                       ( select count(*) 
                         from   tournament_games x
                         where  tournament_id = a.id ) as total,
@@ -96,6 +121,7 @@ export class TournamentService {
                     coalesce(f.variant_id, 0) = coalesce(a.variant_id, 0) and
                     coalesce(f.selector_value, 0) = coalesce(a.selector_value, 0)
                  )
+                 left   join time_controls g on (g.id = a.timecontrol_id)
                  where  a.id = $2
                  order  by a.created desc`, [user, id]);
                  if (!x || x.length != 1) {
@@ -119,6 +145,8 @@ export class TournamentService {
                  it.all = x[0].total;
                  it.completed = x[0].completed;
                  it.setting_id = x[0].setting_id;
+                 it.timecontrol_id = x[0].timecontrol_id;
+                 it.timecontrol = x[0].timecontrol;
                  return it;
         } catch (error) {
             console.error(error);
@@ -133,7 +161,8 @@ export class TournamentService {
         try {
             const x = await this.service.query(
                 `select a.id, a.game_id, a.variant_id, a.selector_value, f.name as game,
-                        a.main_time, a.additional_time, a.created, a.closed, a.user_id,
+                        g.main_time, g.additional_time, a.created, a.closed, a.user_id,
+                        a.timecontrol_id, g.name as timecontrol,
                       ( select count(*) 
                         from   tournament_games x
                         where  tournament_id = a.id ) as total,
@@ -154,6 +183,7 @@ export class TournamentService {
                         coalesce(f.variant_id, 0) = coalesce(a.variant_id, 0) and
                         coalesce(f.selector_value, 0) = coalesce(a.selector_value, 0)
                  )
+                 left   join time_controls g on (g.id = a.timecontrol_id)
                  where  b.id = $2 and coalesce(c.id, 0) = $3
                  order  by a.created desc`, [user, g, v]);
                  let l: Tourn[] = x.map(x => {
@@ -175,6 +205,8 @@ export class TournamentService {
                     it.all = x.total;
                     it.completed = x.completed;
                     it.setting_id = x.setting_id;
+                    it.timecontrol_id = x.timecontrol_id;
+                    it.timecontrol = x.timecontrol;
                     return it;
                 });
                 return l;
@@ -191,7 +223,8 @@ export class TournamentService {
         try {
             const x = await this.service.query(
                 `select a.id, a.game_id, a.variant_id, a.selector_value, f.name as game,
-                        a.main_time, a.additional_time, a.created, a.closed, a.user_id,
+                        g.main_time, g.additional_time, a.created, a.closed, a.user_id,
+                        a.timecontrol_id, g.name as timecontrol,
                       ( select count(*) 
                         from   tournament_games x
                         where  tournament_id = a.id ) as total,
@@ -212,6 +245,7 @@ export class TournamentService {
                         coalesce(f.variant_id, 0) = coalesce(a.variant_id, 0) and
                         coalesce(f.selector_value, 0) = coalesce(a.selector_value, 0)
                  )
+                 left   join time_controls g on (g.id = a.timecontrol_id)
                  where  a.closed is null and (a.is_hidden = 0 or a.user_id = $2
                         or a.id in (select tournament_id from tournament_users where user_id = $3))
                  order  by a.created desc`, [user, user, user]);
@@ -234,6 +268,8 @@ export class TournamentService {
                     it.all = x.total;
                     it.completed = x.completed;
                     it.setting_id = x.setting_id;
+                    it.timecontrol_id = x.timecontrol_id;
+                    it.timecontrol = x.timecontrol;
                     return it;
                 });
                 return l;
@@ -250,7 +286,8 @@ export class TournamentService {
         try {
             const x = await this.service.query(
                 `select a.id, a.game_id, a.variant_id, a.selector_value, f.name as game,
-                        a.main_time, a.additional_time, a.created, a.closed, a.user_id,
+                        g.main_time, g.additional_time, a.created, a.closed, a.user_id,
+                        a.timecontrol_id, g.name as timecontrol,
                       ( select count(*) 
                         from   tournament_games x
                         where  tournament_id = a.id ) as total,
@@ -271,6 +308,7 @@ export class TournamentService {
                     coalesce(f.variant_id, 0) = coalesce(a.variant_id, 0) and
                     coalesce(f.selector_value, 0) = coalesce(a.selector_value, 0)
                  )
+                 left   join time_controls g on (g.id = a.timecontrol_id)
                  where  not a.closed is null and (a.is_hidden = 0 or a.user_id = $2
                         or a.id in (select tournament_id from tournament_users where user_id = $3))
                  order  by a.created desc`, [user, user, user]);
@@ -293,6 +331,8 @@ export class TournamentService {
                     it.all = x.total;
                     it.completed = x.completed;
                     it.setting_id = x.setting_id;
+                    it.timecontrol_id = x.timecontrol_id;
+                    it.timecontrol = x.timecontrol;
                     return it;
                 });
                 return l;
@@ -423,7 +463,7 @@ export class TournamentService {
     async getTournSettings(t: Tourn): Promise<Tourn> {
         const x = await this.service.query(
             `select game_id, variant_id, selector_value,
-                    tournamenttype_id, ratingtype_id, main_time, additional_time
+                    tournamenttype_id, ratingtype_id
              from   game_settings
              where  id = $1`, [t.setting_id]);
         if (x && x.length > 0) {
@@ -432,10 +472,30 @@ export class TournamentService {
             t.selector_value = x[0].selector_value;
             t.tournamenttype_id = x[0].tournamenttype_id;
             t.ratingtype_id = x[0].ratingtype_id;
-            t.main_time = x[0].main_time;
-            t.additional_time = x[0].additional_time;
         }
         return t;
+    }
+
+    async getMainTime(id: number): Promise<number> {
+        const x = await this.service.query(
+            `select main_time
+             from   time_controls
+             where  id = $1`, [id]);
+        if (!x || x.length != 1) {
+             return null;
+        }
+        return x[0].main_time;
+    }
+
+    async getAdditionalTime(id: number): Promise<number> {
+        const x = await this.service.query(
+            `select additional_time
+             from   time_controls
+             where  id = $1`, [id]);
+        if (!x || x.length != 1) {
+             return null;
+        }
+        return x[0].additional_time;
     }
 
     async findOneById(id: number): Promise<Tourn> {
@@ -451,12 +511,14 @@ export class TournamentService {
           it.game_id = x.game_id;
           it.variant_id = x.variant_id;
           it.selector_value = x.selector_value;
-          it.main_time = x.main_time;
-          it.additional_time = x.additional_time;
+          it.timecontrol_id = x.timecontrol_id;
           it.is_hidden = x.is_hidden > 0;
           it.created = x.created;
           it.closed = x.closed;
           it.user_id = x.user_id;
+          it.timecontrol_id = x.timecontrol_id;
+          it.main_time = await this.getMainTime(x.timecontrol_id);
+          it.additional_time = await this.getAdditionalTime(x.timecontrol_id);
           return it;
         } catch (error) {
           console.error(error);
@@ -491,8 +553,7 @@ export class TournamentService {
                 game_id: x.game_id,
                 variant_id: x.variant_id,
                 selector_value: x.selector_value,
-                main_time: x.main_time,
-                additional_time: x.additional_time,
+                timecontrol_id: x.timecontrol_id,
                 is_hidden: x.is_hidden ? 1 : 0,
                 user_id: user
             })
@@ -553,6 +614,8 @@ export class TournamentService {
                 if (r > x.rating) {
                     first = false;
                 }
+                s.main_time = await this.getMainTime(s.timecontrol_id);
+                s.additional_time = await this.getAdditionalTime(s.timecontrol_id);
                 const z = await this.service.createQueryBuilder("game_sessions")
                 .insert()
                 .into(game_sessions)
@@ -593,20 +656,9 @@ export class TournamentService {
         }
     }
 
-    async calcUsers(id: number): Promise<number> {
-        const x = await this.service.query(
-            `select count(*) as cnt
-             from   tournament_users
-             where  tournament_id = $1`, [id]);
-        if (!x || x.length != 1) {
-             return 0;
-        }
-        return x[0].cnt;
-    }
-
-    async delTourn(user: number,id: number): Promise<Tourn> {
+    async closeTourn(user: number, x: Tourn): Promise<Tourn> {
         try {
-            const s = await this.findOneById(id);
+            const s = await this.findOneById(x.id);
             if (!s) {
                 return null;
             }
@@ -616,22 +668,47 @@ export class TournamentService {
                     return null;
                 }
             }
-            const c = await this.calcUsers(id);
-            if (c > 0) {
-                await this.service.createQueryBuilder("tournaments")
-                .update(tournaments)
-                .set({ 
-                    closed: new Date()
-                 })
-                .where("id = :id", {id: id})
-                .execute();
-            } else {
-                await this.service.createQueryBuilder("tournaments")
-                .delete()
-                .from(tournaments)
-                .where(`id = :id`, {id: id})
-                .execute();
+            if (!x.closed) {
+                x.closed = new Date();
             }
+            await this.service.createQueryBuilder("tournaments")
+            .update(tournaments)
+            .set({ 
+                closed: x.closed
+             })
+            .where("id = :id", {id: x.id})
+            .execute();
+            return s;
+        } catch (error) {
+            console.error(error);
+            throw new InternalServerErrorException({
+                status: HttpStatus.BAD_REQUEST,
+                error: error
+            });
+        }
+    }
+
+    async delTourn(id: number): Promise<Tourn> {
+        try {
+            const s = await this.findOneById(id);
+            if (!s) {
+                return null;
+            }
+            await this.service.createQueryBuilder("tournament_games")
+            .delete()
+            .from(tournament_games)
+            .where(`tournament_id = :id`, {id: id})
+            .execute();
+            await this.service.createQueryBuilder("tournament_users")
+            .delete()
+            .from(tournament_users)
+            .where(`tournament_id = :id`, {id: id})
+            .execute();
+            await this.service.createQueryBuilder("tournaments")
+            .delete()
+            .from(tournaments)
+            .where(`id = :id`, {id: id})
+            .execute();
             return s;
         } catch (error) {
             console.error(error);

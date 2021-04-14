@@ -76,4 +76,10 @@ export class Tourn {
 
     @ApiPropertyOptional()
     setting_id: number;
+
+    @ApiPropertyOptional()
+    timecontrol_id: number;
+
+    @ApiPropertyOptional()
+    timecontrol: string;
 }

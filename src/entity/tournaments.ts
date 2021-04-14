@@ -2,6 +2,7 @@ import { Column, Entity, Index, JoinColumn, ManyToOne, PrimaryGeneratedColumn } 
 import { games } from "./games";
 import { game_variants } from "./game_variants";
 import { rating_types } from "./rating_types";
+import { time_controls } from "./time_controls";
 import { tournament_types } from "./tournament_types";
 import { users } from "./users";
 
@@ -34,14 +35,15 @@ export class tournaments {
     @JoinColumn({ name: "variant_id" })
     variant: game_variants;
 
+    @Index()
+    @Column({ nullable: true })
+    timecontrol_id: number;
+    @ManyToOne(type => time_controls)
+    @JoinColumn({ name: "timecontrol_id" })
+    timecontrol: time_controls;
+
     @Column({ nullable: true })
     selector_value: number;
-
-    @Column({ nullable: true })
-    main_time: number;
-
-    @Column({ nullable: true })
-    additional_time: number;
 
     @Column({ default: 0, nullable: false })
     is_hidden: number;

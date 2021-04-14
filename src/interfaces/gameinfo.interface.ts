@@ -23,9 +23,9 @@ export class GameInfo {
     @ApiProperty()
     ratingtype_id: number;
 
-    @ApiPropertyOptional()
+/*  @ApiPropertyOptional()
     main_time: number;
 
     @ApiPropertyOptional()
-    additional_time: number;
+    additional_time: number;*/
 }
