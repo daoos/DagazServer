@@ -85,7 +85,7 @@ export class SessionService {
                  inner  join tournament_games i on (i.session_id = a.id and i.tournament_id = $1)
                  left   join user_games j on (j.session_id = a.id and j.user_id = $2)
                  where  coalesce(j.user_id, 0) = $3
-                 group  by a.id, a.status_id, a.game_id, d.id, d.name, b.name, d.filename, b.filename, a.created, c.name, b.players_total, a.last_setup, h.suffix, x.id`, [tourn, user, user]);
+                 group  by a.id, a.status_id, a.game_id, d.id, d.name, b.name, d.filename, b.filename, a.created, c.name, b.players_total, a.last_setup, x.id`, [tourn, user, user]);
                  let l: Sess[] = x.map(x => {
                     let it = new Sess();
                     it.id = x.id;
