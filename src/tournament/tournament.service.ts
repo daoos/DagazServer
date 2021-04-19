@@ -476,28 +476,6 @@ export class TournamentService {
         return t;
     }
 
-    async getMainTime(id: number): Promise<number> {
-        const x = await this.service.query(
-            `select main_time
-             from   time_controls
-             where  id = $1`, [id]);
-        if (!x || x.length != 1) {
-             return null;
-        }
-        return x[0].main_time;
-    }
-
-    async getAdditionalTime(id: number): Promise<number> {
-        const x = await this.service.query(
-            `select additional_time
-             from   time_controls
-             where  id = $1`, [id]);
-        if (!x || x.length != 1) {
-             return null;
-        }
-        return x[0].additional_time;
-    }
-
     async findOneById(id: number): Promise<Tourn> {
         try {
           const x = await this.service.createQueryBuilder("tournaments")
@@ -517,8 +495,15 @@ export class TournamentService {
           it.closed = x.closed;
           it.user_id = x.user_id;
           it.timecontrol_id = x.timecontrol_id;
-          it.main_time = await this.getMainTime(x.timecontrol_id);
-          it.additional_time = await this.getAdditionalTime(x.timecontrol_id);
+          const t = await this.service.query(
+            `select main_time, additional_time, is_sandglass
+             from   time_controls
+             where  id = $1`, [it.timecontrol_id]);
+          if (t && t.length > 0) {
+             it.main_time = t[0].main_time;
+             it.additional_time = t[0].additional_time;
+             it.is_sandglass = t[0].is_sandglass;
+          }
           return it;
         } catch (error) {
           console.error(error);
@@ -553,7 +538,7 @@ export class TournamentService {
                 game_id: x.game_id,
                 variant_id: x.variant_id,
                 selector_value: x.selector_value,
-                timecontrol_id: x.timecontrol_id,
+                timecontrol_id: +x.timecontrol_id ? x.timecontrol_id : null,
                 is_hidden: x.is_hidden ? 1 : 0,
                 user_id: user
             })
@@ -571,6 +556,10 @@ export class TournamentService {
     }
 
     async joinToSession(s: number, u: number, p: number, t: number): Promise<void> {
+        let limit = t;
+        if (limit) {
+            limit = limit * 1000;
+        }
         await this.service.createQueryBuilder("user_games")
         .insert()
         .into(user_games)
@@ -578,7 +567,7 @@ export class TournamentService {
             user_id: u,
             session_id: s,
             player_num: p,
-            time_limit: t * 1000,
+            time_limit: limit,
             is_ai: 0
         })
         .execute();
@@ -614,8 +603,6 @@ export class TournamentService {
                 if (r > x.rating) {
                     first = false;
                 }
-                s.main_time = await this.getMainTime(s.timecontrol_id);
-                s.additional_time = await this.getAdditionalTime(s.timecontrol_id);
                 const z = await this.service.createQueryBuilder("game_sessions")
                 .insert()
                 .into(game_sessions)
@@ -628,6 +615,7 @@ export class TournamentService {
                     is_protected: 1,
                     main_time: s.main_time,
                     additional_time: s.additional_time,
+                    is_sandglass: s.is_sandglass,
                     last_time: null
                 })
                 .returning('*')

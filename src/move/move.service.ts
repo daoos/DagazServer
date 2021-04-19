@@ -51,7 +51,7 @@ export class MoveService {
             last_user: uid,
             last_time: Date.now()
         })
-        .where("id = :id and last_user <> :uid and last_time is null", {id: sess, uid: uid})
+        .where("id = :id and last_time is null", {id: sess})
         .execute();
         return true;
     }
@@ -181,13 +181,13 @@ export class MoveService {
 
     async getAdditionalTime(sid: number): Promise<number> {
         let x = await this.service.query(
-            `select additional_time
+            `select additional_time * 1000 as additional_time
              from   game_sessions
              where  id = $1`, [sid]);
         if (!x || x.length == 0) {
              return null;
         }
-        return x[0].additional_time * 1000;
+        return x[0].additional_time;
     }
 
     async getUnconfirmedMove(sess: number): Promise<Move[]> {
@@ -320,7 +320,16 @@ export class MoveService {
 
     async addMove(x: Move): Promise<Move> {
         try {
-            x.session_id = await this.getSession(x.uid);
+            const t = await this.service.query(
+                `select a.session_id, b.is_sandglass
+                 from   user_games a
+                 inner  join game_sessions b on (b.id = a.session_id)
+                 where  a.id = $1`, [x.uid]);
+            if (!t || t.length == 0) {
+                 return null;
+            }
+            const is_sandglass = t[0].is_sandglass;
+            x.session_id = t[0].session_id;
             x.user_id = await this.getUser(x.uid);
             const f = await this.checkSession(x.session_id);
             if (!f) {
@@ -329,9 +338,6 @@ export class MoveService {
             const last_time = await this.getLastTime(x.session_id);
             let time_delta = last_time ? Date.now() - last_time : null;
             let time_limit = await this.getTimeLimit(x.uid);
-            if (!time_limit) {
-                time_delta = null;
-            }
             const turn_num = await this.getTurnNumber(x.session_id);
             const y = await this.service.createQueryBuilder("game_moves")
             .insert()
@@ -349,6 +355,24 @@ export class MoveService {
             .returning('*')
             .execute();
             x.id = y.generatedMaps[0].id;
+            if (!time_limit) {
+                time_delta = null;
+            }
+            if (time_delta && is_sandglass) {
+                const z = await this.service.query(
+                    `select id, time_limit
+                     from   user_games
+                     where  session_id = $1 and id <> $2`, [x.session_id, x.uid]);
+                if (z && (z.length > 0) && z[0].time_limit) {
+                    await this.service.createQueryBuilder("user_games")
+                    .update(user_games)
+                    .set({ 
+                        time_limit: +z[0].time_limit + +time_delta
+                     })
+                    .where("id = :id", {id: z[0].id})
+                    .execute();
+                }
+            }
             if (time_limit && time_delta) {
                 if (time_limit < 0) {
                     time_limit = 0;

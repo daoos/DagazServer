@@ -449,10 +449,11 @@ export class SessionService {
         }
     }
 
-    async getMainTime(id: number): Promise<number> {
+    async getMainTime(sid: number): Promise<number> {
         const x = await this.service.query(
             `select main_time * 1000 as main_time
-             from games where id = $1`, [id]);
+             from   game_sessions
+             where  id = $1`, [sid]);
         if (!x || x.length != 1) {
             return null;
         }
@@ -490,7 +491,7 @@ export class SessionService {
 
     async joinToSession(user:number, s: Sess, is_ai: boolean): Promise<number> {
         s.player_num = await this.getAvailPlayer(s.id, s.player_num);
-        const t = await this.getMainTime(s.game_id);
+        const t = await this.getMainTime(s.id);
         const y = await this.service.createQueryBuilder("user_games")
         .insert()
         .into(user_games)
@@ -987,7 +988,7 @@ export class SessionService {
                     s.ai = x[0].ai;
                 }
                 if (x[0].last_user && s.uid) {
-                    if (x[0].last_user == s.uid) {
+                    if (x[0].last_user != s.uid) {
                         await this.setLastTime(s.id);
                     }
                     s.time_limit = await this.getTimeLimit(s.uid);

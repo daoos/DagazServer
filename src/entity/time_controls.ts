@@ -16,4 +16,7 @@ export class time_controls {
 
     @Column({ nullable: false })
     order_num: number;
+
+    @Column({ default: false, nullable: false })
+    is_sandglass: boolean;
 }

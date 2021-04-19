@@ -75,4 +75,7 @@ export class game_sessions {
 
     @Column({ nullable: true })
     additional_time: number;
+
+    @Column({ default: false, nullable: false })
+    is_sandglass: boolean;
 }

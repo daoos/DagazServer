@@ -42,6 +42,7 @@ export class tournaments1617176544639 implements MigrationInterface {
         await queryRunner.query(`insert into time_controls(id, name, main_time, additional_time, order_num) values(1, '02:00:00+01:00', 7200, 60, 2)`);
         await queryRunner.query(`insert into time_controls(id, name, main_time, additional_time, order_num) values(2, '00:30:00+00:20', 1800, 20, 1)`);
         await queryRunner.query(`insert into time_controls(id, name, main_time, additional_time, order_num) values(3, '04:00:00+03:00', 14400, 180, 3)`);
+        await queryRunner.query(`insert into time_controls(id, name, main_time, additional_time, is_sandglass, order_num) values(4, 'Sandglass 00:15:00', 900, 0, true, 4)`);
     }
 
     public async down(queryRunner: QueryRunner): Promise<any> {

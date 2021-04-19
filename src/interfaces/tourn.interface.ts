@@ -82,4 +82,7 @@ export class Tourn {
 
     @ApiPropertyOptional()
     timecontrol: string;
+
+    @ApiPropertyOptional()
+    is_sandglass: boolean;
 }

@@ -31,6 +31,9 @@ var sid = null;
 var turn = 1;
 var netstamp = null;
 var recovery_setup = null;
+var time_limit = null;
+var additional_time = null;
+var time_stamp = null;
 
 function App(canvas, params) {
   this.design = Dagaz.Model.getDesign();
@@ -470,7 +473,10 @@ var recovery = function(s) {
          }
          player_num = data.player_num;
          setup = data.last_setup;
-         console.log('Recovery: Succeed [uid = ' + uid + ']');
+         time_limit = data.time_limit;
+         additional_time = data.additional_time;
+         time_stamp = Date.now();
+         console.log('Recovery: Succeed [uid = ' + uid + '], time_limit = ' + time_limit + ', additional_time = ' + additional_time);
          inProgress = false;
      },
      error: function() {
@@ -818,8 +824,11 @@ var getConfirmed = function() {
                      }
                  }
              } else {
-                 last_move = data[0].move_str;
-                 console.log('Confirmed: Succeed [move = ' + last_move + ']');
+                 last_move  = data[0].move_str;
+                 time_limit = data[0].time_limit;
+                 time_stamp = Date.now();
+                 additional_time = data[0].additional_time;
+                 console.log('Confirmed: Succeed [move = ' + last_move + '], time_limit = ' + time_limit + ', additional_time = ' + additional_time);
              }
          } else {
              netstamp = Date.now();
@@ -927,9 +936,61 @@ App.prototype.getAI = function() {
   return this.ai;
 }
 
+App.prototype.updateTimer = function() {
+  if (_.isUndefined(time_limit) || (time_limit === null)) return;
+  var player = this.design.playerNames[this.board.player];
+  var t = time_limit;
+  if (player_num != this.board.player) {
+      if (additional_time) {
+          t += additional_time;
+      }
+      if (t < 0) {
+          winGame();
+          this.setDone();
+          this.gameOver(player + " won", this.board.player);
+      }
+      return;
+  }
+  if (time_stamp !== null) {
+      t -= Date.now() - time_stamp;
+  }
+  var c = '#0000CD';
+  if ((t < 0) && additional_time) {
+      t += additional_time;
+      c = '#DC143C';      
+  }
+  if (t < 0) {
+      t = 0;
+      time_stamp = null;
+      time_limit = null;
+      loseGame();
+      this.setDone();
+      this.gameOver(player + " lose", -this.board.player);
+  }
+  t = (t / 1000) | 0;
+  var s = '' + (t % 60);
+  if (s.length < 2) {
+      s = '0' + s;
+  }
+  s = ':' + s;
+  t = (t / 60) | 0;
+  s = '' + (t % 60) + s;
+  if (s.length < 5) {
+      s = '0' + s;
+  }
+  s = ':' + s;
+  t = (t / 60) | 0;
+  s = '' + t + s;
+  if (s.length < 8) {
+      s = '0' + s;
+  }
+  timer.innerHTML = '<b style="color:' + c + ';">' + s + '</b>';
+}
+
 App.prototype.exec = function() {
   this.view.configure();
   this.view.draw(this.canvas);
+  this.updateTimer();
   if (inProgress) return;
   if (this.state == STATE.STOP) {
       this.state = STATE.IDLE;
