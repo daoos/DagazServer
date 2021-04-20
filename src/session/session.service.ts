@@ -61,11 +61,11 @@ export class SessionService {
           }
       }
 
-      async getTournSessions(tourn: number, user: number): Promise<Sess[]> {
+      async getTournSessions(tourn: number, auth: number, user: number): Promise<Sess[]> {
         try {
             const x = await this.service.query(
                 `select distinct a.id as id, a.status_id as status, a.game_id as game_id, d.id as variant_id,
-                        coalesce(d.name, b.name) || ' (' || a.id || ')' as game, coalesce(d.filename, b.filename) as filename, 
+                        coalesce(d.name, b.name) || ' (' || a.id || ')' as game, coalesce(d.filename, b.filename) || coalesce(h.suffix, '') as filename, 
                         a.created as created, c.name as creator, b.players_total as players_total, a.last_setup as last_setup, 
                         string_agg(
                             case
@@ -80,12 +80,13 @@ export class SessionService {
                  left   join game_variants d on (d.id = a.variant_id)
                  inner  join user_games e on (e.session_id = a.id)
                  inner  join users f on (f.id = e.user_id)
-                 left   join game_styles h on (h.game_id = b.id and h.player_num = e.player_num)
                  left   join user_games x on (x.session_id = a.id and x.is_ai = 1)
                  inner  join tournament_games i on (i.session_id = a.id and i.tournament_id = $1)
                  left   join user_games j on (j.session_id = a.id and j.user_id = $2)
-                 where  coalesce(j.user_id, 0) = $3
-                 group  by a.id, a.status_id, a.game_id, d.id, d.name, b.name, d.filename, b.filename, a.created, c.name, b.players_total, a.last_setup, x.id`, [tourn, user, user]);
+                 left   join game_styles h on (h.game_id = b.id and h.player_num = j.player_num)
+                 left   join user_games k on (k.session_id = a.id and k.user_id = $3)
+                 where  coalesce(k.user_id, 0) = $4
+                 group  by a.id, a.status_id, a.game_id, d.id, d.name, b.name, d.filename, b.filename, a.created, c.name, b.players_total, a.last_setup, x.id, h.suffix`, [tourn, auth, user, user]);
                  let l: Sess[] = x.map(x => {
                     let it = new Sess();
                     it.id = x.id;
@@ -1385,11 +1386,10 @@ export class SessionService {
                  })
                 .where("session_id = :id", {id: x.id})
                 .execute();
-                return x;
             } else {
                 await this.changeAiSettings(x.id, x.winner, x.loser);
             }
-            if (x.winner) {
+            if (x.winner && !x.loser) {
                 await this.service.createQueryBuilder("user_games")
                 .update(user_games)
                 .set({ 
@@ -1406,9 +1406,8 @@ export class SessionService {
                  })
                 .where("session_id = :id and id <> :uid", {id: x.id, uid: x.winner})
                 .execute();
-                return x;
             }
-            if (x.loser) {
+            if (x.loser && !x.winner) {
                 await this.service.createQueryBuilder("user_games")
                 .update(user_games)
                 .set({ 

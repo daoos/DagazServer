@@ -39,9 +39,10 @@ export class SessionController {
     @ApiOkResponse({ description: 'Successfully.'})
     @ApiUnauthorizedResponse({ description: 'Unauthorized.'})
     @ApiInternalServerErrorResponse({ description: 'Internal Server error.'})
-    async findTournSessions(@Res() res, @Param('tourn') tourn): Promise<Sess[]> {
+    async findTournSessions(@Req() request: Request, @Res() res, @Param('tourn') tourn): Promise<Sess[]> {
+        const auth: any = request.user;
         try {
-            const r = await this.service.getTournSessions(tourn, 0);
+            const r = await this.service.getTournSessions(tourn, auth.id, 0);
             return res.status(HttpStatus.OK).json(r);
         } catch(e) {
             return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ error: e.message.error.toString(), stack: e.stack});
@@ -53,9 +54,10 @@ export class SessionController {
     @ApiOkResponse({ description: 'Successfully.'})
     @ApiUnauthorizedResponse({ description: 'Unauthorized.'})
     @ApiInternalServerErrorResponse({ description: 'Internal Server error.'})
-    async findTournUserSessions(@Res() res, @Param('tourn') tourn, @Param('user') user): Promise<Sess[]> {
+    async findTournUserSessions(@Req() request: Request, @Res() res, @Param('tourn') tourn, @Param('user') user): Promise<Sess[]> {
+        const auth: any = request.user;
         try {
-            const r = await this.service.getTournSessions(tourn, user);
+            const r = await this.service.getTournSessions(tourn, auth.id, user);
             return res.status(HttpStatus.OK).json(r);
         } catch(e) {
             return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ error: e.message.error.toString(), stack: e.stack});

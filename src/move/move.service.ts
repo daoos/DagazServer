@@ -144,7 +144,7 @@ export class MoveService {
                 it.setup_str = x[0].setup_str;
                 it.note = x[0].note;
                 it.time_delta = x[0].time_delta;
-                it.time_limit = await this.getTimeLimit(it.uid);
+                it.time_limit = await this.getTimeLimit(uid);
                 it.additional_time = await this.getAdditionalTime(it.session_id);
                 l.push(it);
                 await this.acceptMove(it.id);

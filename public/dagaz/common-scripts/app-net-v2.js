@@ -927,8 +927,11 @@ App.prototype.updateTimer = function() {
       return;
   }
   if (time_stamp !== null) {
-      t -= Date.now() - time_stamp;
+      var now = Date.now();
+      time_limit -= now - time_stamp;
+      time_stamp = now;
   }
+  t = time_limit;
   var c = '#0000CD';
   if ((t < 0) && additional_time) {
       t += additional_time;
