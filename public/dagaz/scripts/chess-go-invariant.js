@@ -20,13 +20,27 @@ var kingFound = function(design, board, pos, dir) {
   return false;
 }
 
+var convertMove = function(board, move) {
+  var m = Dagaz.Model.createMove(0);
+  _.each(move.actions, function(a) {
+      m.actions.push(a);
+      if (a[0] === null) return;
+      if (a[1] === null) return;
+      var piece = board.getPiece(a[1][0]);
+      if (piece === null) return;
+      if (piece.type != 7) return;
+      m.movePiece(a[1][0], a[0][0], piece);
+  });
+  return m;
+}
+
 var CheckInvariants = Dagaz.Model.CheckInvariants;
 
 Dagaz.Model.CheckInvariants = function(board) {
   var design = Dagaz.Model.design;
   _.each(board.moves, function(move) {
       if (!_.isUndefined(move.failed)) return;
-      var b = board.apply(move);
+      var b = board.apply(convertMove(board, move));
       var kings = [];
       _.each(design.allPositions(), function(pos) {
           var piece = b.getPiece(pos);
