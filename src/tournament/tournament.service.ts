@@ -347,24 +347,17 @@ export class TournamentService {
 
     async delTournMember(id: number): Promise<Member> {
         try {
-            const x = await this.service.createQueryBuilder("tournament_users")
-            .where("id = :id", {id: id})
-            .getOne();
-            if (!x) {
-              return null;
-            }
             let it = new Member();
-            it.id = x.id;
-            it.user_id = x.user_id;
+            it.id = id;
             await this.service.createQueryBuilder("tournament_games")
             .delete()
             .from(tournament_games)
-            .where(`player_a = :id or player_b = :id`, {id: id})
+            .where(`player_a = :id or player_b = :id`, {id: it.id})
             .execute();
             await this.service.createQueryBuilder("tournament_users")
             .delete()
             .from(tournament_users)
-            .where(`id = :id`, {id: id})
+            .where(`id = :id`, {id: it.id})
             .execute();
             return it;
         } catch (error) {
