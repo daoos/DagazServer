@@ -622,6 +622,7 @@ var sendAlert = function(result) {
 }
 
 var winGame = function() {
+  if (!onceGameOver) return;
   if (auth === null) return;
   if (!uid) return;
   $.ajax({
@@ -662,6 +663,7 @@ var winGame = function() {
 }
 
 var loseGame = function() {
+  if (!onceGameOver) return;
   if (auth === null) return;
   if (!uid) return;
   $.ajax({
@@ -914,10 +916,10 @@ App.prototype.getAI = function() {
 App.prototype.updateTimer = function() {
   if (_.isUndefined(time_limit) || (time_limit === null)) return;
   var player = this.design.playerNames[this.board.player];
-  var t = time_limit;
+  var t = +time_limit;
   if (player_num != this.board.player) {
       if (additional_time) {
-          t += additional_time;
+          t += +additional_time;
       }
       if (t < 0) {
           winGame();
@@ -934,7 +936,7 @@ App.prototype.updateTimer = function() {
   t = time_limit;
   var c = '#0000CD';
   if ((t < 0) && additional_time) {
-      t += additional_time;
+      t += +additional_time;
       c = '#DC143C';      
   }
   if (t < 0) {

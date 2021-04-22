@@ -378,6 +378,7 @@ export class MoveService {
                     time_limit = 0;
                 }
                 time_limit -= time_delta;
+                if (time_limit < 0) time_limit = 0;
                 await this.service.createQueryBuilder("user_games")
                 .update(user_games)
                 .set({ 

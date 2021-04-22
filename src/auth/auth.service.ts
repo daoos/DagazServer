@@ -37,6 +37,7 @@ export class AuthService {
         x.refresh_token = r;
         x.role = u.is_admin;
         x.realm = u.realm;
+        x.user_id = u.id;
         return x;
       } catch (error) {
         console.error(error);
@@ -56,7 +57,8 @@ export class AuthService {
           access_token: a,
           refresh_token: r,
           role: 0,
-          realm: 1
+          realm: 1,
+          user_id: 0
         };
       } catch (error) {
         console.error(error);
@@ -80,7 +82,8 @@ export class AuthService {
           access_token: a,
           refresh_token: r,
           role: u.is_admin,
-          realm: u.realm
+          realm: u.realm,
+          user_id: user.id
         };
       } catch (error) {
         console.error(error);
@@ -111,7 +114,8 @@ export class AuthService {
           access_token: a,
           refresh_token: r,
           role: 0,
-          realm: 2
+          realm: 2,
+          user_id: 0
         };
       } catch (error) {
         console.error(error);

@@ -13,4 +13,7 @@ export class Token {
 
     @ApiPropertyOptional()
     realm: number;
+
+    @ApiPropertyOptional()
+    user_id: number;
 }

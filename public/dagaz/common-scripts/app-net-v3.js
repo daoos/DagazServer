@@ -454,6 +454,7 @@ var sendAlert = function(result) {
 }
 
 var winGame = function() {
+  if (!onceGameOver) return;
   if (auth === null) return;
   if (!uid) return;
   $.ajax({
@@ -494,6 +495,7 @@ var winGame = function() {
 }
 
 var loseGame = function() {
+  if (!onceGameOver) return;
   if (auth === null) return;
   if (!uid) return;
   $.ajax({
