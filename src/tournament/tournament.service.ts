@@ -72,10 +72,10 @@ export class TournamentService {
     async getTime(): Promise<GameTime[]> {
         try {
             const x = await this.service.query(
-                `select id, name, main_time, additional_time, order_num
+                `select id, name, main_time, additional_time, order_num, is_sandglass
                  from   time_controls
                  union  all
-                 select 0 as id, 'No', null::integer, null::integer, 0
+                 select 0 as id, 'No', null::integer, null::integer, 0, false
                  order  by order_num`);
                  let l: GameTime[] = x.map(x => {
                     let it = new GameTime();
@@ -83,6 +83,7 @@ export class TournamentService {
                     it.name = x.name;
                     it.main_time = x.main_time;
                     it.additional_time = x.additional_time;
+                    it.is_sandglass = x.is_sandglass;
                     return it;
                 });
                 return l;
@@ -637,6 +638,7 @@ export class TournamentService {
                     selector_value: s.selector_value,
                     status_id: 2,
                     is_protected: 1,
+                    timecontrol_id: s.timecontrol_id,
                     main_time: s.main_time,
                     additional_time: s.additional_time,
                     is_sandglass: s.is_sandglass,

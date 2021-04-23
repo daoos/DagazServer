@@ -91,4 +91,10 @@ export class Sess {
 
     @ApiPropertyOptional()
     additional_time: number;
+
+    @ApiPropertyOptional()
+    timecontrol_id: number;
+
+    @ApiPropertyOptional()
+    timecontrol: string;
 }

@@ -12,6 +12,7 @@ import { Tourn } from '../interfaces/tourn.interface';
 import { tournament_games } from '../entity/tournament_games';
 import { tournament_users } from '../entity/tournament_users';
 import { user_ratings } from '../entity/user_ratings';
+import { GameTime } from '../interfaces/gametime.interface';
 
 @Injectable()
 export class SessionService {
@@ -126,7 +127,8 @@ export class SessionService {
                               when e.is_ai = 1 then 'AI'
                               else f.name
                             end || ' (' || e.player_num || ')', ' / ' order by e.player_num) as player_name,
-                        coalesce(a.last_turn, 0) as last_turn, coalesce(a.selector_value, 0) as selector_value, x.id as ai, a.changed as changed
+                        coalesce(a.last_turn, 0) as last_turn, coalesce(a.selector_value, 0) as selector_value, x.id as ai, a.changed as changed,
+                        a.timecontrol_id, t.name as timecontrol
                  from   game_sessions a
                  inner  join games b on (b.id = a.game_id)
                  inner  join users c on (c.id = a.user_id and c.realm_id = $1)
@@ -137,8 +139,9 @@ export class SessionService {
                  left   join game_styles h on (h.game_id = b.id and h.player_num = g.player_num)
                  inner  join user_games i on (i.session_id = a.id and i.player_num = a.next_player and i.user_id = $4)
                  left   join user_games x on (x.session_id = a.id and x.is_ai = 1)
+                 left   join time_controls t on (t.id = a.timecontrol_id)
                  where  a.status_id = 2 and a.closed is null
-                 group  by a.id, a.status_id, a.game_id, d.id, d.name, b.name, d.filename, b.filename, a.created, c.name, b.players_total, a.last_setup, h.suffix, x.id
+                 group  by a.id, a.status_id, a.game_id, d.id, d.name, b.name, d.filename, b.filename, a.created, c.name, b.players_total, a.last_setup, h.suffix, x.id, a.timecontrol_id, t.name
                  union  all
                  select a.id as id, a.status_id as status, a.game_id as game_id, d.id as variant_id,
                         coalesce(d.name, e.name) || ' (' || a.id || ')' as game, coalesce(d.filename, e.filename) || coalesce(h.suffix, '') as filename,
@@ -148,7 +151,8 @@ export class SessionService {
                               when k.is_ai = 1 then 'AI'
                               else f.name
                             end || ' (' || k.player_num || ')', ' / ' order by k.player_num) as player_name,
-                        coalesce(a.last_turn, 0) as last_turn, coalesce(a.selector_value, 0) as selector_value, x.id as ai, a.changed as changed
+                        coalesce(a.last_turn, 0) as last_turn, coalesce(a.selector_value, 0) as selector_value, x.id as ai, a.changed as changed,
+                        a.timecontrol_id, t.name as timecontrol
                  from   game_sessions a
                  inner  join user_games b on (b.session_id = a.id and b.player_num = 1 and b.user_id = $5)
                  left   join game_moves c on (c.session_id = a.id)
@@ -160,8 +164,9 @@ export class SessionService {
                  inner  join user_games k on (k.session_id = a.id)
                  inner  join users f on (f.id = k.user_id and f.realm_id = $8)
                  left   join user_games x on (x.session_id = a.id and x.is_ai = 1)
+                 left   join time_controls t on (t.id = a.timecontrol_id)
                  where  c.id is null and a.closed is null
-                 group  by a.id, a.status_id, a.game_id, d.id, d.name, e.name, d.filename, e.filename, a.created, e.players_total, a.last_setup, h.suffix, x.id, j.name
+                 group  by a.id, a.status_id, a.game_id, d.id, d.name, e.name, d.filename, e.filename, a.created, e.players_total, a.last_setup, h.suffix, x.id, j.name, a.timecontrol_id, t.name
                  order  by changed desc`, [realm, realm, user, user, user, user, realm, realm]);
                  let l: Sess[] = x.map(x => {
                     let it = new Sess();
@@ -177,6 +182,8 @@ export class SessionService {
                     it.last_setup = x.last_setup;
                     it.last_turn = x.last_turn;
                     it.selector_value = x.selector_value;
+                    it.timecontrol_id = x.timecontrol_id;
+                    it.timecontrol = x.timecontrol;
                     it.ai = x.ai;
                     return it;
                 });
@@ -203,7 +210,8 @@ export class SessionService {
                               else f.name
                             end || ' (' || e.player_num || 
                         ')', ' / ' order by e.player_num) as player_name,
-                        coalesce(a.last_turn, 0) as last_turn, coalesce(a.selector_value, 0) as selector_value, x.id as ai
+                        coalesce(a.last_turn, 0) as last_turn, coalesce(a.selector_value, 0) as selector_value, x.id as ai,
+                        a.timecontrol_id, t.name as timecontrol
                  from   game_sessions a
                  inner  join games b on (b.id = a.game_id and coalesce($1, b.id) = b.id)
                  inner  join users c on (c.id = a.user_id and c.realm_id = $2)
@@ -213,9 +221,10 @@ export class SessionService {
                  left   join user_games g on (g.session_id = a.id and g.user_id = $4 and g.is_ai = 0)
                  left   join game_styles h on (h.game_id = b.id and h.player_num = g.player_num)
                  left   join user_games x on (x.session_id = a.id and x.is_ai = 1)
+                 left   join time_controls t on (t.id = a.timecontrol_id)
                  where  coalesce(a.last_turn, 0) > 0
                  and  ( coalesce($5, d.id) = d.id or d.id is null )
-                 group  by a.id, a.status_id, a.game_id, d.id, d.name, b.name, d.filename, b.filename, a.created, c.name, b.players_total, a.last_setup, h.suffix, x.id
+                 group  by a.id, a.status_id, a.game_id, d.id, d.name, b.name, d.filename, b.filename, a.created, c.name, b.players_total, a.last_setup, h.suffix, x.id, a.timecontrol_id, t.name
                  order  by a.changed desc`, [game, realm, realm, user, variant]);
                  let l: Sess[] = x.map(x => {
                     let it = new Sess();
@@ -231,6 +240,8 @@ export class SessionService {
                     it.last_setup = x.last_setup;
                     it.last_turn = x.last_turn;
                     it.selector_value = x.selector_value;
+                    it.timecontrol_id = x.timecontrol_id;
+                    it.timecontrol = x.timecontrol;
                     it.ai = x.ai;
                     return it;
                 });
@@ -251,7 +262,8 @@ export class SessionService {
                 `select a.id as id, a.status_id as status, a.game_id as game_id, d.id as variant_id,
                         coalesce(d.name, b.name) || ' (' || a.id || ')' as game, coalesce(d.filename, b.filename) as filename, 
                         a.created as created, c.name  || ' (' || e.player_num || ')' as creator, b.players_total as players_total,
-                        a.last_setup as last_setup, e.player_num as player_num, coalesce(a.selector_value, 0) as selector_value
+                        a.last_setup as last_setup, e.player_num as player_num, coalesce(a.selector_value, 0) as selector_value,
+                        a.timecontrol_id, g.name as timecontrol
                  from   game_sessions a
                  inner  join games b on (b.id = a.game_id and coalesce($1, b.id) = b.id)
                  inner  join users c on (c.id = a.user_id and c.realm_id = $2)
@@ -262,6 +274,7 @@ export class SessionService {
                         coalesce(f.game_id, b.id) = b.id and
                       ( d.id is null or coalesce(f.variant_id, d.id) = d.id)
                  )
+                 left   join time_controls g on (g.id = a.timecontrol_id)
                  where  a.status_id = 1 and a.closed is null
                  and  ( coalesce($5, d.id) = d.id or d.id is null )
                  and    f.id is null
@@ -280,6 +293,8 @@ export class SessionService {
                     it.player_num = x.player_num;
                     it.last_setup = x.last_setup;
                     it.selector_value = x.selector_value;
+                    it.timecontrol_id = x.timecontrol_id;
+                    it.timecontrol = x.timecontrol;
                     return it;
                 });
                 return l;
@@ -305,7 +320,8 @@ export class SessionService {
                               else f.name
                             end || ' (' || e.player_num || 
                         ')', ' / ' order by e.player_num) as player_name,
-                        coalesce(a.last_turn, 0) as last_turn, coalesce(a.selector_value, 0) as selector_value, x.id as ai
+                        coalesce(a.last_turn, 0) as last_turn, coalesce(a.selector_value, 0) as selector_value, x.id as ai,
+                        a.timecontrol_id, t.name as timecontrol
                  from   game_sessions a
                  inner  join games b on (b.id = a.game_id)
                  inner  join users c on (c.id = a.user_id and c.realm_id = $1)
@@ -315,8 +331,9 @@ export class SessionService {
                  left   join user_games g on (g.session_id = a.id and g.user_id = $3 and g.is_ai = 0)
                  left   join game_styles h on (h.game_id = b.id and h.player_num = g.player_num)
                  left   join user_games x on (x.session_id = a.id and x.is_ai = 1)
+                 left   join time_controls t on (t.id = a.timecontrol_id)
                  where  a.status_id = 2 and a.closed is null
-                 group  by a.id, a.status_id, a.game_id, d.id, d.name, b.name, d.filename, b.filename, a.created, c.name, b.players_total, a.last_setup, h.suffix, x.id
+                 group  by a.id, a.status_id, a.game_id, d.id, d.name, b.name, d.filename, b.filename, a.created, c.name, b.players_total, a.last_setup, h.suffix, x.id, a.timecontrol_id, t.name
                  order  by a.changed desc`, [realm, realm, user]);
                  let l: Sess[] = x.map(x => {
                     let it = new Sess();
@@ -332,6 +349,8 @@ export class SessionService {
                     it.last_setup = x.last_setup;
                     it.last_turn = x.last_turn;
                     it.selector_value = x.selector_value;
+                    it.timecontrol_id = x.timecontrol_id;
+                    it.timecontrol = x.timecontrol;
                     it.ai = x.ai;
                     return it;
                 });
@@ -358,7 +377,8 @@ export class SessionService {
                               else f.name
                             end || ' (' || e.player_num || 
                         ')', ' / ' order by e.player_num) as player_name,
-                        coalesce(a.last_turn, 0) as last_turn, coalesce(a.selector_value, 0) as selector_value, x.id as ai
+                        coalesce(a.last_turn, 0) as last_turn, coalesce(a.selector_value, 0) as selector_value, x.id as ai,
+                        a.timecontrol_id, t.name as timecontrol
                  from   game_sessions a
                  inner  join games b on (b.id = a.game_id)
                  inner  join users c on (c.id = a.user_id and c.realm_id = $1)
@@ -368,8 +388,9 @@ export class SessionService {
                  left   join user_games g on (g.session_id = a.id and g.user_id = $3 and g.is_ai = 0)
                  left   join game_styles h on (h.game_id = b.id and h.player_num = g.player_num)
                  left   join user_games x on (x.session_id = a.id and x.is_ai = 1)
+                 left   join time_controls t on (t.id = a.timecontrol_id)
                  where  a.status_id = 3
-                 group  by a.id, a.status_id, a.game_id, d.id, d.name, b.name, d.filename, b.filename, a.created, c.name, b.players_total, a.last_setup, h.suffix, x.id
+                 group  by a.id, a.status_id, a.game_id, d.id, d.name, b.name, d.filename, b.filename, a.created, c.name, b.players_total, a.last_setup, h.suffix, x.id, a.timecontrol_id, t.name
                  order  by a.changed desc`, [realm, realm, user]);
                  let l: Sess[] = x.map(x => {
                     let it = new Sess();
@@ -385,6 +406,8 @@ export class SessionService {
                     it.last_setup = x.last_setup;
                     it.last_turn = x.last_turn;
                     it.selector_value = x.selector_value;
+                    it.timecontrol_id = x.timecontrol_id;
+                    it.timecontrol = x.timecontrol;
                     it.ai = x.ai;
                     return it;
                 });
@@ -411,7 +434,8 @@ export class SessionService {
                               else f.name
                             end || ' (' || e.player_num || 
                         ')', ' / ' order by e.player_num) as player_name,
-                        coalesce(a.last_turn, 0) as last_turn, coalesce(a.selector_value, 0) as selector_value, x.id as ai
+                        coalesce(a.last_turn, 0) as last_turn, coalesce(a.selector_value, 0) as selector_value, x.id as ai,
+                        a.timecontrol_id, t.name as timecontrol
                  from   game_sessions a
                  inner  join games b on (b.id = a.game_id)
                  inner  join users c on (c.id = a.user_id and c.realm_id = $1)
@@ -421,7 +445,8 @@ export class SessionService {
                  inner  join user_games g on (g.session_id = a.id and g.user_id = $3 and g.is_ai = 0)
                  left   join game_styles h on (h.game_id = b.id and h.player_num = g.player_num)
                  left   join user_games x on (x.session_id = a.id and x.is_ai = 1)
-                 group  by a.id, a.status_id, a.game_id, d.id, d.name, b.name, d.filename, b.filename, a.created, c.name, b.players_total, a.last_setup, h.suffix, x.id
+                 left   join time_controls t on (t.id = a.timecontrol_id)
+                 group  by a.id, a.status_id, a.game_id, d.id, d.name, b.name, d.filename, b.filename, a.created, c.name, b.players_total, a.last_setup, h.suffix, x.id, a.timecontrol_id, t.name
                  order  by a.changed desc`, [realm, realm, user]);
                  let l: Sess[] = x.map(x => {
                     let it = new Sess();
@@ -437,6 +462,8 @@ export class SessionService {
                     it.last_setup = x.last_setup;
                     it.last_turn = x.last_turn;
                     it.selector_value = x.selector_value;
+                    it.timecontrol_id = x.timecontrol_id;
+                    it.timecontrol = x.timecontrol;
                     it.ai = x.ai;
                     return it;
                 });
@@ -1071,6 +1098,23 @@ export class SessionService {
         return sess;
     }
 
+    async getTimeControl(id: number): Promise<GameTime> {
+        const x = await this.service.query(
+            `select id, name, main_time, additional_time, is_sandglass
+             from   time_controls
+             where  id = $1`, [id]);
+        if (!x || x.length == 0) {
+             return null;
+        }
+        let r = new GameTime();
+        r.id = x[0].id;
+        r.name = x[0].name;
+        r.main_time = x[0].main_time;
+        r.additional_time = x[0].additional_time;
+        r.is_sandglass = x[0].is_sandglass;
+        return r;
+    }
+
     async createSession(user:number, x: Sess): Promise<Sess> {
         try {
             if (!x.with_ai) {
@@ -1082,6 +1126,10 @@ export class SessionService {
             const suffix = await this.getSuffix(x.game_id, x.player_num);
             await this.clearWaiting();
             await this.clearObsolete();
+            let t: GameTime = null;
+            if (x.timecontrol_id) {
+                t = await this.getTimeControl(x.timecontrol_id);
+            }
             const y = await this.service.createQueryBuilder("game_sessions")
             .insert()
             .into(game_sessions)
@@ -1091,6 +1139,10 @@ export class SessionService {
                 status_id: 1,
                 variant_id: x.variant_id,
                 selector_value: x.selector_value,
+                timecontrol_id: x.timecontrol_id,                
+                main_time: t ? t.main_time : null,
+                additional_time: t ? t.additional_time : null,
+                is_sandglass: t ? t.is_sandglass : false,
                 last_time: null
             })
             .returning('*')

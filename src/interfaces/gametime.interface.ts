@@ -13,4 +13,7 @@ export class GameTime {
 
     @ApiProperty()
     additional_time: number;
+
+    @ApiProperty()
+    is_sandglass: boolean;
 }

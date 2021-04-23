@@ -2,6 +2,7 @@ import { Entity, PrimaryGeneratedColumn, Column, Index, ManyToOne, JoinColumn } 
 import { games } from "./games";
 import { game_statuses } from "./game_statuses";
 import { game_variants } from "./game_variants";
+import { time_controls } from "./time_controls";
 import { users } from "./users";
 
 @Entity()
@@ -78,4 +79,11 @@ export class game_sessions {
 
     @Column({ default: false, nullable: false })
     is_sandglass: boolean;
+
+    @Index()
+    @Column({ nullable: true })
+    timecontrol_id: number;
+    @ManyToOne(type => time_controls)
+    @JoinColumn({ name: "timecontrol_id" })
+    timecontrol: time_controls;
 }

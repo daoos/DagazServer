@@ -8,59 +8,78 @@ Dagaz.Model.checkVersion = function(design, name, value) {
   }
 }
 
-var getMode = function(design, player, move) {
-  var r = 0;
-  var start = null; var end = null;
-  _.each(move.actions, function(a) {
-      if (a[0] !== null) {
-          if (a[1] === null) {
-              r = 1;
-          } else {
-              if (start === null) {
-                  start = a[0][0];
-              }
-              end = a[1][0];
-          }
-      }
-  });
-  if (design.inZone(1, player, end) && (r == 0)) {
-      move.failed = true;
+var isEq = function(a, b) {
+  if ((a[0] === null) && (b[0] !== null)) return false;
+  if ((a[1] === null) && (b[1] !== null)) return false;
+  if ((a[0] !== null) && (b[0] === null)) return false;
+  if ((a[1] !== null) && (b[1] === null)) return false;
+  if ((a[0] !== null) && (b[0] !== null) && (a[0][0] != b[0][0])) return false;
+  if ((a[1] !== null) && (b[1] !== null) && (a[1][0] != b[1][0])) return false;
+  return true;
+}
+
+var isPrefix = function(m, move) {
+  if (m.actions.length >= move.actions.length) return false;
+  for (var i = 0; i < m.actions.length; i++) {
+      if (!isEq(m.actions[i], move.actions[i])) return false;
   }
-  if ((start !== null) && (end !== null) && design.inZone(1, player, start) && !design.inZone(1, player, end)) {
-      return 2 + r;
-  }
-  return {
-      res: r,
-      pos: start
-  };
+  return true;
 }
 
 var CheckInvariants = Dagaz.Model.CheckInvariants;
 
 Dagaz.Model.CheckInvariants = function(board) {
   var design = Dagaz.Model.design;
-  var mode = 0;
+  var moves = []; var isCapturing = false;
   _.each(board.moves, function(move) {
-      if (_.isUndefined(move.failed)) {
-          var m = getMode(design, board.player, move);
-          if ((m.res == 1) && (m.pos !== null)) {
-               var piece = board.getPiece(m.pos);
-               if ((piece !== null) && (piece.type == 1)) {
-                   m = 0;
-               }
-          }
-          if (m.res > mode) {
-              mode = m.res;
-          }
+      if (!_.isUndefined(move.failed)) return;
+      var src = null; var dst = null;
+      if ((move.actions[0][0] !== null) &&
+          (move.actions[0][1] === null)) {
+          isCapturing = true;
+      }
+      _.each(move.actions, function(a) {
+          if (a[0] === null) return;
+          if (a[1] === null) return;
+          dst = a[1][0];
+          if (src !== null) return;
+          src = a[0][0];
+      });
+      if (design.inZone(0, board.player, src) && 
+         !design.inZone(0, board.player, dst)) {
+          move.failed = true;
+          return;
+      }
+      if (design.inZone(1, board.player, src) && 
+         !design.inZone(1, board.player, dst)) {
+         moves.push(move);
       }
   });
-  if (mode > 0) {
-      _.each(board.moves, function(move) {
-          if (getMode(design, board.player, move).res < mode) {
-              move.failed = true;
+  if (moves.length > 0) {
+      board.moves = moves;
+      CheckInvariants(board);
+      return;
+  }
+  _.each(board.moves, function(move) {
+      if (!_.isUndefined(move.failed)) return;
+      var f = true;
+      _.each(move.actions, function(a) {
+          if (!f) return;
+          if (a[0] === null) return;
+          if (a[1] !== null) return;
+          f = false;
+      });
+      if (f) {
+          if (isCapturing) move.failed = true;
+          return;
+      }
+      _.each(board.moves, function(m) {
+          if (!_.isUndefined(m.failed)) return;
+          if (isPrefix(m, move)) {
+              m.failed = true;
           }
       });
-  }
+  });
   CheckInvariants(board);
 }
 
