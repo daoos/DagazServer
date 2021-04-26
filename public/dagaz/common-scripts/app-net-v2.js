@@ -704,6 +704,7 @@ var loseGame = function() {
 }
 
 var drawGame = function() {
+  if (!onceGameOver) return;
   if (auth === null) return;
   if (!uid) return;
   $.ajax({
