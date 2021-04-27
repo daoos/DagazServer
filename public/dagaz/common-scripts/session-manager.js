@@ -58,7 +58,7 @@ Dagaz.Controller.home = function() {
   }
   curr = node;
   checkButtons();
-  Dagaz.Controller.setup(node.setup, node.player);
+  Dagaz.Controller.setup(node.setup, node.player, node.limit);
   console.log('undo: ' + node.setup);
   if (!_.isUndefined(Dagaz.Controller.play)) {
       Dagaz.Controller.play(Dagaz.Sounds.page);
@@ -78,7 +78,7 @@ Dagaz.Controller.undo = function() {
   if (!node) return false;
   curr = node;
   checkButtons();
-  Dagaz.Controller.setup(node.setup, node.player);
+  Dagaz.Controller.setup(node.setup, node.player, node.limit);
   console.log('undo: ' + node.setup);
   if (!_.isUndefined(Dagaz.Controller.play)) {
       Dagaz.Controller.play(Dagaz.Sounds.page);
@@ -97,7 +97,7 @@ Dagaz.Controller.redo = function() {
       node = n;
   });
   if (!node) return false;
-  Dagaz.Controller.apply(node.move, node.setup);
+  Dagaz.Controller.apply(node.move, node.setup, node.limit);
   curr = node;
   checkButtons();
 }
@@ -125,6 +125,7 @@ Dagaz.Controller.addMoves = function(moves) {
           player: move.next_player,
           move: move.move_str,
           setup: move.setup_str,
+          limit: move.time_limit,
           nodes:  []
       };
       node.nodes.push(top);   

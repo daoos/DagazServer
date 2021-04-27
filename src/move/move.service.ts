@@ -17,11 +17,19 @@ export class MoveService {
     async getMovesBySession(sid: number, turn: number): Promise<Move[]> {
         try {
             const x = await this.service.query(
-                `select id, session_id, user_id, turn_num,
-                        move_str, setup_str, note, time_delta
-                 from   game_moves
-                 where  session_id = $1 and turn_num = $2
-                 order  by id`, [sid, turn]);
+                `select a.id, a.session_id, a.user_id, a.turn_num,
+                        a.move_str, a.setup_str, a.note, a.time_delta,
+                        b.main_time, b.additional_time, b.is_sandglass,
+                      ( select sum(c.time_delta)
+                        from   game_moves c
+                        where  c.session_id = a.session_id
+                        and    c.user_id = a.user_id
+                        and    c.turn_num <= a.turn_num
+                      ) as time_limit
+                 from   game_moves a
+                 inner  join game_sessions b on (b.id = a.session_id)
+                 where  a.session_id = $1 and a.turn_num = $2
+                 order  by a.id`, [sid, turn]);
             let l: Move[] = x.map(x => {
                 let it = new Move();
                 it.id = x.id;
@@ -32,6 +40,14 @@ export class MoveService {
                 it.setup_str = x.setup_str;
                 it.note = x.note;
                 it.time_delta = x.time_delta;
+                if (x.main_time && !x.is_sandglass) {
+                    it.time_limit = x.main_time * 1000;
+                    it.time_limit -= x.time_limit;
+                    if (it.time_limit < 0) {
+                        it.time_limit = x.time_delta - (x.additional_time * 1000);
+                    }
+                }
+                it.additional_time = x.additional_time;
                 return it;
             });
             return l;

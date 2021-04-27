@@ -343,7 +343,7 @@ Dagaz.Controller.isBuzy = function() {
   return self.state == STATE.BUZY;
 }
 
-Dagaz.Controller.apply = function(move, setup) {
+Dagaz.Controller.apply = function(move, setup, limit) {
   var self = Dagaz.Controller.app;
   if (self.state == STATE.BUZY) {
       recovery_setup = setup;
@@ -351,10 +351,13 @@ Dagaz.Controller.apply = function(move, setup) {
       delete self.list;
       self.clearPositions();
       self.view.markPositions(Dagaz.View.markType.TARGET, []);
+      if (limit) {
+          time_limit = limit;
+      }
   }
 }
 
-Dagaz.Controller.setup = function(setup) {
+Dagaz.Controller.setup = function(setup, player, limit) {
   var self = Dagaz.Controller.app;
   if (self.state == STATE.BUZY) {
       Dagaz.Model.setup(self.board, setup);
@@ -363,6 +366,9 @@ Dagaz.Controller.setup = function(setup) {
       delete self.list;
       self.clearPositions();
       self.view.markPositions(Dagaz.View.markType.TARGET, []);
+      if (limit) {
+          time_limit = limit;
+      }
   }
 }
 
@@ -477,9 +483,10 @@ var recovery = function(s) {
   });
 }
 
-App.prototype.acceptMove = function(move) {
+App.prototype.acceptMove = function(move, limit) {
   if (_.isUndefined(Dagaz.Controller.addMoves)) {
-      last_move = move;
+      last_move  = move;
+      time_limit = limit;
   } else {
       if (_.isUndefined(this.top)) {
           this.top = this.board;
@@ -499,7 +506,8 @@ App.prototype.acceptMove = function(move) {
           branch_num: 1,
           next_player: this.top.player,
           move_str: r,
-          setup_str: Dagaz.Model.getSetup(this.design, this.top)
+          setup_str: Dagaz.Model.getSetup(this.design, this.top),
+          time_limit: limit
       }]);
   }
 }
@@ -525,9 +533,9 @@ var watchMove = function() {
      },
      success: function(data) {
          if (data.length > 0) {
-             Dagaz.Controller.app.acceptMove(data[0].move_str);
+             Dagaz.Controller.app.acceptMove(data[0].move_str, data[0].time_limit);
              turn++;
-             console.log('Watch Move: Succeed [move = ' + last_move + ']');
+             console.log('Watch Move: Succeed [move = ' + last_move + '], time_limit = ' + data[0].time_limit);
          }
          inProgress = false;
      },
@@ -914,33 +922,39 @@ App.prototype.getAI = function() {
   return this.ai;
 }
 
-App.prototype.updateTimer = function() {
+App.prototype.updateTimer = function() {  
   if (_.isUndefined(time_limit) || (time_limit === null)) return;
   var player = this.design.playerNames[this.board.player];
-  var t = +time_limit;
-  if (player_num != this.board.player) {
-      if (additional_time) {
-          t += +additional_time;
+  if (uid) {
+      var t = +time_limit;
+      if (player_num != this.board.player) {
+          if (additional_time) {
+              t += +additional_time;
+          }
+          if (t < 0) {
+              winGame();
+              this.setDone();
+              this.gameOver(player + " won", this.board.player);
+          }
+          return;
       }
-      if (t < 0) {
-          winGame();
-          this.setDone();
-          this.gameOver(player + " won", this.board.player);
+      if (time_stamp !== null) {
+          var now = Date.now();
+          time_limit -= now - time_stamp;
+          time_stamp = now;
       }
-      return;
-  }
-  if (time_stamp !== null) {
-      var now = Date.now();
-      time_limit -= now - time_stamp;
-      time_stamp = now;
   }
   t = time_limit;
   var c = '#0000CD';
-  if ((t < 0) && additional_time) {
-      t += +additional_time;
-      c = '#DC143C';      
-  }
   if (t < 0) {
+       if (uid) {
+          if (additional_time) t += +additional_time;
+       } else {
+          t = -t;
+       }
+       c = '#DC143C';      
+  }
+  if (uid && (t < 0)) {
       t = 0;
       time_stamp = null;
       time_limit = null;
