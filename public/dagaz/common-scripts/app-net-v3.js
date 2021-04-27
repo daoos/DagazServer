@@ -34,6 +34,7 @@ var recovery_setup = null;
 var time_limit = null;
 var additional_time = null;
 var time_stamp = null;
+var onceWinPlay = true;
 
 function App(canvas) {
   this.canvas = canvas;
@@ -617,8 +618,9 @@ var getConfirmed = function() {
                  var r = data[0].result_id;
                  if (r == 1) {
                      loseGame();
-                     if (!_.isUndefined(Dagaz.Controller.play)) {
+                     if (!_.isUndefined(Dagaz.Controller.play) && onceWinPlay) {
                          Dagaz.Controller.play(Dagaz.Sounds.lose);
+                         onceWinPlay = false;
                      }
                      App.prototype.setDone();
                      app.doneMessage = player + " won";
@@ -626,8 +628,9 @@ var getConfirmed = function() {
                      gameOver(app.doneMessage, app, app.winPlayer);
                  } else if (r == 2) {
                      winGame();
-                     if (!_.isUndefined(Dagaz.Controller.play)) {
+                     if (!_.isUndefined(Dagaz.Controller.play) && onceWinPlay) {
                          Dagaz.Controller.play(Dagaz.Sounds.win);
+                         onceWinPlay = false;
                      }
                      App.prototype.setDone();
                      app.doneMessage = player + " lose";
@@ -636,8 +639,9 @@ var getConfirmed = function() {
                  } else {
                      if (confirm("Do you agree to a draw?")) {
                          drawGame();
-                         if (!_.isUndefined(Dagaz.Controller.play)) {
+                         if (!_.isUndefined(Dagaz.Controller.play) && onceWinPlay) {
                              Dagaz.Controller.play(Dagaz.Sounds.draw);
+                             onceWinPlay = false;
                          }
                          App.prototype.setDone();
                          app.doneMessage = "Draw";
@@ -761,6 +765,7 @@ App.prototype.getAI = function() {
 }
 
 App.prototype.updateTimer = function() {  
+  if (!onceGameOver) return;
   if (_.isUndefined(time_limit) || (time_limit === null)) return;
   var player = this.design.playerNames[this.board.player];
   if (uid) {
@@ -872,8 +877,9 @@ App.prototype.exec = function() {
              if (this.list.isEmpty()) {
                  App.prototype.setDone();
                  Canvas.style.cursor = "default";
-                 if (!_.isUndefined(Dagaz.Controller.play)) {
+                 if (!_.isUndefined(Dagaz.Controller.play) && onceWinPlay) {
                      Dagaz.Controller.play(Dagaz.Sounds.lose);
+                     onceWinPlay = false;
                  }
                  loseGame();
                  this.gameOver(player + " lose", -this.board.player);
@@ -922,8 +928,9 @@ App.prototype.exec = function() {
       if (this.board.moves.length == 0) {
           App.prototype.setDone();
           Canvas.style.cursor = "default";
-          if (!_.isUndefined(Dagaz.Controller.play)) {
+          if (!_.isUndefined(Dagaz.Controller.play) && onceWinPlay) {
               Dagaz.Controller.play(Dagaz.Sounds.win);
+              onceWinPlay = false;
           }
           var player = this.design.playerNames[this.board.player];
           this.gameOver(player + " lose", -this.board.player);
@@ -1010,13 +1017,15 @@ App.prototype.exec = function() {
               if (g > 0) {
                   if (player_num == this.board.parent.player) {
                       winGame();
-                      if (!_.isUndefined(Dagaz.Controller.play)) {
+                      if (!_.isUndefined(Dagaz.Controller.play) && onceWinPlay) {
                           Dagaz.Controller.play(Dagaz.Sounds.win);
+                          onceWinPlay = false;
                       }
                   } else {
                       loseGame();
-                      if (!_.isUndefined(Dagaz.Controller.play)) {
+                      if (!_.isUndefined(Dagaz.Controller.play) && onceWinPlay) {
                           Dagaz.Controller.play(Dagaz.Sounds.lose);
+                          onceWinPlay = false;
                       }
                   }
                   this.doneMessage = player + " won";
@@ -1024,21 +1033,24 @@ App.prototype.exec = function() {
               } else if (g < 0) {
                   if (player_num == this.board.parent.player) {
                       loseGame();
-                      if (!_.isUndefined(Dagaz.Controller.play)) {
+                      if (!_.isUndefined(Dagaz.Controller.play) && onceWinPlay) {
                           Dagaz.Controller.play(Dagaz.Sounds.lose);
+                          onceWinPlay = false;
                       }
                   } else {
                       winGame();
-                      if (!_.isUndefined(Dagaz.Controller.play)) {
+                      if (!_.isUndefined(Dagaz.Controller.play) && onceWinPlay) {
                           Dagaz.Controller.play(Dagaz.Sounds.win);
+                          onceWinPlay = false;
                       }
                   }
                   this.doneMessage = player + " lose";
                   this.winPlayer   = -this.board.parent.player;
               } else {
                   drawGame();
-                  if (!_.isUndefined(Dagaz.Controller.play)) {
+                  if (!_.isUndefined(Dagaz.Controller.play) && onceWinPlay) {
                       Dagaz.Controller.play(Dagaz.Sounds.draw);
+                      onceWinPlay = false;
                   }
                   this.doneMessage = "Draw";
                   this.winPlayer   = 0;
