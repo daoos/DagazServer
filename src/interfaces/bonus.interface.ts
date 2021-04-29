@@ -25,4 +25,10 @@ export class Bonus {
 
     @ApiPropertyOptional()
     email: string;
+
+    @ApiPropertyOptional()
+    phone: string;
+
+    @ApiPropertyOptional()
+    info: string;
 }

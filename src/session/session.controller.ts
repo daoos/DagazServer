@@ -216,7 +216,7 @@ export class SessionController {
 
     @UseGuards(JwtAuthGuard, TokenGuard)
     @Post()
-    @ApiBody({ type: [Sess] })
+    @ApiBody({ type: Sess })
     @ApiCreatedResponse({ description: 'Successfully.'})
     @ApiNotFoundResponse({ description: 'Not Found.'})
     @ApiUnauthorizedResponse({ description: 'Unauthorized.'})
@@ -237,7 +237,7 @@ export class SessionController {
 
     @UseGuards(JwtAuthGuard, TokenGuard)
     @Post('anonymous')
-    @ApiBody({ type: [Sess] })
+    @ApiBody({ type: Sess })
     @ApiCreatedResponse({ description: 'Successfully.'})
     @ApiNotFoundResponse({ description: 'Not Found.'})
     @ApiUnauthorizedResponse({ description: 'Unauthorized.'})
@@ -258,7 +258,7 @@ export class SessionController {
 
     @UseGuards(JwtAuthGuard, TokenGuard)
     @Post('recovery')
-    @ApiBody({ type: [Sess] })
+    @ApiBody({ type: Sess })
     @ApiOkResponse({ description: 'Successfully.'})
     @ApiUnauthorizedResponse({ description: 'Unauthorized.'})
     @ApiInternalServerErrorResponse({ description: 'Internal Server error.'})
@@ -277,7 +277,7 @@ export class SessionController {
     }
 
     @Post('close')
-    @ApiBody({ type: [Sess] })
+    @ApiBody({ type: Sess })
     @ApiOkResponse({ description: 'Successfully.'})
     @ApiUnauthorizedResponse({ description: 'Unauthorized.'})
     @ApiForbiddenResponse({ description: 'Forbidden.'})

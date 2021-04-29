@@ -134,7 +134,7 @@ export class GameController {
 
     @UseGuards(JwtAuthGuard, TokenGuard)
     @Post('preview')
-    @ApiBody({ type: [Preview] })
+    @ApiBody({ type: Preview })
     @ApiOkResponse({ description: 'Successfully.'})
     @ApiUnauthorizedResponse({ description: 'Unauthorized.'})
     @ApiNotFoundResponse({ description: 'Not Found.'})

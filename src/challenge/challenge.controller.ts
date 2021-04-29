@@ -31,7 +31,7 @@ export class ChallengeController {
 
     @UseGuards(JwtAuthGuard, TokenGuard)
     @Post()
-    @ApiBody({ type: [Challenge] })
+    @ApiBody({ type: Challenge })
     @ApiCreatedResponse({ description: 'Successfully.'})
     @ApiUnauthorizedResponse({ description: 'Unauthorized.'})
     @ApiInternalServerErrorResponse({ description: 'Internal Server error.'})

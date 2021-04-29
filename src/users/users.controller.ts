@@ -55,7 +55,7 @@ export class UsersController {
 
     @UseGuards(JwtAuthGuard, TokenGuard)
     @Post('current')
-    @ApiBody({ type: [User] })
+    @ApiBody({ type: User })
     @ApiOkResponse({ description: 'Successfully.'})
     @ApiUnauthorizedResponse({ description: 'Unauthorized.'})
     @ApiForbiddenResponse({ description: 'Forbidden.'})
@@ -76,7 +76,7 @@ export class UsersController {
     }
 
     @Post()
-    @ApiBody({ type: [User] })
+    @ApiBody({ type: User })
     @ApiCreatedResponse({ description: 'Successfully.'})
     @ApiConflictResponse({ description: 'User already exists.'})
     @ApiInternalServerErrorResponse({ description: 'Internal Server error.'})

@@ -31,7 +31,7 @@ export class PreferencesController {
 
     @UseGuards(JwtAuthGuard, TokenGuard)
     @Post()
-    @ApiBody({ type: [Pref] })
+    @ApiBody({ type: Pref })
     @ApiCreatedResponse({ description: 'Successfully.'})
     @ApiUnauthorizedResponse({ description: 'Unauthorized.'})
     @ApiInternalServerErrorResponse({ description: 'Internal Server error.'})

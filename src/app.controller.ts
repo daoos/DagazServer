@@ -43,7 +43,7 @@ export class AppController {
   }
 
   @Post('api/auth/recovery')
-  @ApiBody({ type: [Token] })
+  @ApiBody({ type: Token })
   @ApiOkResponse({ description: 'Successfully.'})
   @ApiNotFoundResponse({ description: 'Not Found.'})
   @ApiInternalServerErrorResponse({ description: 'Internal Server error.'})

@@ -16,7 +16,7 @@ export class JoinController {
 
     @UseGuards(JwtAuthGuard, TokenGuard)
     @Post()
-    @ApiBody({ type: [Join] })
+    @ApiBody({ type: Join })
     @ApiCreatedResponse({ description: 'Successfully.'})
     @ApiUnauthorizedResponse({ description: 'Unauthorized.'})
     @ApiNotFoundResponse({ description: 'Not Found.'})

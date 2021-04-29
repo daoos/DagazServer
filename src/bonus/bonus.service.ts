@@ -2,8 +2,6 @@ import { Injectable, Inject, InternalServerErrorException, HttpStatus } from '@n
 import { bonuses } from '../entity/bonuses';
 import { Repository } from 'typeorm';
 import { Bonus } from '../interfaces/bonus.interface';
-import { queue } from '../entity/queue';
-import { contacts } from '../entity/contacts';
 
 @Injectable()
 export class BonusService {
@@ -66,66 +64,36 @@ export class BonusService {
         return x[0].expire_period;
     }
 
-    async getUserId(uid: number): Promise<number> {
+    async findBonus(bonus: string): Promise<Bonus> {
         const x = await this.service.query(
-            `select user_id
-             from   user_games a
-             where  a.id = $1`, [uid]);
+            `select a.id as id, a.type_id as type_id, a.uid as uid, 
+                    a.bonus as bonus, a.created as created, 
+                    a.expired as expired, a.activated as activated,
+                    a.external_info as info, a.phone, a.email
+             from   bonuses a
+             where  a.bonus = $1 and now() <= coalesce(a.expired, now())`, [bonus]);
         if (!x || x.length != 1) {
-            return null;
+             return null;
         }
-        return x[0].user_id;
-    }
-
-    async getContactId(user: number, email: string) {
-        const x = await this.service.query(
-            `select a.id
-             from   contacts a
-             where  a.type_id = 1 and a.user_id = $1 and a.address = $2`, [user, email]);
-        if (x && x.length == 1) {
-             return x[0].id;
-        }
-        const y = await this.service.createQueryBuilder("contacts")
-        .insert()
-        .into(contacts)
-        .values({
-            type_id: 1,
-            user_id: user,
-            address: email,
-            created: new Date()
-        })
-        .returning('*')
-        .execute();
-        return y.generatedMaps[0].id;
+        var r = new Bonus();
+        r.id = x[0].id;
+        r.type_id = x[0].type_id;
+        r.uid = x[0].uid;
+        r.bonus = x[0].bonus;
+        r.created = x[0].created;
+        r.expired = x[0].expired;
+        r.activated = x[0].activated;
+        r.info = x[0].info;
+        r.phone = x[0].phone;
+        r.email = x[0].email;
+        return r;
     }
 
     async getBonus(bonus: string): Promise<Bonus> {
         try {
-            const x = await this.service.query(
-                `select a.id as id, a.type_id as type_id, a.uid as uid, 
-                        a.bonus as bonus, a.created as created, 
-                        a.expired as expired, a.activated as activated
-                 from   bonuses a
-                 where  a.bonus = $1 and now() <= coalesce(a.expired, now())`, [bonus]);
-            if (!x || x.length != 1) {
-                 return null;
-            }
-            var r = new Bonus();
-            r.id = x[0].id;
-            r.type_id = x[0].type_id;
-            r.uid = x[0].uid;
-            r.bonus = x[0].bonus;
-            r.created = x[0].created;
-            r.expired = x[0].expired;
-            r.activated = x[0].activated;
-            if (!r.activated) {
-                await this.service.createQueryBuilder("bonuses")
-                .update(bonuses)
-                .set({ 
-                    activated: new Date()
-                 })
-                .where("id = :id", {id: r.id})
-                .execute();
+            const r = await this.findBonus(bonus);
+            if (!r) {
+                return null;
             }
             return r;
         } catch (error) {
@@ -181,24 +149,57 @@ export class BonusService {
         }
     }
 
-    async sendBonus(x: Bonus): Promise<Bonus> {
+    async updateBonus(x: Bonus): Promise<Bonus> {
         try {
-            const bonus = await this.getBonus(x.bonus);
-            if (!bonus) {
+            const r = await this.findBonus(x.bonus);
+            if (!r) {
                 return null;
             }
-            const user = await this.getUserId(x.uid);
-            const contact = await this.getContactId(user, x.email);
-            const y = await this.service.createQueryBuilder("queue")
-            .insert()
-            .into(queue)
-            .values({
-                contact_id: contact,
-                bonuse_id: bonus.id,
-                scheduled: new Date()
-            })
+            if (x.email) {
+                r.email = x.email;
+            }
+            if (x.phone) {
+                r.phone = x.phone;
+            }
+            await this.service.createQueryBuilder("bonuses")
+            .update(bonuses)
+            .set({ 
+                phone: r.phone,
+                email: r.email
+             })
+            .where("id = :id", {id: r.id})
             .execute();
-            return x;
+            return r;
+        } catch (error) {
+            console.error(error);
+            throw new InternalServerErrorException({
+                status: HttpStatus.BAD_REQUEST,
+                error: error
+            });
+        }
+    }
+
+    async activateBonus(x: Bonus): Promise<Bonus> {
+        try {
+            const r = await this.findBonus(x.bonus);
+            if (!r) {
+                return null;
+            }
+            if (x.info) {
+                r.info = x.info;
+            }
+            if (!r.activated) {
+                r.activated = new Date();
+            }
+            await this.service.createQueryBuilder("bonuses")
+            .update(bonuses)
+            .set({ 
+                external_info: r.info,
+                activated: r.activated
+             })
+            .where("id = :id", {id: r.id})
+            .execute();
+            return r;
         } catch (error) {
             console.error(error);
             throw new InternalServerErrorException({

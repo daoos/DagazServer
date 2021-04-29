@@ -89,7 +89,7 @@ export class MoveController {
 
     @UseGuards(JwtAuthGuard, TokenGuard)
     @Post('accept')
-    @ApiBody({ type: [Move] })
+    @ApiBody({ type: Move })
     @ApiOkResponse({ description: 'Successfully.'})
     @ApiInternalServerErrorResponse({ description: 'Internal Server error.'})
     async acept(@Res() res, @Body() x: Move): Promise<Move> {
@@ -103,7 +103,7 @@ export class MoveController {
 
     @UseGuards(JwtAuthGuard, TokenGuard)
     @Post('alert')
-    @ApiBody({ type: [Move] })
+    @ApiBody({ type: Move })
     @ApiCreatedResponse({ description: 'Successfully.'})
     @ApiInternalServerErrorResponse({ description: 'Internal Server error.'})
     async alert(@Res() res, @Body() x: Move): Promise<Move> {
@@ -118,7 +118,7 @@ export class MoveController {
     @UseGuards(JwtAuthGuard, RolesGuard, TokenGuard)
     @Roles('admin')
     @Post('confirm')
-    @ApiBody({ type: [Move] })
+    @ApiBody({ type: Move })
     @ApiOkResponse({ description: 'Successfully.'})
     @ApiNotFoundResponse({ description: 'Not Found.'})
     @ApiUnauthorizedResponse({ description: 'Unauthorized.'})

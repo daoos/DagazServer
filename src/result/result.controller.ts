@@ -36,7 +36,7 @@ export class ResultController {
 
     @UseGuards(JwtAuthGuard, TokenGuard)
     @Post()
-    @ApiBody({ type: [Result] })
+    @ApiBody({ type: Result })
     @ApiCreatedResponse({ description: 'Successfully.'})
     @ApiUnauthorizedResponse({ description: 'Unauthorized.'})
     @ApiNotFoundResponse({ description: 'Not Found.'})

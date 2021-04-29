@@ -36,4 +36,10 @@ export class bonuses {
 
     @Column({ type: "text", nullable: true })
     external_info: string;
+
+    @Column({ type: "text", nullable: true })
+    phone: string;
+
+    @Column({ type: "text", nullable: true })
+    email: string;
 }

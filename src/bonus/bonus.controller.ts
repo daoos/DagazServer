@@ -1,4 +1,4 @@
-import { Controller, UseGuards, Post, Req, Res, Body, HttpStatus, Get, Param } from '@nestjs/common';
+import { Controller, UseGuards, Post, Res, Body, HttpStatus, Get, Param, Put } from '@nestjs/common';
 import { ApiSecurity, ApiBody, ApiCreatedResponse, ApiUnauthorizedResponse, ApiNotFoundResponse, ApiInternalServerErrorResponse, ApiOkResponse, ApiForbiddenResponse } from '@nestjs/swagger';
 import { BonusService } from './bonus.service';
 import { Bonus } from '../interfaces/bonus.interface';
@@ -37,11 +37,11 @@ export class BonusController {
     }
 
     @Post()
-    @ApiBody({ type: [Bonus] })
+    @ApiBody({ type: Bonus })
     @ApiCreatedResponse({ description: 'Successfully.'})
     @ApiNotFoundResponse({ description: 'Not Found.'})
     @ApiInternalServerErrorResponse({ description: 'Internal Server error.'})
-    async join(@Res() res, @Body() x: Bonus): Promise<Bonus> {
+    async createBonus(@Res() res, @Body() x: Bonus): Promise<Bonus> {
         try {
             const r = await this.service.createBonus(x);
             if (!r) {
@@ -54,18 +54,38 @@ export class BonusController {
         }
     }
 
-    @Post('send')
-    @ApiBody({ type: [Bonus] })
+    @Put()
+    @ApiBody({ type: Bonus })
     @ApiOkResponse({ description: 'Successfully.'})
     @ApiNotFoundResponse({ description: 'Not Found.'})
     @ApiInternalServerErrorResponse({ description: 'Internal Server error.'})
-    async send(@Res() res, @Body() x: Bonus): Promise<Bonus> {
+    async updateBonus(@Res() res, @Body() x: Bonus): Promise<Bonus> {
         try {
-            const r = await this.service.sendBonus(x);
+            const r = await this.service.updateBonus(x);
             if (!r) {
                 return res.status(HttpStatus.NOT_FOUND).json();
             } else {
-                return res.status(HttpStatus.CREATED).json(r);
+                return res.status(HttpStatus.OK).json(r);
+            }
+        } catch (e) {
+            return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ error: e.message.error.toString(), stack: e.stack});
+        }
+    }
+
+    @UseGuards(JwtAuthGuard, RolesGuard, TokenGuard)
+    @Roles('admin')
+    @Put('activate')
+    @ApiBody({ type: Bonus })
+    @ApiOkResponse({ description: 'Successfully.'})
+    @ApiNotFoundResponse({ description: 'Not Found.'})
+    @ApiInternalServerErrorResponse({ description: 'Internal Server error.'})
+    async activateBonus(@Res() res, @Body() x: Bonus): Promise<Bonus> {
+        try {
+            const r = await this.service.activateBonus(x);
+            if (!r) {
+                return res.status(HttpStatus.NOT_FOUND).json();
+            } else {
+                return res.status(HttpStatus.OK).json(r);
             }
         } catch (e) {
             return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ error: e.message.error.toString(), stack: e.stack});
