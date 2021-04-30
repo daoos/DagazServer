@@ -975,7 +975,8 @@ export class SessionService {
                         b.player_num as player_num, b.id as uid, b.user_id as user_id,
                         a.status_id as status_id, d.id as ai, a.last_user as last_user,
                         e.result_id as result_id, b.is_ai as is_ai, a.variant_id as variant_id,
-                        v.ai_flags as ai_flags, v.width as width, v.height as height
+                        v.ai_flags as ai_flags, v.width as width, v.height as height,
+                        v.is_dice
                  from   game_sessions a
                  inner  join user_games b on (b.session_id = a.id and b.is_ai = 0)
                  left   join user_games d on (d.session_id = a.id and d.is_ai = 1)
@@ -1021,7 +1022,7 @@ export class SessionService {
                     }
                     s.time_limit = await this.getTimeLimit(s.uid);
                     s.additional_time = await this.getAdditionalTime(s.id);
-                    if (!s.ai && !x[0].result_id && (x[0].last_user != s.uid)) {
+                    if (!s.ai && !x[0].result_id && (x[0].last_user != s.uid) && (x[0].is_dice == 0)) {
                         s.last_setup = await this.rollbackSess(s.last_setup, s.id, s.uid);
                     }
                 }

@@ -29,6 +29,9 @@ export class game_variants {
     @Column({ default: 0, nullable: false })
     is_hidden: number;
 
+    @Column({ default: 0, nullable: false })
+    is_dice: number;
+
     @Index()
     @Column({ nullable: true })
     external_ai: number;

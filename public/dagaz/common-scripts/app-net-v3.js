@@ -825,6 +825,13 @@ App.prototype.updateTimer = function() {
   timer.innerHTML = '<b style="color:' + c + ';">' + s + '</b>';
 }
 
+App.prototype.isRandom = function() {
+  if (!_.isUndefined(this.design.turns) && !_.isUndefined(this.design.turns[this.board.turn])) {
+      return this.design.turns[this.board.turn].random;
+  }
+  return false;
+}
+
 App.prototype.exec = function() {
   this.view.configure();
   this.view.draw(this.canvas);
@@ -861,6 +868,46 @@ App.prototype.exec = function() {
       this.state = STATE.IDLE;
   }
   if (this.state == STATE.IDLE) {
+      if (this.isRandom() && ((player_num == this.board.player) || (bot !== null))) {
+          this.move = null;
+          while (this.isRandom()) {
+              if (_.isUndefined(this.board.moves)) {
+                  this.board.generate(this.design);
+              }
+              var moves = _.filter(this.board.moves, function(move) {
+                  if (!_.isUndefined(move.failed)) return false;
+                  return _.indexOf(this.design.turns[this.board.turn].modes, move.mode) >= 0;
+              }, this);
+              if (moves.length > 0) {
+                  var ix = 0;
+                  if (moves.length > 1) {
+                      ix = _.random(0, moves.length - 1);
+                  }
+                  var move = moves[ix];
+                  this.boardApply(move);
+                  if (this.move === null) {
+                      this.move = move;
+                  } else {
+                      this.move.join(move);
+                  }
+              }
+          }
+          if (this.move !== null) {
+              var s = this.move.toString();
+              if (!_.isUndefined(Dagaz.Model.getSetup)) {
+                  s = Dagaz.Model.getSetup(this.design, this.board);
+                  console.log("Setup: " + s);
+              }
+              Dagaz.Model.Done(this.design, this.board);
+              var u = uid;
+              if (player_num != this.board.player) {
+                  u = bot;
+              }
+              addMove(this.move.toString(), s, u);
+              this.state = STATE.EXEC;
+              return;
+          }
+      }
       if (player_num == this.board.player) {
          if (_.isUndefined(this.list)) {
              var player = this.design.playerNames[this.board.player];
@@ -923,6 +970,7 @@ App.prototype.exec = function() {
       }
   }
   if (this.state == STATE.BUZY) {
+      this.board.IGNORE_DICES = true;
       this.board.generate(this.design);
       this.board.moves = Dagaz.Model.Determinate(this.board.moves);
       if (this.board.moves.length == 0) {
@@ -972,6 +1020,10 @@ App.prototype.exec = function() {
               s = ', setup=' + Dagaz.Model.getSetup(this.design, this.board);
           }         
           console.log('Buzy: Bad move [' + last_move + ']' + s);
+          setup = null;
+          uid = null;
+          this.state = STATE.INIT;
+          return;
       }
       var player = this.design.playerNames[this.board.player];
       console.log("Player: " + player);

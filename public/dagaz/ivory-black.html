@@ -1,35 +1,41 @@
 <html>
 <head>
 <META http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>Ur</title>
+<title>Storm the Ivory Tower</title>
 </head>
 <body>
 
-<img id="Board" style="display:none" src="images/ur/ur.png">
-<img id="Whited0" style="display:none" src="images/ur/d011.png">
-<img id="Blackd0" style="display:none" src="images/ur/d010.png">
-<img id="Whited1" style="display:none" src="images/ur/d100.png">
-<img id="Blackd1" style="display:none" src="images/ur/d101.png">
-<img id="WhiteMan" style="display:none" src="images/ur/wi.png">
-<img id="BlackMan" style="display:none" src="images/ur/bi.png">
-<img id="WhiteKing" style="display:none" src="images/ur/wp.png">
-<img id="BlackKing" style="display:none" src="images/ur/bp.png">
+<img id="Board" style="display:none" src="images/ivory/board.png">
+<img id="RedNinny" style="display:none" src="images/ivory/rninny.png">
+<img id="BlueNinny" style="display:none" src="images/ivory/bninny.png">
+<img id="RedYahoo" style="display:none" src="images/ivory/ryahoo.png">
+<img id="BlueYahoo" style="display:none" src="images/ivory/byahoo.png">
+<img id="RedFuddy-Duddy" style="display:none" src="images/ivory/rfuddyduddy.png">
+<img id="BlueFuddy-Duddy" style="display:none" src="images/ivory/bfuddyduddy.png">
+<img id="RedNumskull" style="display:none" src="images/ivory/rnumskull.png">
+<img id="BlueNumskull" style="display:none" src="images/ivory/bnumskull.png">
+<img id="RedClodhopper" style="display:none" src="images/ivory/rclodhopper.png">
+<img id="BlueClodhopper" style="display:none" src="images/ivory/bclodhopper.png">
+<img id="RedToady" style="display:none" src="images/ivory/rtoady.png">
+<img id="BlueToady" style="display:none" src="images/ivory/btoady.png">
+<img id="RedBrain" style="display:none" src="images/ivory/rbrain.png">
+<img id="BlueBrain" style="display:none" src="images/ivory/bbrain.png">
 
 <table style="margin:auto; font-family:sans-serif; font-size:14px" id="Table">
 <tr><td>
 <a href="javascript:Dagaz.Controller.home()" title="Home" style="display:none" id="home"><img src="images/home.png"/></a>
 <a href="javascript:Dagaz.Controller.undo()" title="PgDown" style="display:none" id="undo"><img src="images/undo.png"/></a>
-Copyright (c) 2011 Dmitry Skyruk
-<a target="_blank" href="https://www.ancientgames.org/royal-game-ur-game-20-squares/">Rules</a>
+Copyright (c) 2003 Fergus Duniho
+<a target="_blank" href="https://www.chessvariants.com/large.dir/ivorytower.html">Rules</a>
 <a href="javascript:Dagaz.Controller.resign()">I Resign</a>
 <a href="javascript:Dagaz.Controller.drawOffer()">Offer Draw</a>
 <a href="javascript:Dagaz.Controller.sound()" id="sound">no Sound</a>
 <a href="javascript:Dagaz.Controller.redo()" title="PgUp" style="display:none" id="redo"><img src="images/redo.png"/></a>
 <div align="right" id="timer"/>
 </td></tr>
-<tr style="height:401px; vertical-align:top">
-<td id="CanvasCell" style="width:763px">
-<canvas id="Canvas" width="763" height="401" style="cursor:default">Broken canvas...</canvas>
+<tr style="height:604px; vertical-align:top">
+<td id="CanvasCell" style="width:544px">
+<canvas id="Canvas" width="544" height="604" style="cursor:default">Broken canvas...</canvas>
 </td><td style="width:300px;">
 <div style="height:510px; overflow:auto" id="ScrollDiv">
 <img id="GlyphImage"><p id="HelpText"></p>
@@ -39,7 +45,7 @@ Copyright (c) 2011 Dmitry Skyruk
 </tr>
 <tr>
 <td>
-<div style="height:100px; width:763px; margin-left:auto; margin-right:auto">
+<div style="height:100px; width:500px; margin-left:auto; margin-right:auto">
 <table>
 <tr style="display:none" id="PieceInfo">
 <td><img id="PieceInfoImage"></td><td id="PieceInfoText"></td>
@@ -60,14 +66,8 @@ Copyright (c) 2011 Dmitry Skyruk
 <script src="common-scripts/move-list-v2.js"></script>
 <script src="common-scripts/session-manager.js"></script>
 <script src="common-scripts/sound-manager-v2.js"></script>
-<script src="scripts/skip-pass.js"></script>
-<script src="scripts/ur-goal.js"></script>
-<script src="scripts/ur-repeat.js"></script>
-<script src="scripts/ur-extension.js"></script>
-<script src="scripts/ur-restrictions.js"></script>
-<script src="scripts/ur-promotion.js"></script>
-<script src="scripts/ur-dice.js"></script>
-<script src="scripts/ur.js"></script>
+<script src="scripts/ivory-invariant.js"></script>
+<script src="scripts/ivory-black.js"></script>
 <script src="common-scripts/app-net-v2.js"></script>
 
 </body>

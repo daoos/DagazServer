@@ -1,34 +1,33 @@
 <html>
 <head>
 <META http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>Ur</title>
+<title>Shen</title>
 </head>
 <body>
 
-<img id="Board" style="display:none" src="images/ur/ur.png">
-<img id="Whited0" style="display:none" src="images/ur/d011.png">
-<img id="Blackd0" style="display:none" src="images/ur/d010.png">
-<img id="Whited1" style="display:none" src="images/ur/d100.png">
-<img id="Blackd1" style="display:none" src="images/ur/d101.png">
-<img id="WhiteMan" style="display:none" src="images/ur/wi.png">
-<img id="BlackMan" style="display:none" src="images/ur/bi.png">
-<img id="WhiteKing" style="display:none" src="images/ur/wp.png">
-<img id="BlackKing" style="display:none" src="images/ur/bp.png">
+<img id="Board" style="display:none" src="images/shen/board.png">
+<img id="BlueD0" style="display:none" src="images/shen/wdice.png">
+<img id="RedD0" style="display:none" src="images/shen/wdice.png">
+<img id="BlueD1" style="display:none" src="images/shen/bdice.png">
+<img id="RedD1" style="display:none" src="images/shen/bdice.png">
+<img id="BlueMan" style="display:none" src="images/shen/white.png">
+<img id="RedMan" style="display:none" src="images/shen/black.png">
 
 <table style="margin:auto; font-family:sans-serif; font-size:14px" id="Table">
 <tr><td>
 <a href="javascript:Dagaz.Controller.home()" title="Home" style="display:none" id="home"><img src="images/home.png"/></a>
 <a href="javascript:Dagaz.Controller.undo()" title="PgDown" style="display:none" id="undo"><img src="images/undo.png"/></a>
-Copyright (c) 2011 Dmitry Skyruk
-<a target="_blank" href="https://www.ancientgames.org/royal-game-ur-game-20-squares/">Rules</a>
+Designed by <a href="https://a4games.company/pdfs-2/">A4 Games</a>
+<a target="_blank" href="https://en.wikipedia.org/wiki/Hounds_and_Jackals">Rules</a>
 <a href="javascript:Dagaz.Controller.resign()">I Resign</a>
+<a href="javascript:Dagaz.Controller.drawOffer()">Offer Draw</a>
 <a href="javascript:Dagaz.Controller.sound()" id="sound">no Sound</a>
 <a href="javascript:Dagaz.Controller.redo()" title="PgUp" style="display:none" id="redo"><img src="images/redo.png"/></a>
 <div align="right" id="timer"/>
 </td></tr>
-<tr style="height:401px; vertical-align:top">
-<td id="CanvasCell" style="width:763px">
-<canvas id="Canvas" width="763" height="401" style="cursor:default">Broken canvas...</canvas>
+<tr style="height:668px; vertical-align:top">
+<td id="CanvasCell" style="width:628px">
+<canvas id="Canvas" width="628" height="668" style="cursor:default">Broken canvas...</canvas>
 </td><td style="width:300px;">
 <div style="height:510px; overflow:auto" id="ScrollDiv">
 <img id="GlyphImage"><p id="HelpText"></p>
@@ -38,7 +37,7 @@ Copyright (c) 2011 Dmitry Skyruk
 </tr>
 <tr>
 <td>
-<div style="height:100px; width:763px; margin-left:auto; margin-right:auto">
+<div style="height:100px; width:500px; margin-left:auto; margin-right:auto">
 <table>
 <tr style="display:none" id="PieceInfo">
 <td><img id="PieceInfoImage"></td><td id="PieceInfoText"></td>
@@ -55,19 +54,18 @@ Copyright (c) 2011 Dmitry Skyruk
 <script src="common-scripts/zrf-model.js"></script>
 <script src="common-scripts/zobrist.js"></script>
 <script src="common-scripts/common-setup-v2.js"></script>
-<script src="common-scripts/2d-view-v2.js"></script>
+<script src="common-scripts/2d-view-v4.js"></script>
 <script src="common-scripts/move-list-v2.js"></script>
 <script src="common-scripts/session-manager.js"></script>
 <script src="common-scripts/sound-manager-v2.js"></script>
-<script src="common-scripts/heuristic-ai.js"></script>
 <script src="scripts/skip-pass.js"></script>
-<script src="scripts/ur-goal.js"></script>
-<script src="scripts/ur-repeat.js"></script>
-<script src="scripts/ur-extension.js"></script>
-<script src="scripts/ur-restrictions.js"></script>
-<script src="scripts/ur-promotion.js"></script>
-<script src="scripts/ur-dice.js"></script>
-<script src="scripts/ur.js"></script>
+<script src="scripts/shen-goal.js"></script>
+<script src="scripts/shen-turns.js"></script>
+<script src="scripts/shen-respawn.js"></script>
+<script src="scripts/shen-pass.js"></script>
+<script src="scripts/shen-extension.js"></script>
+<script src="scripts/shen-restrictions.js"></script>
+<script src="scripts/shen.js"></script>
 <script src="common-scripts/app-net-v2.js"></script>
 
 </body>

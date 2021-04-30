@@ -18,13 +18,13 @@ Dagaz.Model.CheckInvariants = function(board) {
       var pos = move.actions[0][1][0];
       var piece = board.getPiece(pos);
       if (piece === null) return;
-      pos = design.navigate(board.player, 0, 6);
-      while (pos !== null) {
-          if (board.getPiece(pos) === null) {
-              move.dropPiece(pos, piece.promote(2));
+      var p = design.navigate(board.player, 0, 6);
+      while (p !== null) {
+          if (board.getPiece(p) === null) {
+              move.dropPiece(p, piece.promote(2));
               break;
           }
-          pos = design.navigate(board.player, pos, 6);
+          p = design.navigate(board.player, p, 6);
       }
   });
   CheckInvariants(board);
