@@ -33,6 +33,7 @@ var time_limit = null;
 var additional_time = null;
 var time_stamp = null;
 var onceWinPlay = true;
+var last_setup = null;
 
 function App(canvas, params) {
   this.design = Dagaz.Model.getDesign();
@@ -814,7 +815,8 @@ var getConfirmed = function() {
                      }
                  }
              } else {
-                 last_move = data[0].move_str;
+                 last_move  = data[0].move_str;
+                 last_setup = data[0].setup_str;
                  time_limit = data[0].time_limit;
                  time_stamp = Date.now();
                  additional_time = data[0].additional_time;
@@ -1194,6 +1196,10 @@ App.prototype.exec = function() {
           }
       }, this);
       if (this.move === null) {
+          if ((recovery_setup === null) && (last_setup !== null)) {
+              recovery_setup = last_setup;
+              last_setup = null;
+          }
           if (recovery_setup !== null) {
               Dagaz.Controller.setup(recovery_setup);
               console.log('Buzy: Setup recovered [' + recovery_setup + ']');
@@ -1207,10 +1213,6 @@ App.prototype.exec = function() {
               s = ', setup=' + Dagaz.Model.getSetup(this.design, this.board);
           }         
           console.log('Buzy: Bad move [' + last_move + ']' + s);
-//        window.location = window.location;
-          setup = null;
-          uid = null;
-          this.state = STATE.INIT;
           return;
       }
       var player = this.design.playerNames[this.board.player];

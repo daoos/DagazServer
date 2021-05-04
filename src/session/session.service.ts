@@ -1026,6 +1026,13 @@ export class SessionService {
                         s.last_setup = await this.rollbackSess(s.last_setup, s.id, s.uid);
                     }
                 }
+                await this.service.createQueryBuilder("game_moves")
+                .update(game_moves)
+                .set({ 
+                    accepted: new Date()
+                 })
+                .where("session_id = :sid and uid <> :uid and accepted is null", {sid: s.id, uid: s.uid})
+                .execute();
             }
             return s;
         } catch (error) {
