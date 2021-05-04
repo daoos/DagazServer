@@ -10,6 +10,7 @@ Dagaz.Model.checkVersion = function(design, name, value) {
 
 Dagaz.AI.heuristic = function(ai, design, board, move) {
   if (move.mode == 0) return 1;
+  if (move.mode > 4)  return 1;
   var r = 100;
   var pos = move.actions[0][1][0];
   if (design.inZone(0, board.player, pos)) {

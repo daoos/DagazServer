@@ -14,6 +14,7 @@ Dagaz.Model.CheckInvariants = function(board) {
   var design = Dagaz.Model.design;
   _.each(board.moves, function(move) {
       if (move.mode < 1) return;
+      if (move.mode > 4) return;
       if (!_.isUndefined(move.failed)) return;
       var pos = move.actions[0][0][0];
       var p = design.navigate(board.player, pos, 0);

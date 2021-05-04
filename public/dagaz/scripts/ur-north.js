@@ -56,13 +56,13 @@ Dagaz.Model.BuildDesign = function(design) {
 
     design.addTurn(1, [1, 2, 3, 4]); // 0
     design.repeatMark();
-    design.addRandom(2, [0]); // 1
-    design.addRandom(2, [0]); // 2
-    design.addRandom(2, [0]); // 3
+    design.addRandom(2, [5]); // 1
+    design.addRandom(2, [6]); // 2
+    design.addRandom(2, [7]); // 3
     design.addTurn(2, [1, 2, 3, 4]); // 4
-    design.addRandom(1, [0]); // 5
-    design.addRandom(1, [0]); // 6
-    design.addRandom(1, [0]); // 7
+    design.addRandom(1, [5]); // 5
+    design.addRandom(1, [6]); // 6
+    design.addRandom(1, [7]); // 7
     design.addTurn(1, [1, 2, 3, 4]); // 8
 
     design.addPosition("x3", [0, 0, 0, 0, 0, 0, 3, 52, 0, 0]);
@@ -157,6 +157,12 @@ Dagaz.Model.BuildDesign = function(design) {
     design.addZone("dices", 2, [2, 1, 0]);
     design.addZone("star", 1, [40, 10, 29, 50, 20]);
     design.addZone("star", 2, [40, 10, 29, 50, 20]);
+    design.addZone("dice-1", 1, [0]);
+    design.addZone("dice-1", 2, [0]);
+    design.addZone("dice-2", 1, [1]);
+    design.addZone("dice-2", 2, [1]);
+    design.addZone("dice-3", 1, [2]);
+    design.addZone("dice-3", 2, [2]);
 
     design.addCommand(0, ZRF.IN_ZONE,	4);	// dices
     design.addCommand(0, ZRF.FUNCTION,	20);	// verify
@@ -202,11 +208,30 @@ Dagaz.Model.BuildDesign = function(design) {
     design.addCommand(4, ZRF.FUNCTION,	25);	// to
     design.addCommand(4, ZRF.FUNCTION,	28);	// end
 
+    design.addCommand(5, ZRF.IN_ZONE,	6);	// dice-1
+    design.addCommand(5, ZRF.FUNCTION,	20);	// verify
+    design.addCommand(5, ZRF.FUNCTION,	25);	// to
+    design.addCommand(5, ZRF.FUNCTION,	28);	// end
+
+    design.addCommand(6, ZRF.IN_ZONE,	7);	// dice-2
+    design.addCommand(6, ZRF.FUNCTION,	20);	// verify
+    design.addCommand(6, ZRF.FUNCTION,	25);	// to
+    design.addCommand(6, ZRF.FUNCTION,	28);	// end
+
+    design.addCommand(7, ZRF.IN_ZONE,	8);	// dice-3
+    design.addCommand(7, ZRF.FUNCTION,	20);	// verify
+    design.addCommand(7, ZRF.FUNCTION,	25);	// to
+    design.addCommand(7, ZRF.FUNCTION,	28);	// end
+
     design.addPiece("d0", 0);
-    design.addDrop(0, 0, [], 0, 10);
+    design.addDrop(0, 5, [], 5, 10);
+    design.addDrop(0, 6, [], 6, 10);
+    design.addDrop(0, 7, [], 7, 10);
 
     design.addPiece("d1", 1);
-    design.addDrop(1, 0, [], 0, 10);
+    design.addDrop(1, 5, [], 5, 10);
+    design.addDrop(1, 6, [], 6, 10);
+    design.addDrop(1, 7, [], 7, 10);
 
     design.addPiece("Man", 2);
     design.addMove(2, 1, [2], 1, 11);
