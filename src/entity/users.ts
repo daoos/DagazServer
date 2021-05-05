@@ -8,7 +8,7 @@ export class users {
     id: number;
 
     @Index()
-    @Column({ nullable: false })
+    @Column({ nullable: false, default: 1 })
     realm_id: number;
     @ManyToOne(type => realms)
     @JoinColumn({ name: "realm_id" })

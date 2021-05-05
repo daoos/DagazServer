@@ -30,7 +30,7 @@ export class tournaments1617176544639 implements MigrationInterface {
         await queryRunner.query(`insert into game_settings(id, name, game_id, variant_id, selector_value, tournamenttype_id, ratingtype_id) values(5, 'Frisian Checkers', 22, 5, null, 1, 1)`);
         await queryRunner.query(`insert into game_settings(id, name, game_id, variant_id, selector_value, tournamenttype_id, ratingtype_id) values(6, '80 Cells Checkers', 22, 6, null, 1, 1)`);
         await queryRunner.query(`insert into game_settings(id, name, game_id, variant_id, selector_value, tournamenttype_id, ratingtype_id) values(7, 'Fighting Checkers', 22, 180, null, 1, 1)`);
-        await queryRunner.query(`insert into game_settings(id, name, game_id, variant_id, selector_value, tournamenttype_id, ratingtype_id) values(8, 'Fighting Chess', 30, 33, 1, null, 1)`);
+        await queryRunner.query(`insert into game_settings(id, name, game_id, variant_id, selector_value, tournamenttype_id, ratingtype_id) values(8, 'Fighting Chess', 30, 33, 1, 1, 1)`);
         await queryRunner.query(`insert into game_settings(id, name, game_id, variant_id, selector_value, tournamenttype_id, ratingtype_id) values(9, 'Shatranj', 30, 38, 93, 1, 1)`);
         await queryRunner.query(`insert into game_settings(id, name, game_id, variant_id, selector_value, tournamenttype_id, ratingtype_id) values(10, 'Sovereign Chess', 30, 193, null, 1, 1)`);
         await queryRunner.query(`insert into game_settings(id, name, game_id, variant_id, selector_value, tournamenttype_id, ratingtype_id) values(11, 'Turnover', 30, 56, null, 1, 1)`);
