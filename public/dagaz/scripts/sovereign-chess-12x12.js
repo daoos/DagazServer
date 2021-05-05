@@ -1,3 +1,4 @@
+Dagaz.Controller.persistense = "none";
 Dagaz.Model.DETAIL_MOVE_DESCRIPTION = true;
 Dagaz.Model.showLose = true;
 
