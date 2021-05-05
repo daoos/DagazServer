@@ -26,7 +26,7 @@ Dagaz.Model.CheckInvariants = function(board) {
   }
   var moves  = [];
   _.each(board.moves, function(move) {
-      if (move.isSimpleMove() && ((move.mode == mode) || _.isUndefined(board.IGNORE_DICES))) {
+      if (move.isSimpleMove() && ((move.mode == mode) || !_.isUndefined(board.IGNORE_DICES))) {
           moves.push(move);
           var pos = design.navigate(1, move.actions[0][0][0], 0);
           if ((pos !== null) && (board.getPiece(pos) !== null)) {

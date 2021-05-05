@@ -12,8 +12,8 @@ Dagaz.Model.checkVersion = function(design, name, value) {
 }
 
 if (!_.isUndefined(Dagaz.Controller.addSound)) {
-    Dagaz.Controller.addSound(1, "../sounds/slide.ogg", true);
-    Dagaz.Controller.addSound(10, "../sounds/dice.wav", true);
+    Dagaz.Controller.addSound(1, "sounds/slide.ogg", true);
+    Dagaz.Controller.addSound(10, "sounds/dice.wav", true);
 }
 
 var getState = function(design, board, player, pos) {

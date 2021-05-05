@@ -1118,17 +1118,10 @@ App.prototype.exec = function() {
 
 Dagaz.Model.InitGame();
 Dagaz.Controller.createApp(Canvas);
-
-App.prototype.run = function() {
-  var timestamp = Date.now();
-  this.exec();
-  var delta = Date.now() - timestamp;
-  _.delay(function() {
-     Dagaz.Controller.app.run();
-  }, (delta > WAIT_FRAME) ? 0 : WAIT_FRAME - delta);
-}
-
 Dagaz.View.getView().init(Canvas, Dagaz.Controller.app);
-Dagaz.Controller.app.run();
+
+setInterval(function() {
+  Dagaz.Controller.app.exec();
+}, 100);
 
 })();
