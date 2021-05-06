@@ -97,7 +97,15 @@ Dagaz.Controller.redo = function() {
       node = n;
   });
   if (!node) return false;
-  Dagaz.Controller.apply(node.move, node.setup, node.limit);
+  if (node.move !== null) {
+      Dagaz.Controller.apply(node.move, node.setup, node.limit);
+  } else {
+      Dagaz.Controller.setup(node.setup, node.player, node.limit);
+      console.log('redo: ' + node.setup);
+      if (!_.isUndefined(Dagaz.Controller.play)) {
+          Dagaz.Controller.play(Dagaz.Sounds.page);
+      }
+  }
   curr = node;
   checkButtons();
 }

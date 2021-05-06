@@ -38,15 +38,17 @@ var CheckInvariants = Dagaz.Model.CheckInvariants;
 Dagaz.Model.CheckInvariants = function(board) {
   var design = Dagaz.Model.design;
   var dice = getDice(design, board, board.player);
-  _.each(board.moves, function(move) {
-      if ((move.mode >= 1) && (move.mode <= 5)) {
-           if (move.mode != dice){
-               move.failed = true;
-               return;
-           }
-           clearDices(design, board, board.player, move);
-      }
-  });
+  if (_.isUndefined(board.IGNORE_DICES)) {
+      _.each(board.moves, function(move) {
+          if ((move.mode >= 1) && (move.mode <= 5)) {
+               if (move.mode != dice){
+                   move.failed = true;
+                   return;
+               }
+               clearDices(design, board, board.player, move);
+          }
+      });
+  }
   CheckInvariants(board);
 }
 

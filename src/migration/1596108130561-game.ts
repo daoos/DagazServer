@@ -229,9 +229,10 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(193, 30, 'Sovereign Chess', 'sovereign-chess', 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(194, 30, 'Sovereign Chess (12x12)', 'sovereign-chess-12x12', 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total, is_dice) values(195, 45, 'Ur', 'ur', 2, 1)`);
-//      await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total, is_dice) values(196, 45, 'Shen', 'shen', 2, 1)`);
+        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total, is_dice) values(196, 45, 'Shen', 'shen', 2, 1)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total, is_dice) values(197, 45, 'Puluc', 'puluc', 2, 1)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total, max_selector) values(198, 30, 'Storm the Ivory Tower', 'ivory', 2, 2)`);
+//      await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total, is_dice) values(199, 45, 'Chaturaji', 'chaturaji', 2, 1)`);
 
         await queryRunner.query(`insert into game_styles(id, game_id, name, suffix, player_num) values(1, 23, 'European', '', null)`);
         await queryRunner.query(`insert into game_styles(id, game_id, name, suffix, player_num) values(2, 23, 'Chinese', '-kanji', null)`);
@@ -826,10 +827,11 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(546, 'sovereign-chess', null, 'sovereign-chess', 'https://en.wikipedia.org/wiki/Sovereign_Chess', 'Sovereign Chess')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(547, 'sovereign-chess-12x12', null, 'sovereign-chess-12x12', 'https://en.wikipedia.org/wiki/Sovereign_Chess', 'Sovereign Chess')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(548, 'ur', null, 'ur', 'https://www.ancientgames.org/royal-game-ur-game-20-squares/', '2011 Dmitry Skyruk')`);
-//      await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(549, 'shen', null, 'shen', 'https://en.wikipedia.org/wiki/Hounds_and_Jackals')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(549, 'shen', null, 'shen', 'https://en.wikipedia.org/wiki/Hounds_and_Jackals')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(550, 'puluc', null, 'puluc', 'https://en.wikipedia.org/wiki/Bul_(game)')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(551, 'ivory', 1, 'ivory-1', 'https://www.chessvariants.com/large.dir/ivorytower.html', '2003 Fergus Duniho')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(552, 'ivory', 2, 'ivory-2', 'https://www.chessvariants.com/large.dir/ivorytower.html', '2003 Fergus Duniho')`);
+//      await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(553, 'chaturaji', null, 'chaturaji', 'https://en.wikipedia.org/wiki/Chaturaji')`);
 }
 
     public async down(queryRunner: QueryRunner): Promise<any> {

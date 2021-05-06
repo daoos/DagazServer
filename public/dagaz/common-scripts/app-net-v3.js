@@ -323,7 +323,7 @@ var recovery = function(s) {
   });
 }
 
-App.prototype.acceptMove = function(move, limit) {
+App.prototype.acceptMove = function(move, setup, limit) {
   if (_.isUndefined(Dagaz.Controller.addMoves)) {
       last_move  = move;
       time_limit = limit;
@@ -339,8 +339,11 @@ App.prototype.acceptMove = function(move, limit) {
               r = m;
           }
       });
-      if (r === null) return;
-      this.top = this.top.apply(r);
+      if (r === null) {
+          Dagaz.Model.setup(this.top, setup);
+      } else {
+          this.top = this.top.apply(r);
+      }
       Dagaz.Controller.addMoves([{
           turn_num: turn,
           branch_num: 1,
@@ -373,7 +376,7 @@ var watchMove = function() {
      },
      success: function(data) {
          if (data.length > 0) {
-             Dagaz.Controller.app.acceptMove(data[0].move_str, data[0].time_limit);
+             Dagaz.Controller.app.acceptMove(data[0].move_str, data[0].setup_str, data[0].time_limit);
              turn++;
              console.log('Watch Move: Succeed [move = ' + last_move + '], time_limit = ' + data[0].time_limit);
          }
