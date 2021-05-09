@@ -1,31 +1,32 @@
 <html>
 <head>
 <META http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>Camelot</title>
+<title>Senet</title>
 </head>
 <body>
 
-<img id="Board" style="display:none" src="images/camelot/camelot.png">
-<img id="WhiteMan" style="display:none" src="images/camelot/spawn.png">
-<img id="BlackMan" style="display:none" src="images/camelot/npawn.png">
-<img id="WhiteKnight" style="display:none" src="images/camelot/sknight.png">
-<img id="BlackKnight" style="display:none" src="images/camelot/nknight.png">
+<img id="Board" style="display:none" src="images/senet/board.png">
+<img id="BlueZero" style="display:none" src="images/senet/light.png">
+<img id="GreenZero" style="display:none" src="images/senet/light.png">
+<img id="BlueOne" style="display:none" src="images/senet/dark.png">
+<img id="GreenOne" style="display:none" src="images/senet/dark.png">
+<img id="BlueStone" style="display:none" src="images/senet/blue.png">
+<img id="GreenStone" style="display:none" src="images/senet/green.png">
 
 <table style="margin:auto; font-family:sans-serif; font-size:14px" id="Table">
 <tr><td>
 <a href="javascript:Dagaz.Controller.home()" title="Home" style="display:none" id="home"><img src="images/home.png"/></a>
 <a href="javascript:Dagaz.Controller.undo()" title="PgDown" style="display:none" id="undo"><img src="images/undo.png"/></a>
-Copyright (c) 1930 George S. Parker
-<a target="_blank" href="https://en.wikipedia.org/wiki/Camelot_(board_game)">Rules</a>
+<a target="_blank" href="https://en.wikipedia.org/wiki/Senet">Rules</a>
 <a href="javascript:Dagaz.Controller.resign()">I Resign</a>
 <a href="javascript:Dagaz.Controller.sound()" id="sound">no Sound</a>
 <a href="javascript:Dagaz.Controller.redo()" title="PgUp" style="display:none" id="redo"><img src="images/redo.png"/></a>
 <div align="right" id="timer"/>
 </td></tr>
-<tr style="height:804px; vertical-align:top">
-<td id="CanvasCell" style="width:604px">
-<canvas id="Canvas" width="604" height="804" style="cursor:default">Broken canvas...</canvas>
-</td><td style="width:604px;">
+<tr style="height:185px; vertical-align:top">
+<td id="CanvasCell" style="width:660px">
+<canvas id="Canvas" width="660" height="185" style="cursor:default">Broken canvas...</canvas>
+</td><td style="width:300px;">
 <div style="height:510px; overflow:auto" id="ScrollDiv">
 <img id="GlyphImage"><p id="HelpText"></p>
 <p id="GameSession"></p>
@@ -34,7 +35,7 @@ Copyright (c) 1930 George S. Parker
 </tr>
 <tr>
 <td>
-<div style="height:100px; width:604px; margin-left:auto; margin-right:auto">
+<div style="height:100px; width:500px; margin-left:auto; margin-right:auto">
 <table>
 <tr style="display:none" id="PieceInfo">
 <td><img id="PieceInfoImage"></td><td id="PieceInfoText"></td>
@@ -51,16 +52,19 @@ Copyright (c) 1930 George S. Parker
 <script src="common-scripts/zrf-model.js"></script>
 <script src="common-scripts/zobrist.js"></script>
 <script src="common-scripts/common-setup-v2.js"></script>
-<script src="common-scripts/2d-view-v2.js"></script>
-<script src="common-scripts/move-list-v1.js"></script>
+<script src="common-scripts/2d-view-v4.js"></script>
+<script src="common-scripts/move-list-v2.js"></script>
 <script src="common-scripts/sound-manager-v2.js"></script>
 <script src="common-scripts/session-manager.js"></script>
 <script src="common-scripts/random-ai.js"></script>
-<script src="common-scripts/heuristic-ai-v5.js"></script>
-<script src="scripts/camelot-goal.js"></script>
-<script src="scripts/camelot-invariant.js"></script>
-<script src="scripts/camelot-extension.js"></script>
-<script src="scripts/camelot-north.js"></script>
+<script src="scripts/senet-goal.js"></script>
+<script src="scripts/senet-pass.js"></script>
+<script src="scripts/senet-invariant.js"></script>
+<script src="scripts/senet-extension.js"></script>
+<script src="scripts/senet-homes.js"></script>
+<script src="scripts/senet-restrictions.js"></script>
+<script src="scripts/senet-dices.js"></script>
+<script src="scripts/senet.js"></script>
 <script src="common-scripts/app-net-v2.js"></script>
 
 </body>
