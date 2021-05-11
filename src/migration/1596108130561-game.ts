@@ -232,7 +232,7 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total, is_dice) values(196, 45, 'Shen', 'shen', 2, 1)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total, is_dice) values(197, 45, 'Puluc', 'puluc', 2, 1)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total, max_selector) values(198, 30, 'Storm the Ivory Tower', 'ivory', 2, 2)`);
-//      await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total, is_dice) values(199, 45, 'Chaturaji', 'chaturaji', 2, 1)`);
+        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total, is_dice) values(199, 45, 'Chaturaji', 'chaturaji', 2, 1)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total, is_dice) values(200, 45, 'Senet', 'senet', 2, 1)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total, is_dice, max_selector) values(201, 45, 'Oblong Shatranj', 'oblong-shatranj', 2, 1, 4)`);
 
@@ -833,7 +833,7 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(550, 'puluc', null, 'puluc', 'https://en.wikipedia.org/wiki/Bul_(game)')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(551, 'ivory', 1, 'ivory-1', 'https://www.chessvariants.com/large.dir/ivorytower.html', '2003 Fergus Duniho')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(552, 'ivory', 2, 'ivory-2', 'https://www.chessvariants.com/large.dir/ivorytower.html', '2003 Fergus Duniho')`);
-//      await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(553, 'chaturaji', null, 'chaturaji', 'https://en.wikipedia.org/wiki/Chaturaji')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(553, 'chaturaji', null, 'chaturaji', 'https://en.wikipedia.org/wiki/Chaturaji')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(554, 'senet', null, 'senet', 'https://en.wikipedia.org/wiki/Senet')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(555, 'oblong-shatranj', 1, 'oblong-1', 'http://history.chess.free.fr/oblong.htm')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(556, 'oblong-shatranj', 2, 'oblong-2', 'http://history.chess.free.fr/oblong.htm')`);

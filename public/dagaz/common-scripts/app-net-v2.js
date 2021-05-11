@@ -912,6 +912,7 @@ Dagaz.Controller.drawOffer = function() {
 }
 
 App.prototype.getContext = function(player, forced) {
+  if (Dagaz.AI.isFriend(player_num, player)) return null;
   if (_.isUndefined(this.context)) {
       this.context = [];
   }
@@ -1035,7 +1036,7 @@ App.prototype.exec = function() {
       this.state = STATE.IDLE;
   }
   if (this.state == STATE.IDLE) {
-      if (this.isRandom() && ((player_num == this.board.player) || (bot !== null))) {
+      if (this.isRandom() && (Dagaz.AI.isFriend(player_num, this.board.player) || (bot !== null))) {
           this.move = null;
           while (this.isRandom()) {
               if (_.isUndefined(this.board.moves)) {
@@ -1075,7 +1076,7 @@ App.prototype.exec = function() {
               return;
           }
       }
-      if (player_num == this.board.player) {
+      if (Dagaz.AI.isFriend(player_num, this.board.player)) {
           if (_.isUndefined(this.list)) {
               var player = this.design.playerNames[this.board.player];
               console.log("Player: " + player);

@@ -27,7 +27,6 @@ if (!_.isUndefined(Dagaz.Controller.addSound)) {
 
 Dagaz.Model.BuildDesign = function(design) {
     design.checkVersion("z2j", "2");
-    design.checkVersion("pass-turn", "forced");
     design.checkVersion("smart-moves", "false");
     design.checkVersion("show-blink", "false");
     design.checkVersion("show-hints", "false");

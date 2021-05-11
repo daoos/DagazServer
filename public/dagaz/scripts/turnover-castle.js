@@ -115,7 +115,9 @@ Dagaz.Model.CheckInvariants = function(board) {
        }
   }
   _.each(f, function(pos) {
-       if (!isAttacked(design, board, board.player, pos)) return;
+       if (f.length > 1) {
+           if (!isAttacked(design, board, board.player, pos)) return;
+       }
        _.each(_.range(8), function(dir) {
             var move = Dagaz.Model.createMove(16);
             var p = pos;
