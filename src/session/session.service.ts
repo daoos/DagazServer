@@ -1008,6 +1008,7 @@ export class SessionService {
             s.filename = x[0].filename;
             s.players_total = x[0].players_total;
             s.last_setup = x[0].last_setup;
+            s.is_dice = x[0].is_dice;
             s.ai_timeout = await this.getAiTimeout(s.id);
             x = x.filter((it) => { return (it.user_id == user) && (it.is_ai == 0); });
             if ((x.length == 1) && (x[0].status_id != 3)) {

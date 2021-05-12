@@ -97,4 +97,7 @@ export class Sess {
 
     @ApiPropertyOptional()
     timecontrol: string;
+
+    @ApiPropertyOptional()
+    is_dice: boolean;
 }
