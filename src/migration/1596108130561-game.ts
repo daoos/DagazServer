@@ -235,6 +235,7 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total, is_dice) values(199, 45, 'Chaturaji', 'chaturaji', 2, 1)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total, is_dice) values(200, 45, 'Senet', 'senet', 2, 1)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total, is_dice, max_selector) values(201, 45, 'Oblong Shatranj', 'oblong-shatranj', 2, 1, 4)`);
+        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(202, 37, 'Martian Chess', 'martian-chess', 2)`);
 
         await queryRunner.query(`insert into game_styles(id, game_id, name, suffix, player_num) values(1, 23, 'European', '', null)`);
         await queryRunner.query(`insert into game_styles(id, game_id, name, suffix, player_num) values(2, 23, 'Chinese', '-kanji', null)`);
@@ -839,6 +840,7 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(556, 'oblong-shatranj', 2, 'oblong-2', 'http://history.chess.free.fr/oblong.htm')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(557, 'oblong-shatranj', 3, 'oblong-3', 'http://history.chess.free.fr/oblong.htm')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(558, 'oblong-shatranj', 4, 'oblong-4', 'http://history.chess.free.fr/oblong.htm')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(559, 'martian-chess', null, 'martian', 'https://en.wikipedia.org/wiki/Martian_chess', '1999 Andrew Looney')`);
 }
 
     public async down(queryRunner: QueryRunner): Promise<any> {
