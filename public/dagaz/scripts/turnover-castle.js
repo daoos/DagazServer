@@ -119,7 +119,7 @@ Dagaz.Model.CheckInvariants = function(board) {
            if (!isAttacked(design, board, board.player, pos)) return;
        }
        _.each(_.range(8), function(dir) {
-            var move = Dagaz.Model.createMove(16);
+            var move = Dagaz.Model.createMove(16, 15);
             var p = pos;
             while (p !== null) {
                 var piece = board.getPiece(p);

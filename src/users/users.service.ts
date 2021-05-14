@@ -3,8 +3,6 @@ import { Repository } from 'typeorm';
 import { users } from '../entity/users';
 import { User } from '../interfaces/user.interface';
 import { tokens } from '../entity/tokens';
-import { realms } from '../entity/realms';
-import { Token } from '../interfaces/token.interface';
 
 @Injectable()
 export class UsersService {
