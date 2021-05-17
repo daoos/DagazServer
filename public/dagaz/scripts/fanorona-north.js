@@ -32,14 +32,14 @@ Dagaz.Model.BuildDesign = function(design) {
     design.checkVersion("fanorona-extension", "true");
     design.checkVersion("fanorona-invariant", "true");
 
-    design.addDirection("w");
-    design.addDirection("e");
-    design.addDirection("s");
-    design.addDirection("n");
-    design.addDirection("ne");
-    design.addDirection("sw");
-    design.addDirection("nw");
-    design.addDirection("se");
+    design.addDirection("w");  // 0
+    design.addDirection("e");  // 1
+    design.addDirection("s");  // 2
+    design.addDirection("n");  // 3
+    design.addDirection("ne"); // 4
+    design.addDirection("sw"); // 5
+    design.addDirection("nw"); // 6
+    design.addDirection("se"); // 7
 
     design.addPlayer("White", [1, 0, 3, 2, 5, 4, 7, 6]);
     design.addPlayer("Black", [0, 1, 2, 3, 4, 5, 6, 7]);

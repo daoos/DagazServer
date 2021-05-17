@@ -47,6 +47,9 @@ Dagaz.View.deltaY = function(pos) {
           if (!design.inZone(4, board.player, +pos)) {
               dy = -dy;
           }
+          if (Dagaz.View.DY_INVERSE) {
+              dy = -dy;
+          }
           dy *= r.pos;
       }
       cache[pos] = dy;

@@ -9,25 +9,57 @@ Dagaz.Model.checkVersion = function(design, name, value) {
 }
 
 Dagaz.AI.MAX_DEEP  = 2;
-Dagaz.AI.heuristic = Dagaz.AI.simpleHeuristic;
 
-Dagaz.AI.eval = function(design, params, board, player) {
+var bonus = [
+ 30, 30, 50, 30, 50, 30, 50, 30, 30, 
+ 30, 80, 40, 80, 40, 80, 40, 80, 30, 
+ 50, 40, 80, 40, 80, 40, 80, 40, 50, 
+ 30, 80, 40, 80, 40, 80, 40, 80, 30, 
+ 30, 30, 50, 30, 50, 30, 50, 30, 30
+];
+
+Dagaz.AI.getPrice = function(pos) {
+  if (pos >= 45) return 0
+  return bonus[pos];
+}
+
+Dagaz.AI.eval = function(ai, design, board, player) {
   var r = 0;
   _.each(design.allPositions(), function(pos) {
       var piece = board.getPiece(pos);
       if (piece !== null) {
-          var v = design.price[piece.type];
-          var bonus = 8;
-          if (_.indexOf([19, 29, 11, 21, 31, 13, 23, 33, 15, 25], +pos) >= 0) {
-              bonus -= 4;
+          var v = Dagaz.AI.getPrice(pos);
+          if (piece.player == board.player) {
+              _.each(design.allDirections(), function(dir) {
+                  var p = design.navigate(1, pos, dir);
+                  if (p === null) return;
+                  var piece = board.getPiece(p);
+                  var cnt = 0;
+                  if (piece === null) {
+                      p = design.navigate(0, pos, dir);
+                      while (p !== null) {
+                          piece = board.getPiece(p);
+                          if (piece === null) break;
+                          if (piece.player == board.player) break;
+                          p = design.navigate(0, p, dir);
+                          cnt++;
+                      }
+                  } else {
+                      if (piece.player == board.player) return;
+                      var q = design.navigate(0, pos, dir);
+                      if (q === null) return;
+                      if (board.getPiece(q) !== null) return;
+                      while (p !== null) {
+                          cnt++;
+                          piece = board.getPiece(p);
+                          if (piece === null) break;
+                          if (piece.player == board.player) break;
+                          p = design.navigate(1, p, dir);
+                      }
+                  }
+                  v += cnt;
+              });
           }
-          if (_.indexOf([27, 9, 37, 39, 41, 43, 1, 3, 5, 7, 35, 17], +pos) >= 0) {
-              bonus -= 3;
-          }
-          if (_.indexOf([36, 0, 44, 8], +pos) >= 0) {
-              bonus -= 5;
-          }
-          v += bonus;
           if (!Dagaz.AI.isFriend(player, piece.player)) {
               v = -v;
           }
@@ -35,6 +67,10 @@ Dagaz.AI.eval = function(design, params, board, player) {
       }
   });
   return r;
+}
+
+Dagaz.AI.heuristic = function(ai, design, board, move) {
+  return move.actions.length;
 }
 
 var CheckInvariants = Dagaz.Model.CheckInvariants;
