@@ -365,3 +365,48 @@ body, html {
         }
     }
 }
+
+.form-group {
+    display:block;
+    position: relative;
+    margin-bottom:30px;
+    margin-top:10px;
+    label {
+        display:block;
+        background: #FFF;
+        position: absolute;
+        left:15px;
+        top:0;
+        font-size:16px;
+        font-weight: normal;
+        padding:0 5px;
+        transform:translate(0,-50%);
+    }
+    .form-control {
+        padding:10px 25px;
+        border:2px solid #CCC;
+        border-radius: 10px;
+        display: block;
+        font-size:18px;
+        outline: 0;
+        box-sizing: border-box;
+        width: 100%;
+
+        &:focus {
+            border:2px solid #AAA;
+
+        }
+    }
+
+    .error {
+        display:none;
+        padding:10px;
+        color:#990000;
+    }
+
+    &.has-error {
+        .error { 
+            display:block;
+        }
+    }
+}

@@ -26,14 +26,29 @@
             <h2>Вы победили!</h2>
             <div class="bonus">Ваш бонус: <span class="bonus-self" id="bonusplace">XXXXXXXXXXXXXXXX</span></div>
             <br/><br/>
-            <a href="#" class="btn btn-center" id="replayButton">Сыграем ещё?</a>
-            <a href="index.html" class="btn btn-center btn-gray">Вернуться к списку игр</a>
+            <div class="form-group" id="emailField">
+                <label>E-Mail</label>
+                <input class="form-control" id="form_email" onkeyup="checkvalid('email',this)" onblur="onBlur('email')"/>
+                <div class="error">
+                    Введите корректный E-Mail
+                </div>
+            </div>
+            <div class="form-group" id="phoneField">
+                <label>Телефон</label>
+                <input class="form-control" id="form_email" onkeyup="checkvalid('phone',this)" onblur="onBlur('phone')"/>
+                <div class="error">
+                    Введите корректный Телефон
+                </div>
+            </div>
+            <a href="#" class="btn btn-center" id="replayButton" onclick="playAgain()">Сыграем ещё?</a>
+            <a href="#" class="btn btn-center btn-gray" onclick="backToIndex()">Вернуться к списку игр</a>
         </div>
     </div>
 </body>
 <script>
         var args = location.search.split("").slice(1).join("").split("&");
         var params = {};
+        var gameId = '';
         for(arg in args) {
             arg = args[arg].split("=");
             params[arg.splice(0,1)[0]] = arg.join("=");
@@ -43,9 +58,127 @@
             var names = JSON.parse('%%bonusNames%%');
             document.getElementById("gameName").innerHTML = (names[params['gameid'] ? params['gameid'] : 'filler'])+'<span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>';
 
-            let gameId = params['gameid'] ? ( names[params['gameid']] ? params['gameid'] : null) : null;
-        document.getElementById("replayButton").href = gameId ? (gameId + ".html") : "index.html";
+            gameId = params['gameid'] ? ( names[params['gameid']] ? params['gameid'] : null) : null;
+        //document.getElementById("replayButton").href = gameId ? (gameId + ".html") : "index.html";
         })();
+
+        var valids = {
+            email:false,
+            phone:false
+        };
+
+        var blured = {
+            email:false,
+            phone:false
+        };
+
+        var fields = {
+            email:'',
+            phone:''
+        };
+
+        var allEmpty = true;
+
+        function sendAnd(what) {
+            fetch("/bonus", {
+                method: 'PUT', // *GET, POST, PUT, DELETE, etc.
+                mode: 'cors', // no-cors, *cors, same-origin
+                cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+                credentials: 'same-origin', // include, *same-origin, omit
+                headers: {
+                'Content-Type': 'application/json'
+                // 'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                redirect: 'follow', // manual, *follow, error
+                referrerPolicy: 'no-referrer', // no-referrer, *client
+                body: JSON.stringify({
+                    email:fields.email,
+                    phone:fields.phone,
+                    bonus:params['bonus'] ? params['bonus'] : '-'
+                }) 
+            }).json().then(function(resp) {
+                what();
+            });
+        }
+
+        function playAgain() {
+            if(allEmpty) {
+                window.location = gameId ? (gameId + ".html") : "index.html";
+                return false;
+            }
+            sendAnd(function(){
+                window.location = gameId ? (gameId + ".html") : "index.html";
+            });
+            return false;
+        }
+
+        function backToIndex() {
+            if(allEmpty) {
+                window.location = "index.html";
+                return false;
+            }
+            sendAnd(function(){
+                window.location = "index.html";
+            });
+            return false;
+        }
+
+        function checkEmpty() {
+            this.allEmpty = fields.email == '' && fields.phone == '';
+            return this.allEmpty;
+        }
+
+        function onFocus(type) {
+
+        }
+
+        function onBlur(type) {
+            switch(type) {
+                case "email":
+                    if(!valids.email) {
+                        document.getElementById("emailField").classList.add("has-error");
+                    }else{
+                        document.getElementById("emailField").classList.remove("has-error");
+                    }
+                    break;
+                case "phone":
+                    if(!valids.phone) {
+                        document.getElementById("phoneField").classList.add("has-error");
+                    }else{
+                        document.getElementById("phoneField").classList.remove("has-error");
+                    }
+                    break;
+            }
+        }
+
+        function checkvalid(type,event) {
+            var vb = event.value;
+            
+            switch(type) {
+                case "email":
+                    var v = vb.replace(/[ ]+/gm,"");
+                    valids.email = v.match((/[^@]{1,}@[^.]{2,}\.[\w]{1,}/)); 
+                    if(valids.email) {
+                        fields.email = v;
+                        document.getElementById("emailField").classList.remove("has-error");
+                    }else{
+                        fields.email = "";
+                    }
+                    checkEmpty();
+                    break;
+                case "phone":
+                    var v = vb.replace((/[^0-9+]+/gm),"");
+                    valids.phone = v.length >= 6;
+                    if(valids.phone) {
+                        fields.phone = v;
+                        document.getElementById("phoneField").classList.remove("has-error");
+                    }else{
+                        fields.phone = '';
+                    }
+                    checkEmpty();
+                    break;
+            }
+        }
         
 </script>
 </html>
