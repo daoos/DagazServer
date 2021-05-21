@@ -308,6 +308,12 @@ MoveList.prototype.setPosition = function(pos) {
                   // Smart from move
                   m[0][0] = [ pos ];
                   this.copyActions(result, actions, move.mode, move.sound);
+                  if (!_.isUndefined(move.hints)) {
+                      result.hints = [];
+                      _.each(move.hints, function(h) {
+                          result.hints.push(h);
+                      });
+                  }
                   return true;
               }
               if (Dagaz.Model.smartTo && (this.position == null) && (_.indexOf(m[0][1], pos) >= 0)) {
