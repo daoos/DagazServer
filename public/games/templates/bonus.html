@@ -80,7 +80,7 @@
         var allEmpty = true;
 
         function sendAnd(what) {
-            fetch("/bonus", {
+            fetch("/api/bonus", {
                 method: 'PUT', // *GET, POST, PUT, DELETE, etc.
                 mode: 'cors', // no-cors, *cors, same-origin
                 cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
@@ -96,7 +96,7 @@
                     phone:fields.phone,
                     bonus:params['bonus'] ? params['bonus'] : '-'
                 }) 
-            }).json().then(function(resp) {
+            }).then(function(resp) {
                 what();
             });
         }
