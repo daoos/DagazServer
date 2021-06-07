@@ -240,6 +240,7 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total, is_dice) values(203, 46, 'Backgammon', 'backgammon', 2, 1)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total, is_dice) values(204, 46, 'Hypergammon', 'hypergammon', 2, 1)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(205, 22, 'Cyclic Checkers', 'cyclic-checkers', 2)`);
+        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(206, 37, 'Duel', 'duel', 2)`);
 
         await queryRunner.query(`insert into game_styles(id, game_id, name, suffix, player_num) values(1, 23, 'European', '', null)`);
         await queryRunner.query(`insert into game_styles(id, game_id, name, suffix, player_num) values(2, 23, 'Chinese', '-kanji', null)`);
@@ -851,6 +852,7 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(560, 'backgammon', null, 'backgammon', 'https://bkgm.com/rules.html')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(561, 'hypergammon', null, 'hypergammon', 'https://bkgm.com/variants/HyperBackgammon.html')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, copyright) values(562, 'cyclic-checkers', null, 'russian-checkers-1', 'Victor Bajguzhakov')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(563, 'duel', null, 'duel')`);
 }
 
     public async down(queryRunner: QueryRunner): Promise<any> {

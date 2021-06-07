@@ -1,0 +1,108 @@
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>Duel</title>
+</head>
+<body>
+
+<img id="Board" style="display:none" src="images/duel/board.png">
+<img id="RedKing" style="display:none" src="images/duel/kingr.png">
+<img id="WhiteKing" style="display:none" src="images/duel/kingw.png">
+<img id="RedD12" style="display:none" src="images/duel/d1r.png">
+<img id="WhiteD12" style="display:none" src="images/duel/d1w.png">
+<img id="RedD13" style="display:none" src="images/duel/d1r.png">
+<img id="WhiteD13" style="display:none" src="images/duel/d1w.png">
+<img id="RedD14" style="display:none" src="images/duel/d1r.png">
+<img id="WhiteD14" style="display:none" src="images/duel/d1w.png">
+<img id="RedD15" style="display:none" src="images/duel/d1r.png">
+<img id="WhiteD15" style="display:none" src="images/duel/d1w.png">
+<img id="RedD21" style="display:none" src="images/duel/d2r.png">
+<img id="WhiteD21" style="display:none" src="images/duel/d2w.png">
+<img id="RedD23" style="display:none" src="images/duel/r2r.png">
+<img id="WhiteD23" style="display:none" src="images/duel/r2w.png">
+<img id="RedD24" style="display:none" src="images/duel/r2r.png">
+<img id="WhiteD24" style="display:none" src="images/duel/r2w.png">
+<img id="RedD26" style="display:none" src="images/duel/d2r.png">
+<img id="WhiteD26" style="display:none" src="images/duel/d2w.png">
+<img id="RedD31" style="display:none" src="images/duel/d3r.png">
+<img id="WhiteD31" style="display:none" src="images/duel/d3w.png">
+<img id="RedD32" style="display:none" src="images/duel/r3r.png">
+<img id="WhiteD32" style="display:none" src="images/duel/r3w.png">
+<img id="RedD35" style="display:none" src="images/duel/r3r.png">
+<img id="WhiteD35" style="display:none" src="images/duel/r3w.png">
+<img id="RedD36" style="display:none" src="images/duel/d3r.png">
+<img id="WhiteD36" style="display:none" src="images/duel/d3w.png">
+<img id="RedD41" style="display:none" src="images/duel/d4r.png">
+<img id="WhiteD41" style="display:none" src="images/duel/d4w.png">
+<img id="RedD42" style="display:none" src="images/duel/d4r.png">
+<img id="WhiteD42" style="display:none" src="images/duel/d4w.png">
+<img id="RedD45" style="display:none" src="images/duel/d4r.png">
+<img id="WhiteD45" style="display:none" src="images/duel/d4w.png">
+<img id="RedD46" style="display:none" src="images/duel/d4r.png">
+<img id="WhiteD46" style="display:none" src="images/duel/d4w.png">
+<img id="RedD51" style="display:none" src="images/duel/d5r.png">
+<img id="WhiteD51" style="display:none" src="images/duel/d5w.png">
+<img id="RedD53" style="display:none" src="images/duel/d5r.png">
+<img id="WhiteD53" style="display:none" src="images/duel/d5w.png">
+<img id="RedD54" style="display:none" src="images/duel/d5r.png">
+<img id="WhiteD54" style="display:none" src="images/duel/d5w.png">
+<img id="RedD56" style="display:none" src="images/duel/d5r.png">
+<img id="WhiteD56" style="display:none" src="images/duel/d5w.png">
+<img id="RedD62" style="display:none" src="images/duel/r6r.png">
+<img id="WhiteD62" style="display:none" src="images/duel/r6w.png">
+<img id="RedD63" style="display:none" src="images/duel/d6r.png">
+<img id="WhiteD63" style="display:none" src="images/duel/d6w.png">
+<img id="RedD64" style="display:none" src="images/duel/d6r.png">
+<img id="WhiteD64" style="display:none" src="images/duel/d6w.png">
+<img id="RedD65" style="display:none" src="images/duel/r6r.png">
+<img id="WhiteD65" style="display:none" src="images/duel/r6w.png">
+
+<table style="margin:auto; font-family:sans-serif; font-size:14px" id="Table">
+<tr><td>
+<a href="javascript:Dagaz.Controller.home()" title="Home" style="display:none" id="home"><img src="images/home.png"/></a>
+<a href="javascript:Dagaz.Controller.undo()" title="PgDown" style="display:none" id="undo"><img src="images/undo.png"/></a>
+<a href="javascript:Dagaz.Controller.redo()" title="PgUp" style="display:none" id="redo"><img src="images/redo.png"/></a>
+<a href="javascript:Dagaz.Controller.resign()">I Resign</a>
+<a href="javascript:Dagaz.Controller.drawOffer()">Offer Draw</a>
+<a href="javascript:Dagaz.Controller.sound()" id="sound">no Sound</a>
+<div align="right" id="timer"/>
+</td></tr>
+<tr style="height:316px; vertical-align:top">
+<td id="CanvasCell" style="width:352px">
+<canvas id="Canvas" width="352" height="316" style="cursor:default">Broken canvas...</canvas>
+</td><td style="width:300px;">
+<div style="height:510px; overflow:auto" id="ScrollDiv">
+<img id="GlyphImage"><p id="HelpText"></p>
+<p id="GameSession"></p>
+</div>
+</td>
+</tr>
+<tr>
+<td>
+<div style="height:100px; width:352px; margin-left:auto; margin-right:auto">
+<table>
+<tr style="display:none" id="PieceInfo">
+<td><img id="PieceInfoImage"></td><td id="PieceInfoText"></td>
+</tr>
+</table>
+</div>
+</td>
+</tr>
+</table>
+
+<script src="vendor/underscore-min.js"></script>
+<script src="vendor/jquery-3.5.1.min.js"></script>
+<script src="common-scripts/dagaz.js"></script>
+<script src="common-scripts/zrf-model.js"></script>
+<script src="common-scripts/zobrist.js"></script>
+<script src="common-scripts/common-setup-v2.js"></script>
+<script src="common-scripts/2d-view-v2.js"></script>
+<script src="common-scripts/move-list-v1.js"></script>
+<script src="common-scripts/sound-manager-v2.js"></script>
+<script src="common-scripts/session-manager.js"></script>
+<script src="scripts/duel-goal.js"></script>
+<script src="scripts/duel-north.js"></script>
+<script src="common-scripts/app-net-v2.js"></script>
+
+</body>
+</html>
