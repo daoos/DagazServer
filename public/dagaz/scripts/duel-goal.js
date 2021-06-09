@@ -24,8 +24,6 @@ Dagaz.Model.checkGoals = function(design, board, player) {
           f++;
       }
   });
-  console.log(fg);
-  console.log(eg);
   if (fg || (e == 0)) return 1;
   if (eg || (f == 0)) return -1;
   return checkGoals(design, board, player);

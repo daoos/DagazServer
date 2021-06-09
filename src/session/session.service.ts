@@ -969,6 +969,13 @@ export class SessionService {
 
     async recovery(user:number, s: Sess): Promise<Sess> {
         try {
+            await this.service.createQueryBuilder("game_moves")
+            .update(game_moves)
+            .set({ 
+                accepted: new Date()
+             })
+            .where("session_id = :sid and accepted is null", {sid: s.id})
+            .execute();
             let x = await this.service.query(
                 `select c.id as game_id, c.name as game, c.filename as filename,
                         c.players_total as players_total, a.last_setup as last_setup,
