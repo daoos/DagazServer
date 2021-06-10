@@ -110,9 +110,12 @@ Dagaz.Model.BuildDesign = function(design) {
     design.addPosition("g1", [0, 1, -1, -9]);
     design.addPosition("h1", [0, 1, -1, -9]);
     design.addPosition("i1", [0, 0, -1, -9]);
+    design.addPosition("X1", [0, 0, 0, 0]);
 
     design.addZone("goal", 1, [4]);
     design.addZone("goal", 2, [67]);
+    design.addZone("home", 1, [63, 64, 65, 66, 68, 69, 70, 71]);
+    design.addZone("home", 2, [0, 1, 2, 3, 5, 6, 7, 8]);
 
     design.addCommand(0, ZRF.FUNCTION,	24);	// from
     design.addCommand(0, ZRF.PARAM,	0);	// $1
@@ -2097,24 +2100,29 @@ Dagaz.Model.BuildDesign = function(design) {
     design.addMove(24, 76, [2], 4);
     design.addMove(24, 75, [1], 4);
 
-    design.setup("Red", "King", 67);
-    design.setup("Red", "D13", 64);
-    design.setup("Red", "D13", 70);
-    design.setup("Red", "D23", 65);
-    design.setup("Red", "D23", 69);
-    design.setup("Red", "D53", 63);
-    design.setup("Red", "D53", 71);
-    design.setup("Red", "D63", 66);
-    design.setup("Red", "D63", 68);
-    design.setup("White", "King", 4);
-    design.setup("White", "D14", 1);
-    design.setup("White", "D14", 7);
-    design.setup("White", "D24", 2);
-    design.setup("White", "D24", 6);
-    design.setup("White", "D54", 0);
-    design.setup("White", "D54", 8);
-    design.setup("White", "D64", 3);
-    design.setup("White", "D64", 5);
+    design.setupSelector(2);
+
+    design.setup("Red", "King", 67, 1);
+    design.setup("Red", "D13", 64, 1);
+    design.setup("Red", "D13", 70, 1);
+    design.setup("Red", "D23", 65, 1);
+    design.setup("Red", "D23", 69, 1);
+    design.setup("Red", "D53", 63, 1);
+    design.setup("Red", "D53", 71, 1);
+    design.setup("Red", "D63", 66, 1);
+    design.setup("Red", "D63", 68, 1);
+    design.setup("White", "King", 4, 1);
+    design.setup("White", "D14", 1, 1);
+    design.setup("White", "D14", 7, 1);
+    design.setup("White", "D24", 2, 1);
+    design.setup("White", "D24", 6, 1);
+    design.setup("White", "D54", 0, 1);
+    design.setup("White", "D54", 8, 1);
+    design.setup("White", "D64", 3, 1);
+    design.setup("White", "D64", 5, 1);
+
+    design.setup("Red", "King", 67, 2);
+    design.setup("White", "King", 4, 2);
 }
 
 Dagaz.View.configure = function(view) {
@@ -2169,6 +2177,58 @@ Dagaz.View.configure = function(view) {
     view.defPiece("WhiteD64", "White D64");
     view.defPiece("RedD65", "Red D65");
     view.defPiece("WhiteD65", "White D65");
+
+    view.defPiece("RedKH",  "Red King Hint");
+    view.defPiece("RedD12H", "Red D12 Hint");
+    view.defPiece("RedD13H", "Red D13 Hint");
+    view.defPiece("RedD14H", "Red D14 Hint");
+    view.defPiece("RedD15H", "Red D15 Hint");
+    view.defPiece("RedD21H", "Red D21 Hint");
+    view.defPiece("RedD23H", "Red D23 Hint");
+    view.defPiece("RedD24H", "Red D24 Hint");
+    view.defPiece("RedD26H", "Red D26 Hint");
+    view.defPiece("RedD31H", "Red D31 Hint");
+    view.defPiece("RedD32H", "Red D32 Hint");
+    view.defPiece("RedD35H", "Red D35 Hint");
+    view.defPiece("RedD36H", "Red D36 Hint");
+    view.defPiece("RedD41H", "Red D41 Hint");
+    view.defPiece("RedD42H", "Red D42 Hint");
+    view.defPiece("RedD45H", "Red D45 Hint");
+    view.defPiece("RedD46H", "Red D46 Hint");
+    view.defPiece("RedD51H", "Red D51 Hint");
+    view.defPiece("RedD53H", "Red D53 Hint");
+    view.defPiece("RedD54H", "Red D54 Hint");
+    view.defPiece("RedD56H", "Red D56 Hint");
+    view.defPiece("RedD62H", "Red D62 Hint");
+    view.defPiece("RedD63H", "Red D63 Hint");
+    view.defPiece("RedD64H", "Red D64 Hint");
+    view.defPiece("RedD65H", "Red D65 Hint");
+
+    view.defPiece("WhiteKH",  "White King Hint");
+    view.defPiece("WhiteD12H", "White D12 Hint");
+    view.defPiece("WhiteD13H", "White D13 Hint");
+    view.defPiece("WhiteD14H", "White D14 Hint");
+    view.defPiece("WhiteD15H", "White D15 Hint");
+    view.defPiece("WhiteD21H", "White D21 Hint");
+    view.defPiece("WhiteD23H", "White D23 Hint");
+    view.defPiece("WhiteD24H", "White D24 Hint");
+    view.defPiece("WhiteD26H", "White D26 Hint");
+    view.defPiece("WhiteD31H", "White D31 Hint");
+    view.defPiece("WhiteD32H", "White D32 Hint");
+    view.defPiece("WhiteD35H", "White D35 Hint");
+    view.defPiece("WhiteD36H", "White D36 Hint");
+    view.defPiece("WhiteD41H", "White D41 Hint");
+    view.defPiece("WhiteD42H", "White D42 Hint");
+    view.defPiece("WhiteD45H", "White D45 Hint");
+    view.defPiece("WhiteD46H", "White D46 Hint");
+    view.defPiece("WhiteD51H", "White D51 Hint");
+    view.defPiece("WhiteD53H", "White D53 Hint");
+    view.defPiece("WhiteD54H", "White D54 Hint");
+    view.defPiece("WhiteD56H", "White D56 Hint");
+    view.defPiece("WhiteD62H", "White D62 Hint");
+    view.defPiece("WhiteD63H", "White D63 Hint");
+    view.defPiece("WhiteD64H", "White D64 Hint");
+    view.defPiece("WhiteD65H", "White D65 Hint");
  
     view.defPosition("a8", 6, 7, 38, 38);
     view.defPosition("b8", 44, 7, 38, 38);
@@ -2242,4 +2302,5 @@ Dagaz.View.configure = function(view) {
     view.defPosition("g1", 234, 273, 38, 38);
     view.defPosition("h1", 272, 273, 38, 38);
     view.defPosition("i1", 310, 273, 38, 38);
+    view.defPosition("X1", 357, 72, 99, 132);
 }

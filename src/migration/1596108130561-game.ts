@@ -240,7 +240,7 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total, is_dice) values(203, 46, 'Backgammon', 'backgammon', 2, 1)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total, is_dice) values(204, 46, 'Hypergammon', 'hypergammon', 2, 1)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(205, 22, 'Cyclic Checkers', 'cyclic-checkers', 2)`);
-        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(206, 37, 'Duel', 'duel', 2)`);
+        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total, max_selector) values(206, 37, 'Duel', 'duel', 2, 2)`);
 
         await queryRunner.query(`insert into game_styles(id, game_id, name, suffix, player_num) values(1, 23, 'European', '', null)`);
         await queryRunner.query(`insert into game_styles(id, game_id, name, suffix, player_num) values(2, 23, 'Chinese', '-kanji', null)`);
@@ -357,6 +357,8 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_setups(id, game_id, variant_id, selector_value, name) values(17, 37, 189, 2, '7x5')`);
         await queryRunner.query(`insert into game_setups(id, game_id, variant_id, selector_value, name) values(18, 37, 189, 3, '5x7')`);
         await queryRunner.query(`insert into game_setups(id, game_id, variant_id, selector_value, name) values(19, 37, 189, 4, '7x7')`);
+        await queryRunner.query(`insert into game_setups(id, game_id, variant_id, selector_value, name) values(20, 37, 206, 1, 'Standard')`);
+        await queryRunner.query(`insert into game_setups(id, game_id, variant_id, selector_value, name) values(21, 37, 206, 2, 'Random')`);
 
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(1, 'doubutsu-shogi', null, 'doubutsu-shogi', 'https://en.wikipedia.org/wiki/D%C5%8Dbutsu_sh%C5%8Dgi', 'Madoka Kitao')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(2, 'atari-go', null, 'atari-go', 'https://en.wikipedia.org/wiki/Go_variants#First_Capture')`);
@@ -852,7 +854,8 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(560, 'backgammon', null, 'backgammon', 'https://bkgm.com/rules.html')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(561, 'hypergammon', null, 'hypergammon', 'https://bkgm.com/variants/HyperBackgammon.html')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, copyright) values(562, 'cyclic-checkers', null, 'russian-checkers-1', 'Victor Bajguzhakov')`);
-        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(563, 'duel', null, 'duel')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(563, 'duel', 1, 'duel-1')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(564, 'duel', 2, 'duel-2')`);
 }
 
     public async down(queryRunner: QueryRunner): Promise<any> {

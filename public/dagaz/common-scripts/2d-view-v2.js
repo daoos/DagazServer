@@ -655,6 +655,9 @@ View2D.prototype.draw = function(canvas) {
       this.drawKo(ctx);
       Dagaz.View.showMarks(this, ctx);
       this.showDrops(ctx);
+      if (Dagaz.View.showPieceHint && (hintedPiece !== null)) {
+          Dagaz.View.showPieceHint(this, ctx, hintedPiece);
+      }
       this.animate();
   }
 }
@@ -665,27 +668,31 @@ View2D.prototype.debug = function(text) {
 }
 
 Dagaz.View.showHint = function(view) {
-  if (Dagaz.Model.showHints) {
-      var positions = view.pointToPositions(mouseX, mouseY);
-      if (!_.isUndefined(positions) && (positions.length > 0)) {
-          var ix  = posToIx(view, positions[0]);
-          if (ix !== null) {
-              var piece = view.piece[view.setup[ix].name];
-              if (hintedPiece !== piece) {
-                  var text = piece.name;
-                  if (piece.help) {
-                      text = piece.help;
-                  }
+  var positions = view.pointToPositions(mouseX, mouseY);
+  if (!_.isUndefined(positions) && (positions.length > 0)) {
+      var ix  = posToIx(view, positions[0]);
+      if (ix !== null) {
+          var piece = view.piece[view.setup[ix].name];
+          if (hintedPiece !== piece) {
+              var text = piece.name;
+              if (piece.help) {
+                  text = piece.help;
+              }
+              if (Dagaz.Model.showHints) {
                   PieceInfoImage.src = piece.h.src;
                   PieceInfoText.innerHTML = text;
                   PieceInfo.style.display = "inline";
-                  hintedPiece = piece;
               }
+              hintedPiece = piece;
+              view.invalidate();
           }
-      } else {
-          PieceInfo.style.display = "none";
-          hintedPiece = null;
       }
+  } else {
+      if (Dagaz.Model.showHints) {
+          PieceInfo.style.display = "none";
+      }
+      hintedPiece = null;
+      view.invalidate();
   }
 }
 
