@@ -108,6 +108,7 @@ Dagaz.Model.BuildDesign = function(design) {
     design.addPosition("e1", [-1, 1, 0, -7]);
     design.addPosition("f1", [-1, 1, 0, -7]);
     design.addPosition("g1", [-1, 0, 0, -7]);
+    design.addPosition("X1", [0, 0, 0, 0]);
 
     design.addZone("trap", 1, [2, 10, 4]);
     design.addZone("trap", 2, [58, 52, 60]);
@@ -281,6 +282,23 @@ Dagaz.View.configure = function(view) {
     view.defPiece("GreenLion", "Green Lion");
     view.defPiece("RedElephant", "Red Elephant");
     view.defPiece("GreenElephant", "Green Elephant");
+
+    view.defPiece("RedRatH", "Red Rat Hint");
+    view.defPiece("GreenRatH", "Green Rat Hint");
+    view.defPiece("RedCatH", "Red Cat Hint");
+    view.defPiece("GreenCatH", "Green Cat Hint");
+    view.defPiece("RedDogH", "Red Dog Hint");
+    view.defPiece("GreenDogH", "Green Dog Hint");
+    view.defPiece("RedFoxH", "Red Fox Hint");
+    view.defPiece("GreenFoxH", "Green Fox Hint");
+    view.defPiece("RedPantherH", "Red Panther Hint");
+    view.defPiece("GreenPantherH", "Green Panther Hint");
+    view.defPiece("RedTigerH", "Red Tiger Hint");
+    view.defPiece("GreenTigerH", "Green Tiger Hint");
+    view.defPiece("RedLionH", "Red Lion Hint");
+    view.defPiece("GreenLionH", "Green Lion Hint");
+    view.defPiece("RedElephantH", "Red Elephant Hint");
+    view.defPiece("GreenElephantH", "Green Elephant Hint");
  
     view.defPosition("a9", 400, 531, 66, 66);
     view.defPosition("b9", 334, 531, 66, 66);
@@ -345,4 +363,5 @@ Dagaz.View.configure = function(view) {
     view.defPosition("e1", 136, 3, 66, 66);
     view.defPosition("f1", 70, 3, 66, 66);
     view.defPosition("g1", 4, 3, 66, 66);
+    view.defPosition("X1", 0, 600, 470, 660);
 }

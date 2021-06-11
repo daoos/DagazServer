@@ -854,8 +854,8 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(560, 'backgammon', null, 'backgammon', 'https://bkgm.com/rules.html')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(561, 'hypergammon', null, 'hypergammon', 'https://bkgm.com/variants/HyperBackgammon.html')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, copyright) values(562, 'cyclic-checkers', null, 'russian-checkers-1', 'Victor Bajguzhakov')`);
-        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(563, 'duel', 1, 'duel-1')`);
-        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(564, 'duel', 2, 'duel-2')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, copyright) values(563, 'duel', 1, 'duel-1', 'Parker Brothers')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, copyright) values(564, 'duel', 2, 'duel-2', 'Parker Brothers')`);
 }
 
     public async down(queryRunner: QueryRunner): Promise<any> {
