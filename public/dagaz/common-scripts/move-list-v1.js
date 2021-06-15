@@ -102,6 +102,21 @@ MoveList.prototype.getStarts = function() {
   return result;
 }
 
+MoveList.prototype.isUniqDest = function(pos) {
+  var res = [];
+  _.each(this.moves, function(move) {
+      _.each(move.actions, function(a) {
+         if (a[3] - 1 != this.level) return;
+         if (a[0] === null) return;
+         if (a[1] === null) return;
+         if (a[1][0] != pos) return;
+         if (_.indexOf(res, +a[0][0]) >= 0) return;
+         res.push(+a[0][0]);
+      }, this);
+  }, this);
+  return res.length == 1;
+}
+
 MoveList.prototype.getStops = function() {
   if (this.stops !== null) {
       return this.stops;
@@ -140,10 +155,12 @@ MoveList.prototype.getStops = function() {
       }, this);
       positions = _.countBy(positions, _.identity);
       _.each(_.keys(positions), function(pos) {
-            if (positions[pos] == 1) {
+            if ((positions[pos] == 1) || 
+                (Dagaz.Model.smartTo && (positions[pos] > 1) && (this.level > 0)) ||
+                (Dagaz.Model.smartTo && (positions[pos] > 1) && this.isUniqDest(+pos))) {
                 result.push(+pos);
             }
-      });
+      }, this);
   }
   result = _.uniq(result);
   this.stops = result;

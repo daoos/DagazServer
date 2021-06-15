@@ -23,7 +23,7 @@ ZRF = {
 
 Dagaz.Model.BuildDesign = function(design) {
     design.checkVersion("z2j", "2");
-    design.checkVersion("smart-moves", "false");
+    design.checkVersion("smart-moves", "to");
     design.checkVersion("pass-partial", "false");
     design.checkVersion("detect-loops", "true");
 
