@@ -20,14 +20,17 @@ Dagaz.Model.CheckInvariants = function(board) {
   var f = true;
   _.each(board.moves, function(move) {
       var c = [];
+      var g = true;
       _.each(move.actions, function(a) {
           if (a[0] === null) return;
           if (a[1] !== null) return;
           var piece = board.getPiece(a[0][0]);
           if (piece === null) return;
           if (piece.player != board.player) {
-              f = false;
+              if (g) f = false;
               return;
+          } else {
+              g = false;
           }
           c.push(a);
       });
