@@ -9,16 +9,28 @@ Dagaz.Model.checkVersion = function(design, name, value) {
 }
 
 var isEq = function(a, b) {
+  if ((a[1] !== null) || (b[1] !== null)) return true;
   if ((a[0] !== null) && (b[0] === null)) return false;
   if ((a[0] === null) && (b[0] !== null)) return false;
   if ((a[0] !== null) && (a[0][0] != b[0][0])) return false;
-  if ((a[1] !== null) && (b[1] === null)) return false;
-  if ((a[1] === null) && (b[1] !== null)) return false;
-  if ((a[1] !== null) && (a[1][0] != b[1][0])) return false;
   return true;
 }
 
-var isPrefix = function(board, prefix, move, pn) {
+var isPrefix = function(board, prefix, move) {
+  if (prefix.actions.length > move.actions.length) return false;
+  for (var i = 0; i < prefix.actions.length; i++) {
+      if (!isEq(prefix.actions[i], move.actions[i])) return false;
+      if (move.actions[i][1] === null) {
+          if (move.actions[i][0] === null) return false;
+          var piece = board.getPiece(move.actions[i][0][0]);
+          if (piece === null) return false;
+          if (piece.player == board.player) return false;
+      }
+  }
+  return true;
+}
+
+var isBadMove = function(board, prefix, move, pn) {
   if (prefix.actions.length < move.actions.length) return false;
   var i = 0;
   for (; i < prefix.actions.length; i++) {
@@ -49,7 +61,8 @@ Dagaz.Model.CheckInvariants = function(board) {
       });
       if (pn == 0) return;
       _.each(board.moves, function(prefix) {
-          if (isPrefix(board, prefix, move, pn)) move.failed = true;
+          if (isBadMove(board, prefix, move, pn)) move.failed = true;
+          if (isPrefix(board, prefix, move)) prefix.failed = true;
       });
   });
   CheckInvariants(board);
