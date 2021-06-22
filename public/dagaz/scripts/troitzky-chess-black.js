@@ -21,6 +21,13 @@ ZRF = {
     VERIFY:        20
 };
 
+Dagaz.Controller.addSound(10, "sounds/pawn.wav", true);
+Dagaz.Controller.addSound(11, "sounds/knight.wav", true);
+Dagaz.Controller.addSound(12, "sounds/bishop.wav", true);
+Dagaz.Controller.addSound(13, "sounds/queen.wav", true);
+Dagaz.Controller.addSound(14, "sounds/rook.wav", true);
+Dagaz.Controller.addSound(15, "sounds/castle.wav", true);
+
 Dagaz.Model.BuildDesign = function(design) {
     design.checkVersion("z2j", "2");
     design.checkVersion("animate-captures", "false");
@@ -283,56 +290,56 @@ Dagaz.Model.BuildDesign = function(design) {
     design.addCommand(7, ZRF.FUNCTION,	28);	// end
 
     design.addPiece("Pawn", 0, 100);
-    design.addMove(0, 0, [5], 0);
-    design.addMove(0, 1, [5, 5], 0);
-    design.addMove(0, 2, [4], 0);
-    design.addMove(0, 2, [15], 0);
-    design.addMove(0, 3, [3, 5, 5], 0);
-    design.addMove(0, 3, [14, 5, 5], 0);
+    design.addMove(0, 0, [5], 0, 10);
+    design.addMove(0, 1, [5, 5], 0, 10);
+    design.addMove(0, 2, [4], 0, 10);
+    design.addMove(0, 2, [15], 0, 10);
+    design.addMove(0, 3, [3, 5, 5], 0, 10);
+    design.addMove(0, 3, [14, 5, 5], 0, 10);
 
     design.addPiece("Rook", 1, 500);
-    design.addMove(1, 4, [5, 5], 0);
-    design.addMove(1, 4, [11, 11], 0);
-    design.addMove(1, 4, [14, 14], 0);
-    design.addMove(1, 4, [3, 3], 0);
+    design.addMove(1, 4, [5, 5], 0, 11);
+    design.addMove(1, 4, [11, 11], 0, 11);
+    design.addMove(1, 4, [14, 14], 0, 11);
+    design.addMove(1, 4, [3, 3], 0, 11);
 
     design.addPiece("Knight", 2, 320);
-    design.addMove(2, 5, [1], 0);
-    design.addMove(2, 5, [12], 0);
-    design.addMove(2, 5, [2], 0);
-    design.addMove(2, 5, [13], 0);
-    design.addMove(2, 5, [6], 0);
-    design.addMove(2, 5, [9], 0);
-    design.addMove(2, 5, [7], 0);
-    design.addMove(2, 5, [10], 0);
+    design.addMove(2, 5, [1], 0, 12);
+    design.addMove(2, 5, [12], 0, 12);
+    design.addMove(2, 5, [2], 0, 12);
+    design.addMove(2, 5, [13], 0, 12);
+    design.addMove(2, 5, [6], 0, 12);
+    design.addMove(2, 5, [9], 0, 12);
+    design.addMove(2, 5, [7], 0, 12);
+    design.addMove(2, 5, [10], 0, 12);
 
     design.addPiece("Bishop", 3, 330);
-    design.addMove(3, 4, [4, 4], 0);
-    design.addMove(3, 4, [0, 0], 0);
-    design.addMove(3, 4, [15, 15], 0);
-    design.addMove(3, 4, [8, 8], 0);
+    design.addMove(3, 4, [4, 4], 0, 13);
+    design.addMove(3, 4, [0, 0], 0, 13);
+    design.addMove(3, 4, [15, 15], 0, 13);
+    design.addMove(3, 4, [8, 8], 0, 13);
 
     design.addPiece("Queen", 4, 900);
-    design.addMove(4, 4, [5, 5], 0);
-    design.addMove(4, 4, [11, 11], 0);
-    design.addMove(4, 4, [14, 14], 0);
-    design.addMove(4, 4, [3, 3], 0);
-    design.addMove(4, 4, [4, 4], 0);
-    design.addMove(4, 4, [0, 0], 0);
-    design.addMove(4, 4, [15, 15], 0);
-    design.addMove(4, 4, [8, 8], 0);
+    design.addMove(4, 4, [5, 5], 0, 14);
+    design.addMove(4, 4, [11, 11], 0, 14);
+    design.addMove(4, 4, [14, 14], 0, 14);
+    design.addMove(4, 4, [3, 3], 0, 14);
+    design.addMove(4, 4, [4, 4], 0, 14);
+    design.addMove(4, 4, [0, 0], 0, 14);
+    design.addMove(4, 4, [15, 15], 0, 14);
+    design.addMove(4, 4, [8, 8], 0, 14);
 
     design.addPiece("King", 5, 20000);
-    design.addMove(5, 5, [5], 0);
-    design.addMove(5, 5, [11], 0);
-    design.addMove(5, 5, [14], 0);
-    design.addMove(5, 5, [3], 0);
-    design.addMove(5, 5, [4], 0);
-    design.addMove(5, 5, [0], 0);
-    design.addMove(5, 5, [15], 0);
-    design.addMove(5, 5, [8], 0);
-    design.addMove(5, 6, [5, 3, 3], 1);
-    design.addMove(5, 7, [5, 14, 14, 14], 1);
+    design.addMove(5, 5, [5], 0, 15);
+    design.addMove(5, 5, [11], 0, 15);
+    design.addMove(5, 5, [14], 0, 15);
+    design.addMove(5, 5, [3], 0, 15);
+    design.addMove(5, 5, [4], 0, 15);
+    design.addMove(5, 5, [0], 0, 15);
+    design.addMove(5, 5, [15], 0, 15);
+    design.addMove(5, 5, [8], 0, 15);
+    design.addMove(5, 6, [5, 3, 3], 1, 15);
+    design.addMove(5, 7, [5, 14, 14, 14], 1, 15);
 
     design.setupSelector(3);
 

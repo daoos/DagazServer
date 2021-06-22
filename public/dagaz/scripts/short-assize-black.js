@@ -22,6 +22,13 @@ ZRF = {
     VERIFY:        20
 };
 
+Dagaz.Controller.addSound(10, "sounds/pawn.wav", true);
+Dagaz.Controller.addSound(11, "sounds/knight.wav", true);
+Dagaz.Controller.addSound(12, "sounds/bishop.wav", true);
+Dagaz.Controller.addSound(13, "sounds/queen.wav", true);
+Dagaz.Controller.addSound(14, "sounds/rook.wav", true);
+Dagaz.Controller.addSound(15, "sounds/castle.wav", true);
+
 Dagaz.Model.BuildDesign = function(design) {
     design.checkVersion("z2j", "2");
     design.checkVersion("animate-drops", "false");
@@ -233,60 +240,60 @@ Dagaz.Model.BuildDesign = function(design) {
     design.addPriority(1);			// normal-type
 
     design.addPiece("Pawn", 0, 100);
-    design.addMove(0, 0, [4], 1);
-    design.addMove(0, 1, [7], 1);
-    design.addMove(0, 1, [3], 1);
+    design.addMove(0, 0, [4], 1, 10);
+    design.addMove(0, 1, [7], 1, 10);
+    design.addMove(0, 1, [3], 1, 10);
 
     design.addPiece("Rook", 1, 500);
-    design.addDrop(1, 7, [], 0);
-    design.addMove(1, 2, [4, 4], 1);
-    design.addMove(1, 2, [2, 2], 1);
-    design.addMove(1, 2, [0, 0], 1);
-    design.addMove(1, 2, [1, 1], 1);
+    design.addDrop(1, 7, [], 0, 11);
+    design.addMove(1, 2, [4, 4], 1, 11);
+    design.addMove(1, 2, [2, 2], 1, 11);
+    design.addMove(1, 2, [0, 0], 1, 11);
+    design.addMove(1, 2, [1, 1], 1, 11);
 
     design.addPiece("Knight", 2, 320);
-    design.addDrop(2, 7, [], 0);
-    design.addMove(2, 3, [4, 7], 1);
-    design.addMove(2, 3, [4, 3], 1);
-    design.addMove(2, 3, [2, 6], 1);
-    design.addMove(2, 3, [2, 5], 1);
-    design.addMove(2, 3, [0, 7], 1);
-    design.addMove(2, 3, [0, 6], 1);
-    design.addMove(2, 3, [1, 3], 1);
-    design.addMove(2, 3, [1, 5], 1);
+    design.addDrop(2, 7, [], 0, 12);
+    design.addMove(2, 3, [4, 7], 1, 12);
+    design.addMove(2, 3, [4, 3], 1, 12);
+    design.addMove(2, 3, [2, 6], 1, 12);
+    design.addMove(2, 3, [2, 5], 1, 12);
+    design.addMove(2, 3, [0, 7], 1, 12);
+    design.addMove(2, 3, [0, 6], 1, 12);
+    design.addMove(2, 3, [1, 3], 1, 12);
+    design.addMove(2, 3, [1, 5], 1, 12);
 
     design.addPiece("Bishop", 3, 330);
-    design.addDrop(3, 7, [], 0);
-    design.addMove(3, 2, [7, 7], 1);
-    design.addMove(3, 2, [6, 6], 1);
-    design.addMove(3, 2, [3, 3], 1);
-    design.addMove(3, 2, [5, 5], 1);
+    design.addDrop(3, 7, [], 0, 13);
+    design.addMove(3, 2, [7, 7], 1, 13);
+    design.addMove(3, 2, [6, 6], 1, 13);
+    design.addMove(3, 2, [3, 3], 1, 13);
+    design.addMove(3, 2, [5, 5], 1, 13);
 
     design.addPiece("Queen", 4, 900);
-    design.addMove(4, 2, [4, 4], 1);
-    design.addMove(4, 2, [2, 2], 1);
-    design.addMove(4, 2, [0, 0], 1);
-    design.addMove(4, 2, [1, 1], 1);
-    design.addMove(4, 2, [7, 7], 1);
-    design.addMove(4, 2, [6, 6], 1);
-    design.addMove(4, 2, [3, 3], 1);
-    design.addMove(4, 2, [5, 5], 1);
+    design.addMove(4, 2, [4, 4], 1, 14);
+    design.addMove(4, 2, [2, 2], 1, 14);
+    design.addMove(4, 2, [0, 0], 1, 14);
+    design.addMove(4, 2, [1, 1], 1, 14);
+    design.addMove(4, 2, [7, 7], 1, 14);
+    design.addMove(4, 2, [6, 6], 1, 14);
+    design.addMove(4, 2, [3, 3], 1, 14);
+    design.addMove(4, 2, [5, 5], 1, 14);
 
     design.addPiece("King", 5, 20000);
-    design.addDrop(5, 7, [], 0);
-    design.addMove(5, 4, [4], 1);
-    design.addMove(5, 4, [2], 1);
-    design.addMove(5, 4, [0], 1);
-    design.addMove(5, 4, [1], 1);
-    design.addMove(5, 4, [7], 1);
-    design.addMove(5, 4, [6], 1);
-    design.addMove(5, 4, [3], 1);
-    design.addMove(5, 4, [5], 1);
+    design.addDrop(5, 7, [], 0, 15);
+    design.addMove(5, 4, [4], 1, 15);
+    design.addMove(5, 4, [2], 1, 15);
+    design.addMove(5, 4, [0], 1, 15);
+    design.addMove(5, 4, [1], 1, 15);
+    design.addMove(5, 4, [7], 1, 15);
+    design.addMove(5, 4, [6], 1, 15);
+    design.addMove(5, 4, [3], 1, 15);
+    design.addMove(5, 4, [5], 1, 15);
 
     design.addPiece("PQ", 6, 1000);
-    design.addMove(6, 5, [4], 1);
-    design.addMove(6, 6, [7], 1);
-    design.addMove(6, 6, [3], 1);
+    design.addMove(6, 5, [4], 1, 10);
+    design.addMove(6, 6, [7], 1, 10);
+    design.addMove(6, 6, [3], 1, 10);
 
     design.setup("White", "Pawn", 40);
     design.setup("White", "Pawn", 41);

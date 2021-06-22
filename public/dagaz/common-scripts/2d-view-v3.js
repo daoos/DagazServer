@@ -795,8 +795,8 @@ Dagaz.View.showHint = function(view) {
 
 var mouseUpdate = function(event) {
   var canvasRect = Canvas.getBoundingClientRect();
-  mouseX = event.clientX - canvasRect.left;
-  mouseY = event.clientY - canvasRect.top;
+  mouseX = (event.clientX - canvasRect.left) / (canvasRect.width / Canvas.width);
+  mouseY = (event.clientY - canvasRect.top) / (canvasRect.height / Canvas.height);
 }
 
 var mouseMove = function(event) {

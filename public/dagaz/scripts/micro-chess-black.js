@@ -24,6 +24,12 @@ ZRF = {
     VERIFY:        20
 };
 
+Dagaz.Controller.addSound(10, "sounds/pawn.wav", true);
+Dagaz.Controller.addSound(11, "sounds/knight.wav", true);
+Dagaz.Controller.addSound(12, "sounds/bishop.wav", true);
+Dagaz.Controller.addSound(13, "sounds/queen.wav", true);
+Dagaz.Controller.addSound(14, "sounds/rook.wav", true);
+
 Dagaz.Model.BuildDesign = function(design) {
     design.checkVersion("z2j", "2");
     design.checkVersion("animate-captures", "false");
@@ -164,42 +170,42 @@ Dagaz.Model.BuildDesign = function(design) {
     design.addCommand(5, ZRF.FUNCTION,	28);	// end
 
     design.addPiece("Pawn", 0, 100);
-    design.addMove(0, 0, [4], 0);
-    design.addMove(0, 1, [7], 0);
-    design.addMove(0, 1, [3], 0);
+    design.addMove(0, 0, [4], 0, 10);
+    design.addMove(0, 1, [7], 0, 10);
+    design.addMove(0, 1, [3], 0, 10);
 
     design.addPiece("King", 1, 20000);
-    design.addMove(1, 2, [4], 0);
-    design.addMove(1, 2, [2], 0);
-    design.addMove(1, 2, [0], 0);
-    design.addMove(1, 2, [1], 0);
-    design.addMove(1, 2, [7], 0);
-    design.addMove(1, 2, [6], 0);
-    design.addMove(1, 2, [3], 0);
-    design.addMove(1, 2, [5], 0);
-    design.addMove(1, 3, [0, 0, 0, 1, 1], 0);
+    design.addMove(1, 2, [4], 0, 11);
+    design.addMove(1, 2, [2], 0, 11);
+    design.addMove(1, 2, [0], 0, 11);
+    design.addMove(1, 2, [1], 0, 11);
+    design.addMove(1, 2, [7], 0, 11);
+    design.addMove(1, 2, [6], 0, 11);
+    design.addMove(1, 2, [3], 0, 11);
+    design.addMove(1, 2, [5], 0, 11);
+    design.addMove(1, 3, [0, 0, 0, 1, 1], 0, 11);
 
     design.addPiece("Rook", 2, 500);
-    design.addMove(2, 4, [4, 4], 0);
-    design.addMove(2, 4, [2, 2], 0);
-    design.addMove(2, 4, [0, 0], 0);
-    design.addMove(2, 4, [1, 1], 0);
+    design.addMove(2, 4, [4, 4], 0, 12);
+    design.addMove(2, 4, [2, 2], 0, 12);
+    design.addMove(2, 4, [0, 0], 0, 12);
+    design.addMove(2, 4, [1, 1], 0, 12);
 
     design.addPiece("Knight", 3, 330);
-    design.addMove(3, 5, [4, 7], 0);
-    design.addMove(3, 5, [4, 3], 0);
-    design.addMove(3, 5, [2, 6], 0);
-    design.addMove(3, 5, [2, 5], 0);
-    design.addMove(3, 5, [0, 7], 0);
-    design.addMove(3, 5, [0, 6], 0);
-    design.addMove(3, 5, [1, 3], 0);
-    design.addMove(3, 5, [1, 5], 0);
+    design.addMove(3, 5, [4, 7], 0, 13);
+    design.addMove(3, 5, [4, 3], 0, 13);
+    design.addMove(3, 5, [2, 6], 0, 13);
+    design.addMove(3, 5, [2, 5], 0, 13);
+    design.addMove(3, 5, [0, 7], 0, 13);
+    design.addMove(3, 5, [0, 6], 0, 13);
+    design.addMove(3, 5, [1, 3], 0, 13);
+    design.addMove(3, 5, [1, 5], 0, 13);
 
     design.addPiece("Bishop", 4, 320);
-    design.addMove(4, 4, [7, 7], 0);
-    design.addMove(4, 4, [6, 6], 0);
-    design.addMove(4, 4, [3, 3], 0);
-    design.addMove(4, 4, [5, 5], 0);
+    design.addMove(4, 4, [7, 7], 0, 14);
+    design.addMove(4, 4, [6, 6], 0, 14);
+    design.addMove(4, 4, [3, 3], 0, 14);
+    design.addMove(4, 4, [5, 5], 0, 14);
 
     design.setupSelector(2);
 

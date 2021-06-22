@@ -21,9 +21,12 @@ ZRF = {
     VERIFY:        20
 };
 
-if (!_.isUndefined(Dagaz.Controller.addSound)) {
-    Dagaz.Controller.addSound(10, "sounds/dice.wav", true);
-}
+Dagaz.Controller.addSound(10, "sounds/pawn.wav", true);
+Dagaz.Controller.addSound(11, "sounds/knight.wav", true);
+Dagaz.Controller.addSound(12, "sounds/bishop.wav", true);
+Dagaz.Controller.addSound(13, "sounds/queen.wav", true);
+Dagaz.Controller.addSound(14, "sounds/rook.wav", true);
+Dagaz.Controller.addSound(20, "sounds/dice.wav", true);
 
 Dagaz.Model.BuildDesign = function(design) {
     design.checkVersion("z2j", "2");
@@ -237,57 +240,57 @@ Dagaz.Model.BuildDesign = function(design) {
     design.addCommand(6, ZRF.FUNCTION,	28);	// end
 
     design.addPiece("D2", 0, 2);
-    design.addDrop(0, 0, [], 0, 10);
+    design.addDrop(0, 0, [], 0, 20);
     design.addMove(0, 6, [], 1);
 
     design.addPiece("D3", 1, 3);
-    design.addDrop(1, 0, [], 0, 10);
+    design.addDrop(1, 0, [], 0, 20);
     design.addMove(1, 6, [], 1);
 
     design.addPiece("D4", 2, 4);
-    design.addDrop(2, 0, [], 0, 10);
+    design.addDrop(2, 0, [], 0, 20);
     design.addMove(2, 6, [], 1);
 
     design.addPiece("D5", 3, 5);
-    design.addDrop(3, 0, [], 0, 10);
+    design.addDrop(3, 0, [], 0, 20);
     design.addMove(3, 6, [], 1);
 
     design.addPiece("Raja", 4, 5);
-    design.addMove(4, 1, [7], 5);
-    design.addMove(4, 1, [1], 5);
-    design.addMove(4, 1, [4], 5);
-    design.addMove(4, 1, [3], 5);
-    design.addMove(4, 1, [6], 5);
-    design.addMove(4, 1, [2], 5);
-    design.addMove(4, 1, [5], 5);
-    design.addMove(4, 1, [0], 5);
+    design.addMove(4, 1, [7], 5, 10);
+    design.addMove(4, 1, [1], 5, 10);
+    design.addMove(4, 1, [4], 5, 10);
+    design.addMove(4, 1, [3], 5, 10);
+    design.addMove(4, 1, [6], 5, 10);
+    design.addMove(4, 1, [2], 5, 10);
+    design.addMove(4, 1, [5], 5, 10);
+    design.addMove(4, 1, [0], 5, 10);
 
     design.addPiece("Bhata", 5, 1);
-    design.addMove(5, 2, [7], 5);
-    design.addMove(5, 3, [6], 5);
-    design.addMove(5, 3, [5], 5);
+    design.addMove(5, 2, [7], 5, 11);
+    design.addMove(5, 3, [6], 5, 11);
+    design.addMove(5, 3, [5], 5, 11);
 
     design.addPiece("Gaja", 6, 2);
-    design.addMove(6, 4, [6, 6], 2);
-    design.addMove(6, 4, [5, 5], 2);
-    design.addMove(6, 4, [2, 2], 2);
-    design.addMove(6, 4, [0, 0], 2);
+    design.addMove(6, 4, [6, 6], 2, 12);
+    design.addMove(6, 4, [5, 5], 2, 12);
+    design.addMove(6, 4, [2, 2], 2, 12);
+    design.addMove(6, 4, [0, 0], 2, 12);
 
     design.addPiece("Ashva", 7, 3);
-    design.addMove(7, 4, [7, 6], 3);
-    design.addMove(7, 4, [7, 5], 3);
-    design.addMove(7, 4, [1, 2], 3);
-    design.addMove(7, 4, [1, 0], 3);
-    design.addMove(7, 4, [4, 6], 3);
-    design.addMove(7, 4, [4, 2], 3);
-    design.addMove(7, 4, [3, 5], 3);
-    design.addMove(7, 4, [3, 0], 3);
+    design.addMove(7, 4, [7, 6], 3, 13);
+    design.addMove(7, 4, [7, 5], 3, 13);
+    design.addMove(7, 4, [1, 2], 3, 13);
+    design.addMove(7, 4, [1, 0], 3, 13);
+    design.addMove(7, 4, [4, 6], 3, 13);
+    design.addMove(7, 4, [4, 2], 3, 13);
+    design.addMove(7, 4, [3, 5], 3, 13);
+    design.addMove(7, 4, [3, 0], 3, 13);
 
     design.addPiece("Ratha", 8, 4);
-    design.addMove(8, 5, [7, 7], 4);
-    design.addMove(8, 5, [1, 1], 4);
-    design.addMove(8, 5, [4, 4], 4);
-    design.addMove(8, 5, [3, 3], 4);
+    design.addMove(8, 5, [7, 7], 4, 14);
+    design.addMove(8, 5, [1, 1], 4, 14);
+    design.addMove(8, 5, [4, 4], 4, 14);
+    design.addMove(8, 5, [3, 3], 4, 14);
 
     design.addPiece("RajaCaptured", 9, 1000);
 
