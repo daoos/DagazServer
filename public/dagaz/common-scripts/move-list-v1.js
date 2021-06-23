@@ -156,7 +156,7 @@ MoveList.prototype.getStops = function() {
       positions = _.countBy(positions, _.identity);
       _.each(_.keys(positions), function(pos) {
             if ((positions[pos] == 1) || 
-                (Dagaz.Model.smartTo && (positions[pos] > 1) && (this.level > 0)) ||
+//              (Dagaz.Model.smartTo && (positions[pos] > 1) && (this.level > 0)) ||
                 (Dagaz.Model.smartTo && (positions[pos] > 1) && this.isUniqDest(+pos))) {
                 result.push(+pos);
             }
