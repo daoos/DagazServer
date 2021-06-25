@@ -155,17 +155,25 @@ export class BonusService {
             if (!r) {
                 return null;
             }
+            if (x.name) {
+                r.name = x.name;
+            }
             if (x.email) {
                 r.email = x.email;
             }
             if (x.phone) {
                 r.phone = x.phone;
             }
+            if (x.service) {
+                r.service = x.service;
+            }
             await this.service.createQueryBuilder("bonuses")
             .update(bonuses)
             .set({ 
+                name: r.name,
                 phone: r.phone,
-                email: r.email
+                email: r.email,
+                serv: r.service
              })
             .where("id = :id", {id: r.id})
             .execute();

@@ -42,4 +42,10 @@ export class bonuses {
 
     @Column({ type: "text", nullable: true })
     email: string;
+
+    @Column({ type: "text", nullable: true })
+    name: string;
+
+    @Column({ type: "text", nullable: true })
+    serv: string;
 }

@@ -2,7 +2,35 @@
 <head>
 <META http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="css/%%style%%"/>
+    <link rel="stylesheet" href="css/style-7eb2a9d6.css"/>
+    <style>
+        label.required:after
+        {
+            color: rgb(184, 0, 0);
+            content: " *";
+        }
+        .submit_button {
+            background: #1976d2;
+            color: #fff;
+        }
+        .deadline {
+            font-size: 1.2rem;
+            font-weight: 500;
+            color: rgb(255, 52, 52);
+
+        }
+        .less_deadline {
+            font-size: 1.1rem;
+            font-weight: 500;
+
+        }
+        /*label.plus7 {
+            position: absolute;
+            top: 20px;
+            font: 400 13.3333px Arial;
+            color: -internal-light-dark(black, white);
+        }*/
+    </style>
 <title>Бонус</title>
 </head>
 <body>
@@ -26,22 +54,48 @@
             <h2>Вы победили!</h2>
             <div class="bonus">Ваш бонус: <span class="bonus-self" id="bonusplace">XXXXXXXXXXXXXXXX</span></div>
             <br/><br/>
+            <div class="form-group" id="nameField">
+                <label class="required">Имя</label>
+                <input required class="form-control" id="form_name" onkeyup="checkvalid('name',this)"/>
+                <div class="error">
+                    Введите корректное имя
+                </div>
+            </div>
             <div class="form-group" id="emailField">
-                <label>E-Mail</label>
-                <input class="form-control" id="form_email" onkeyup="checkvalid('email',this)" onblur="onBlur('email')"/>
+                <label class="required">E-Mail</label>
+                <input required class="form-control" id="form_email" onkeyup="checkvalid('email',this)" onblur="onBlur('email')"/>
                 <div class="error">
                     Введите корректный E-Mail
                 </div>
             </div>
             <div class="form-group" id="phoneField">
-                <label>Телефон</label>
-                <input class="form-control" id="form_email" onkeyup="checkvalid('phone',this)" onblur="onBlur('phone')"/>
+                <label class="required">Телефон</label>
+                <input placeholder="+7" value="+7" required class="form-control" id="form_email" onkeyup="checkvalid('phone',this)" onblur="onBlur('phone')"/>
                 <div class="error">
-                    Введите корректный Телефон
+                    Введите корректный Телефон +7(___)-___-__-__
                 </div>
             </div>
+            <div class="form-group" id="serviceField">
+                <label class="required">Какая услуга вас интересует?</label>
+                <input required class="form-control" id="form_email" onkeyup="checkvalid('service',this)"/>
+            </div>
+            <div class="succesOrNot"></div>
+            <a href="#" style="margin-top: 15px;" class="btn btn-center btn-gray submit_button" onclick="sendAndShow()"><center>Отправить</center></a>
             <a href="#" class="btn btn-center" id="replayButton" onclick="playAgain()">Сыграем ещё?</a>
             <a href="#" class="btn btn-center btn-gray" onclick="backToIndex()">Вернуться к списку игр</a>
+
+            <div class="under-body">
+                <a href="privacy.html">Политика конфиденциальности</a>
+            </div>
+
+            <div class="description">
+                <p>Поля, отмеченные <span style="color: rgb(184, 0, 0);">*</span> , обязательны для заполнения.</p>
+                <p><span class="deadline">Срок действия Бонус-кода - 1 месяц!</span></p>
+                <p>Все данные будут переданы менеджеру, для учёта бонус-кода и более удобной коммуникации с Вами.</p>
+                <p>На указанную Вами электронную почту, продублируются заполненные данные и бонус-код.</p>
+                <p>Менеджер свяжется с Вами, по указанному номеру телефона.</p>
+                <p><span class="less_deadline">Проверяйте правильность заполненных Вами данных.</span></p>
+            </div>
         </div>
     </div>
 </body>
@@ -55,7 +109,7 @@
         }
         document.getElementById("bonusplace").innerText = params['bonus'] ? params['bonus'] : '-'; 
         (function(){
-            var names = JSON.parse('%%bonusNames%%');
+            var names = JSON.parse('{"bagh-chal":"Тигры и козы","damone":"Italian Damone","filler":"Filler","foxnguse":"Лиса и гуси","french-military":"Французская военная игра","horn-chess":"Китайские роговые шахматы","kharbaga":"Кабарга","light-off":"Туши свет!","magyar-dama":"Мадьярские шашки","maharadja":"Магараджа","netwalk":"Сеть","shisima":"Shisima","uxo":"Тактические крестики нолики"}');
             document.getElementById("gameName").innerHTML = (names[params['gameid'] ? params['gameid'] : 'filler'])+'<span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>';
 
             gameId = params['gameid'] ? ( names[params['gameid']] ? params['gameid'] : null) : null;
@@ -63,16 +117,21 @@
         })();
 
         var valids = {
+            service:false,
+            name:false,
             email:false,
             phone:false
         };
 
         var blured = {
+            name:false,
             email:false,
             phone:false
         };
 
         var fields = {
+            service:'',
+            name:'',
             email:'',
             phone:''
         };
@@ -92,39 +151,60 @@
                 redirect: 'follow', // manual, *follow, error
                 referrerPolicy: 'no-referrer', // no-referrer, *client
                 body: JSON.stringify({
+                    name:fields.name,
                     email:fields.email,
                     phone:fields.phone,
-                    bonus:params['bonus'] ? params['bonus'] : '-'
+                    service:fields.service,
+                    bonus:params['bonus'] ? params['bonus'] : '-',
+                    game:document.querySelector('#gameName').innerText
                 }) 
-            }).then(function(resp) {
+            })./*json().*/then(function(resp) {
                 what();
             });
         }
 
         function playAgain() {
-            if(allEmpty) {
+            window.location = gameId ? (gameId + ".html") : "index.html";
+            return false;
+
+            /*if(allEmpty) {
                 window.location = gameId ? (gameId + ".html") : "index.html";
                 return false;
             }
             sendAnd(function(){
                 window.location = gameId ? (gameId + ".html") : "index.html";
             });
-            return false;
+            return false;*/
         }
 
         function backToIndex() {
-            if(allEmpty) {
+            window.location = "index.html";
+            return false;
+
+            /*if(allEmpty) {
                 window.location = "index.html";
                 return false;
             }
             sendAnd(function(){
                 window.location = "index.html";
+            });
+            return false;*/
+        }
+
+        function sendAndShow() {
+            let div_ = document.querySelector('.succesOrNot');
+            if(fields.email == '' || fields.phone == '' || fields.name == '' || fields.service == '') {
+                div_.innerHTML='<center><span style="color: rgb(184, 0, 0); font-size:1.2rem;">Заявка не отправлена. Заполните все поля!</span></center>';
+                return false;
+            }
+            sendAnd(function(){
+                div_.innerHTML='<center><span style="color: green; font-size:1.2rem;">Спасибо! Заявка отправлена. Скоро менеджер свяжется с Вами.</span></center>';
             });
             return false;
         }
 
         function checkEmpty() {
-            this.allEmpty = fields.email == '' && fields.phone == '';
+            this.allEmpty = fields.email == '' && fields.phone == '' && fields.name == '' && fields.service == '';
             return this.allEmpty;
         }
 
@@ -168,12 +248,32 @@
                     break;
                 case "phone":
                     var v = vb.replace((/[^0-9+]+/gm),"");
-                    valids.phone = v.length >= 6;
+                    valids.phone = v.length === 12 && v[0] === '+' && v[1] === '7';
                     if(valids.phone) {
                         fields.phone = v;
                         document.getElementById("phoneField").classList.remove("has-error");
                     }else{
                         fields.phone = '';
+                    }
+                    checkEmpty();
+                    break;
+                case "name":
+                    valids.name = vb.length >= 1;
+                    if(valids.name) {
+                        fields.name = vb;
+                        document.getElementById("nameField").classList.remove("has-error");
+                    }else{
+                        fields.name = '';
+                    }
+                    checkEmpty();
+                    break;
+                case "service":
+                    valids.service = vb.length >= 1;
+                    if(valids.service) {
+                        fields.service = vb;
+                        document.getElementById("serviceField").classList.remove("has-error");
+                    }else{
+                        fields.service = '';
                     }
                     checkEmpty();
                     break;
