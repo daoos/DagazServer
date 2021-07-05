@@ -228,7 +228,7 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(191, 24, 'Shashki Adiyukh (8x8)', 'adiuh-checkers', 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(192, 24, 'Shashki Adiyukh (8x10)', 'adiuh-checkers-8x10', 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(193, 30, 'Sovereign Chess', 'sovereign-chess', 2)`);
-        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(194, 30, 'Sovereign Chess (12x12)', 'sovereign-chess-12x12', 2)`);
+        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(194, 30, 'Sovereign Chess Arena (12x12)', 'sovereign-chess-12x12', 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total, is_dice) values(195, 45, 'Ur', 'ur', 2, 1)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total, is_dice) values(196, 45, 'Shen', 'shen', 2, 1)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total, is_dice) values(197, 45, 'Puluc', 'puluc', 2, 1)`);

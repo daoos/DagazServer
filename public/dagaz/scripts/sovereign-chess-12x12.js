@@ -372,20 +372,6 @@ Dagaz.Model.BuildDesign = function(design) {
     design.addCommand(6, ZRF.FUNCTION,	20);	// verify
     design.addCommand(6, ZRF.PARAM,	5);	// $6
     design.addCommand(6, ZRF.FUNCTION,	22);	// navigate
-    design.addCommand(6, ZRF.FORK,	3);
-    design.addCommand(6, ZRF.FUNCTION,	25);	// to
-    design.addCommand(6, ZRF.FUNCTION,	28);	// end
-    design.addCommand(6, ZRF.FUNCTION,	1);	// empty?
-    design.addCommand(6, ZRF.FUNCTION,	20);	// verify
-    design.addCommand(6, ZRF.PARAM,	6);	// $7
-    design.addCommand(6, ZRF.FUNCTION,	22);	// navigate
-    design.addCommand(6, ZRF.FORK,	3);
-    design.addCommand(6, ZRF.FUNCTION,	25);	// to
-    design.addCommand(6, ZRF.FUNCTION,	28);	// end
-    design.addCommand(6, ZRF.FUNCTION,	1);	// empty?
-    design.addCommand(6, ZRF.FUNCTION,	20);	// verify
-    design.addCommand(6, ZRF.PARAM,	7);	// $8
-    design.addCommand(6, ZRF.FUNCTION,	22);	// navigate
     design.addCommand(6, ZRF.FUNCTION,	25);	// to
     design.addCommand(6, ZRF.FUNCTION,	28);	// end
 
@@ -418,10 +404,10 @@ Dagaz.Model.BuildDesign = function(design) {
     design.addMove(0, 5, [0], 0, 10);
 
     design.addPiece("Rook", 1);
-    design.addMove(1, 6, [7, 7, 7, 7, 7, 7, 7, 7], 0, 11);
-    design.addMove(1, 6, [3, 3, 3, 3, 3, 3, 3, 3], 0, 11);
-    design.addMove(1, 6, [4, 4, 4, 4, 4, 4, 4, 4], 0, 11);
-    design.addMove(1, 6, [1, 1, 1, 1, 1, 1, 1, 1], 0, 11);
+    design.addMove(1, 6, [7, 7, 7, 7, 7, 7], 0, 11);
+    design.addMove(1, 6, [3, 3, 3, 3, 3, 3], 0, 11);
+    design.addMove(1, 6, [4, 4, 4, 4, 4, 4], 0, 11);
+    design.addMove(1, 6, [1, 1, 1, 1, 1, 1], 0, 11);
 
     design.addPiece("Knight", 2);
     design.addMove(2, 7, [7, 6], 0, 12);
@@ -434,20 +420,20 @@ Dagaz.Model.BuildDesign = function(design) {
     design.addMove(2, 7, [3, 0], 0, 12);
 
     design.addPiece("Bishop", 3);
-    design.addMove(3, 6, [6, 6, 6, 6, 6, 6, 6, 6], 0, 13);
-    design.addMove(3, 6, [5, 5, 5, 5, 5, 5, 5, 5], 0, 13);
-    design.addMove(3, 6, [2, 2, 2, 2, 2, 2, 2, 2], 0, 13);
-    design.addMove(3, 6, [0, 0, 0, 0, 0, 0, 0, 0], 0, 13);
+    design.addMove(3, 6, [6, 6, 6, 6, 6, 6], 0, 13);
+    design.addMove(3, 6, [5, 5, 5, 5, 5, 5], 0, 13);
+    design.addMove(3, 6, [2, 2, 2, 2, 2, 2], 0, 13);
+    design.addMove(3, 6, [0, 0, 0, 0, 0, 0], 0, 13);
 
     design.addPiece("Queen", 4);
-    design.addMove(4, 6, [7, 7, 7, 7, 7, 7, 7, 7], 0, 14);
-    design.addMove(4, 6, [3, 3, 3, 3, 3, 3, 3, 3], 0, 14);
-    design.addMove(4, 6, [4, 4, 4, 4, 4, 4, 4, 4], 0, 14);
-    design.addMove(4, 6, [1, 1, 1, 1, 1, 1, 1, 1], 0, 14);
-    design.addMove(4, 6, [6, 6, 6, 6, 6, 6, 6, 6], 0, 14);
-    design.addMove(4, 6, [5, 5, 5, 5, 5, 5, 5, 5], 0, 14);
-    design.addMove(4, 6, [2, 2, 2, 2, 2, 2, 2, 2], 0, 14);
-    design.addMove(4, 6, [0, 0, 0, 0, 0, 0, 0, 0], 0, 14);
+    design.addMove(4, 6, [7, 7, 7, 7, 7, 7], 0, 14);
+    design.addMove(4, 6, [3, 3, 3, 3, 3, 3], 0, 14);
+    design.addMove(4, 6, [4, 4, 4, 4, 4, 4], 0, 14);
+    design.addMove(4, 6, [1, 1, 1, 1, 1, 1], 0, 14);
+    design.addMove(4, 6, [6, 6, 6, 6, 6, 6], 0, 14);
+    design.addMove(4, 6, [5, 5, 5, 5, 5, 5], 0, 14);
+    design.addMove(4, 6, [2, 2, 2, 2, 2, 2], 0, 14);
+    design.addMove(4, 6, [0, 0, 0, 0, 0, 0], 0, 14);
 
     design.addPiece("King", 5);
     design.addMove(5, 8, [7], 0, 15);
