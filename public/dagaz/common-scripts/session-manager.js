@@ -185,14 +185,16 @@ window.onkeyup = function(event) {
   if (_.isUndefined(event.key)) {
       name = DIR_NAMES[event.keyIdentifier];
   }
-  if (curr.parent && (name == 'd')) {
-      Dagaz.Controller.undo();
-  }
-  if (curr.nodes.length && (name == 'u')) {
-      Dagaz.Controller.redo();
-  }
-  if (curr.nodes.length && (name == 'h')) {
-      Dagaz.Controller.home();
+  if (curr) {
+      if (curr.parent && (name == 'd')) {
+          Dagaz.Controller.undo();
+      }
+      if (curr.nodes.length && (name == 'u')) {
+          Dagaz.Controller.redo();
+      }
+      if (curr.nodes.length && (name == 'h')) {
+          Dagaz.Controller.home();
+      }
   }
   if (onkeyup) {
       onkeyup(event);
