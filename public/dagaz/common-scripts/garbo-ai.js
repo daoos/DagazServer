@@ -40,10 +40,10 @@ var garbo = function(bestMove, value, timeTaken, ply) {
   console.log('Garbo: ' + resultMove + ', value = ' + value + ', time = ' + timeTaken + ', ply = ' + ply);
   if (resultMove == 'O-O-O') {
       if (player == 1) {
-          resultMove = 'e1-a1';
+          resultMove = 'e1-c1';
       }
       if (player == 2) {
-          resultMove = 'e8-a8';
+          resultMove = 'e8-c8';
       }
   }
   if (resultMove == 'O-O') {
