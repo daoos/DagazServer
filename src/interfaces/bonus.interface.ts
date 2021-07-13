@@ -37,4 +37,7 @@ export class Bonus {
 
     @ApiPropertyOptional()
     service: string;
+
+    @ApiPropertyOptional()
+    game: string;
 }
