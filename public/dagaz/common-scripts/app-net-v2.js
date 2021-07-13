@@ -1002,6 +1002,31 @@ App.prototype.isRandom = function() {
   return false;
 }
 
+Dagaz.AI.callback = function(result) {
+  var app = Dagaz.Controller.app;
+  var player = app.design.playerNames[app.board.player];
+  if (app.state != STATE.WAIT) return;
+  console.log("Player: " + player);
+  var move = null;
+  _.each(app.board.moves, function(m) {
+      var x = m.toString() + ' ';
+      if (x.startsWith(result + ' ')) {
+          move = m;
+      }
+  });
+  if (move === null) return;
+  app.boardApply(move);
+  var s = move.toString();
+  if (!_.isUndefined(Dagaz.Model.getSetup)) {
+      s = Dagaz.Model.getSetup(app.design, app.board);
+      console.log("Setup: " + s);
+  }
+  Dagaz.Model.Done(app.design, app.board);
+  addMove(move.toString(), s, bot);
+  app.move = move;
+  app.state = STATE.EXEC;
+}
+
 App.prototype.exec = function() {
   this.view.configure();
   this.view.draw(this.canvas);
@@ -1140,25 +1165,10 @@ App.prototype.exec = function() {
               this.timestamp = Date.now();
               var player = this.design.playerNames[this.board.player];
               var result = this.getAI().getMove(ctx);
-              if (result) {
-                  if (result.move) {
-                      console.log("Player: " + player);
-                      this.boardApply(result.move);
-                      var s = result.move.toString();
-                      if (!_.isUndefined(Dagaz.Model.getSetup)) {
-                          s = Dagaz.Model.getSetup(this.design, this.board);
-                          console.log("Setup: " + s);
-                      }
-                      Dagaz.Model.Done(this.design, this.board);
-                      addMove(result.move.toString(), s, bot);
-                      this.move = result.move;
-                      this.state = STATE.EXEC;
-                  } else {
-                      winGame();
-                      this.gameOver(player + " lose", -this.board.player);
-                      App.prototype.setDone();
-                      return;
-                  }
+              this.state = STATE.WAIT;
+              if (result && result.move) {
+                  Dagaz.AI.callback(result.move);
+                  return;
               }
           } else {
               this.state = STATE.BUZY;

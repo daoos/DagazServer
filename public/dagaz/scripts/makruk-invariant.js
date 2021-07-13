@@ -8,6 +8,26 @@ Dagaz.Model.checkVersion = function(design, name, value) {
   }
 }
 
+Dagaz.Model.moveToString = function(move) {
+  var r = "";
+  _.each(move.actions, function(a) {
+      if (a[1] === null) return;
+      if (r != "") {
+          r = r + " ";
+      }
+      if (a[0] != null) {
+          r = r + Dagaz.Model.posToString(a[0][0]);
+          if (a[1] !== null) {
+              r = r + '-';
+          }
+      }
+      if (a[1] !== null) {
+          r = r + Dagaz.Model.posToString(a[1][0]);
+      }
+  });
+  return r;
+}
+
 var findPiece = function(design, board, player, type) {
   var positions = design.allPositions();
   for (var i = 0; i < positions.length; i++) {
@@ -85,7 +105,7 @@ Dagaz.Model.checkGoals = function(design, board, player) {
   var king = design.getPieceType("Khun");
   board.generate(design);
   if (board.moves.length == 0) {
-      var pos = Dagaz.Model.findPiece(design, board, board.player, king);
+      var pos = findPiece(design, board, board.player, king);
       if (pos === null) return 1;
       if (Dagaz.Model.checkPositions(design, board, board.player, [pos])) {
           return 1;
