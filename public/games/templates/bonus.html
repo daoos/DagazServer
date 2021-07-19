@@ -139,25 +139,33 @@
         var allEmpty = true;
 
         function sendAnd(what) {
-            fetch("/api/bonus", {
-                method: 'PUT', // *GET, POST, PUT, DELETE, etc.
+            var formData = new FormData();
+            formData.append('name', fields.name);
+            formData.append('email', fields.email);
+            formData.append('phone', fields.phone);
+            formData.append('service', fields.service);
+            formData.append('bonus', params['bonus'] ? params['bonus'] : '-');
+            formData.append('game', document.querySelector('#gameName').innerText);
+
+            fetch("https://contcentr.ru/wp-content/themes/dtco/wheel_amocrm/games_crm.php", {
+                method: 'POST', // *GET, POST, PUT, DELETE, etc.
                 mode: 'cors', // no-cors, *cors, same-origin
                 cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
                 credentials: 'same-origin', // include, *same-origin, omit
-                headers: {
-                'Content-Type': 'application/json'
-                // 'Content-Type': 'application/x-www-form-urlencoded',
-                },
+                /*headers: {
+                    //'Content-Type': 'application/json'
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },*/
                 redirect: 'follow', // manual, *follow, error
                 referrerPolicy: 'no-referrer', // no-referrer, *client
-                body: JSON.stringify({
+                body: formData/*JSON.stringify({
                     name:fields.name,
                     email:fields.email,
                     phone:fields.phone,
                     service:fields.service,
                     bonus:params['bonus'] ? params['bonus'] : '-',
                     game:document.querySelector('#gameName').innerText
-                }) 
+                })*/
             })./*json().*/then(function(resp) {
                 what();
             });
