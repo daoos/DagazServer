@@ -2,18 +2,19 @@
 
 (function() {
 
-Dagaz.AI.g_timeout     = 3000;
-Dagaz.Model.WIDTH      = 8;
-Dagaz.Model.HEIGHT     = 8;
+Dagaz.AI.Q_SEARCH_LIMIT = -20;
+Dagaz.AI.g_timeout      = 3000;
+Dagaz.Model.WIDTH       = 8;
+Dagaz.Model.HEIGHT      = 8;
 
-Dagaz.AI.PIECE_MASK    = 0xF;
-Dagaz.AI.TYPE_MASK     = 0x7;
-Dagaz.AI.PLAYERS_MASK  = 0x18;
-Dagaz.AI.COUNTER_SIZE  = 6;
-Dagaz.AI.TYPE_SIZE     = 3;
+Dagaz.AI.PIECE_MASK     = 0xF;
+Dagaz.AI.TYPE_MASK      = 0x7;
+Dagaz.AI.PLAYERS_MASK   = 0x18;
+Dagaz.AI.COUNTER_SIZE   = 6;
+Dagaz.AI.TYPE_SIZE      = 3;
 
-Dagaz.AI.colorBlack    = 0x10;
-Dagaz.AI.colorWhite    = 0x08;
+Dagaz.AI.colorBlack     = 0x10;
+Dagaz.AI.colorWhite     = 0x08;
 
 Dagaz.AI.g_board = new Array(256); // Sentinel 0x80, pieces are in low 4 bits, 0x8 for color, 0x7 bits for piece type
 Dagaz.AI.g_toMove = 0; // side to move, 0 or 8, 0 = black, 8 = white
@@ -146,7 +147,7 @@ function QSearch(alpha, beta, ply) {
     if (realEval > alpha)
         alpha = realEval;
 
-    if (ply < -20) return realEval;
+    if (ply < Dagaz.AI.Q_SEARCH_LIMIT) return realEval;
 
     var moves = new Array();
     var moveScores = new Array();
