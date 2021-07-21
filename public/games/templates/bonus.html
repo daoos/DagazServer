@@ -137,6 +137,13 @@
         };
 
         var allEmpty = true;
+        var isError = false;
+
+        function checkError() {
+            if (isError) {
+                alarm();
+            }
+        }
 
         function sendAnd(what) {
             var formData = new FormData();
@@ -147,9 +154,9 @@
             formData.append('bonus', params['bonus'] ? params['bonus'] : '-');
             formData.append('game', document.querySelector('#gameName').innerText);
 
-            fetch("https://contcentr.ru/wp-content/themes/dtco/wheel_amocrm/games_crm.php", {
+            const response = fetch("https://contcentr.ru/wp-content/themes/dtco/wheel_amocrm/games_crm.php", {
                 method: 'POST', // *GET, POST, PUT, DELETE, etc.
-                mode: 'cors', // no-cors, *cors, same-origin
+                mode: 'no-cors', // no-cors, *cors, same-origin
                 cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
                 credentials: 'same-origin', // include, *same-origin, omit
                 /*headers: {
@@ -167,8 +174,13 @@
                     game:document.querySelector('#gameName').innerText
                 })*/
             })./*json().*/then(function(resp) {
+                isError = false;
                 what();
             });
+            if (!response.ok) {
+                isError = true;
+                setTimeout(checkError, 3000);
+            }
         }
 
         function playAgain() {
@@ -197,6 +209,11 @@
                 window.location = "index.html";
             });
             return false;*/
+        }
+
+	function alarm() {
+            let div_ = document.querySelector('.succesOrNot');
+            div_.innerHTML='<center><span style="color: rgb(184, 0, 0); font-size:1.2rem;">Заявка не отправлена. Не удалось связаться с сервером.</span></center>';
         }
 
         function sendAndShow() {
