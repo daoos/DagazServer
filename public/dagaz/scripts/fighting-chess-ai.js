@@ -138,8 +138,8 @@ function FormatSquare(square) {
     return letters[(square & 0xF) - 4] + (((Dagaz.Model.HEIGHT + 1) - (square >> 4)) + 1);
 }
 
-Dagaz.AI.FormatMove = function(move, color) {
-    if (color == Dagaz.AI.colorWhite) {
+Dagaz.AI.FormatMove = function(move) {
+    if (Dagaz.AI.g_toMove == Dagaz.AI.colorWhite) {
         if (move & moveflagCastleKing) return "e1-g1";
         if (move & moveflagCastleQueen) return "e1-c1";
     } else {
@@ -148,6 +148,11 @@ Dagaz.AI.FormatMove = function(move, color) {
     }
     var result = FormatSquare(move & 0xFF) + '-' + FormatSquare((move >> 8) & 0xFF);
     if (move & moveflagPromotion) {
+        if (Dagaz.AI.g_toMove == Dagaz.AI.colorWhite) {
+            result += " White";
+        } else {
+            result += " Black";
+        }
         if (move & moveflagPromoteBishop) result += " Bishop";
         else if (move & moveflagPromoteKnight) result += " Knight";
         else if (move & moveflagPromoteQueen) result += " Queen";
