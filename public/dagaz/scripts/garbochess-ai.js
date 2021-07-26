@@ -1241,9 +1241,9 @@ function MakeTable(table) {
     for (var i = 0; i < 256; i++) {
         result[i] = 0;
     }
-    for (var row = 0; row < 8; row++) {
-        for (var col = 0; col < 8; col++) {
-            result[MakeSquare(row, col)] = table[row * 8 + col];
+    for (var row = 0; row < g_height; row++) {
+        for (var col = 0; col < g_width; col++) {
+            result[MakeSquare(row, col)] = table[row * g_width + col];
         }
     }
     return result;
@@ -1278,10 +1278,10 @@ function ResetGame() {
     g_zobristBlackLow = mt.next(32);
     g_zobristBlackHigh = mt.next(32);
 
-    for (var row = 0; row < 8; row++) {
-        for (var col = 0; col < 8; col++) {
+    for (var row = 0; row < g_height; row++) {
+        for (var col = 0; col < g_width; col++) {
             var square = MakeSquare(row, col);
-            flipTable[square] = MakeSquare(7 - row, col);
+            flipTable[square] = MakeSquare((g_height - 1) - row, col);
         }
     }
 
@@ -1454,8 +1454,9 @@ function InitializeFromFen(fen) {
                         piece |= pieceKing;
                         break;
                 }
-                
-                g_board[MakeSquare(row, col)] = piece;
+                if (piece & 0x7) {
+                    g_board[MakeSquare(row, col)] = piece;
+                }
                 col++;
             }
         }
@@ -1552,15 +1553,13 @@ function InitializePieceList() {
             g_pieceList[(i << 6) | j] = 0;
         }
     }
-
     for (var i = 0; i < 256; i++) {
         g_pieceIndex[i] = 0;
         if (g_board[i] & (colorWhite | colorBlack)) {
-			var piece = g_board[i] & 0xF;
-
-			g_pieceList[(piece << 6) | g_pieceCount[piece]] = i;
-			g_pieceIndex[i] = g_pieceCount[piece];
-			g_pieceCount[piece]++;
+            var piece = g_board[i] & 0xF;
+            g_pieceList[(piece << 6) | g_pieceCount[piece]] = i;
+            g_pieceIndex[i] = g_pieceCount[piece];
+            g_pieceCount[piece]++;
         }
     }
 }
@@ -2409,6 +2408,12 @@ function BuildPVMessage(bestMove, value, timeTaken, ply) {
     return "Ply:" + ply + " Score:" + value + " Nodes:" + totalNodes + " NPS:" + ((totalNodes / (timeTaken / 1000)) | 0) + " " + PVFromHash(bestMove, 15);
 }
 
+function SetParams(width, height, flags) {
+    g_flags   = flags;
+    g_width   = width;
+    g_height  = height;
+}
+
 function SetTimeout(timeout) {
     g_timeout = timeout;
 }
@@ -2455,6 +2460,7 @@ Dagaz.AI.FormatMove        = FormatMove;
 Dagaz.AI.ResetGame         = ResetGame;
 Dagaz.AI.InitializeFromFen = InitializeFromFen;
 Dagaz.AI.Search            = Search;
+Dagaz.AI.SetParams         = SetParams;
 Dagaz.AI.SetTimeout        = SetTimeout;
 
 })();
