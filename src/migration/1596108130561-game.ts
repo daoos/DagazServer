@@ -242,6 +242,7 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(205, 22, 'Cyclic Checkers', 'cyclic-checkers', 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total, max_selector) values(206, 37, 'Duel', 'duel', 2, 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(207, 36, 'Men Row Chess', 'menrow', 2)`);
+        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(208, 30, 'Rock Chess', 'rock-chess', 2)`);
 
         await queryRunner.query(`insert into game_styles(id, game_id, name, suffix, player_num) values(1, 23, 'European', '', null)`);
         await queryRunner.query(`insert into game_styles(id, game_id, name, suffix, player_num) values(2, 23, 'Chinese', '-kanji', null)`);
@@ -341,6 +342,7 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_bots(id, game_id, variant_id, selector_value, player_num) values(73, 30, 34, null, null)`);
         await queryRunner.query(`insert into game_bots(id, game_id, variant_id, selector_value, player_num) values(75, 30, 58, null, 1)`);
         await queryRunner.query(`insert into game_bots(id, game_id, variant_id, selector_value, player_num) values(76, 30, 33, null, null)`);
+        await queryRunner.query(`insert into game_bots(id, game_id, variant_id, selector_value, player_num) values(77, 30, 208, null, null)`);
 
         await queryRunner.query(`insert into game_setups(id, game_id, variant_id, selector_value, name) values(1, 25, 10, 1, 'Without Handicap')`);
         await queryRunner.query(`insert into game_setups(id, game_id, variant_id, selector_value, name) values(2, 25, 10, 2, 'Left-Kyo Handicap')`);
@@ -861,6 +863,7 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, copyright) values(563, 'duel', 1, 'duel-1', 'Parker Brothers')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, copyright) values(564, 'duel', 2, 'duel-2', 'Parker Brothers')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(565, 'menrow', null, 'menrow', 'https://www.iggamecenter.com/info/en/menrowchess.html', '2008 Giuseppe Acciaro')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(566, 'rock-chess', null, 'rock-chess')`);
 }
 
     public async down(queryRunner: QueryRunner): Promise<any> {
