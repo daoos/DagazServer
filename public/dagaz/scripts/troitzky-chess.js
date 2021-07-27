@@ -243,52 +243,6 @@ Dagaz.Model.BuildDesign = function(design) {
     design.addCommand(5, ZRF.FUNCTION,	25);	// to
     design.addCommand(5, ZRF.FUNCTION,	28);	// end
 
-    design.addCommand(6, ZRF.FUNCTION,	24);	// from
-    design.addCommand(6, ZRF.LITERAL,	1);	// Rook
-    design.addCommand(6, ZRF.FUNCTION,	11);	// create
-    design.addCommand(6, ZRF.PARAM,	0);	// $1
-    design.addCommand(6, ZRF.FUNCTION,	22);	// navigate
-    design.addCommand(6, ZRF.FUNCTION,	1);	// empty?
-    design.addCommand(6, ZRF.FUNCTION,	20);	// verify
-    design.addCommand(6, ZRF.PARAM,	1);	// $2
-    design.addCommand(6, ZRF.FUNCTION,	22);	// navigate
-    design.addCommand(6, ZRF.FUNCTION,	1);	// empty?
-    design.addCommand(6, ZRF.FUNCTION,	20);	// verify
-    design.addCommand(6, ZRF.PARAM,	2);	// $3
-    design.addCommand(6, ZRF.FUNCTION,	22);	// navigate
-    design.addCommand(6, ZRF.FUNCTION,	3);	// friend?
-    design.addCommand(6, ZRF.FUNCTION,	20);	// verify
-    design.addCommand(6, ZRF.LITERAL,	1);	// Rook
-    design.addCommand(6, ZRF.FUNCTION,	10);	// piece?
-    design.addCommand(6, ZRF.FUNCTION,	20);	// verify
-    design.addCommand(6, ZRF.FUNCTION,	25);	// to
-    design.addCommand(6, ZRF.FUNCTION,	28);	// end
-
-    design.addCommand(7, ZRF.FUNCTION,	24);	// from
-    design.addCommand(7, ZRF.LITERAL,	1);	// Rook
-    design.addCommand(7, ZRF.FUNCTION,	11);	// create
-    design.addCommand(7, ZRF.PARAM,	0);	// $1
-    design.addCommand(7, ZRF.FUNCTION,	22);	// navigate
-    design.addCommand(7, ZRF.FUNCTION,	1);	// empty?
-    design.addCommand(7, ZRF.FUNCTION,	20);	// verify
-    design.addCommand(7, ZRF.PARAM,	1);	// $2
-    design.addCommand(7, ZRF.FUNCTION,	22);	// navigate
-    design.addCommand(7, ZRF.FUNCTION,	1);	// empty?
-    design.addCommand(7, ZRF.FUNCTION,	20);	// verify
-    design.addCommand(7, ZRF.PARAM,	2);	// $3
-    design.addCommand(7, ZRF.FUNCTION,	22);	// navigate
-    design.addCommand(7, ZRF.FUNCTION,	1);	// empty?
-    design.addCommand(7, ZRF.FUNCTION,	20);	// verify
-    design.addCommand(7, ZRF.PARAM,	3);	// $4
-    design.addCommand(7, ZRF.FUNCTION,	22);	// navigate
-    design.addCommand(7, ZRF.FUNCTION,	3);	// friend?
-    design.addCommand(7, ZRF.FUNCTION,	20);	// verify
-    design.addCommand(7, ZRF.LITERAL,	1);	// Rook
-    design.addCommand(7, ZRF.FUNCTION,	10);	// piece?
-    design.addCommand(7, ZRF.FUNCTION,	20);	// verify
-    design.addCommand(7, ZRF.FUNCTION,	25);	// to
-    design.addCommand(7, ZRF.FUNCTION,	28);	// end
-
     design.addPiece("Pawn", 0, 100);
     design.addMove(0, 0, [5], 0, 10);
     design.addMove(0, 1, [5, 5], 0, 10);
@@ -338,8 +292,6 @@ Dagaz.Model.BuildDesign = function(design) {
     design.addMove(5, 5, [0], 0, 15);
     design.addMove(5, 5, [15], 0, 15);
     design.addMove(5, 5, [8], 0, 15);
-    design.addMove(5, 6, [5, 3, 3], 1, 15);
-    design.addMove(5, 7, [5, 14, 14, 14], 1, 15);
 
     design.setupSelector(3);
 

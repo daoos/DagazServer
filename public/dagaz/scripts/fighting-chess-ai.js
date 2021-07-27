@@ -363,10 +363,10 @@ Dagaz.AI.IsHashMoveValid = function(hashMove) {
             return false;
         }
 
-/*      if (dir == -16 || dir == 16) {
+        if (dir == -16 || dir == 16) {
             // White/Black push
-            return Dagaz.AI.g_board[to] == 0;
-        } else */ if (dir == -15 || dir == -17 || dir == 15 || dir == 17) {
+            return true;
+        } else if (dir == -15 || dir == -17 || dir == 15 || dir == 17) {
             // White/Black capture
             return Dagaz.AI.g_board[to] != 0;
         } else if (dir == -32) {
@@ -457,10 +457,14 @@ Dagaz.AI.ResetGame = function() {
            g_vectorDelta[index].pieceMask[Dagaz.AI.colorWhite >> Dagaz.AI.TYPE_SIZE] |= (1 << piecePawn);
            index = square - (square - 15) + 128;
            g_vectorDelta[index].pieceMask[Dagaz.AI.colorWhite >> Dagaz.AI.TYPE_SIZE] |= (1 << piecePawn);
+           index = square - (square - 16) + 128;
+           g_vectorDelta[index].pieceMask[Dagaz.AI.colorWhite >> Dagaz.AI.TYPE_SIZE] |= (1 << piecePawn);
             
            index = square - (square + 17) + 128;
            g_vectorDelta[index].pieceMask[0] |= (1 << piecePawn);
            index = square - (square + 15) + 128;
+           g_vectorDelta[index].pieceMask[0] |= (1 << piecePawn);
+           index = square - (square + 16) + 128;
            g_vectorDelta[index].pieceMask[0] |= (1 << piecePawn);
 
            for (var i = pieceKnight; i <= pieceKing; i++) {
@@ -1031,6 +1035,7 @@ function IsSquareAttackable(target, color) {
 	var pawn = (color ? Dagaz.AI.colorWhite : Dagaz.AI.colorBlack) | piecePawn;
 	if (Dagaz.AI.g_board[target - (inc - 1)] == pawn) return true;
 	if (Dagaz.AI.g_board[target - (inc + 1)] == pawn) return true;
+	if (Dagaz.AI.g_board[target - inc] == pawn) return true;
 	// Attackable by pieces?
 	for (var i = pieceKnight; i <= pieceKing; i++) {
         var index = (color | i) << Dagaz.AI.COUNTER_SIZE;

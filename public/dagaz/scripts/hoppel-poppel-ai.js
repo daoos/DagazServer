@@ -69,8 +69,8 @@ function FormatMove(move) {
     if (move & moveflagCastleQueen) return "O-O-O";
     var result = FormatSquare(move & 0xFF) + '-' + FormatSquare((move >> 8) & 0xFF);
     if (move & moveflagPromotion) {
-        if (move & moveflagPromoteBishop) result += " Bishop";
-        else if (move & moveflagPromoteKnight) result += " Knight";
+        if (move & moveflagPromoteBishop) result += " Biskni";
+        else if (move & moveflagPromoteKnight) result += " Knibis";
         else if (move & moveflagPromoteQueen) result += " Queen";
         else result += " Rook";
     }
@@ -509,6 +509,15 @@ function IsHashMoveValid(hashMove) {
         }
 
         return true;
+    } else if ((pieceType == pieceKnight) && (g_board[to] == 0)) {
+        var dir = to - from;
+        return _.indexOf(g_bishopDeltas, dir) >= 0;
+    } else if ((pieceType == pieceBishop) && (g_board[to] == 0)) {
+        var dx = (to & 0xF) - (from & 0xF);
+        if (dx < 0) dx = -dx;
+        var dy = ((to & 0xF0) - (from & 0xF0)) >> 4;
+        if (dy < 0) dy = -dy;
+        return dx == dy;
     } else {
         // This validates that this piece type can actually make the attack
         if (hashMove >> 16) return false;
@@ -720,8 +729,8 @@ function AllCutNode(ply, depth, beta, allowNull) {
             // Disable null move if potential zugzwang (no big pieces)
             (g_pieceCount[pieceBishop | g_toMove] != 0 ||
              g_pieceCount[pieceKnight | g_toMove] != 0 ||
-             g_pieceCount[pieceRook | g_toMove] != 0 ||
-             g_pieceCount[pieceQueen | g_toMove] != 0)) {
+             g_pieceCount[pieceRook   | g_toMove] != 0 ||
+             g_pieceCount[pieceQueen  | g_toMove] != 0)) {
             var r = 3 + (ply >= 5 ? 1 : ply / 4);
             if (g_baseEval - beta > 1500) r++;
 
