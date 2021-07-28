@@ -1,0 +1,78 @@
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>Omega Chess</title>
+</head>
+<body>
+
+<img id="Board" style="display:none" src="images/omega/omega.png">
+<img id="Promote" style="display:none" src="images/omega/omega-6.png">
+<img id="WhitePawn" style="display:none" src="images/omega/wpawn.png">
+<img id="BlackPawn" style="display:none" src="images/omega/bpawn.png">
+<img id="WhiteRook" style="display:none" src="images/omega/wrook.png">
+<img id="BlackRook" style="display:none" src="images/omega/brook.png">
+<img id="WhiteKnight" style="display:none" src="images/omega/wknight.png">
+<img id="BlackKnight" style="display:none" src="images/omega/bknight.png">
+<img id="WhiteBishop" style="display:none" src="images/omega/wbishop.png">
+<img id="BlackBishop" style="display:none" src="images/omega/bbishop.png">
+<img id="WhiteQueen" style="display:none" src="images/omega/wqueen.png">
+<img id="BlackQueen" style="display:none" src="images/omega/bqueen.png">
+<img id="WhiteKing" style="display:none" src="images/omega/wking.png">
+<img id="BlackKing" style="display:none" src="images/omega/bking.png">
+<img id="WhiteChampion" style="display:none" src="images/omega/wpaladin.png">
+<img id="BlackChampion" style="display:none" src="images/omega/bpaladin.png">
+<img id="WhiteWizard" style="display:none" src="images/omega/wmoon.png">
+<img id="BlackWizard" style="display:none" src="images/omega/bmoon.png">
+
+<table style="margin:auto; font-family:sans-serif; font-size:14px" id="Table">
+<tr><td>
+<a href="javascript:Dagaz.Controller.home()" title="Home" style="display:none" id="home"><img src="images/home.png"/></a>
+<a href="javascript:Dagaz.Controller.undo()" title="PgDown" style="display:none" id="undo"><img src="images/undo.png"/></a>
+Copyright (c) 1992 Daniel MacDonald
+<a target="_blank" href="https://en.wikipedia.org/wiki/Omega_Chess">Rules</a>
+<a href="javascript:Dagaz.Controller.resign()">I Resign</a>
+<a href="javascript:Dagaz.Controller.drawOffer()">Offer Draw</a>
+<a href="javascript:Dagaz.Controller.sound()" id="sound">no Sound</a>
+<a href="javascript:Dagaz.Controller.redo()" title="PgUp" style="display:none" id="redo"><img src="images/redo.png"/></a>
+<div align="right" id="timer"/>
+</td></tr>
+<tr style="height:654px; vertical-align:top">
+<td id="CanvasCell" style="width:654px">
+<canvas id="Canvas" width="654" height="654" style="cursor:default">Broken canvas...</canvas>
+</td><td style="width:300px;">
+<div style="height:510px; overflow:auto" id="ScrollDiv">
+<img id="GlyphImage"><p id="HelpText"></p>
+<p id="GameSession"></p>
+</div>
+</td>
+</tr>
+<tr>
+<td>
+<div style="height:100px; width:500px; margin-left:auto; margin-right:auto">
+<table>
+<tr style="display:none" id="PieceInfo">
+<td><img id="PieceInfoImage"></td><td id="PieceInfoText"></td>
+</tr>
+</table>
+</div>
+</td>
+</tr>
+</table>
+
+<script src="vendor/underscore-min.js"></script>
+<script src="vendor/jquery-3.5.1.min.js"></script>
+<script src="common-scripts/dagaz.js"></script>
+<script src="common-scripts/zrf-model.js"></script>
+<script src="common-scripts/zobrist.js"></script>
+<script src="common-scripts/common-setup-v3.js"></script>
+<script src="common-scripts/2d-view-v3.js"></script>
+<script src="common-scripts/move-list-v2.js"></script>
+<script src="common-scripts/session-manager.js"></script>
+<script src="common-scripts/sound-manager-v2.js"></script>
+<script src="scripts/omega-chess-promotion.js"></script>
+<script src="scripts/omega-chess-invariant.js"></script>
+<script src="scripts/omega-chess-black.js"></script>
+<script src="common-scripts/app-net-v5.js"></script>
+
+</body>
+</html>
