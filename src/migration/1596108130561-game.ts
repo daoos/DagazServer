@@ -243,7 +243,7 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total, max_selector) values(206, 37, 'Duel', 'duel', 2, 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(207, 36, 'Men Row Chess', 'menrow', 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(208, 30, 'Rock Chess', 'rock-chess', 2)`);
-        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(209, 30, 'Omega Chess', 'omega-chess', 2)`);
+//      await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(209, 30, 'Omega Chess', 'omega-chess', 2)`);
 //      await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(210, 30, 'Omega Chess Advanced', 'omega-chess-advanced', 2)`);
 
         await queryRunner.query(`insert into game_styles(id, game_id, name, suffix, player_num) values(1, 23, 'European', '', null)`);
@@ -301,7 +301,7 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_bots(id, game_id, variant_id, selector_value, player_num) values(30, 22, 67, null, null)`);
         await queryRunner.query(`insert into game_bots(id, game_id, variant_id, selector_value, player_num) values(31, 25, 109, null, null)`);
 //      await queryRunner.query(`insert into game_bots(id, game_id, variant_id, selector_value, player_num) values(32, 43, null, null, null)`);
-        await queryRunner.query(`insert into game_bots(id, game_id, variant_id, selector_value, player_num) values(33, 30, 122, 2, 1)`);
+        await queryRunner.query(`insert into game_bots(id, game_id, variant_id, selector_value, player_num) values(33, 30, 122, null, null)`);
         await queryRunner.query(`insert into game_bots(id, game_id, variant_id, selector_value, player_num) values(34, 30, 135, null, null)`);
         await queryRunner.query(`insert into game_bots(id, game_id, variant_id, selector_value, player_num) values(35, 30, 137, null, null)`);
         await queryRunner.query(`insert into game_bots(id, game_id, variant_id, selector_value, player_num) values(36, 30, 142, null, null)`);
@@ -866,7 +866,7 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, copyright) values(564, 'duel', 2, 'duel-2', 'Parker Brothers')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(565, 'menrow', null, 'menrow', 'https://www.iggamecenter.com/info/en/menrowchess.html', '2008 Giuseppe Acciaro')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(566, 'rock-chess', null, 'rock-chess')`);
-        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(567, 'omega-chess', null, 'omega', 'https://en.wikipedia.org/wiki/Omega_Chess', '1992 Daniel MacDonald')`);
+//      await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(567, 'omega-chess', null, 'omega', 'https://en.wikipedia.org/wiki/Omega_Chess', '1992 Daniel MacDonald')`);
 //      await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(568, 'omega-chess-advanced', null, 'omega', 'https://en.wikipedia.org/wiki/Omega_Chess#Omega_Chess_Advanced', '1992 Daniel MacDonald')`);
 }
 
