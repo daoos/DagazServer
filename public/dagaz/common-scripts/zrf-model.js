@@ -1073,6 +1073,15 @@ ZrfDesign.prototype.addPosition = function(name, links, selector) {
   this.positions.push(Dagaz.int32Array(links));
 }
 
+ZrfDesign.prototype.isKilledPos = function(pos) {
+  if (pos >= this.positions.length) return true;
+  var links = this.positions[pos];
+  for (var i = 0; i < links.length; i++) {
+      if (links[i] != 0) return false;
+  }
+  return true;
+}
+
 ZrfDesign.prototype.addGrid = function() {
   return new ZrfGrid(this);
 }
