@@ -54,7 +54,10 @@ Dagaz.Model.PostProcessing = function(board, moves) {
           if (move.actions[0][0] === null) return;
           if (move.actions[0][1] === null) return;
           if (move.actions[0][2] === null) return;
-          var piece = move.actions[0][2][0];
+          var piece = board.getPiece(move.actions[0][0][0]);
+          if (piece === null) return;
+          if (piece.type != design.getPieceType("Pawn")) return;
+          piece = move.actions[0][2][0];
           if (piece.type != design.getPieceType("King")) return;
           move.capturePiece(king);
           if (piece.player != player) {

@@ -150,6 +150,14 @@ Dagaz.Model.checkGoals = function(design, board, player) {
   return checkGoals(design, board, player);
 }
 
+var copy = function(a) {
+  var r = [];
+  _.each(a, function(x) {
+      r.push(x);
+  });
+  return r;
+}
+
 var CheckInvariants = Dagaz.Model.CheckInvariants;
 
 Dagaz.Model.CheckInvariants = function(board) {
@@ -165,8 +173,6 @@ Dagaz.Model.CheckInvariants = function(board) {
       king = pos;
   });
   if ((king !== null) && (c.enemy.length > 0)) {
-      Dagaz.Model.expandColors(design, board, c.friend, c.enemy);
-      Dagaz.Model.expandColors(design, board, c.enemy, c.friend);
       _.each(board.moves, function(move) {
            if (move.actions.length < 1) return;
            if (move.actions[0][0] == null) return;
@@ -183,7 +189,13 @@ Dagaz.Model.CheckInvariants = function(board) {
                positions.push(pos);
            }
            var undo = applyMoves(design, board, move);
-           if (Dagaz.Model.checkPositions(design, board, c, positions)) {
+           var x = {
+               friend: copy(c.friend),
+               enemy:  copy(c.enemy)
+           };
+           Dagaz.Model.expandColors(design, board, x.friend, x.enemy);
+           Dagaz.Model.expandColors(design, board, x.enemy, x.friend);
+           if (Dagaz.Model.checkPositions(design, board, x, positions)) {
                move.failed = true;
            }
            applyMoves(design, board, undo);
