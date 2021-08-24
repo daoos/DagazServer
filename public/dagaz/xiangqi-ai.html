@@ -1,11 +1,11 @@
 <html>
 <head>
 <META http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>Xiangqi 42</title>
+<title>XiangQi</title>
 </head>
 <body>
 
-<img id="Board" style="display:none" src="images/xiangqi/6x7.png">
+<img id="Board" style="display:none" src="images/xiangqi/10x9.png">
 <img id="RedSoldier" style="display:none" src="images/xiangqi/rsoldier.png">
 <img id="BlackSoldier" style="display:none" src="images/xiangqi/bsoldier.png">
 <img id="RedHorse" style="display:none" src="images/xiangqi/rhorse.png">
@@ -25,18 +25,17 @@
 <tr><td>
 <a href="javascript:Dagaz.Controller.home()" title="Home" style="display:none" id="home"><img src="images/home.png"/></a>
 <a href="javascript:Dagaz.Controller.undo()" title="PgDown" style="display:none" id="undo"><img src="images/undo.png"/></a>
-Copyright (c) Robert Price
-<a target="_blank" href="https://www.chessvariants.com/42.dir/xiangqi42.html">Rules</a>
+<a target="_blank" href="https://en.wikipedia.org/wiki/Xiangqi">Rules</a>
 <a href="javascript:Dagaz.Controller.resign()">I Resign</a>
 <a href="javascript:Dagaz.Controller.drawOffer()">Offer Draw</a>
 <a href="javascript:Dagaz.Controller.sound()" id="sound">no Sound</a>
 <a href="javascript:Dagaz.Controller.redo()" title="PgUp" style="display:none" id="redo"><img src="images/redo.png"/></a>
 <div align="right" id="timer"/>
 </td></tr>
-<tr style="height:278px; vertical-align:top">
-<td id="CanvasCell" style="width:321px">
-<canvas id="Canvas" width="321" height="278" style="cursor:default">Broken canvas...</canvas>
-</td><td style="width:321px;">
+<tr style="height:458px; vertical-align:top">
+<td id="CanvasCell" style="width:411px">
+<canvas id="Canvas" width="411" height="458" style="cursor:default">Broken canvas...</canvas>
+</td><td style="width:411px;">
 <div style="height:510px; overflow:auto" id="ScrollDiv">
 <img id="GlyphImage"><p id="HelpText"></p>
 <p id="GameSession"></p>
@@ -45,7 +44,7 @@ Copyright (c) Robert Price
 </tr>
 <tr>
 <td>
-<div style="height:100px; width:321px; margin-left:auto; margin-right:auto">
+<div style="height:100px; width:411px; margin-left:auto; margin-right:auto">
 <table>
 <tr style="display:none" id="PieceInfo">
 <td><img id="PieceInfoImage"></td><td id="PieceInfoText"></td>
@@ -65,9 +64,16 @@ Copyright (c) Robert Price
 <script src="common-scripts/move-list-v2.js"></script>
 <script src="common-scripts/sound-manager-v2.js"></script>
 <script src="common-scripts/session-manager.js"></script>
+<script src="common-scripts/random-ai.js"></script>
+<script src="common-scripts/maxmin-ai-v2.js"></script>
+<script src="common-scripts/garbo-ai-v2.js"></script>
+<script src="common-scripts/sgf-parser.js"></script>
+<script src="data/xiangqi.js"></script>
+<script src="common-scripts/sgf-ai-v2.js"></script>
+<script src="scripts/xiangqi-ai.js"></script>
 <script src="scripts/xiangqi-setup.js"></script>
 <script src="scripts/xiangqi-extension.js"></script>
-<script src="scripts/mini-xiangqi-black.js"></script>
+<script src="scripts/xiangqi.js"></script>
 <script src="common-scripts/app-net-v2.js"></script>
 
 </body>

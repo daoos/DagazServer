@@ -3,9 +3,11 @@
 (function() {
 
 Dagaz.AI.Q_SEARCH_LIMIT = -20;
+Dagaz.AI.ALL_CUT_LIMIT  = 100;
 Dagaz.AI.g_timeout      = 3000;
 Dagaz.Model.WIDTH       = 8;
 Dagaz.Model.HEIGHT      = 8;
+Dagaz.AI.STALMATED      = false;
 
 Dagaz.AI.PIECE_MASK     = 0xF;
 Dagaz.AI.TYPE_MASK      = 0x7;
@@ -61,7 +63,7 @@ function Ai(parent) {
 var findBot = Dagaz.AI.findBot;
 
 Dagaz.AI.findBot = function(type, params, parent) {
-  if ((type == "external") || (type == "common") || (type == "1") || (type == "2")) {
+  if ((type == "external") || (type == "smart") || (type == "1") || (type == "2")) {
       return new Ai(parent);
   } else {
       return findBot(type, params, parent);
@@ -364,7 +366,7 @@ Dagaz.AI.isNoZugzwang = function() {
 }
 
 function AllCutNode(ply, depth, beta, allowNull) {
-//  if (depth > 100) return 0;
+    if (depth > Dagaz.AI.ALL_CUT_LIMIT) return 0;
 
     if (ply <= 0) {
         return QSearch(beta - 1, beta, 0);
@@ -523,7 +525,7 @@ function AllCutNode(ply, depth, beta, allowNull) {
 
     if (!moveMade) {
         // If we have no valid moves it's either stalemate or checkmate
-        if (Dagaz.AI.g_inCheck)
+        if (Dagaz.AI.g_inCheck || Dagaz.AI.STALMATED)
             // Checkmate.
             return minEval + depth;
         else 
@@ -633,7 +635,7 @@ function AlphaBeta(ply, depth, alpha, beta) {
 
     if (!moveMade) {
         // If we have no valid moves it's either stalemate or checkmate
-        if (Dagaz.AI.inCheck) 
+        if (Dagaz.AI.g_inCheck || Dagaz.AI.STALMATED) 
             // Checkmate.
             return minEval + depth;
         else 
@@ -702,6 +704,7 @@ Dagaz.AI.InitializePieceList = function() {
         }
     }
     for (var i = 0; i < 256; i++) {
+        if (Dagaz.AI.g_board[i] & 0x80) continue;
         Dagaz.AI.g_pieceIndex[i] = 0;
         if (Dagaz.AI.g_board[i] & Dagaz.AI.PLAYERS_MASK) {
             var piece = Dagaz.AI.g_board[i] & Dagaz.AI.PIECE_MASK;

@@ -2,6 +2,7 @@
 
 Dagaz.AI.AI_FRAME      = 3000;
 Dagaz.AI.getForcedMove = Dagaz.AI.getChessForcedMove;
+Dagaz.AI.inProgress    = false;
 
 var checkVersion = Dagaz.Model.checkVersion;
 

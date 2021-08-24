@@ -1,4 +1,9 @@
 Dagaz.Controller.persistense = "none";
+Dagaz.AI.Q_SEARCH_LIMIT = -5;
+Dagaz.AI.ALL_CUT_LIMIT  = 3;
+
+Dagaz.Model.WIDTH  = 9;
+Dagaz.Model.HEIGHT = 10;
 
 ZRF = {
     JUMP:          0,
@@ -27,8 +32,7 @@ Dagaz.Model.BuildDesign = function(design) {
     design.checkVersion("show-hints", "false");
     design.checkVersion("show-blink", "false");
     design.checkVersion("animate-captures", "false");
-    design.checkVersion("advisor-wait", "5");
-    design.checkVersion("xiangqi-extension", "true");
+    design.checkVersion("advisor-wait", "15");
 
     design.addDirection("w");
     design.addDirection("e");
