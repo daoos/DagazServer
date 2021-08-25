@@ -6,31 +6,31 @@
 <body>
 
 <img id="Board" style="display:none" src="images/xiangqi/10x9.png">
-<img id="RedSoldier" style="display:none" src="images/xiangqi/kanji/rsoldier.png">
-<img id="BlackSoldier" style="display:none" src="images/xiangqi/kanji/bsoldier.png">
-<img id="RedHorse" style="display:none" src="images/xiangqi/kanji/rhorse.png">
-<img id="BlackHorse" style="display:none" src="images/xiangqi/kanji/bhorse.png">
-<img id="RedElephant" style="display:none" src="images/xiangqi/kanji/relephant.png">
-<img id="BlackElephant" style="display:none" src="images/xiangqi/kanji/belephant.png">
-<img id="RedChariot" style="display:none" src="images/xiangqi/kanji/rchariot.png">
-<img id="BlackChariot" style="display:none" src="images/xiangqi/kanji/bchariot.png">
-<img id="RedCannon" style="display:none" src="images/xiangqi/kanji/rcannon.png">
-<img id="BlackCannon" style="display:none" src="images/xiangqi/kanji/bcannon.png">
-<img id="RedMandarin" style="display:none" src="images/xiangqi/kanji/rmandarin.png">
-<img id="BlackMandarin" style="display:none" src="images/xiangqi/kanji/bmandarin.png">
-<img id="RedGeneral" style="display:none" src="images/xiangqi/kanji/rgeneral.png">
-<img id="BlackGeneral" style="display:none" src="images/xiangqi/kanji/bgeneral.png">
-<img id="RedUnknownSoldier" style="display:none" src="images/xiangqi/bu.png">
+<img id="RedSoldier" style="display:none" src="images/xiangqi/rsoldier.png">
+<img id="BlackSoldier" style="display:none" src="images/xiangqi/bsoldier.png">
+<img id="RedHorse" style="display:none" src="images/xiangqi/rhorse.png">
+<img id="BlackHorse" style="display:none" src="images/xiangqi/bhorse.png">
+<img id="RedElephant" style="display:none" src="images/xiangqi/relephant.png">
+<img id="BlackElephant" style="display:none" src="images/xiangqi/belephant.png">
+<img id="RedChariot" style="display:none" src="images/xiangqi/rchariot.png">
+<img id="BlackChariot" style="display:none" src="images/xiangqi/bchariot.png">
+<img id="RedCannon" style="display:none" src="images/xiangqi/rcannon.png">
+<img id="BlackCannon" style="display:none" src="images/xiangqi/bcannon.png">
+<img id="RedMandarin" style="display:none" src="images/xiangqi/rmandarin.png">
+<img id="BlackMandarin" style="display:none" src="images/xiangqi/bmandarin.png">
+<img id="RedGeneral" style="display:none" src="images/xiangqi/rgeneral.png">
+<img id="BlackGeneral" style="display:none" src="images/xiangqi/bgeneral.png">
+<img id="RedUnknownSoldier" style="display:none" src="images/xiangqi/ru.png">
 <img id="BlackUnknownSoldier" style="display:none" src="images/xiangqi/bu.png">
-<img id="RedUnknownHorse" style="display:none" src="images/xiangqi/bu.png">
+<img id="RedUnknownHorse" style="display:none" src="images/xiangqi/ru.png">
 <img id="BlackUnknownHorse" style="display:none" src="images/xiangqi/bu.png">
-<img id="RedUnknownElephant" style="display:none" src="images/xiangqi/bu.png">
+<img id="RedUnknownElephant" style="display:none" src="images/xiangqi/ru.png">
 <img id="BlackUnknownElephant" style="display:none" src="images/xiangqi/bu.png">
-<img id="RedUnknownChariot" style="display:none" src="images/xiangqi/bu.png">
+<img id="RedUnknownChariot" style="display:none" src="images/xiangqi/ru.png">
 <img id="BlackUnknownChariot" style="display:none" src="images/xiangqi/bu.png">
-<img id="RedUnknownCannon" style="display:none" src="images/xiangqi/bu.png">
+<img id="RedUnknownCannon" style="display:none" src="images/xiangqi/ru.png">
 <img id="BlackUnknownCannon" style="display:none" src="images/xiangqi/bu.png">
-<img id="RedUnknownMandarin" style="display:none" src="images/xiangqi/bu.png">
+<img id="RedUnknownMandarin" style="display:none" src="images/xiangqi/ru.png">
 <img id="BlackUnknownMandarin" style="display:none" src="images/xiangqi/bu.png">
 
 <table style="margin:auto; font-family:sans-serif; font-size:14px" id="Table">
@@ -38,7 +38,6 @@
 <a href="javascript:Dagaz.Controller.home()" title="Home" style="display:none" id="home"><img src="images/home.png"/></a>
 <a href="javascript:Dagaz.Controller.undo()" title="PgDown" style="display:none" id="undo"><img src="images/undo.png"/></a>
 <a href="javascript:Dagaz.Controller.resign()">I Resign</a>
-<a href="javascript:Dagaz.Controller.drawOffer()">Offer Draw</a>
 <a href="javascript:Dagaz.Controller.sound()" id="sound">no Sound</a>
 <a href="javascript:Dagaz.Controller.redo()" title="PgUp" style="display:none" id="redo"><img src="images/redo.png"/></a>
 <div align="right" id="timer"/>
@@ -76,6 +75,10 @@
 <script src="common-scripts/move-list-v2.js"></script>
 <script src="common-scripts/sound-manager-v2.js"></script>
 <script src="common-scripts/session-manager.js"></script>
+<script src="common-scripts/random-ai.js"></script>
+<script src="common-scripts/maxmin-ai-v2.js"></script>
+<script src="common-scripts/garbo-ai-v2.js"></script>
+<script src="scripts/xiangqi-ai.js"></script>
 <script src="scripts/xiangqi-extension.js"></script>
 <script src="scripts/dark-chinese-setup.js"></script>
 <script src="scripts/dark-chinese-chess.js"></script>

@@ -1,6 +1,6 @@
 Dagaz.Controller.persistense = "none";
 Dagaz.AI.Q_SEARCH_LIMIT = -5;
-Dagaz.AI.ALL_CUT_LIMIT  = 3;
+Dagaz.AI.ALL_CUT_LIMIT  = 2;
 
 Dagaz.Model.WIDTH  = 9;
 Dagaz.Model.HEIGHT = 10;
