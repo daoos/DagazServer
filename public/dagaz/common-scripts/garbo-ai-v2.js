@@ -8,6 +8,7 @@ Dagaz.AI.g_timeout      = 3000;
 Dagaz.Model.WIDTH       = 8;
 Dagaz.Model.HEIGHT      = 8;
 Dagaz.AI.STALMATED      = false;
+Dagaz.AI.INC_CHECK_PLY  = true;
 
 Dagaz.AI.PIECE_MASK     = 0xF;
 Dagaz.AI.TYPE_MASK      = 0x7;
@@ -366,8 +367,6 @@ Dagaz.AI.isNoZugzwang = function() {
 }
 
 function AllCutNode(ply, depth, beta, allowNull) {
-    if (depth > Dagaz.AI.ALL_CUT_LIMIT) return 0;
-
     if (ply <= 0) {
         return QSearch(beta - 1, beta, 0);
     }
@@ -389,6 +388,8 @@ function AllCutNode(ply, depth, beta, allowNull) {
 
     if (maxEval - (depth + 1) < beta)
 	return beta - 1;
+
+    if (depth > Dagaz.AI.ALL_CUT_LIMIT) return beta - 1;
 
     var hashMove = null;
     var hashNode = g_hashTable[Dagaz.AI.g_hashKeyLow & g_hashMask];
@@ -545,7 +546,6 @@ function AlphaBeta(ply, depth, alpha, beta) {
     g_nodeCount++;
 
     if (depth > 0 && IsRepDraw()) return 0;
-//  if (depth > 100) return 0;
 
     // Mate distance pruning
     var oldAlpha = alpha;
@@ -580,9 +580,9 @@ function AlphaBeta(ply, depth, alpha, beta) {
             continue;
         }
 
-        if (Dagaz.AI.g_inCheck) {
+        if (Dagaz.AI.g_inCheck && Dagaz.AI.INC_CHECK_PLY) {
             // Check extensions
-            plyToSearch++;
+            if (depth < 100) plyToSearch++;
         }
 
         var value;
