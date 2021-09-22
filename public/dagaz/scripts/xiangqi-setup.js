@@ -133,7 +133,7 @@ Dagaz.Model.setup = function(board, init) {
 }
 
 var getPieceNotation = function(design, piece) {
-  r = 'P';
+  var r = 'P';
   if (piece.type == design.getPieceType("Horse"))    r = 'N';
   if (piece.type == design.getPieceType("Elephant")) r = 'B';
   if (piece.type == design.getPieceType("Chariot"))  r = 'R';

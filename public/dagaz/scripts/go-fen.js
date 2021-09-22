@@ -1,23 +1,8 @@
 Dagaz.Controller.persistense = "none";
-
-Dagaz.Model.WIDTH  = 6;
-Dagaz.Model.HEIGHT = 6;
+Dagaz.Model.WIDTH  = 19;
+Dagaz.Model.HEIGHT = 19;
 
 (function() {
-
-Dagaz.Model.moveToString = function(move) {
-  var r = "";
-  _.each(move.actions, function(a) {
-      if (a[1] === null) return;
-      if ((r == "") && (a[0] != null)) {
-          r = r + Dagaz.Model.posToString(a[0][0]);
-      }
-      if (a[1] !== null) {
-          r = r + "-" + Dagaz.Model.posToString(a[1][0]);
-      }
-  });
-  return r;
-}
 
 var getName = function() {
   var str = window.location.pathname.toString();
@@ -86,28 +71,28 @@ var getTurn = function(setup) {
   }
 }
 
-var createPiece = function(design, c) {
-  if (c == 'W') return Dagaz.Model.createPiece(design.getPieceType("SmallSquare"), 1);
-  if (c == 'w') return Dagaz.Model.createPiece(design.getPieceType("SmallSquare"), 2);
-  if (c == 'R') return Dagaz.Model.createPiece(design.getPieceType("Square"), 1);
-  if (c == 'r') return Dagaz.Model.createPiece(design.getPieceType("Square"), 2);
-  if (c == 'F') return Dagaz.Model.createPiece(design.getPieceType("SmallTriangle"), 1);
-  if (c == 'f') return Dagaz.Model.createPiece(design.getPieceType("SmallTriangle"), 2);
-  if (c == 'B') return Dagaz.Model.createPiece(design.getPieceType("Triangle"), 1);
-  if (c == 'b') return Dagaz.Model.createPiece(design.getPieceType("Triangle"), 2);
-  if (c == 'K') return Dagaz.Model.createPiece(design.getPieceType("SmallCircle"), 1);
-  if (c == 'k') return Dagaz.Model.createPiece(design.getPieceType("SmallCircle"), 2);
-  if (c == 'Q') return Dagaz.Model.createPiece(design.getPieceType("Circle"), 1);
-  if (c == 'q') return Dagaz.Model.createPiece(design.getPieceType("Circle"), 2);
-  return null;
+var createPiece = function(design, player, c) {
+  if (c == 'b') {
+      player = (player == 1) ? 2 : 1;
+  }
+  return Dagaz.Model.createPiece(0, player);
+}
+
+var getPieceNotation = function(design, player, piece) {
+  if (piece.player == player) return 'w';
+  return 'b';
 }
 
 Dagaz.Model.setup = function(board, init) {
   var design = Dagaz.Model.design;
   var setup  = getSetup(init);
-  var player = 1;
   if (setup) {
       board.clear();
+      var turn = getTurn(init);
+      if (turn) {
+          board.turn   = +turn;
+          board.player = design.currPlayer(board.turn);
+      }
       var pos = 0;
       for (var i = 0; i < setup.length; i++) {
            var c = setup[i];
@@ -115,33 +100,14 @@ Dagaz.Model.setup = function(board, init) {
                if ((c >= '0') && (c <= '9')) {
                    pos += +c;
                } else {
-                   var piece = createPiece(design, c);
+                   var piece = createPiece(design, board.player, c);
                    board.setPiece(pos, piece);
                    pos++;
                }
                if (pos >= Dagaz.Model.WIDTH * Dagaz.Model.HEIGHT) break;
            }
       }
-      var turn = getTurn(init);
-      if (turn) {
-          board.turn   = +turn;
-          board.player = design.currPlayer(board.turn);
-      }
   }
-}
-
-var getPieceNotation = function(design, piece) {
-  var r = '1';
-  if (piece.type == design.getPieceType("SmallSquare")) r = 'W';
-  if (piece.type == design.getPieceType("Square")) r = 'R';
-  if (piece.type == design.getPieceType("SmallTriangle")) r = 'F';
-  if (piece.type == design.getPieceType("Triangle")) r = 'B';
-  if (piece.type == design.getPieceType("SmallCircle")) r = 'K';
-  if (piece.type == design.getPieceType("Circle")) r = 'Q';
-  if (piece.player > 1) {
-      return r.toLowerCase();
-  }
-  return r;
 }
 
 Dagaz.Model.getSetup = function(design, board) {
@@ -169,16 +135,11 @@ Dagaz.Model.getSetup = function(design, board) {
                str += c;
            }
            c = 0;
-           str += getPieceNotation(design, piece);
+           str += getPieceNotation(design, board.player, piece);
        }
   }
   if (c > 0) {
       str += c;
-  }
-  if (board.turn == 0) {
-      str += " w";
-  } else {
-      str += " b";
   }
   if (Dagaz.Controller.persistense == "setup") {
       var s = str + "&game=" + getName() + "*";
