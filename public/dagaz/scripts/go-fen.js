@@ -72,6 +72,7 @@ var getTurn = function(setup) {
 }
 
 var createPiece = function(design, player, c) {
+  if (c == 'X') return null;
   if (c == 'b') {
       player = (player == 1) ? 2 : 1;
   }
@@ -93,9 +94,10 @@ Dagaz.Model.setup = function(board, init) {
           board.turn   = +turn;
           board.player = design.currPlayer(board.turn);
       }
-      var pos = 0;
-      for (var i = 0; i < setup.length; i++) {
+      var pos = 0; var ko = [];
+      for (var i = 0; i < setup.length; i++) { 
            var c = setup[i];
+//         if (c == 'X') ko.push(pos);
            if (c != '/') {
                if ((c >= '0') && (c <= '9')) {
                    pos += +c;
@@ -107,12 +109,27 @@ Dagaz.Model.setup = function(board, init) {
                if (pos >= Dagaz.Model.WIDTH * Dagaz.Model.HEIGHT) break;
            }
       }
+      if (ko.length > 0) board.ko = ko;
   }
+}
+
+var getCapture = function(move) {
+  var r = null;
+  _.each(move.actions, function(a) {
+      if ((a[1] === null) && (a[0] !== null)) r = a[0][0];
+  });
+  return r;
+}
+
+var getKo = function(design, board) {
+  if (_.isUndefined(board.move)) return null;
+  if (board.move.actions.length != 2) return null;
+  return getCapture(board.move);
 }
 
 Dagaz.Model.getSetup = function(design, board) {
   var str = "?turn=" + board.turn + ";&setup=";
-  var k = 0; var c = 0;
+  var k = 0; var c = 0; var ko = getKo(design, board);
   for (var pos = 0; pos < Dagaz.Model.WIDTH * Dagaz.Model.HEIGHT; pos++) {
        if (k >= Dagaz.Model.WIDTH) {
            if (c > 0) {
@@ -123,6 +140,14 @@ Dagaz.Model.getSetup = function(design, board) {
            c = 0;
        }
        k++;
+       if ((ko !== null) && (pos == ko)) {
+           if (c > 0) {
+               str += c;
+           }
+           c = 0;
+           str += 'X';
+           continue;
+       }
        var piece = board.getPiece(pos);
        if (piece === null) {
            if (c > 8) {
