@@ -9,10 +9,14 @@ Dagaz.Model.checkVersion = function(design, name, value) {
 }
 
 var getPath = function(move) {
-  var r = [];
+  var r = []; var f = true;
   _.each(move.actions, function(a) {
       if (a[0] === null) return;
-      if (a[1] !== null) return;
+      if (f) {
+          if (r.length == 0) r.push(a[0][0]);
+          f = false;
+          return;
+      }
       r.push(a[0][0]);
   });
   return r;
