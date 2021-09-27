@@ -13,9 +13,10 @@ import { GameModule } from './game/game.module';
 import { BonusModule } from './bonus/bonus.module';
 import { TournamentModule } from './tournament/tournament.module';
 import { RatingModule } from './rating/rating.module';
+import { AiModule } from './ai/ai.module';
 
 @Module({
-  imports: [DatabaseModule, UsersModule, AuthModule, PreferencesModule, SessionModule, ChallengeModule, JoinModule, MoveModule, ResultModule, GameModule, BonusModule, TournamentModule, RatingModule],
+  imports: [DatabaseModule, UsersModule, AuthModule, PreferencesModule, SessionModule, ChallengeModule, JoinModule, MoveModule, ResultModule, GameModule, BonusModule, TournamentModule, RatingModule, AiModule],
   controllers: [AppController]
 })
 export class AppModule {}
