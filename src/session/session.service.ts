@@ -13,6 +13,8 @@ import { tournament_games } from '../entity/tournament_games';
 import { tournament_users } from '../entity/tournament_users';
 import { user_ratings } from '../entity/user_ratings';
 import { GameTime } from '../interfaces/gametime.interface';
+import { ai_response } from '../entity/ai_response';
+import { ai_request } from '../entity/ai_request';
 
 @Injectable()
 export class SessionService {
@@ -683,6 +685,16 @@ export class SessionService {
             if (!s) {
                 return null;
             }
+            await this.service.createQueryBuilder("ai_response")
+            .delete()
+            .from(ai_response)
+            .where(`session_id  = :id`, {id: id})
+            .execute();
+            await this.service.createQueryBuilder("ai_request")
+            .delete()
+            .from(ai_request)
+            .where(`session_id  = :id`, {id: id})
+            .execute();
             await this.service.createQueryBuilder("tournament_games")
             .update(tournament_games)
             .set({ 
@@ -693,30 +705,22 @@ export class SessionService {
             await this.service.createQueryBuilder("game_alerts")
             .delete()
             .from(game_alerts)
-            .where(`session_id in (select a.id
-                                   from   game_sessions a
-                                   where  a.id = :id)`, {id: id})
+            .where(`session_id = :id`, {id: id})
             .execute();
             await this.service.createQueryBuilder("game_moves")
             .delete()
             .from(game_moves)
-            .where(`session_id in (select a.id
-                                   from   game_sessions a
-                                   where  a.id = :id)`, {id: id})
+            .where(`session_id = :id`, {id: id})
             .execute();
             await this.service.createQueryBuilder("challenge")
             .delete()
             .from(challenge)
-            .where(`session_id in (select a.id
-                                   from   game_sessions a
-                                   where  a.id = :id)`, {id: id})
+            .where(`session_id = :id`, {id: id})
             .execute();
             await this.service.createQueryBuilder("user_games")
             .delete()
             .from(user_games)
-            .where(`session_id in (select a.id
-                                   from   game_sessions a
-                                   where  a.id = :id)`, {id: id})
+            .where(`session_id = :id`, {id: id})
             .execute();
             await this.service.createQueryBuilder("game_sessions")
             .delete()
@@ -735,6 +739,22 @@ export class SessionService {
 
     async clearWaiting(): Promise<boolean> {
         const dt = new Date();
+        await this.service.createQueryBuilder("ai_response")
+        .delete()
+        .from(ai_response)
+        .where(`session_id in (select id
+            from   game_sessions
+            where  status_id = 1 and is_protected = 0
+            and    created + interval '1 week' < :dt)`, {dt: dt})
+        .execute();
+        await this.service.createQueryBuilder("ai_request")
+        .delete()
+        .from(ai_request)
+        .where(`session_id in (select id
+            from   game_sessions
+            where  status_id = 1 and is_protected = 0
+            and    created + interval '1 week' < :dt)`, {dt: dt})
+        .execute();
         await this.service.createQueryBuilder("tournament_games")
         .update(tournament_games)
         .set({ 
@@ -787,6 +807,22 @@ export class SessionService {
 
     async clearObsolete(): Promise<boolean> {
         const dt = new Date();
+        await this.service.createQueryBuilder("ai_response")
+        .delete()
+        .from(ai_response)
+        .where(`session_id in (select id
+            from   game_sessions
+            where  status_id = 1 and is_protected = 0
+            and    created + interval '1 week' < :dt)`, {dt: dt})
+        .execute();
+        await this.service.createQueryBuilder("ai_request")
+        .delete()
+        .from(ai_request)
+        .where(`session_id in (select id
+            from   game_sessions
+            where  status_id = 1 and is_protected = 0
+            and    created + interval '1 week' < :dt)`, {dt: dt})
+        .execute();
         await this.service.createQueryBuilder("tournament_games")
         .update(tournament_games)
         .set({ 
