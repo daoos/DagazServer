@@ -1,14 +1,10 @@
 import { Column, Entity, Index, JoinColumn, ManyToOne, PrimaryColumn } from "typeorm";
-import { game_sessions } from "./game_sessions";
 import { game_variants } from "./game_variants";
 
 @Entity()
 export class ai_request {
     @PrimaryColumn()
     session_id: number;
-    @ManyToOne(type => game_sessions)
-    @JoinColumn({ name: "session_id" })
-    session: game_sessions;
 
     @Index()
     @Column({ nullable: false })
@@ -22,6 +18,9 @@ export class ai_request {
 
     @Column({type: "numeric", precision: 10, scale: 2, nullable: true})
     coeff: number;
+
+    @Column({type: "numeric", nullable: true})
+    flags: number;
 
     @Column({default: () => "now()"})
     created: Date;

@@ -42,10 +42,26 @@ export class AiService {
         return r;
     }
 
+    async getSid(): Promise<AiRequest> {
+        try {
+            const x = await this.service.query(
+                `select nextval('game_sessions_id_seq') as sid`);
+            let r = new AiRequest();
+            r.sid = x[0].sid;
+            return r;
+        } catch (error) {
+            console.error(error);
+            throw new InternalServerErrorException({
+                status: HttpStatus.BAD_REQUEST,
+                error: error
+            });
+        }
+    }
+
     async get(id: number): Promise<AiRequest[]> {
         try {
             const x = await this.service.query(
-                `select a.session_id, a.setup, a.coeff, a.variant_id
+                `select a.session_id, a.setup, a.coeff, a.flags, a.variant_id
                  from   ai_request a
                  where  a.variant_id = $1 and a.completed is null
                  order  by a.created`, [id]);
@@ -56,6 +72,7 @@ export class AiService {
                 it.variant_id = x[0].variant_id;
                 it.setup = x[0].setup;
                 it.coeff = x[0].coeff;            
+                it.flags = x[0].flags;
                 r.push(it);
             }
             return r;
@@ -79,10 +96,11 @@ export class AiService {
                     session_id: x.sid,
                     variant_id: x.variant_id,
                     setup: x.setup,
-                    coeff: x.coeff
+                    coeff: x.coeff,
+                    flags: x.flags
                 })
                 .execute();
-                return null;
+                return [];
             }
             if (req.setup != x.setup) {
                 await this.service.createQueryBuilder("ai_response")
@@ -99,9 +117,9 @@ export class AiService {
                  })
                 .where("session_id = :id", {id: x.sid})
                 .execute();
-                return null;
+                return [];
             }
-            if (!req.completed) return null;
+            if (!req.completed) return [];
             const resp = await this.getResponses(x.sid);
             await this.service.createQueryBuilder("ai_response")
             .delete()

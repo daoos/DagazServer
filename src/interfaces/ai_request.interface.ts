@@ -5,14 +5,17 @@ export class AiRequest {
     @ApiProperty()
     sid: number;
 
-    @ApiProperty()
+    @ApiPropertyOptional()
     variant_id: number;
 
-    @ApiProperty()
+    @ApiPropertyOptional()
     setup: string;
 
     @ApiPropertyOptional()
     coeff: number;
+
+    @ApiPropertyOptional()
+    flags: number;
 
     @ApiPropertyOptional()
     completed: Date;

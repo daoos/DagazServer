@@ -1105,11 +1105,23 @@ App.prototype.exec = function() {
           }
       }
       if (Dagaz.AI.isFriend(player_num, this.board.player)) {
+          if (Dagaz.AI.advisor) {
+              var timestamp = Date.now();
+              if (_.isUndefined(Dagaz.AI.advisorStamp) || ((Dagaz.AI.advisorStamp !== null) && (timestamp - Dagaz.AI.advisorStamp > 1000))) {
+                  var s = Dagaz.Model.getSetup(this.design, this.board);
+                  if (Dagaz.AI.advisor(auth, sid, s)) {
+                      Dagaz.AI.advisorStamp = null;
+                  } else {
+                      Dagaz.AI.advisorStamp = timestamp;
+                  }
+              }
+          }
           if (_.isUndefined(this.list)) {
               var player = this.design.playerNames[this.board.player];
               console.log("Player: " + player);
+              var s = Dagaz.Model.getSetup(this.design, this.board);
               if (!_.isUndefined(Dagaz.Model.getSetup)) {
-                  console.log("Setup: " + Dagaz.Model.getSetup(this.design, this.board));
+                  console.log("Setup: " + s);
               }
               if (!Dagaz.Controller.noDropIndex) {
                   dropIndex = 0;
@@ -1243,8 +1255,12 @@ App.prototype.exec = function() {
       this.state = STATE.EXEC;
       last_move = null;
   }
-  if (this.state == STATE.EXEC) {
+  if (this.state == STATE.EXEC) {       
       this.state = STATE.IDLE;
+      delete Dagaz.AI.advisorStamp;
+      if (!_.isUndefined(Dagaz.AI.clearAdvisor)) {
+          Dagaz.AI.clearAdvisor();
+      }
       isDrag = false;
       if (!_.isUndefined(this.list) && this.list.isDone()) {
           var moves = this.list.filterDrops(this.list.getMoves(), dropIndex);

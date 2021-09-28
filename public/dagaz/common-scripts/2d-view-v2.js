@@ -51,6 +51,8 @@ function View2D() {
   this.current = [];
   this.drops   = [];
   this.ko      = [];
+  this.labels  = [];
+  this.marks   = [];
 }
 
 Dagaz.View.getView = function() {
@@ -192,22 +194,27 @@ View2D.prototype.addPiece = function(piece, pos, model) {
   });
 }
 
+View2D.prototype.defMark = function(type, res) {
+  this.marks[type] = res;
+}
+
 View2D.prototype.markPositions = function(type, positions) {
   if (type == Dagaz.View.markType.TARGET) {
-      this.target  = positions;
+      this.target   = positions;
   } 
   if (type == Dagaz.View.markType.ATTACKING) {
-      this.strike  = positions;
+      this.strike   = positions;
   }
   if (type == Dagaz.View.markType.GOAL) {
-      this.goal    = positions;
+      this.goal     = positions;
   }
   if (type == Dagaz.View.markType.CURRENT) {
-      this.current = positions;
+      this.current  = positions;
   }
   if (type == Dagaz.View.markType.KO) {
-      this.ko      = positions;
+      this.ko       = positions;
   }
+  this.labels[type] = positions;
   this.invalidate();
 }
 
@@ -382,6 +389,18 @@ var drawMarks = function(ctx, view, list, color) {
         ctx.fill();
         ctx.stroke();
    }, view);
+}
+
+var drawLabels = function(ctx, view) {
+   for (var i = Dagaz.View.markType.KO + 1; i < view.marks.length; i++) {
+        var piece = view.piece[view.marks[i]];
+        _.each(view.labels[i], function(pos) {
+              var p = view.pos[pos];
+              var x = ( p.x + (p.dx - piece.dx) / 2) | 0;
+              var y = ( p.y + (p.dy - piece.dy) / 2) | 0;
+              ctx.drawImage(piece.h, x, y, piece.dx, piece.dy);
+        });
+   }
 }
 
 View2D.prototype.drawKo = function(ctx) {
@@ -559,6 +578,7 @@ View2D.prototype.animate = function() {
 Dagaz.View.showMarks = function(view, ctx) {
   drawMarks(ctx, view, view.target, Dagaz.View.TARGET_COLOR);
   drawMarks(ctx, view, view.goal,   "#FFFF00");
+  drawLabels(ctx, view);
 }
 
 Dagaz.View.showPiece = function(view, ctx, frame, pos, piece, model, x, y) {
