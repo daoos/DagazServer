@@ -155,6 +155,21 @@ export class SessionController {
     }
 
     @UseGuards(JwtAuthGuard, TokenGuard)
+    @Get('current/:variant')
+    @ApiOkResponse({ description: 'Successfully.'})
+    @ApiUnauthorizedResponse({ description: 'Unauthorized.'})
+    @ApiInternalServerErrorResponse({ description: 'Internal Server error.'})
+    async findCurrentVar(@Req() request: Request, @Res() res, @Param('variant') variant): Promise<Sess[]> {
+        const user: any = request.user;
+        try {
+            const r = await this.service.getCurrentSessionsVar(user.id, variant);
+            return res.status(HttpStatus.OK).json(r);
+        } catch(e) {
+            return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ error: e.message.error.toString(), stack: e.stack});
+        }
+    }
+
+    @UseGuards(JwtAuthGuard, TokenGuard)
     @Get('current')
     @ApiOkResponse({ description: 'Successfully.'})
     @ApiUnauthorizedResponse({ description: 'Unauthorized.'})

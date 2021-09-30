@@ -29,7 +29,6 @@ Dagaz.AI.clearAdvisor = function() {
 Dagaz.AI.advisor = function(auth, sid, setup) {
   console.log('sid = ' + sid + ', setup = ' + setup);
   if (result !== null) {
-      console.log(result);
       showResult();
       result = null;
       return true;

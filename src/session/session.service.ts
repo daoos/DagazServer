@@ -117,6 +117,38 @@ export class SessionService {
         }
       }
 
+      async getCurrentSessionsVar(user: number, variant: number): Promise<Sess[]> {
+          try {
+            const x = await this.service.query(
+                `select a.id, a.last_setup, a.status_id as status, a.game_id, a.variant_id, a.last_turn
+                 from   game_sessions a
+                 inner  join user_games b on (b.session_id = a.id and b.player_num = a.next_player and b.user_id = $1)
+                 where  a.status_id = 2 and a.closed is null and a.variant_id = $2 and not a.last_setup is null
+                 order  by a.changed
+                 limit  1`, [user, variant]);
+                 let l: Sess[] = x.map(x => {
+                    let it = new Sess();
+                    it.id = x.id;
+                    it.status = x.status;
+                    it.game_id = x.game_id;
+                    it.variant_id = x.variant_id;
+                    it.last_setup = x.last_setup;
+                    it.last_turn = x.last_turn;
+                    return it;
+                });
+                for (let i = 0; i < l.length; i++) {
+                    await this.setLastTime(l[i].id);
+                }
+                return l;
+          } catch (error) {
+              console.error(error);
+              throw new InternalServerErrorException({
+                  status: HttpStatus.BAD_REQUEST,
+                  error: error
+              });
+          }
+      }
+
       async getCurrentSessions(user: number): Promise<Sess[]> {
         try {
             const realm = await this.getRealm(user);
@@ -963,6 +995,16 @@ export class SessionService {
         return x[0].ai_timeout;
     }
 
+    async setLastUser(sid: number, uid: number): Promise<void> {
+        await this.service.createQueryBuilder("game_sessions")
+        .update(game_sessions)
+        .set({ 
+            last_user: uid
+         })
+        .where("id = :id", {id: sid})
+        .execute();
+    }
+
     async setLastTime(sid: number): Promise<void> {
         await this.service.createQueryBuilder("game_sessions")
         .update(game_sessions)
@@ -993,7 +1035,7 @@ export class SessionService {
     }
 
     async getAdditionalTime(sid: number): Promise<number> {
-        let x = await this.service.query(
+        const x = await this.service.query(
             `select additional_time
              from   game_sessions
              where  id = $1`, [sid]);
@@ -1001,6 +1043,18 @@ export class SessionService {
              return null;
         }
         return x[0].additional_time * 1000;
+    }
+
+    async isRoot(user:number): Promise<boolean> {
+        const x = await this.service.query(
+            `select id
+             from   users
+             where  id = $1 and is_admin = 1`, [user]);
+        if (!x || x.length == 0) {
+            return false;
+        } else {
+            return true;
+        }
     }
 
     async recovery(user:number, s: Sess): Promise<Sess> {
@@ -1013,7 +1067,7 @@ export class SessionService {
             .where("session_id = :sid and accepted is null", {sid: s.id})
             .execute();
             let x = await this.service.query(
-                `select c.id as game_id, c.name as game, c.filename as filename,
+                `select c.id as game_id, coalesce(v.name, c.name) as game, coalesce(v.filename, c.filename) as filename,
                         c.players_total as players_total, a.last_setup as last_setup,
                         b.player_num as player_num, b.id as uid, b.user_id as user_id,
                         a.status_id as status_id, d.id as ai, a.last_user as last_user,
@@ -1030,8 +1084,9 @@ export class SessionService {
             if (!x || x.length == 0) {
                  return null;
             }
-            if (s.setup_required && !x[0].last_setup) {
-                return null;
+            if (s.setup_required) {
+                if (!x[0].last_setup) return null;
+                delete s.last_setup;
             }
             if (!x[0].last_setup && s.last_setup) {
                 await this.service.createQueryBuilder("game_sessions")
@@ -1052,6 +1107,9 @@ export class SessionService {
             s.players_total = x[0].players_total;
             s.last_setup = x[0].last_setup;
             s.is_dice = x[0].is_dice;
+            if (x[0].status_id == 2) {
+                s.is_admin = await this.isRoot(user);
+            }
             s.ai_timeout = await this.getAiTimeout(s.id);
             x = x.filter((it) => { return (it.user_id == user) && (it.is_ai == 0); });
             if ((x.length == 1) && (x[0].status_id != 3)) {
@@ -1062,6 +1120,7 @@ export class SessionService {
                 }
                 if (x[0].last_user && s.uid) {
                     if (x[0].last_user != s.uid) {
+                        await this.setLastUser(s.id, s.uid);
                         await this.setLastTime(s.id);
                     }
                     s.time_limit = await this.getTimeLimit(s.uid);
@@ -1079,6 +1138,9 @@ export class SessionService {
                     .where("session_id = :sid and uid <> :uid and accepted is null", {sid: s.id, uid: s.uid})
                     .execute();
                 }
+            }
+            if (s.ai && !Number.isInteger(s.ai)) {
+                delete s.ai;
             }
             return s;
         } catch (error) {
@@ -1464,6 +1526,16 @@ export class SessionService {
         .execute();
     }
 
+    async getNextUid(sid: number): Promise<number> {
+        const x = await this.service.query(
+            `select b.id
+             from   game_sessions a
+             inner  join user_games b on (b.session_id = a.id and b.id <> a.last_user)
+             where  a.id = $1`, [sid]);
+        if (!x || x.length == 0) return null;
+        return x[0].id;
+    }
+
     async closeSession(x: Sess): Promise<Sess> {
         try {
             if (!x.id) {
@@ -1473,6 +1545,9 @@ export class SessionService {
                 if (x.loser) {
                     x.id = await this.getSession(x.loser);
                 }
+            } else if (!x.winner && !x.loser) {
+                x.loser = await this.getNextUid(x.id);
+                if (!x.loser) x.id = null;
             }
             if (!x.id) return null;
             await this.service.createQueryBuilder("game_sessions")

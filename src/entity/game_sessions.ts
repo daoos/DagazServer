@@ -65,7 +65,7 @@ export class game_sessions {
     @Column({ default: 0, nullable: false })
     is_protected: number;
 
-    @Column({ nullable: true })
+    @Column({ nullable: true, default: 1 })
     next_player: number;
 
     @Column({ default: 1, nullable: false })

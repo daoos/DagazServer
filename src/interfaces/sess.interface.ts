@@ -100,4 +100,7 @@ export class Sess {
 
     @ApiPropertyOptional()
     is_dice: boolean;
+
+    @ApiPropertyOptional()
+    is_admin: boolean;
 }

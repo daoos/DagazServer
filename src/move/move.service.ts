@@ -227,6 +227,7 @@ export class MoveService {
             if (x.length > 0) {
                 let it = new Move();
                 it.id = x[0].id;
+                it.uid = x[0].uid;
                 it.session_id = x[0].session_id;
                 it.user_id = x[0].user_id;
                 it.turn_num = x[0].turn_num;
@@ -416,8 +417,21 @@ export class MoveService {
                  })
                 .where("id = :sess", {sess: x.session_id})
                 .execute();
+    
+            } else {
+                await this.service.createQueryBuilder("game_sessions")
+                .update(game_sessions)
+                .set({ 
+                    changed: new Date(),
+                    last_time: null,
+                    last_turn: turn_num,
+                    last_user: x.uid,
+                    next_player: null
+                 })
+                .where("id = :sess", {sess: x.session_id})
+                .execute();
             }
-            return x;
+        return x;
         } catch (error) {
           console.error(error);
           throw new InternalServerErrorException({
@@ -443,6 +457,7 @@ export class MoveService {
             await this.service.createQueryBuilder("game_sessions")
             .update(game_sessions)
             .set({ 
+                next_player: x.next_player,
                 last_setup: x.setup_str
              })
             .where("id = :id", {id: x.session_id})
