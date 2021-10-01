@@ -417,7 +417,6 @@ export class MoveService {
                  })
                 .where("id = :sess", {sess: x.session_id})
                 .execute();
-    
             } else {
                 await this.service.createQueryBuilder("game_sessions")
                 .update(game_sessions)
