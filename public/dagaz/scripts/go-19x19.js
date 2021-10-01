@@ -419,10 +419,14 @@ Dagaz.View.configure = function(view) {
     view.defPiece("WhiteStone", "White Stone");
     view.defPiece("Big", "Big");
     view.defPiece("Small", "Small");
+    view.defPiece("RBig", "RBig");
+    view.defPiece("RSmall", "RSmall");
     view.defPiece("Ko", "Ko");
 
     view.defMark(5, "Big");
     view.defMark(6, "Small");
+    view.defMark(7, "RBig");
+    view.defMark(8, "RSmall");
  
     view.defPosition("a19", 6, 6, 30, 30);
     view.defPosition("b19", 36, 6, 30, 30);
