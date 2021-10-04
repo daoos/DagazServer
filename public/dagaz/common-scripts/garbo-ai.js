@@ -59,6 +59,10 @@ var garbo = function(bestMove, value, timeTaken, ply) {
   }
 }
 
+function debugPlyCallback(bestMove, value, time, ply) {
+    console.log(Dagaz.AI.FormatMove(bestMove) + ', v = ' + value + ', t = ' + time + ', ply = ' + ply);
+}
+
 Ai.prototype.getMove = function(ctx) {
   var moves = Dagaz.AI.generate(ctx, ctx.board);
   if (moves.length == 0) {
@@ -106,7 +110,7 @@ Ai.prototype.getMove = function(ctx) {
       var fen = result[1];
       setTimeout(function () {
             Dagaz.AI.InitializeFromFen(fen);
-            Dagaz.AI.Search(garbo, 10, null);
+            Dagaz.AI.Search(garbo, 10, debugPlyCallback);
         }, 100);
       return {
            done: false,
