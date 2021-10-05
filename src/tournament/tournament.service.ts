@@ -662,7 +662,6 @@ export class TournamentService {
                 if (r > x.rating) {
                     first = false;
                 }
-
                 await this.createSession(user, s, first ? user : x.user_id, first ? x.user_id : user, first ? id : x.id, first ? x.id : id);
 //              await this.createSession(user, s, first ? x.user_id : user, first ? user : x.user_id, first ? x.id : id, first ? id : x.id);
             });
