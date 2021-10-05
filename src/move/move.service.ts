@@ -430,7 +430,7 @@ export class MoveService {
                 .where("id = :sess", {sess: x.session_id})
                 .execute();
             }
-        return x;
+            return x;
         } catch (error) {
           console.error(error);
           throw new InternalServerErrorException({

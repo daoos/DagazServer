@@ -598,6 +598,40 @@ export class TournamentService {
         .execute();
     }
 
+    async createSession(user: number, s: Tourn, a: number, b: number, aid: number, bid: number): Promise<void> {
+        const z = await this.service.createQueryBuilder("game_sessions")
+        .insert()
+        .into(game_sessions)
+        .values({
+            user_id: user,
+            game_id: s.game_id,
+            variant_id: s.variant_id,
+            selector_value: s.selector_value,
+            status_id: 2,
+            is_protected: 1,
+            timecontrol_id: s.timecontrol_id,
+            main_time: s.main_time,
+            additional_time: s.additional_time,
+            is_sandglass: s.is_sandglass,
+            last_time: null
+        })
+        .returning('*')
+        .execute();
+        const sess = z.generatedMaps[0].id;
+        await this.joinToSession(sess, a, 1, s.main_time);
+        await this.joinToSession(sess, b, 2, s.main_time);
+        await this.service.createQueryBuilder("tournament_games")
+        .insert()
+        .into(tournament_games)
+        .values({
+           tournament_id: s.id,
+           player_a: aid,
+           player_b: bid,
+           session_id: sess
+        })
+        .execute();
+    }
+
     async joinTourn(user: number,t: Tourn): Promise<Tourn> {
         try {
             const s = await this.findOneById(t.id);
@@ -628,37 +662,9 @@ export class TournamentService {
                 if (r > x.rating) {
                     first = false;
                 }
-                const z = await this.service.createQueryBuilder("game_sessions")
-                .insert()
-                .into(game_sessions)
-                .values({
-                    user_id: user,
-                    game_id: s.game_id,
-                    variant_id: s.variant_id,
-                    selector_value: s.selector_value,
-                    status_id: 2,
-                    is_protected: 1,
-                    timecontrol_id: s.timecontrol_id,
-                    main_time: s.main_time,
-                    additional_time: s.additional_time,
-                    is_sandglass: s.is_sandglass,
-                    last_time: null
-                })
-                .returning('*')
-                .execute();
-                const sess = z.generatedMaps[0].id;
-                await this.joinToSession(sess, user, first ? 1 : 2, s.main_time);
-                await this.joinToSession(sess, x.user_id, first ? 2 : 1, s.main_time);
-                await this.service.createQueryBuilder("tournament_games")
-                .insert()
-                .into(tournament_games)
-                .values({
-                   tournament_id: s.id,
-                   player_a: first ? id : x.id,
-                   player_b: first ? x.id : id,
-                   session_id: sess
-                })
-                .execute();
+
+                await this.createSession(user, s, first ? user : x.user_id, first ? x.user_id : user, first ? id : x.id, first ? x.id : id);
+//              await this.createSession(user, s, first ? x.user_id : user, first ? user : x.user_id, first ? x.id : id, first ? id : x.id);
             });
             return s;
         } catch (error) {

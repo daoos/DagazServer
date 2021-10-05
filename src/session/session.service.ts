@@ -1120,7 +1120,7 @@ export class SessionService {
                 }
                 if (x[0].last_user && s.uid) {
                     if (x[0].last_user != s.uid) {
-                        await this.setLastUser(s.id, s.uid);
+//                      await this.setLastUser(s.id, s.uid); // for arbiter (brakes last move replay)
                         await this.setLastTime(s.id);
                     }
                     s.time_limit = await this.getTimeLimit(s.uid);
