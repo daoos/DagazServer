@@ -246,6 +246,7 @@ export class game1596108130561 implements MigrationInterface {
 //      await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(209, 30, 'Omega Chess', 'omega-chess', 2)`);
 //      await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(210, 30, 'Omega Chess Advanced', 'omega-chess-advanced', 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(211, 17, 'RedStone', 'redstone-19x19', 2)`);
+        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(212, 30, 'Vis-a-vis Chess', 'visavis-chess', 2)`);
 
         await queryRunner.query(`insert into game_styles(id, game_id, name, suffix, player_num) values(1, 23, 'European', '', null)`);
         await queryRunner.query(`insert into game_styles(id, game_id, name, suffix, player_num) values(2, 23, 'Chinese', '-kanji', null)`);
@@ -874,6 +875,7 @@ export class game1596108130561 implements MigrationInterface {
 //      await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(567, 'omega-chess', null, 'omega', 'https://en.wikipedia.org/wiki/Omega_Chess', '1992 Daniel MacDonald')`);
 //      await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(568, 'omega-chess-advanced', null, 'omega', 'https://en.wikipedia.org/wiki/Omega_Chess#Omega_Chess_Advanced', '1992 Daniel MacDonald')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(569, 'redstone-19x19', null, 'go-19x19', 'https://senseis.xmp.net/?Redstone', '2012 Mark Steere')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, copyright) values(570, 'visavis-chess', null, 'chess-1', '2014 Viktor Pankovich')`);
 }
 
     public async down(queryRunner: QueryRunner): Promise<any> {
