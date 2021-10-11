@@ -1,7 +1,9 @@
 import { HttpStatus, Inject, Injectable, InternalServerErrorException } from '@nestjs/common';
 import { Repository } from 'typeorm';
+import { ai_fit } from '../entity/ai_fit';
 import { ai_request } from '../entity/ai_request';
 import { ai_response } from '../entity/ai_response';
+import { AiFit } from '../interfaces/ai_fit.interface';
 import { AiRequest } from '../interfaces/ai_request.interface';
 import { AiResponse } from '../interfaces/ai_response.interface';
 
@@ -168,6 +170,60 @@ export class AiService {
                 .execute();
                 return x;
             }
+        } catch (error) {
+          console.error(error);
+          throw new InternalServerErrorException({
+              status: HttpStatus.BAD_REQUEST,
+              error: error
+          });
+        }
+    }
+
+    async getFit(): Promise<AiFit[]> {
+        try {
+            let mx = null;
+            const x = await this.service.query(
+                `select id, setup, move
+                 from   ai_fit
+                 order  by id
+                 limit  10`);
+            let r: AiFit[] = x.map(x => {
+                 let it = new AiFit();
+                 it.setup = x.setup;
+                 it.move = x.move;
+                 if ((mx === null) || (mx < x.id)) {
+                     mx = x.id;
+                 }
+                 return it;
+            });
+            if (mx) {
+                await this.service.createQueryBuilder("ai_fit")
+                .delete()
+                .from(ai_fit)
+                .where(`id <= :id`, {id: mx})
+                .execute();
+            }
+            return r;
+        } catch (error) {
+            console.error(error);
+            throw new InternalServerErrorException({
+                status: HttpStatus.BAD_REQUEST,
+                error: error
+            });
+        }
+    }
+
+    async addFit(x: AiFit): Promise<AiFit> {
+        try {
+            await this.service.createQueryBuilder("ai_fit")
+            .insert()
+            .into(ai_fit)
+            .values({
+                setup: x.setup,
+                move: x.move
+            })
+            .execute();
+            return x;
         } catch (error) {
           console.error(error);
           throw new InternalServerErrorException({

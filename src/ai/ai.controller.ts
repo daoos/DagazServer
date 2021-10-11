@@ -1,5 +1,6 @@
-import { Body, Controller, Get, HttpStatus, Param, Post, Put, Res } from '@nestjs/common';
-import { ApiBody, ApiInternalServerErrorResponse, ApiNotFoundResponse, ApiOkResponse, ApiResponse, ApiSecurity } from '@nestjs/swagger';
+import { Body, Controller, Delete, Get, HttpStatus, Param, Post, Put, Res } from '@nestjs/common';
+import { ApiBody, ApiCreatedResponse, ApiInternalServerErrorResponse, ApiNotFoundResponse, ApiOkResponse, ApiResponse, ApiSecurity } from '@nestjs/swagger';
+import { AiFit } from '../interfaces/ai_fit.interface';
 import { AiRequest } from '../interfaces/ai_request.interface';
 import { AiResponse } from '../interfaces/ai_response.interface';
 import { AiService } from './ai.service';
@@ -66,6 +67,33 @@ export class AiController {
             } else {
                 return res.status(HttpStatus.OK).json(r);
             }
+        } catch (e) {
+            return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ error: e.message.error.toString(), stack: e.stack});
+        }
+    }
+
+    @Put('fit')
+    @ApiBody({ type: AiFit })
+    @ApiResponse({ type: AiFit })
+    @ApiCreatedResponse({ description: 'Successfully.'})
+    @ApiInternalServerErrorResponse({ description: 'Internal Server error.'})
+    async putFit(@Res() res, @Body() x: AiFit): Promise<AiFit> {
+        try {
+            const r = await this.service.addFit(x);
+            return res.status(HttpStatus.CREATED).json(r);
+        } catch (e) {
+            return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ error: e.message.error.toString(), stack: e.stack});
+        }
+    }
+
+    @Delete('fit')
+    @ApiResponse({ type: [AiFit] })
+    @ApiOkResponse({ description: 'Successfully.'})
+    @ApiInternalServerErrorResponse({ description: 'Internal Server error.'})
+    async getFit(@Res() res): Promise<AiFit[]> {
+        try {
+            const r = await this.service.getFit();
+            return res.status(HttpStatus.OK).json(r);
         } catch (e) {
             return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ error: e.message.error.toString(), stack: e.stack});
         }
