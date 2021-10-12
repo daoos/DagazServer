@@ -39,6 +39,7 @@ export class tournaments1617176544639 implements MigrationInterface {
         await queryRunner.query(`insert into game_settings(id, name, game_id, variant_id, selector_value, tournamenttype_id, ratingtype_id) values(14, 'Reversi', 26, 83, 1, 1, 1)`);
         await queryRunner.query(`insert into game_settings(id, name, game_id, variant_id, selector_value, tournamenttype_id, ratingtype_id) values(15, 'Chess Go', 23, 86, null, 1, 1)`);
         await queryRunner.query(`insert into game_settings(id, name, game_id, variant_id, selector_value, tournamenttype_id, ratingtype_id) values(16, 'Alapo', 30, 134, null, 1, 1)`);
+        await queryRunner.query(`insert into game_settings(id, name, game_id, variant_id, selector_value, tournamenttype_id, ratingtype_id) values(17, 'Cyclic Checkers', 22, 205, null, 1, 1)`);
 
         await queryRunner.query(`insert into time_controls(id, name, main_time, additional_time, order_num) values(1, '02:00:00+01:00', 7200, 60, 2)`);
         await queryRunner.query(`insert into time_controls(id, name, main_time, additional_time, order_num) values(2, '00:30:00+00:20', 1800, 20, 1)`);

@@ -22,6 +22,13 @@ Dagaz.Model.CheckInvariants = function(board) {
       if (b.moves.length == 0) {
           move.failed = true;
       }
+      if (b.moves.length == 1) {
+          var w = b.apply(b.moves[0]);
+          w.generate(design);
+          if (w.moves.length == 0) {
+              move.failed = true;
+          }
+      }
       inProgress = false;
   });
   CheckInvariants(board);
