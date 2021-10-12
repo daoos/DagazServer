@@ -63,7 +63,7 @@ export class AiService {
     async get(id: number): Promise<AiRequest[]> {
         try {
             const x = await this.service.query(
-                `select a.session_id, a.setup, a.coeff, a.flags, a.variant_id
+                `select a.session_id, a.setup, a.coeff, a.variant_id
                  from   ai_request a
                  where  a.variant_id = $1 and a.completed is null
                  order  by a.created`, [id]);
@@ -74,7 +74,6 @@ export class AiService {
                 it.variant_id = x[0].variant_id;
                 it.setup = x[0].setup;
                 it.coeff = x[0].coeff;            
-                it.flags = x[0].flags;
                 r.push(it);
             }
             return r;
@@ -98,8 +97,7 @@ export class AiService {
                     session_id: x.sid,
                     variant_id: x.variant_id,
                     setup: x.setup,
-                    coeff: x.coeff,
-                    flags: x.flags
+                    coeff: x.coeff
                 })
                 .execute();
                 return [];

@@ -15,8 +15,5 @@ export class AiRequest {
     coeff: number;
 
     @ApiPropertyOptional()
-    flags: number;
-
-    @ApiPropertyOptional()
     completed: Date;
 }

@@ -19,9 +19,6 @@ export class ai_request {
     @Column({type: "numeric", precision: 10, scale: 2, nullable: true})
     coeff: number;
 
-    @Column({type: "numeric", nullable: true})
-    flags: number;
-
     @Column({default: () => "now()"})
     created: Date;
 
