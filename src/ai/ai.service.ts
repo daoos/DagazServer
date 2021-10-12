@@ -179,18 +179,21 @@ export class AiService {
         }
     }
 
-    async getFit(): Promise<AiFit[]> {
+    async getFit(game: number, lim: number): Promise<AiFit[]> {
         try {
             let mx = null;
             const x = await this.service.query(
-                `select id, setup, move
+                `select id, variant_id, setup, move
                  from   ai_fit
+                 where  variant_id = $1
                  order  by id
-                 limit  10`);
+                 limit  ` + lim, [game]);
+            if (!x || x.length < lim) return [];
             let r: AiFit[] = x.map(x => {
                  let it = new AiFit();
+                 it.variant_id = x.variant_id;
                  it.setup = x.setup;
-                 it.move = x.move;
+                 it.move = x.move;                 
                  if ((mx === null) || (mx < x.id)) {
                      mx = x.id;
                  }
@@ -219,6 +222,7 @@ export class AiService {
             .insert()
             .into(ai_fit)
             .values({
+                variant_id: x.variant_id,
                 setup: x.setup,
                 move: x.move
             })

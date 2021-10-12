@@ -86,13 +86,13 @@ export class AiController {
         }
     }
 
-    @Delete('fit')
+    @Delete('fit/:game/:lim')
     @ApiResponse({ type: [AiFit] })
     @ApiOkResponse({ description: 'Successfully.'})
     @ApiInternalServerErrorResponse({ description: 'Internal Server error.'})
-    async getFit(@Res() res): Promise<AiFit[]> {
+    async getFit(@Res() res, @Param('game') game, @Param('lim') lim): Promise<AiFit[]> {
         try {
-            const r = await this.service.getFit();
+            const r = await this.service.getFit(game, lim);
             return res.status(HttpStatus.OK).json(r);
         } catch (e) {
             return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ error: e.message.error.toString(), stack: e.stack});
