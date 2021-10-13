@@ -28,7 +28,6 @@ Dagaz.Model.BuildDesign = function(design) {
     design.checkVersion("show-blink", "true");
     design.checkVersion("show-captures", "false");
     design.checkVersion("pass-partial", "true");
-    design.checkVersion("advisor-wait", "5");
     design.checkVersion("chu-shogi-promotion", "true");
 
     design.addDirection("se"); // 0

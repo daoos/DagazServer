@@ -30,7 +30,6 @@ Dagaz.Model.BuildDesign = function(design) {
     design.checkVersion("show-drops", "23");
     design.checkVersion("pass-turn", "forced");
     design.checkVersion("animate-redo", "false");
-    design.checkVersion("advisor-wait", "15");
 
     design.addDirection("w");  // 0
     design.addDirection("e");  // 1

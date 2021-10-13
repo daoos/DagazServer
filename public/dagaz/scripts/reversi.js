@@ -31,7 +31,6 @@ Dagaz.Model.BuildDesign = function(design) {
     design.checkVersion("show-hints", "false");
     design.checkVersion("show-drops", "all");
     design.checkVersion("pass-turn", "forced");
-    design.checkVersion("advisor-wait", "5");
     design.checkVersion("animate-redo", "false");
     design.checkVersion("reversi-extension", "true");
 

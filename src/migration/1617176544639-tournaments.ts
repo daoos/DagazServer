@@ -22,6 +22,9 @@ export class tournaments1617176544639 implements MigrationInterface {
         await queryRunner.query(`insert into game_scores(id, game_id, variant_id, result_id, scores) values(13, 23, null, 1, 1)`);
         await queryRunner.query(`insert into game_scores(id, game_id, variant_id, result_id, scores) values(14, 23, null, 2, 0)`);
         await queryRunner.query(`insert into game_scores(id, game_id, variant_id, result_id, scores) values(15, 23, null, 3, 0.5)`);
+        await queryRunner.query(`insert into game_scores(id, game_id, variant_id, result_id, scores) values(16, 31, null, 1, 1)`);
+        await queryRunner.query(`insert into game_scores(id, game_id, variant_id, result_id, scores) values(17, 31, null, 2, 0)`);
+        await queryRunner.query(`insert into game_scores(id, game_id, variant_id, result_id, scores) values(18, 31, null, 3, 0.5)`);
 
         await queryRunner.query(`insert into game_settings(id, name, game_id, variant_id, selector_value, tournamenttype_id, ratingtype_id) values(1, 'Chess', 30, 31, 1, 1, 1)`);
         await queryRunner.query(`insert into game_settings(id, name, game_id, variant_id, selector_value, tournamenttype_id, ratingtype_id) values(2, 'Chess (Mini)', 30, 125, 1, 1, 1)`);
@@ -40,6 +43,24 @@ export class tournaments1617176544639 implements MigrationInterface {
         await queryRunner.query(`insert into game_settings(id, name, game_id, variant_id, selector_value, tournamenttype_id, ratingtype_id) values(15, 'Chess Go', 23, 86, null, 1, 1)`);
         await queryRunner.query(`insert into game_settings(id, name, game_id, variant_id, selector_value, tournamenttype_id, ratingtype_id) values(16, 'Alapo', 30, 134, null, 1, 1)`);
         await queryRunner.query(`insert into game_settings(id, name, game_id, variant_id, selector_value, tournamenttype_id, ratingtype_id) values(17, 'Cyclic Checkers', 22, 205, null, 1, 1)`);
+        await queryRunner.query(`insert into game_settings(id, name, game_id, variant_id, selector_value, tournamenttype_id, ratingtype_id) values(18, 'Turkish Dama', 22, 46, null, 1, 1)`);
+        await queryRunner.query(`insert into game_settings(id, name, game_id, variant_id, selector_value, tournamenttype_id, ratingtype_id) values(19, 'Armenian Tama', 22, 70, null, 1, 1)`);
+        await queryRunner.query(`insert into game_settings(id, name, game_id, variant_id, selector_value, tournamenttype_id, ratingtype_id) values(20, 'Canadian Checkers', 22, 71, null, 1, 1)`);
+        await queryRunner.query(`insert into game_settings(id, name, game_id, variant_id, selector_value, tournamenttype_id, ratingtype_id) values(21, 'Column Checkers', 24, 35, null, 1, 1)`);
+        await queryRunner.query(`insert into game_settings(id, name, game_id, variant_id, selector_value, tournamenttype_id, ratingtype_id) values(22, 'Lasca', 24, 36, null, 1, 1)`);
+        await queryRunner.query(`insert into game_settings(id, name, game_id, variant_id, selector_value, tournamenttype_id, ratingtype_id) values(23, 'Stapeldammen', 24, 37, null, 1, 1)`);
+        await queryRunner.query(`insert into game_settings(id, name, game_id, variant_id, selector_value, tournamenttype_id, ratingtype_id) values(24, 'Constitutional Checkers', 22, 47, null, 1, 1)`);
+        await queryRunner.query(`insert into game_settings(id, name, game_id, variant_id, selector_value, tournamenttype_id, ratingtype_id) values(25, 'Dark Chess', 30, 64, null, 1, 1)`);
+        await queryRunner.query(`insert into game_settings(id, name, game_id, variant_id, selector_value, tournamenttype_id, ratingtype_id) values(26, 'Frisian Checkers', 22, 5, null, 1, 1)`);
+        await queryRunner.query(`insert into game_settings(id, name, game_id, variant_id, selector_value, tournamenttype_id, ratingtype_id) values(27, 'Greek Checkers', 22, 72, null, 1, 1)`);
+        await queryRunner.query(`insert into game_settings(id, name, game_id, variant_id, selector_value, tournamenttype_id, ratingtype_id) values(28, 'Stavropol Checkers', 22, 48, null, 1, 1)`);
+        await queryRunner.query(`insert into game_settings(id, name, game_id, variant_id, selector_value, tournamenttype_id, ratingtype_id) values(29, 'Thai Checkers', 22, 69, null, 1, 1)`);
+        await queryRunner.query(`insert into game_settings(id, name, game_id, variant_id, selector_value, tournamenttype_id, ratingtype_id) values(30, 'Samoedy', 22, 213, null, 1, 1)`);
+//      await queryRunner.query(`insert into game_settings(id, name, game_id, variant_id, selector_value, tournamenttype_id, ratingtype_id) values(31, 'Column Samoedy', 24, 214, null, 1, 1)`);
+        await queryRunner.query(`insert into game_settings(id, name, game_id, variant_id, selector_value, tournamenttype_id, ratingtype_id) values(32, 'Harzdame', 22, 215, null, 1, 1)`);
+        await queryRunner.query(`insert into game_settings(id, name, game_id, variant_id, selector_value, tournamenttype_id, ratingtype_id) values(33, 'Dameo', 22, 216, null, 1, 1)`);
+        await queryRunner.query(`insert into game_settings(id, name, game_id, variant_id, selector_value, tournamenttype_id, ratingtype_id) values(34, 'Oware', 31, 18, null, 1, 1)`);
+        await queryRunner.query(`insert into game_settings(id, name, game_id, variant_id, selector_value, tournamenttype_id, ratingtype_id) values(35, 'Toguz Kumalak', 31, 20, null, 1, 1)`);
 
         await queryRunner.query(`insert into time_controls(id, name, main_time, additional_time, order_num) values(1, '02:00:00+01:00', 7200, 60, 2)`);
         await queryRunner.query(`insert into time_controls(id, name, main_time, additional_time, order_num) values(2, '00:30:00+00:20', 1800, 20, 1)`);

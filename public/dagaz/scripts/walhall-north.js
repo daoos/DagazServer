@@ -28,7 +28,6 @@ Dagaz.Model.BuildDesign = function(design) {
     design.checkVersion("show-hints", "false");
     design.checkVersion("show-blink", "true");
     design.checkVersion("pass-partial", "true");
-    design.checkVersion("advisor-wait", "5");
     design.checkVersion("walhall-extension", "true");
 
     design.addDirection("w");

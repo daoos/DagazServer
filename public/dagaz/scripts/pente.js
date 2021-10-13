@@ -29,7 +29,6 @@ Dagaz.Model.BuildDesign = function(design) {
     design.checkVersion("show-blink", "false");
     design.checkVersion("show-hints", "false");
     design.checkVersion("show-drops", "1");
-    design.checkVersion("advisor-wait", "15");
     design.checkVersion("animate-redo", "false");
     design.checkVersion("pente-restrictions", "true");
     design.checkVersion("renju-extension", "true");

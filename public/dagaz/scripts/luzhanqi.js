@@ -34,7 +34,6 @@ Dagaz.Model.BuildDesign = function(design) {
     design.checkVersion("show-lose", "false");
     design.checkVersion("show-captures", "false");
     design.checkVersion("detect-loops", "true");
-    design.checkVersion("advisor-wait", "5");
 
     design.addDirection("N");
     design.addDirection("S");

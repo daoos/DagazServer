@@ -29,7 +29,6 @@ Dagaz.Model.BuildDesign = function(design) {
     design.checkVersion("show-hints", "false");
     design.checkVersion("mancala-setup", "9");
     design.checkVersion("mancala-view", "true");
-    design.checkVersion("advisor-wait", "5");
     design.checkVersion("toguz-kumalak-extension", "true");
 
     design.addDirection("nx");

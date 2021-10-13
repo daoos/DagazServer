@@ -30,7 +30,6 @@ Dagaz.Model.BuildDesign = function(design) {
     design.checkVersion("show-blink", "false");
     design.checkVersion("shared-pieces", "true");
     design.checkVersion("pass-partial", "true");
-    design.checkVersion("advisor-wait", "5");
     design.checkVersion("banqi-setup", "true");
     design.checkVersion("banqi-extension", "true");
     design.checkVersion("banqi-invariant", "chinese");

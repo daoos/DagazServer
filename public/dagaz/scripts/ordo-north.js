@@ -26,7 +26,6 @@ Dagaz.Model.BuildDesign = function(design) {
     design.checkVersion("animate-captures", "false");
     design.checkVersion("smart-moves", "false");
     design.checkVersion("show-blink", "true");
-    design.checkVersion("advisor-wait", "15");
     design.checkVersion("ordo-extension", "true");
     design.checkVersion("ordo-goal", "true");
 

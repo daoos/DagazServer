@@ -29,7 +29,6 @@ Dagaz.Model.BuildDesign = function(design) {
     design.checkVersion("show-hints", "false");
     design.checkVersion("show-captures", "false");
     design.checkVersion("shared-pieces", "true");
-    design.checkVersion("advisor-wait", "5");
     design.checkVersion("micro-shogi-extension", "true");
 
     design.addDirection("se"); // 0

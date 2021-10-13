@@ -29,7 +29,6 @@ Dagaz.Model.BuildDesign = function(design) {
     design.checkVersion("show-blink", "true");
     design.checkVersion("show-captures", "false");
     design.checkVersion("deferred-captures", "true");
-    design.checkVersion("advisor-wait", "10");
 
     design.addDirection("se");
     design.addDirection("s");

@@ -32,7 +32,6 @@ Dagaz.Model.BuildDesign = function(design) {
     design.checkVersion("show-blink", "false");
     design.checkVersion("show-hints", "false");
     design.checkVersion("complete-partial", "true");
-    design.checkVersion("advisor-wait", "5");
 
     design.addDirection("w");  // 0
     design.addDirection("e");  // 1

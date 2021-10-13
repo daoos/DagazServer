@@ -247,6 +247,10 @@ export class game1596108130561 implements MigrationInterface {
 //      await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(210, 30, 'Omega Chess Advanced', 'omega-chess-advanced', 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(211, 17, 'RedStone', 'redstone-19x19', 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(212, 30, 'Vis-a-vis Chess', 'visavis-chess', 2)`);
+        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(213, 22, 'Samoedy', 'samoedy', 2)`);
+//      await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(214, 24, 'Column Samoedy', 'column-samoedy', 2)`);
+        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(215, 22, 'Harzdame', 'harzdame', 2)`);
+        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(216, 22, 'Dameo', 'dameo', 2)`);
 
         await queryRunner.query(`insert into game_styles(id, game_id, name, suffix, player_num) values(1, 23, 'European', '', null)`);
         await queryRunner.query(`insert into game_styles(id, game_id, name, suffix, player_num) values(2, 23, 'Chinese', '-kanji', null)`);
@@ -351,6 +355,10 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_bots(id, game_id, variant_id, selector_value, player_num) values(79, 23, 165, null, null)`);
         await queryRunner.query(`insert into game_bots(id, game_id, variant_id, selector_value, player_num) values(80, 23, 12, null, null)`);
         await queryRunner.query(`insert into game_bots(id, game_id, variant_id, selector_value, player_num) values(81, 30, 134, null, null)`);
+        await queryRunner.query(`insert into game_bots(id, game_id, variant_id, selector_value, player_num) values(82, 22, 213, null, null)`);
+//      await queryRunner.query(`insert into game_bots(id, game_id, variant_id, selector_value, player_num) values(83, 24, 214, null, null)`);
+        await queryRunner.query(`insert into game_bots(id, game_id, variant_id, selector_value, player_num) values(84, 22, 215, null, null)`);
+        await queryRunner.query(`insert into game_bots(id, game_id, variant_id, selector_value, player_num) values(85, 22, 216, null, null)`);
 
         await queryRunner.query(`insert into game_setups(id, game_id, variant_id, selector_value, name) values(1, 25, 10, 1, 'Without Handicap')`);
         await queryRunner.query(`insert into game_setups(id, game_id, variant_id, selector_value, name) values(2, 25, 10, 2, 'Left-Kyo Handicap')`);
@@ -876,6 +884,10 @@ export class game1596108130561 implements MigrationInterface {
 //      await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(568, 'omega-chess-advanced', null, 'omega', 'https://en.wikipedia.org/wiki/Omega_Chess#Omega_Chess_Advanced', '1992 Daniel MacDonald')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(569, 'redstone-19x19', null, 'go-19x19', 'https://senseis.xmp.net/?Redstone', '2012 Mark Steere')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, copyright) values(570, 'visavis-chess', null, 'chess-1', '2014 Viktor Pankovich')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(571, 'samoedy', null, 'russian-checkers-1')`);
+//      await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(572, 'column-samoedy', null, 'column-checkers')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(573, 'harzdame', null, 'harzdame', 'http://www.iggamecenter.com/info/de/harzdame.html', '2009 Benedikt Rosenau')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(574, 'dameo', null, 'dameo', 'http://www.iggamecenter.com/info/en/dameo.html', '2000 Christian Freeling')`);
 }
 
     public async down(queryRunner: QueryRunner): Promise<any> {

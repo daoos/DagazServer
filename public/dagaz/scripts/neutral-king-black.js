@@ -33,7 +33,6 @@ Dagaz.Model.BuildDesign = function(design) {
     design.checkVersion("smart-moves", "false");
     design.checkVersion("show-blink", "false");
     design.checkVersion("shared-pieces", "true");
-    design.checkVersion("advisor-wait", "5");
 
     design.addDirection("w");
     design.addDirection("e");

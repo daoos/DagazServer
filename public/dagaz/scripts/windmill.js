@@ -29,7 +29,6 @@ Dagaz.Model.BuildDesign = function(design) {
     design.checkVersion("show-blink", "false");
     design.checkVersion("show-hints", "false");
     design.checkVersion("shared-pieces", "true");
-    design.checkVersion("advisor-wait", "5");
 
     design.addDirection("n");
     design.addDirection("s");

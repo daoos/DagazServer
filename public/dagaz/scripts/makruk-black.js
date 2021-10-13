@@ -34,7 +34,6 @@ Dagaz.Model.BuildDesign = function(design) {
     design.checkVersion("smart-moves", "false");
     design.checkVersion("show-blink", "false");
     design.checkVersion("show-hints", "false");
-    design.checkVersion("advisor-wait", "25");
     design.checkVersion("makruk-invariant", "true");
 
     design.addDirection("w");

@@ -34,7 +34,6 @@ Dagaz.Model.BuildDesign = function(design) {
     design.checkVersion("smart-moves", "false");
     design.checkVersion("show-blink", "false");
     design.checkVersion("show-hints", "false");
-    design.checkVersion("advisor-wait", "5");
     design.checkVersion("alapo-extension", "true");
 
     design.addDirection("w");

@@ -28,7 +28,6 @@ Dagaz.Model.BuildDesign = function(design) {
     design.checkVersion("animate-captures", "false");
     design.checkVersion("show-hints", "false");
     design.checkVersion("show-blink", "false");
-    design.checkVersion("advisor-wait", "10");
     design.checkVersion("kono-extension", "true");
 
     design.addDirection("w");  // 0

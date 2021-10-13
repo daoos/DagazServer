@@ -29,7 +29,6 @@ Dagaz.Model.BuildDesign = function(design) {
     design.checkVersion("show-blink", "false");
     design.checkVersion("show-hints", "false");
     design.checkVersion("show-lose", "false");
-    design.checkVersion("advisor-wait", "5");
     design.checkVersion("jasir-invariant", "true");
     design.checkVersion("jasir-extension", "true");
     design.checkVersion("jasir-goal", "true");
