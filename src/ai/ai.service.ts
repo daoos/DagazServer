@@ -1,6 +1,7 @@
 import { HttpStatus, Inject, Injectable, InternalServerErrorException } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { ai_fit } from '../entity/ai_fit';
+import { ai_fit_log } from '../entity/ai_fit_log';
 import { ai_request } from '../entity/ai_request';
 import { ai_response } from '../entity/ai_response';
 import { AiFit } from '../interfaces/ai_fit.interface';
@@ -197,6 +198,17 @@ export class AiService {
                  }
                  return it;
             });
+            for (let i = 0; i < r.length; i++) {
+                await this.service.createQueryBuilder("ai_fit_log")
+                .insert()
+                .into(ai_fit_log)
+                .values({
+                    variant_id: r[i].variant_id,
+                    setup: r[i].setup,
+                    move: r[i].move
+                })
+                .execute();
+            }
             if (mx) {
                 await this.service.createQueryBuilder("ai_fit")
                 .delete()
