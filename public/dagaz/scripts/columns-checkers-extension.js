@@ -5,7 +5,8 @@ Dagaz.AI.MIN_DEEP      = 6;
 
 var MAX_FORCED_FACTOR  = 1;
 
-var inversed = false;
+var unpromote = false;
+var inversed  = false;
 var blink = 1;
 
 var checkVersion = Dagaz.Model.checkVersion;
@@ -17,6 +18,9 @@ Dagaz.Model.checkVersion = function(design, name, value) {
       }
       if (value == "inversed") {
           inversed = true;
+      }
+      if (value == "unpromote") {
+          unpromote = true;
       }
   } else {
       checkVersion(design, name, value);
@@ -229,7 +233,11 @@ Dagaz.Model.CheckInvariants = function(board) {
                             if (dst === null) {
                                 dst = "";
                             }
-                            dst = dst + ((+p.type * 2) + p.player - 1);
+                            var t = p.type;
+                            if (unpromote) {
+                                t = 0;
+                            }
+                            dst = dst + ((+t * 2) + (p.player - 1));
                             var src = p.getValue(0);
                             if ((src === null) || (src == "")) {
                                 if (Dagaz.Model.deferredStrike) {

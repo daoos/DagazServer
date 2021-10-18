@@ -1,22 +1,22 @@
 <html>
 <head>
 <META http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>Column Checkers</title>
+<title>King's Checkers</title>
 </head>
 <body>
 
 <img id="Board" style="display:none" src="images/column/8x8.png">
-<img id="WhiteMan" style="display:none" src="images/column/white.png">
-<img id="BlackMan" style="display:none" src="images/column/black.png">
-<img id="WhiteKing" style="display:none" src="images/column/red.png">
-<img id="BlackKing" style="display:none" src="images/column/blue.png">
+<img id="WhiteMan" style="display:none" src="images/adiuh/wman.png">
+<img id="BlackMan" style="display:none" src="images/adiuh/bman.png">
+<img id="WhiteKing" style="display:none" src="images/adiuh/wking.png">
+<img id="BlackKing" style="display:none" src="images/adiuh/bking.png">
 
 <table style="margin:auto; font-family:sans-serif; font-size:14px" id="Table">
 <tr><td>
 <a href="javascript:Dagaz.Controller.home()" title="Home" style="display:none" id="home"><img src="images/home.png"/></a>
 <a href="javascript:Dagaz.Controller.undo()" title="PgDown" style="display:none" id="undo"><img src="images/undo.png"/></a>
-<a target="_blank" href="https://en.wikipedia.org/wiki/Bashni">Rules</a>
 <a href="javascript:Dagaz.Controller.resign()">I Resign</a>
+<a href="javascript:Dagaz.Controller.drawOffer()">Offer Draw</a>
 <a href="javascript:Dagaz.Controller.sound()" id="sound">no Sound</a>
 <a href="javascript:Dagaz.Controller.redo()" title="PgUp" style="display:none" id="redo"><img src="images/redo.png"/></a>
 <div align="right" id="timer"/>
@@ -24,7 +24,7 @@
 <tr style="height:548px; vertical-align:top">
 <td id="CanvasCell" style="width:548px">
 <canvas id="Canvas" width="548" height="548" style="cursor:default">Broken canvas...</canvas>
-</td><td style="width:548px;">
+</td><td style="width:300px;">
 <div style="height:510px; overflow:auto" id="ScrollDiv">
 <img id="GlyphImage"><p id="HelpText"></p>
 <p id="GameSession"></p>
@@ -33,7 +33,7 @@
 </tr>
 <tr>
 <td>
-<div style="height:100px; width:548px; margin-left:auto; margin-right:auto">
+<div style="height:100px; width:500px; margin-left:auto; margin-right:auto">
 <table>
 <tr style="display:none" id="PieceInfo">
 <td><img id="PieceInfoImage"></td><td id="PieceInfoText"></td>
@@ -52,14 +52,13 @@
 <script src="common-scripts/common-setup-v2.js"></script>
 <script src="common-scripts/2d-view-v4.js"></script>
 <script src="common-scripts/move-list-v1.js"></script>
-<script src="common-scripts/sound-manager-v2.js"></script>
 <script src="common-scripts/session-manager.js"></script>
-<script src="common-scripts/random-ai.js"></script>
-<script src="common-scripts/uct-ai-v4.js"></script>
-<script src="common-scripts/forced-ai.js"></script>
+<script src="common-scripts/sound-manager-v2.js"></script>
+<script src="scripts/kings-checkers-invariant.js"></script>
 <script src="scripts/columns-checkers-extension.js"></script>
 <script src="scripts/russian-captures.js"></script>
-<script src="scripts/column-checkers-black.js"></script>
+<script src="scripts/kings-checkers-restriction.js"></script>
+<script src="scripts/kings-checkers-black.js"></script>
 <script src="common-scripts/app-net-v2.js"></script>
 
 </body>

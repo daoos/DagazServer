@@ -9,10 +9,16 @@ Dagaz.Model.checkVersion = function(design, name, value) {
 }
 
 var getCaptures = function(move) {
-  var r = [];
+  var r = []; var f = true;
   _.each(move.actions, function(a) {
       if (a[0] === null) return;
-      if (a[1] !== null) return;
+      if (a[1] !== null) {
+          if (f) {
+              r.push(a[0][0]);
+              f = false;
+          }
+          return;
+      }
       r.push(a[0][0]);
   });
   return r;
@@ -32,11 +38,12 @@ var CheckInvariants = Dagaz.Model.CheckInvariants;
 Dagaz.Model.CheckInvariants = function(board) {
   var design = Dagaz.Model.design;
   for (var i = 0; i < board.moves.length; i++) {
+      if (!_.isUndefined(board.moves[i].failed)) continue;
       var captures = getCaptures(board.moves[i]);
-      if (captures.length >= 2) {
+      if (captures.length >= 3) {
           for (var j = 0; j < board.moves.length; j++) {
                if ((j != i) && isPrefix(getCaptures(board.moves[j]), captures)) {
-                    board.moves[j].failed = true;
+                   board.moves[j].failed = true;
                }
           }
       }
