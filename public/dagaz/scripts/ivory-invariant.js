@@ -12,9 +12,9 @@ Dagaz.Model.checkVersion = function(design, name, value) {
 }
 
 if (!_.isUndefined(Dagaz.Controller.addSound)) {
-    Dagaz.Controller.addSound(0, "../sounds/slide.ogg", true);
-    Dagaz.Controller.addSound(2,  "../sounds/tadam.wav", true);
-    Dagaz.Controller.addSound(3, "../sounds/loss.wav", true);
+    Dagaz.Controller.addSound(0, "sounds/slide.ogg", true);
+    Dagaz.Controller.addSound(2,  "sounds/tadam.wav", true);
+    Dagaz.Controller.addSound(3, "sounds/loss.wav", true);
 }
 
 var findGeneral = function(design, board, player) {
