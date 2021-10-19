@@ -1179,7 +1179,19 @@ App.prototype.exec = function() {
               var result = this.getAI().getMove(ctx);
               this.state = STATE.WAIT;
               if (result && result.move) {
-                  Dagaz.AI.callback(result.move);
+//                Dagaz.AI.callback(result.move);
+                  console.log("Player: " + player);
+                  result.move.applyAll(this.view);
+                  this.boardApply(result.move);
+                  var s = result.move.toString();
+                  if (!_.isUndefined(Dagaz.Model.getSetup)) {
+                      s = Dagaz.Model.getSetup(this.design, this.board);
+                      console.log("Setup: " + s);
+                  }
+                  Dagaz.Model.Done(this.design, this.board);
+                  addMove(result.move.toString(), s, bot);
+                  this.move = result.move;
+                  this.state = STATE.WAIT;
                   return;
               }
           } else {
