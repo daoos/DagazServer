@@ -1186,6 +1186,19 @@ App.prototype.exec = function() {
           var ai  = this.getAI();
           if ((ctx !== null) && (ai !== null) && (bot !== null)) {
               ai.setContext(ctx, this.board);
+              var moves = Dagaz.AI.generate(ctx, ctx.board);
+              if (moves.length == 0) {
+                  var player = this.design.playerNames[this.board.player];
+                  App.prototype.setDone();
+                  Canvas.style.cursor = "default";
+                  if (!_.isUndefined(Dagaz.Controller.play) && onceWinPlay && (uid || !dice)) {
+                      Dagaz.Controller.play(Dagaz.Sounds.win);
+                      onceWinPlay = false;
+                  }
+                  winGame();
+                  this.gameOver(player + " lose", -this.board.player);
+                  return;
+              }
               Canvas.style.cursor = "wait";
               this.timestamp = Date.now();
               var player = this.design.playerNames[this.board.player];
