@@ -3,6 +3,7 @@ import { ApiBody, ApiCreatedResponse, ApiInternalServerErrorResponse, ApiNotFoun
 import { AiFit } from '../interfaces/ai_fit.interface';
 import { AiRequest } from '../interfaces/ai_request.interface';
 import { AiResponse } from '../interfaces/ai_response.interface';
+import { AiStat } from '../interfaces/ai_stat.interface';
 import { AiService } from './ai.service';
 
 @ApiSecurity('bearer')
@@ -94,6 +95,20 @@ export class AiController {
         try {
             const r = await this.service.getFit(game, lim);
             return res.status(HttpStatus.OK).json(r);
+        } catch (e) {
+            return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ error: e.message.error.toString(), stack: e.stack});
+        }
+    }
+
+    @Post('stat')
+    @ApiBody({ type: AiStat })
+    @ApiResponse({ type: AiStat })
+    @ApiCreatedResponse({ description: 'Successfully.'})
+    @ApiInternalServerErrorResponse({ description: 'Internal Server error.'})
+    async postStat(@Res() res, @Body() x: AiStat): Promise<AiStat> {
+        try {
+            const r = await this.service.postStat(x);
+            return res.status(HttpStatus.CREATED).json(r);
         } catch (e) {
             return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ error: e.message.error.toString(), stack: e.stack});
         }

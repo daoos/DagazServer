@@ -4,9 +4,11 @@ import { ai_fit } from '../entity/ai_fit';
 import { ai_fit_log } from '../entity/ai_fit_log';
 import { ai_request } from '../entity/ai_request';
 import { ai_response } from '../entity/ai_response';
+import { ai_stat } from '../entity/ai_stat';
 import { AiFit } from '../interfaces/ai_fit.interface';
 import { AiRequest } from '../interfaces/ai_request.interface';
 import { AiResponse } from '../interfaces/ai_response.interface';
+import { AiStat } from '../interfaces/ai_stat.interface';
 
 @Injectable()
 export class AiService {
@@ -244,6 +246,31 @@ export class AiService {
               status: HttpStatus.BAD_REQUEST,
               error: error
           });
+        }
+    }
+
+    async postStat(x: AiStat): Promise<AiStat> {
+        try {
+            await this.service.createQueryBuilder("ai_stat")
+            .insert()
+            .into(ai_stat)
+            .values({
+                batch_size: x.batch_size,
+                epoch_count: x.epoch_count,
+                validation_split: x.validation_split,
+                time_delta: x.time_delta,
+                result: JSON.stringify(x.result),
+                model: x.model
+            })
+            .execute();
+            return x;
+
+        } catch (error) {
+            console.error(error);
+            throw new InternalServerErrorException({
+                status: HttpStatus.BAD_REQUEST,
+                error: error
+            });
         }
     }
 }
