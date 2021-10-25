@@ -1167,6 +1167,56 @@ App.prototype.exec = function() {
                   this.gameOver(player + " lose", -this.board.player);
                   return;
               }
+              var moves = this.list.getMoves();
+              if ((moves.length == 1) && moves[0].isPass()) {
+                  App.prototype.setDone();
+                  Canvas.style.cursor = "default";
+                  var g = this.board.checkGoals(this.design, this.board.player);
+                  if (g !== null) {
+                      var player = this.design.playerNames[this.board.player];
+                      if (g > 0) {
+                          if (player_num == this.board.player) {
+                              winGame();
+                              if (!_.isUndefined(Dagaz.Controller.play) && onceWinPlay && (uid || !dice)) {
+                                  Dagaz.Controller.play(Dagaz.Sounds.win);
+                                  onceWinPlay = false;
+                              }
+                          } else {
+                              loseGame();
+                              if (!_.isUndefined(Dagaz.Controller.play) && onceWinPlay && (uid || !dice)) {
+                                  Dagaz.Controller.play(Dagaz.Sounds.lose);
+                                  onceWinPlay = false;
+                              }
+                          }
+                          this.doneMessage = player + " won" + message;
+                          this.winPlayer   = this.board.player;
+                      } else if (g < 0) {
+                          if (player_num == this.board.player) {
+                              loseGame();
+                              if (!_.isUndefined(Dagaz.Controller.play) && onceWinPlay && (uid || !dice)) {
+                                  Dagaz.Controller.play(Dagaz.Sounds.lose);
+                                  onceWinPlay = false;
+                              }
+                          } else {
+                              winGame();
+                              if (!_.isUndefined(Dagaz.Controller.play) && onceWinPlay && (uid || !dice)) {
+                                  Dagaz.Controller.play(Dagaz.Sounds.win);
+                                  onceWinPlay = false;
+                              }
+                         }
+                         this.doneMessage = player + " lose" + message;
+                         this.winPlayer   = -this.board.player;
+                      } else {
+                         drawGame();
+                         if (!_.isUndefined(Dagaz.Controller.play) && onceWinPlay && (uid || !dice)) {
+                             Dagaz.Controller.play(Dagaz.Sounds.draw);
+                             onceWinPlay = false;
+                         }
+                         this.doneMessage = "Draw" + message;
+                         this.winPlayer   = 0;
+                      }
+                  }
+              }
           }
       } else {
           var ctx = this.getContext(this.getBoard().player);
