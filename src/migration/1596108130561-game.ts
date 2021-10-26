@@ -253,6 +253,7 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(216, 22, 'Dameo', 'dameo', 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(217, 24, 'King''s Checkers', 'kings-checkers', 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(218, 24, 'Turkish Columns', 'turkish-columns', 2)`);
+        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(219, 30, 'Vis-a-vis Chess', 'visavis-free', 2)`);
 
         await queryRunner.query(`insert into game_styles(id, game_id, name, suffix, player_num) values(1, 23, 'European', '', null)`);
         await queryRunner.query(`insert into game_styles(id, game_id, name, suffix, player_num) values(2, 23, 'Chinese', '-kanji', null)`);
@@ -894,6 +895,7 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(574, 'dameo', null, 'dameo', 'http://www.iggamecenter.com/info/en/dameo.html', '2000 Christian Freeling')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(575, 'kings-checkers', null, 'column-checkers')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(576, 'turkish-columns', null, 'turkish-columns')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, copyright) values(577, 'visavis-free', null, 'visavis-chess', '2014 Viktor Pankovich')`);
 }
 
     public async down(queryRunner: QueryRunner): Promise<any> {
