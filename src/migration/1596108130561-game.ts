@@ -253,7 +253,7 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(216, 22, 'Dameo', 'dameo', 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(217, 24, 'King''s Checkers', 'kings-checkers', 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(218, 24, 'Turkish Columns', 'turkish-columns', 2)`);
-        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(219, 30, 'Vis-a-vis Chess', 'visavis-free', 2)`);
+        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(219, 30, 'King''s Vis-a-vis Chess', 'visavis-free', 2)`);
 
         await queryRunner.query(`insert into game_styles(id, game_id, name, suffix, player_num) values(1, 23, 'European', '', null)`);
         await queryRunner.query(`insert into game_styles(id, game_id, name, suffix, player_num) values(2, 23, 'Chinese', '-kanji', null)`);

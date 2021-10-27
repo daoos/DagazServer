@@ -421,6 +421,8 @@ Dagaz.View.configure = function(view) {
     view.defPiece("Small", "Small");
     view.defPiece("RBig", "RBig");
     view.defPiece("RSmall", "RSmall");
+    view.defPiece("BM", "BM");
+    view.defPiece("WM", "WM");
     view.defPiece("Ko", "Ko");
 
     view.defMark(5, "Big");

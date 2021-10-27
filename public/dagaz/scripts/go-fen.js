@@ -8,7 +8,7 @@ var getName = function() {
   var str = window.location.pathname.toString();
   var result = str.match(/\/([^.\/]+)\./);
   if (result) {
-      return result[1].replace("-board", "").replace("-ai", "");
+      return result[1].replace("-board", "").replace("-ai", "").replace("-advisor", "");
   } else {
       return str;
   }
@@ -73,13 +73,17 @@ var getTurn = function(setup) {
 
 var createPiece = function(design, player, c) {
   if (c == 'X') return null;
-  if (c == 'b') {
+  if ((c == 'b') || (c == 'B')) {
       player = (player == 1) ? 2 : 1;
   }
   return Dagaz.Model.createPiece(0, player);
 }
 
-var getPieceNotation = function(design, player, piece) {
+var getPieceNotation = function(design, player, piece, cap) {
+  if (cap) {
+      if (piece.player == player) return 'W';
+      return 'B';
+  }
   if (piece.player == player) return 'w';
   return 'b';
 }
@@ -104,6 +108,7 @@ Dagaz.Model.setup = function(board, init) {
                } else {
                    var piece = createPiece(design, board.player, c);
                    board.setPiece(pos, piece);
+                   if ((c == 'W') || (c == 'B')) board.lastt = pos;
                    pos++;
                }
                if (pos >= Dagaz.Model.WIDTH * Dagaz.Model.HEIGHT) break;
@@ -160,7 +165,7 @@ Dagaz.Model.getSetup = function(design, board) {
                str += c;
            }
            c = 0;
-           str += getPieceNotation(design, board.player, piece);
+           str += getPieceNotation(design, board.player, piece, board.lastt == pos);
        }
   }
   if (c > 0) {
