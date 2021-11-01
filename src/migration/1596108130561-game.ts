@@ -254,6 +254,7 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(217, 24, 'King''s Checkers', 'kings-checkers', 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(218, 24, 'Turkish Columns', 'turkish-columns', 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(219, 30, 'King''s Vis-a-vis Chess', 'visavis-free', 2)`);
+        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(220, 23, 'Koma Janggi', 'koma-janggi', 2)`);
 
         await queryRunner.query(`insert into game_styles(id, game_id, name, suffix, player_num) values(1, 23, 'European', '', null)`);
         await queryRunner.query(`insert into game_styles(id, game_id, name, suffix, player_num) values(2, 23, 'Chinese', '-kanji', null)`);
@@ -896,6 +897,8 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(575, 'kings-checkers', null, 'column-checkers')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(576, 'turkish-columns', null, 'turkish-columns')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, copyright) values(577, 'visavis-free', null, 'visavis-chess', '2014 Viktor Pankovich')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(578, 'koma-janggi', null, 'koma-janggi')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(579, 'koma-janggi-kanji', null, 'koma-janggi-kanji')`);
 }
 
     public async down(queryRunner: QueryRunner): Promise<any> {
