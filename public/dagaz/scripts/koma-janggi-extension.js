@@ -157,13 +157,13 @@ Dagaz.Model.CheckInvariants = function(board) {
       var pos = findGeneral(design, b, board.player);     
       if ((pos === null) ||
           checkDirection(design, b, board.player, pos, n, soldier, chariot) ||
-/*        checkDirection(design, b, board.player, pos, w, soldier, chariot) ||
+          checkDirection(design, b, board.player, pos, w, soldier, chariot) ||
           checkDirection(design, b, board.player, pos, e, soldier, chariot) ||
           checkDirection(design, b, board.player, pos, s, null, chariot) ||
           checkFortress(design, b, board.player, pos, nw, fortress, soldier, chariot) ||
           checkFortress(design, b, board.player, pos, ne, fortress, soldier, chariot) ||
           checkFortress(design, b, board.player, pos, sw, fortress, null, chariot) ||
-          checkFortress(design, b, board.player, pos, se, fortress, null, chariot) ||*/
+          checkFortress(design, b, board.player, pos, se, fortress, null, chariot) ||
           checkHorse(design,     b, board.player, pos, nw, n, horse) ||
           checkHorse(design,     b, board.player, pos, nw, w, horse) ||
           checkHorse(design,     b, board.player, pos, ne, n, horse) ||
