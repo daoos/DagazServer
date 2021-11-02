@@ -1,5 +1,8 @@
 Dagaz.Controller.persistense = "none";
 
+Dagaz.Model.WIDTH  = 5;
+Dagaz.Model.HEIGHT = 7;
+
 ZRF = {
     JUMP:          0,
     IF:            1,
@@ -29,7 +32,6 @@ Dagaz.Model.BuildDesign = function(design) {
     design.checkVersion("show-blink", "false");
     design.checkVersion("show-hints", "false");
     design.checkVersion("show-captures", "false");
-    design.checkVersion("janggi-extension", "true");
 
     design.addDirection("se");
     design.addDirection("s");
