@@ -9,10 +9,12 @@ Dagaz.Model.checkVersion = function(design, name, value) {
 }
 
 var isEq = function(a, b) {
-  if ((a[1] !== null) || (b[1] !== null)) return true;
   if ((a[0] !== null) && (b[0] === null)) return false;
   if ((a[0] === null) && (b[0] !== null)) return false;
   if ((a[0] !== null) && (a[0][0] != b[0][0])) return false;
+  if ((a[1] !== null) && (b[1] === null)) return false;
+  if ((a[1] === null) && (b[1] !== null)) return false;
+  if ((a[1] !== null) && (a[1][0] != b[1][0])) return false;
   return true;
 }
 

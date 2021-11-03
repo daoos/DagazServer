@@ -27,6 +27,18 @@ Dagaz.Model.checkVersion = function(design, name, value) {
   }
 }
 
+var getPrice = function(design, piece) {
+  var r = design.price[piece.type];
+  var v = piece.getValue(0);
+  if (v !== null) {
+      for (var i = 0; i < v.length; i++) {
+           var t = (v[i] / 2) | 0;
+           r += (design.price[t] / 2) | 0;
+      }
+  }
+  return r;
+}
+
 Dagaz.AI.heuristic = function(ai, design, board, move) {
   var r = 1;
   _.each(move.actions, function(a) {
@@ -36,7 +48,7 @@ Dagaz.AI.heuristic = function(ai, design, board, move) {
           } else {
               var piece = board.getPiece(a[0][0]);
               if (piece !== null) {
-                  r += design.price[piece.type];
+                  r += getPrice(design, piece);
               }
           }
       }
@@ -77,7 +89,7 @@ Dagaz.AI.getEval = function(design, board) {
       _.each(design.allPositions(), function(pos) {
           var piece = board.getPiece(pos);
           if (piece !== null) {
-              var v = design.price[piece.type];
+              var v = getPrice(design, piece);
               var bonus = 6;
               if (_.indexOf([1, 23, 24, 39, 40, 62], +pos) >= 0) {
                   bonus -= 3;
