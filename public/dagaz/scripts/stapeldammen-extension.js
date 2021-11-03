@@ -13,6 +13,15 @@ Dagaz.Model.checkVersion = function(design, name, value) {
   }
 }
 
+var getPrice = function(design, piece) {
+  var r = design.price[piece.type] * 10;
+  var v = piece.getValue(0);
+  if (v !== null) {
+      r += v.length;
+  }
+  return r;
+}
+
 Dagaz.AI.heuristic = function(ai, design, board, move) {
   var r = 1;
   _.each(move.actions, function(a) {
@@ -22,7 +31,7 @@ Dagaz.AI.heuristic = function(ai, design, board, move) {
           } else {
               var piece = board.getPiece(a[0][0]);
               if (piece !== null) {
-                  r += design.price[piece.type];
+                  r += getPrice(design, piece);
               }
           }
       }
@@ -63,7 +72,7 @@ Dagaz.AI.getEval = function(design, board) {
       _.each(design.allPositions(), function(pos) {
           var piece = board.getPiece(pos);
           if (piece !== null) {
-              var v = design.price[piece.type];
+              var v = getPrice(design, piece);
               if (!Dagaz.AI.isFriend(board.player, piece.player)) {
                   v = -v;
               }
