@@ -68,8 +68,9 @@ export class AiService {
             const x = await this.service.query(
                 `select a.session_id, a.setup, a.coeff, a.variant_id
                  from   ai_request a
-                 where  a.variant_id = $1 and a.completed is null
+                 where  a.variant_id = $1 and a.completed is null and a.requested is null
                  order  by a.created`, [id]);
+            let ids = [];
             let r: AiRequest[] = [];
             if (x && x.length > 0) {
                 let it = new AiRequest();
@@ -78,6 +79,16 @@ export class AiService {
                 it.setup = x[0].setup;
                 it.coeff = x[0].coeff;            
                 r.push(it);
+                ids.push(x[0].session_id);
+            }
+            for (let i = 0; i < ids.length; i++) {
+                await this.service.createQueryBuilder("ai_request")
+                .update(ai_request)
+                .set({ 
+                    requested: new Date(),
+                 })
+                .where("session_id = :id", {id: ids[i]})
+                .execute();
             }
             return r;
         } catch (error) {
@@ -169,8 +180,8 @@ export class AiService {
                  })
                 .where("session_id = :id", {id: sessions[i]})
                 .execute();
-                return x;
             }
+            return x;
         } catch (error) {
           console.error(error);
           throw new InternalServerErrorException({

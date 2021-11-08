@@ -24,4 +24,7 @@ export class ai_request {
 
     @Column({ nullable: true })
     completed: Date;
+
+    @Column({ nullable: true })
+    requested: Date;
 }
