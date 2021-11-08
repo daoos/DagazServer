@@ -30,11 +30,20 @@ var getStartPos = function(move) {
   return r;
 }
 
+var getCapture = function(move) {
+  for (var i = 0; i < move.actions.length; i++) {
+      var a = move.actions[i];
+      if ((a[0] !== null) && (a[1] === null)) return a[0][0];
+  }
+  return null;
+}
+
 var samePiece = function(move, moves) {
   var pos = getStartPos(move);
-  if (pos === null) return false;
+  var cap = getCapture(move);
+  if ((pos === null) || (cap === null)) return false;
   for (var i = 0; i < moves.length; i++) {
-       if (getStartPos(moves[i]) == pos) return true;
+       if ((getStartPos(moves[i]) == pos) && (getCapture(moves[i]) == cap)) return true;
   }
   return false;
 }

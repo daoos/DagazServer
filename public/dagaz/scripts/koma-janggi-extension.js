@@ -50,6 +50,14 @@ Dagaz.Model.checkGoals = function(design, board, player) {
   if (isDraw(design, board, general)) {
       return 0;
   }
+  board.generate(design);
+  if (board.moves.length == 0) {
+      if (board.player == player) {
+          return -1;
+      } else {
+          return 1;
+      }
+  }  
   return checkGoals(design, board, player);
 }
 

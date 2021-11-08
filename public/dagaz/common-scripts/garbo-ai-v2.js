@@ -2,22 +2,23 @@
 
 (function() {
 
-Dagaz.AI.Q_SEARCH_LIMIT = -20;
-Dagaz.AI.ALL_CUT_LIMIT  = 100;
-Dagaz.AI.g_timeout      = 3000;
-Dagaz.Model.WIDTH       = 8;
-Dagaz.Model.HEIGHT      = 8;
-Dagaz.AI.STALMATED      = false;
-Dagaz.AI.INC_CHECK_PLY  = true;
+Dagaz.AI.Q_SEARCH_LIMIT  = -20;
+Dagaz.AI.ALL_CUT_LIMIT   = 100;
+Dagaz.AI.CHECK_EXT_LIMIT = 100;
+Dagaz.AI.g_timeout       = 3000;
+Dagaz.Model.WIDTH        = 8;
+Dagaz.Model.HEIGHT       = 8;
+Dagaz.AI.STALMATED       = false;
+Dagaz.AI.INC_CHECK_PLY   = true;
 
-Dagaz.AI.PIECE_MASK     = 0xF;
-Dagaz.AI.TYPE_MASK      = 0x7;
-Dagaz.AI.PLAYERS_MASK   = 0x18;
-Dagaz.AI.COUNTER_SIZE   = 6;
-Dagaz.AI.TYPE_SIZE      = 3;
+Dagaz.AI.PIECE_MASK      = 0xF;
+Dagaz.AI.TYPE_MASK       = 0x7;
+Dagaz.AI.PLAYERS_MASK    = 0x18;
+Dagaz.AI.COUNTER_SIZE    = 6;
+Dagaz.AI.TYPE_SIZE       = 3;
 
-Dagaz.AI.colorBlack     = 0x10;
-Dagaz.AI.colorWhite     = 0x08;
+Dagaz.AI.colorBlack      = 0x10;
+Dagaz.AI.colorWhite      = 0x08;
 
 Dagaz.AI.g_board = new Array(256); // Sentinel 0x80, pieces are in low 4 bits, 0x8 for color, 0x7 bits for piece type
 Dagaz.AI.g_toMove = 0; // side to move, 0 or 8, 0 = black, 8 = white
@@ -476,7 +477,7 @@ function AllCutNode(ply, depth, beta, allowNull) {
 
         if (Dagaz.AI.g_inCheck) {
             // Check extensions
-            plyToSearch++;
+            if (depth < Dagaz.AI.CHECK_EXT_LIMIT) plyToSearch++;
         } else {
             var reduced = plyToSearch - (movePicker.atMove > 14 ? 2 : 1);
 
@@ -582,7 +583,7 @@ function AlphaBeta(ply, depth, alpha, beta) {
 
         if (Dagaz.AI.g_inCheck && Dagaz.AI.INC_CHECK_PLY) {
             // Check extensions
-            if (depth < 100) plyToSearch++;
+            if (depth < Dagaz.AI.CHECK_EXT_LIMIT) plyToSearch++;
         }
 
         var value;
