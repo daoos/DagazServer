@@ -310,6 +310,27 @@ export class SessionController {
         }
     }
 
+    @UseGuards(JwtAuthGuard)
+    @Post('undo')
+    @ApiBody({ type: Sess })
+    @ApiOkResponse({ description: 'Successfully.'})
+    @ApiUnauthorizedResponse({ description: 'Unauthorized.'})
+    @ApiForbiddenResponse({ description: 'Forbidden.'})
+    @ApiInternalServerErrorResponse({ description: 'Internal Server error.'})
+    async undo(@Req() request: Request, @Res() res, @Body() x: Sess): Promise<Sess> {
+        const user: any = request.user;
+        try {
+            const r = await this.service.undoMove(user.id, x);
+            if (!r) {
+                return res.status(HttpStatus.FORBIDDEN).json(x);
+            } else {
+                return res.status(HttpStatus.OK).json(r);
+            }
+        } catch (e) {
+            return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ error: e.message.error.toString(), stack: e.stack});
+        }
+    }
+
     @UseGuards(JwtAuthGuard, RolesGuard, TokenGuard)
     @Roles('admin')
     @Delete(':id')

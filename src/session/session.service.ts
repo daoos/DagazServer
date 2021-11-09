@@ -711,6 +711,78 @@ export class SessionService {
         }
     }
 
+    async isBotPresent(id: number): Promise<boolean> {
+        const t = await this.service.query(
+            `select count(*) as cn
+             from   user_games
+             where  a.session_id = $1 and is_ai = 1`, [id]);
+        if (!t || t.length == 0) return false;
+        return t[0].cn > 0;
+    }
+
+    async undoMove(user: number, x: Sess): Promise<Sess> {
+        try {
+            const botPresent = await this.isBotPresent(x.id);
+            let turn_num: number;
+            let last_setup: string;
+            let last_user: number;
+            let next_player: number;
+            let last_turn: number;
+            if (botPresent) {
+                const t = await this.service.query(
+                    `select a.turn_num, a.last_setup, a.last_user, a.last_player as next_player, b.last_turn
+                     from   game_moves a
+                     inner  join user_games b on (b.id = a.uid and b.is_ai = 0)
+                     inner  join game_sessions c on (c.id = a.session_id and c.closed is null)
+                     where  a.session_id = $1 and a
+                     order  by b.turn_num desc`, [x.id]);
+                if (!t || t.length == 0) return null;
+                turn_num = t[0].turn_num;
+                last_setup = t[0].last_setup;
+                last_user = t[0].last_user;
+                next_player = t[0].next_player;
+                last_turn = t[0].last_turn;
+            } else {
+                const t = await this.service.query(
+                    `select a.turn_num, a.last_setup, a.last_user, a.last_player as next_player, b.last_turn, b.user_id
+                     from   game_moves a
+                     inner  join user_games b on (b.id = a.uid)
+                     inner  join game_sessions c on (c.id = a.session_id and c.closed is null)
+                     where  a.session_id = $1 and a.accepted is null
+                     order  by a.turn_num`, [x.id]);
+                if (!t || t.length == 0) return null;
+                if (t[0].user_id != user) return null;
+                turn_num = t[0].turn_num;
+                last_setup = t[0].last_setup;
+                last_user = t[0].last_user;
+                next_player = t[0].next_player;
+                last_turn = t[0].last_turn;
+            }
+            await this.service.createQueryBuilder("game_sessions")
+            .update(game_sessions)
+            .set({ 
+                last_setup: last_setup,
+                last_user: last_user,
+                next_player: next_player,
+                last_turn: last_turn
+             })
+            .where("id = :id", {id: x.id})
+            .execute();
+            await this.service.createQueryBuilder("game_moves")
+            .delete()
+            .from(game_moves)
+            .where(`session_id = :id and turn_num >= :turn`, {id: x.id, turn: turn_num})
+            .execute();
+            return x;
+        } catch (error) {
+          console.error(error);
+          throw new InternalServerErrorException({
+              status: HttpStatus.BAD_REQUEST,
+              error: error
+          });
+        }
+    }
+
     async delSession(id: number): Promise<Sess> {
         try {
             const s = await this.findOneById(id);

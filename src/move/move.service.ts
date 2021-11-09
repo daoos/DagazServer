@@ -338,14 +338,18 @@ export class MoveService {
     async addMove(x: Move): Promise<Move> {
         try {
             const t = await this.service.query(
-                `select a.session_id, b.is_sandglass
+                `select a.session_id, b.is_sandglass, b.last_setup, b.last_user, b.next_player as last_player, b.last_turn
                  from   user_games a
                  inner  join game_sessions b on (b.id = a.session_id)
                  where  a.id = $1`, [x.uid]);
             if (!t || t.length == 0) {
                  return null;
             }
+            const last_setup = t[0].last_setup;
+            const last_user = t[0].last_user;
             const is_sandglass = t[0].is_sandglass;
+            const last_player = t[0].last_player;
+            const last_turn = t[0].last_turn;
             x.session_id = t[0].session_id;
             x.user_id = await this.getUser(x.uid);
             const f = await this.checkSession(x.session_id);
@@ -365,6 +369,10 @@ export class MoveService {
                 uid: x.uid,
                 move_str: x.move_str,
                 setup_str: x.setup_str,
+                last_setup: last_setup,
+                last_user: last_user,
+                last_player: last_player,
+                last_turn: last_turn,
                 turn_num: turn_num,
                 note: x.note,
                 time_delta: time_delta

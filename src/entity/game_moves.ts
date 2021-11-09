@@ -43,6 +43,18 @@ export class game_moves {
     @Column({ nullable: true })
     accepted: Date;
 
+    @Column({ type: "text", nullable: true })
+    last_setup: string;
+
+    @Column({ nullable: true })
+    last_user: number;
+
+    @Column({ nullable: true})
+    last_player: number;
+
+    @Column({ nullable: true })
+    last_turn: number;
+
     @Column({ default: 1, nullable: false })
     branch_num: number;
 }
