@@ -255,6 +255,9 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(218, 24, 'Turkish Columns', 'turkish-columns', 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(219, 30, 'King''s Vis-a-vis Chess', 'visavis-free', 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(220, 23, 'Koma Janggi', 'koma-janggi', 2)`);
+        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(221, 30, 'Madrasi Chess', 'madrasi-chess', 2)`);
+        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(222, 30, 'Patrol Chess', 'patrol-chess', 2)`);
+        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(223, 30, 'Benedict Chess', 'benedict-chess', 2)`);
 
         await queryRunner.query(`insert into game_styles(id, game_id, name, suffix, player_num) values(1, 23, 'European', '', null)`);
         await queryRunner.query(`insert into game_styles(id, game_id, name, suffix, player_num) values(2, 23, 'Chinese', '-kanji', null)`);
@@ -900,6 +903,9 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, copyright) values(577, 'visavis-free', null, 'visavis-chess', '2014 Viktor Pankovich')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(578, 'koma-janggi', null, 'koma-janggi')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(579, 'koma-janggi-kanji', null, 'koma-janggi-kanji')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(580, 'madrasi-chess', null, 'chess-1', 'https://en.wikipedia.org/wiki/Madrasi_chess', '1979 Abdul Jabbar Karwatkar')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(581, 'patrol-chess', null, 'chess-1', 'https://en.wikipedia.org/wiki/Patrol_chess', '1975 Frederik Hendrik von Meyenfeldt')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(582, 'benedict-chess', null, 'chess-1', 'https://www.chessvariants.com/difftaking.dir/benedict.html', '2001 W. D. Troyka')`);
 }
 
     public async down(queryRunner: QueryRunner): Promise<any> {
