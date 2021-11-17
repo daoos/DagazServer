@@ -1,30 +1,31 @@
 <html>
 <head>
 <META http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>Hex</title>
+<title>Gonnect</title>
 </head>
 <body>
 
-<img id="Board" style="display:none" src="images/hex/board.png">
-<img id="RedStone" style="display:none" src="images/hex/red.png">
-<img id="BlueStone" style="display:none" src="images/hex/blue.png">
+<img id="Board" style="display:none" src="images/go/gonnect.png">
+<img id="BlackStone" style="display:none" src="images/go/black.png">
+<img id="WhiteStone" style="display:none" src="images/go/white.png">
+<img id="Ko" style="display:none" src="images/go/ko.png">
 
 <table style="margin:auto; font-family:sans-serif; font-size:14px" id="Table">
 <tr><td>
 <a href="javascript:Dagaz.Controller.home()" title="Home" style="display:none" id="home"><img src="images/home.png"/></a>
 <a href="javascript:Dagaz.Controller.undo()" title="PgDown" style="display:none" id="undo"><img src="images/undo.png"/></a>
-Copyright (c) 1942 Piet Hein and John Nash
-<a href="javascript:Dagaz.Controller.redo()" title="PgUp" style="display:none" id="redo"><img src="images/redo.png"/></a>
-<br><a target="_blank" href="http://www.iggamecenter.com/info/en/hex.html">Rules</a>
+Copyright (c) 2000 Joao Pedro Neto
+<a target="_blank" href="https://en.wikipedia.org/wiki/Gonnect">Rules</a>
 <a href="javascript:Dagaz.Controller.resign()">I Resign</a>
 <a href="javascript:Dagaz.Controller.drawOffer()">Offer Draw</a>
 <a href="javascript:Dagaz.Controller.sound()" id="sound">no Sound</a>
+<a href="javascript:Dagaz.Controller.redo()" title="PgUp" style="display:none" id="redo"><img src="images/redo.png"/></a>
 <div align="right" id="timer"/>
 </td></tr>
-<tr style="height:314px; vertical-align:top">
-<td id="CanvasCell" style="width:514px">
-<canvas id="Canvas" width="514" height="314" style="cursor:default">Broken canvas...</canvas>
-</td><td style="width:514px;">
+<tr style="height:382px; vertical-align:top">
+<td id="CanvasCell" style="width:382px">
+<canvas id="Canvas" width="382" height="382" style="cursor:default">Broken canvas...</canvas>
+</td><td style="width:382px;">
 <div style="height:510px; overflow:auto" id="ScrollDiv">
 <img id="GlyphImage"><p id="HelpText"></p>
 <p id="GameSession"></p>
@@ -33,7 +34,7 @@ Copyright (c) 1942 Piet Hein and John Nash
 </tr>
 <tr>
 <td>
-<div style="height:100px; width:514px; margin-left:auto; margin-right:auto">
+<div style="height:100px; width:500px; margin-left:auto; margin-right:auto">
 <table>
 <tr style="display:none" id="PieceInfo">
 <td><img id="PieceInfoImage"></td><td id="PieceInfoText"></td>
@@ -52,11 +53,14 @@ Copyright (c) 1942 Piet Hein and John Nash
 <script src="common-scripts/common-setup-v2.js"></script>
 <script src="common-scripts/2d-view-v2.js"></script>
 <script src="common-scripts/move-list-v3.js"></script>
-<script src="common-scripts/sound-manager-v2.js"></script>
 <script src="common-scripts/session-manager.js"></script>
-<script src="scripts/hex-goal.js"></script>
-<script src="scripts/hex-swap-rule.js"></script>
-<script src="scripts/hex.js"></script>
+<script src="common-scripts/sound-manager-v2.js"></script>
+<script src="scripts/go-fen.js"></script>
+<script src="scripts/gonnect-goal.js"></script>
+<script src="scripts/go-ko.js"></script>
+<script src="scripts/go-capturing.js"></script>
+<script src="scripts/gonnect-restriction.js"></script>
+<script src="scripts/gonnect.js"></script>
 <script src="common-scripts/app-net-v2.js"></script>
 
 </body>

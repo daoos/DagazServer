@@ -259,6 +259,8 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(222, 30, 'Patrol Chess', 'patrol-chess', 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(223, 30, 'Benedict Chess', 'benedict-chess', 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(224, 30, 'Legan Chess', 'legan-chess', 2)`);
+        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(225, 29, 'Hex', 'hex', 2)`);
+        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(226, 29, 'Gonnect', 'gonnect', 2)`);
 
         await queryRunner.query(`insert into game_styles(id, game_id, name, suffix, player_num) values(1, 23, 'European', '', null)`);
         await queryRunner.query(`insert into game_styles(id, game_id, name, suffix, player_num) values(2, 23, 'Chinese', '-kanji', null)`);
@@ -909,6 +911,7 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(581, 'patrol-chess', null, 'chess-1', 'https://en.wikipedia.org/wiki/Patrol_chess', '1975 Frederik Hendrik von Meyenfeldt')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(582, 'benedict-chess', null, 'chess-1', 'https://www.chessvariants.com/difftaking.dir/benedict.html', '2001 W. D. Troyka')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(583, 'legan-chess', null, 'legan-chess', 'https://en.wikipedia.org/wiki/Legan_chess', '1913 L. Legan')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(584, 'gonnect', null, 'gonnect', 'https://en.wikipedia.org/wiki/Gonnect', '2000 Joao Pedro Neto')`);
 }
 
     public async down(queryRunner: QueryRunner): Promise<any> {

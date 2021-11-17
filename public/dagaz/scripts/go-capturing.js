@@ -24,6 +24,7 @@ Dagaz.Model.CheckInvariants = function(board) {
       }
       var isSuicide = true;
       var done = [];
+      if (board.getPiece(pos) !== null) return;
       board.setPiece(pos, move.actions[0][2][0]);
       _.each(design.allDirections(), function(dir) {
           var p = design.navigate(board.player, pos, dir);
