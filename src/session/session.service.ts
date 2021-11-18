@@ -176,7 +176,7 @@ export class SessionService {
                  left   join time_controls t on (t.id = a.timecontrol_id)
                  where  a.status_id = 2 and a.closed is null
                  group  by a.id, a.status_id, a.game_id, d.id, d.name, b.name, d.filename, b.filename, a.created, c.name, b.players_total, a.last_setup, h.suffix, x.id, a.timecontrol_id, t.name
-                 union  all
+                 union
                  select a.id as id, a.status_id as status, a.game_id as game_id, d.id as variant_id,
                         coalesce(d.name, e.name) || ' (' || a.id || ')' as game, coalesce(d.filename, e.filename) || coalesce(h.suffix, '') as filename,
                         a.created as created, j.name as creator, e.players_total as players_total, a.last_setup as last_setup,
