@@ -5,7 +5,7 @@ Dagaz.View.STEP_CNT     = 3;
 Dagaz.View.SHIFT_X      = 0;
 Dagaz.View.SHIFT_Y      = 0;
 
-Dagaz.View.THREAT_ALPHA = 0.5;
+Dagaz.View.STRIKE_ALPHA = 0.5;
 Dagaz.View.DROPS_ALPHA  = 0.5;
 
 Dagaz.View.markType = {
@@ -33,7 +33,7 @@ function View2D() {
   this.back    = [];
   this.piece   = [];
   this.setup   = [];
-  this.threat  = [];
+  this.strike  = [];
   this.current = [];
   this.ko      = [];
   this.target  = [];
@@ -379,7 +379,7 @@ View2D.prototype.markPositions = function(type, positions) {
       this.target = positions;
   } 
   if (type == Dagaz.View.markType.ATTACKING) {
-      this.threat = positions;
+      this.strike = positions;
   }
   if (type == Dagaz.View.markType.CURRENT) {
       this.current = positions;
@@ -433,9 +433,9 @@ Dagaz.View.showPiece = function(view, ctx, frame, pos, piece, model, x, y) {
   var isSaved = false;
   var dx = 0;
   var dy = 0;
-  if (_.indexOf(view.threat, pos) >= 0) {
+  if (_.indexOf(view.strike, pos) >= 0) {
       ctx.save();
-      ctx.globalAlpha = Dagaz.View.THREAT_ALPHA;
+      ctx.globalAlpha = Dagaz.View.STRIKE_ALPHA;
       isSaved = true;
   }
   if (Dagaz.Model.showBlink && (_.indexOf(view.current, pos) >= 0)) {

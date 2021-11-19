@@ -1,15 +1,13 @@
 <html>
 <head>
 <META http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>Column Checkers</title>
+<title>Magyar Dama</title>
 </head>
 <body>
 
-<img id="Board" style="display:none" src="images/column/8x8.png">
-<img id="WhiteMan" style="display:none" src="images/column/white.png">
-<img id="BlackMan" style="display:none" src="images/column/black.png">
-<img id="WhiteKing" style="display:none" src="images/column/red.png">
-<img id="BlackKing" style="display:none" src="images/column/blue.png">
+<img id="NTile" style="display:none" src="images/magyar/tile.png">
+<img id="RedStone" style="display:none" src="images/magyar/red.png">
+<img id="WhiteStone" style="display:none" src="images/magyar/white.png">
 
 <table style="margin:auto; font-family:sans-serif; font-size:14px" id="Table">
 <tr><td>
@@ -20,10 +18,10 @@
 <a href="javascript:Dagaz.Controller.redo()" title="PgUp" style="display:none" id="redo"><img src="images/redo.png"/></a>
 <div align="right" id="timer"/>
 </td></tr>
-<tr style="height:590px; vertical-align:top">
-<td id="CanvasCell" style="width:548px">
-<canvas id="Canvas" width="548" height="590" style="cursor:default">Broken canvas...</canvas>
-</td><td style="width:548px;">
+<tr style="height:843px; vertical-align:top">
+<td id="CanvasCell" style="width:1137px">
+<canvas id="Canvas" width="1137" height="843" style="cursor:default">Broken canvas...</canvas>
+</td><td style="width:1137px;">
 <div style="height:510px; overflow:auto" id="ScrollDiv">
 <img id="GlyphImage"><p id="HelpText"></p>
 <p id="GameSession"></p>
@@ -32,7 +30,7 @@
 </tr>
 <tr>
 <td>
-<div style="height:100px; width:500px; margin-left:auto; margin-right:auto">
+<div style="height:100px; width:1137px; margin-left:auto; margin-right:auto">
 <table>
 <tr style="display:none" id="PieceInfo">
 <td><img id="PieceInfoImage"></td><td id="PieceInfoText"></td>
@@ -51,13 +49,17 @@
 <script src="common-scripts/common-setup-v2.js"></script>
 <script src="common-scripts/2d-view-v4.js"></script>
 <script src="common-scripts/move-list-v1.js"></script>
-<script src="common-scripts/session-manager.js"></script>
 <script src="common-scripts/sound-manager-v2.js"></script>
+<script src="common-scripts/session-manager.js"></script>
 <script src="common-scripts/random-ai.js"></script>
-<script src="common-scripts/uct-ai-v4.js"></script>
-<script src="scripts/columns-checkers-extension.js"></script>
-<script src="scripts/russian-captures.js"></script>
-<script src="scripts/column-samoedy-black.js"></script>
+<script src="common-scripts/aggressive-ai-v5.js"></script>
+<script src="scripts/magyar-pass.js"></script>
+<script src="scripts/magyar-view.js"></script>
+<script src="scripts/magyar-goal.js"></script>
+<script src="scripts/magyar-tiles.js"></script>
+<script src="scripts/magyar-extension.js"></script>
+<script src="scripts/magyar-invariant.js"></script>
+<script src="scripts/magyar-checkers.js"></script>
 <script src="common-scripts/app-net-v2.js"></script>
 
 </body>
