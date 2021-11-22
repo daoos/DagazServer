@@ -16,6 +16,7 @@ Dagaz.Model.CheckInvariants = function(board) {
   var design = Dagaz.Model.design;
   if (!inProgress && (_.indexOf([0, 2], +board.turn) >= 0)) {
       _.each(board.moves, function(move) {
+          if (!_.isUndefined(move.failed)) return;
           var b = board.apply(move);
           inProgress = true;
           b.generate(design);

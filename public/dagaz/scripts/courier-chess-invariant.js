@@ -8,7 +8,30 @@ Dagaz.Model.checkVersion = function(design, name, value) {
   }
 }
 
-var findPiece = function(design, board, player, type) {
+Dagaz.Model.moveToString = function(move) {
+  var r = "";
+  _.each(move.actions, function(a) {
+      if (a[1] === null) return;
+      if (r != "") {
+          r = r + " ";
+      }
+      if (a[0] != null) {
+          r = r + Dagaz.Model.posToString(a[0][0]);
+          if (a[1] !== null) {
+              r = r + '-';
+          }
+      }
+      if (a[1] !== null) {
+          r = r + Dagaz.Model.posToString(a[1][0]);
+      }
+      if ((a[2] !== null) && ((a[0] != null) || (a[1] !== null))) {
+          r = r + " " + a[2][0].getType();
+      }
+  });
+  return r;
+}
+
+Dagaz.Model.findPiece = function(design, board, player, type) {
   var positions = design.allPositions();
   for (var i = 0; i < positions.length; i++) {
        var piece = board.getPiece(positions[i]);
@@ -111,7 +134,7 @@ Dagaz.Model.CheckInvariants = function(board) {
   _.each(board.moves, function(move) {
       var b = board.apply(move);
       var list = [];
-      var pos  = findPiece(design, b, board.player, king);
+      var pos  = Dagaz.Model.findPiece(design, b, board.player, king);
       if (pos !== null) {
           list.push(pos);
       }

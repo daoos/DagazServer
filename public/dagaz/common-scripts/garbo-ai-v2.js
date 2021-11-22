@@ -50,8 +50,8 @@ var hashflagBeta  = 2;
 var hashflagExact = 3;
 
 Dagaz.AI.g_pieceIndex = new Array(256);
-Dagaz.AI.g_pieceList  = new Array(2 * 8 * 64);
-Dagaz.AI.g_pieceCount = new Array(2 * 8);
+Dagaz.AI.g_pieceList  = new Array(2 * 16 * 64);
+Dagaz.AI.g_pieceCount = new Array(2 * 16);
 
 var once       = true;
 var inProgress = false;
@@ -697,7 +697,7 @@ Dagaz.AI.SetHash = function() {
 }
 
 Dagaz.AI.InitializePieceList = function() {
-    for (var i = 0; i < 16; i++) {
+    for (var i = 0; i < 64; i++) {
         Dagaz.AI.g_pieceCount[i] = 0;
         for (var j = 0; j < 64; j++) {
             // 0 is used as the terminator for piece lists

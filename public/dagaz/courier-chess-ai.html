@@ -1,23 +1,27 @@
 <html>
 <head>
 <META http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>Balbo's Game</title>
+<title>Courier Chess</title>
 </head>
 <body>
 
-<img id="Board" style="display:none" src="images/chess/balbo.png">
-<img id="Promote-4" style="display:none" src="images/chess/dialog-4.png">
-<img id="Promote-2" style="display:none" src="images/chess/dialog-2.png">
+<img id="Board" style="display:none" src="images/chess/courier.png">
 <img id="WhitePawn" style="display:none" src="images/chess/wpawn.png">
 <img id="BlackPawn" style="display:none" src="images/chess/bpawn.png">
 <img id="WhiteRook" style="display:none" src="images/chess/wrook.png">
 <img id="BlackRook" style="display:none" src="images/chess/brook.png">
 <img id="WhiteKnight" style="display:none" src="images/chess/wknight.png">
 <img id="BlackKnight" style="display:none" src="images/chess/bknight.png">
-<img id="WhiteBishop" style="display:none" src="images/chess/wbishop.png">
-<img id="BlackBishop" style="display:none" src="images/chess/bbishop.png">
-<img id="WhiteQueen" style="display:none" src="images/chess/wqueen.png">
-<img id="BlackQueen" style="display:none" src="images/chess/bqueen.png">
+<img id="WhiteBishop" style="display:none" src="images/chess/welephant.png">
+<img id="BlackBishop" style="display:none" src="images/chess/belephant.png">
+<img id="WhiteCourier" style="display:none" src="images/chess/wbishop.png">
+<img id="BlackCourier" style="display:none" src="images/chess/bbishop.png">
+<img id="WhiteQueen" style="display:none" src="images/chess/wduke.png">
+<img id="BlackQueen" style="display:none" src="images/chess/bduke.png">
+<img id="WhiteFool" style="display:none" src="images/chess/wfool.png">
+<img id="BlackFool" style="display:none" src="images/chess/bfool.png">
+<img id="WhiteMan" style="display:none" src="images/chess/wman.png">
+<img id="BlackMan" style="display:none" src="images/chess/bman.png">
 <img id="WhiteKing" style="display:none" src="images/chess/wking.png">
 <img id="BlackKing" style="display:none" src="images/chess/bking.png">
 
@@ -25,18 +29,16 @@
 <tr><td>
 <a href="javascript:Dagaz.Controller.home()" title="Home" style="display:none" id="home"><img src="images/home.png"/></a>
 <a href="javascript:Dagaz.Controller.undo()" title="PgDown" style="display:none" id="undo"><img src="images/undo.png"/></a>
-Copyright (c) 1974 M. [Monsieur] G. Balbo
-<a target="_blank" href="https://en.wikipedia.org/wiki/Balbo%27s_Game">Rules</a>
+<a target="_blank" href="https://en.wikipedia.org/wiki/Courier_chess">Rules</a>
 <a href="javascript:Dagaz.Controller.resign()">I Resign</a>
-<a href="javascript:Dagaz.Controller.drawOffer()">Offer Draw</a>
 <a href="javascript:Dagaz.Controller.sound()" id="sound">no Sound</a>
 <a href="javascript:Dagaz.Controller.redo()" title="PgUp" style="display:none" id="redo"><img src="images/redo.png"/></a>
 <div align="right" id="timer"/>
 </td></tr>
-<tr style="height:504px; vertical-align:top">
-<td id="CanvasCell" style="width:554px">
-<canvas id="Canvas" width="554" height="504" style="cursor:default">Broken canvas...</canvas>
-</td><td style="width:554px;">
+<tr style="height:404px; vertical-align:top">
+<td id="CanvasCell" style="width:604px">
+<canvas id="Canvas" width="604" height="404" style="cursor:default">Broken canvas...</canvas>
+</td><td style="width:604px;">
 <div style="height:510px; overflow:auto" id="ScrollDiv">
 <img id="GlyphImage"><p id="HelpText"></p>
 <p id="GameSession"></p>
@@ -45,7 +47,7 @@ Copyright (c) 1974 M. [Monsieur] G. Balbo
 </tr>
 <tr>
 <td>
-<div style="height:100px; width:554px; margin-left:auto; margin-right:auto">
+<div style="height:100px; width:604px; margin-left:auto; margin-right:auto">
 <table>
 <tr style="display:none" id="PieceInfo">
 <td><img id="PieceInfoImage"></td><td id="PieceInfoText"></td>
@@ -61,15 +63,18 @@ Copyright (c) 1974 M. [Monsieur] G. Balbo
 <script src="common-scripts/dagaz.js"></script>
 <script src="common-scripts/zrf-model.js"></script>
 <script src="common-scripts/zobrist-v2.js"></script>
-<script src="common-scripts/2d-view-v3.js"></script>
+<script src="common-scripts/2d-view-v2.js"></script>
 <script src="common-scripts/move-list-v2.js"></script>
 <script src="common-scripts/sound-manager-v2.js"></script>
 <script src="common-scripts/session-manager.js"></script>
-<script src="scripts/balbo-promotion.js"></script>
-<script src="scripts/troitzky-chess-setup.js"></script>
-<script src="scripts/troitzky-invariant.js"></script>
-<script src="scripts/balbo-chess.js"></script>
-<script src="common-scripts/app-net-v5.js"></script>
+<script src="common-scripts/random-ai.js"></script>
+<script src="common-scripts/garbo-ai-v2.js"></script>
+<script src="common-scripts/fast-ai.js"></script>
+<script src="scripts/courier-chess-ai.js"></script>
+<script src="scripts/courier-fen.js"></script>
+<script src="scripts/courier-chess-invariant.js"></script>
+<script src="scripts/courier-chess.js"></script>
+<script src="common-scripts/app-net-v2.js"></script>
 
 </body>
 </html>
