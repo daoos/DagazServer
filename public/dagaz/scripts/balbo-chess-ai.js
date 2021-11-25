@@ -393,6 +393,13 @@ function MakeTable(table) {
     return result;
 }
 
+function inBoard(target) {
+  if (target < 0) return false;
+  if ((target & 0xF0) >= 0xA0) return false;
+  if ((target & 0x0F) >= 0x0B) return false;
+  return true;
+}
+
 var ResetGame = Dagaz.AI.ResetGame;
 
 Dagaz.AI.ResetGame = function() {
@@ -443,7 +450,7 @@ Dagaz.AI.ResetGame = function() {
            for (var i = pieceKnight; i <= pieceKing; i++) {
                 for (var dir = 0; dir < pieceDeltas[i].length; dir++) {
                      var target = square + pieceDeltas[i][dir]; 
-                     while (!(target & 0xAB)) {
+                     while (inBoard(target)) {
                          index = square - target + (Dagaz.AI.VECTORDELTA_SIZE >> 1);
 
                          g_vectorDelta[index].pieceMask[Dagaz.AI.colorWhite >> Dagaz.AI.TYPE_SIZE] |= (1 << i);

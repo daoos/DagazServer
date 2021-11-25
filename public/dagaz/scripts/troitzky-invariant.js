@@ -19,24 +19,6 @@ Dagaz.Model.findPiece = function(design, board, player, type) {
   return null;
 }
 
-var changePieces = function(design, board, move) {
-  _.each(move.actions, function(action) {
-      var piece = null;
-      if (action[0] !== null) {
-          piece = board.getPiece(action[0][0]);
-      } else {
-          piece = board.getPiece(action[1][0]);
-      }
-      if (action[2] !== null) {
-          piece = action[2][0];
-      }
-      if (piece !== null) {
-          piece = piece.setValue(0, true);
-      }
-      action[2] = [ piece ];
-  });
-}
-
 var isMoved = function(board, pos) {
   var piece = board.getPiece(pos);
   if (piece === null) return true;
@@ -127,22 +109,10 @@ Dagaz.Model.CheckInvariants = function(board) {
       if (pos !== null) {
           list.push(pos);
       }
-      if (move.mode == 1) {
-          _.each(move.actions, function(a) {
-               if ((a[0] !== null) && (a[1] !== null)) {
-                    if (isMoved(board, a[0][0]) || isMoved(board, a[1][0])) {
-                        move.failed = true;
-                    }
-                    list.push(a[0][0]);
-                    list.push(a[1][0]);
-               }
-          });
-      }
       if (Dagaz.Model.checkPositions(design, b, board.player, list)) {
           move.failed = true;
           return;
       }
-      changePieces(design, board, move);
   });
   CheckInvariants(board);
 }

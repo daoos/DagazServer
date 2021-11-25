@@ -346,6 +346,13 @@ function MakeTable(table) {
     return result;
 }
 
+function inBoard(target) {
+  if (target < 0) return false;
+  if (target & 0x80) return false;
+  if ((target & 0x0F) >= Dagaz.Model.WIDTH) return false;
+  return true;
+}
+
 var ResetGame = Dagaz.AI.ResetGame;
 
 Dagaz.AI.ResetGame = function() {
@@ -399,7 +406,7 @@ Dagaz.AI.ResetGame = function() {
            for (var i = pieceQueen; i <= pieceDummy; i++) {
                 for (var dir = 0; dir < pieceDeltas[i].length; dir++) {
                      var target = square + pieceDeltas[i][dir];
-                     while (!(target & 0x88)) {
+                     while (inBoard(target)) {
                          index = square - target + 256;
 
                          g_vectorDelta[index].pieceMask[Dagaz.AI.colorWhite >> Dagaz.AI.TYPE_SIZE] |= (1 << i);

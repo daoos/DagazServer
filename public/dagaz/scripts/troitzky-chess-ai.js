@@ -50,7 +50,7 @@ Dagaz.AI.pieceAdj = [
     0,    0,   0,   0,   0,   0,    0,    0,    0,    0, 
     0,    0,   0,   0,   0,   0,    0,    0,    0,    0, 
     0,    0,   0,   0,   0,   0,    0,    0,    0,    0, 
-    0,    0,   0,   0,   0,   0,    0,    0,    0,    0, 
+    0,    0,   0,   0,   0,   0,    0,    0,    0,    0
 ],
 [   0,    0,   0,   0,   0,   0,    0,    0,    0,    0, // piecePawn
     0,    0,   0,   0, 300, 300,    0,    0,    0,    0, 
@@ -61,7 +61,7 @@ Dagaz.AI.pieceAdj = [
     0,  -95, -15,  15,  75,  75,   15,  -15,  -95,    0, 
     0, -100, -20,  10,  70,  70,   10,  -20, -100,    0, 
     0,    0,   0,   0,   0,   0,    0,    0,    0,    0, 
-    0,    0,   0,   0,   0,   0,    0,    0,    0,    0, 
+    0,    0,   0,   0,   0,   0,    0,    0,    0,    0 
 ],
 [   0,    0,   0,   0,-100,-100,    0,    0,    0,    0, // pieceKnight
     0,    0,-100, -50, -50, -50,  -50, -100,    0,    0, 
@@ -72,7 +72,7 @@ Dagaz.AI.pieceAdj = [
     0,  -50,   0,  30,  30,  30,   30,    0,  -50,    0, 
     0, -100,   0,   0,   0,   0,    0,    0, -100,    0, 
     0,    0, -50, -25, -25, -25,  -25,  -50,    0,    0,
-    0,    0,   0,   0,-100,-100,    0,    0,    0,    0, 
+    0,    0,   0,   0,-100,-100,    0,    0,    0,    0 
 ],
 [   0,    0,   0,   0, -25, -25,    0,    0,    0,    0, // pieceBishop
     0,    0, -50, -25, -10, -10,  -25,  -50,    0,    0, 
@@ -83,7 +83,7 @@ Dagaz.AI.pieceAdj = [
     0,  -25, -10,   0,  25,  25,    0,  -10,  -25,    0, 
     0,  -50, -25, -10,   0,   0,  -10,  -25,  -50,    0, 
     0,    0, -50, -25, -10, -10,  -25,  -50,    0,    0, 
-    0,    0,   0,   0, -25, -25,    0,    0,    0,    0, 
+    0,    0,   0,   0, -25, -25,    0,    0,    0,    0 
 ],
 [   0,    0,   0,   0,  20,  20,    0,    0,    0,    0, // pieceRook
     0,    0, -30, -10,  20,  20,  -10,  -30,    0,    0, 
@@ -94,7 +94,7 @@ Dagaz.AI.pieceAdj = [
     0,  -60, -30, -10,  20,  20,  -10,  -30,  -60,    0, 
     0,  -60, -30, -10,  20,  20,  -10,  -30,  -60,    0, 
     0,    0, -30, -10,  20,  20,  -10,  -30,    0,    0, 
-    0,    0,   0,   0,  20,  20,    0,    0,    0,    0, 
+    0,    0,   0,   0,  20,  20,    0,    0,    0,    0 
 ],
 [   0,    0,   0,   0,  -5,  -5,    0,    0,    0,    0, // pieceQueen
     0,    0, -50, -25, -10, -10,  -25,  -50,    0,    0, 
@@ -105,7 +105,7 @@ Dagaz.AI.pieceAdj = [
     0,  -25, -10,  10,  25,  25,   10,  -10,  -25,    0, 
     0,  -50, -25, -10,  20,  20,  -10,  -25,  -50,    0, 
     0,    0, -50, -25,  10,  10,  -25,  -50,    0,    0, 
-    0,    0,   0,   0,  -5,  -5,    0,    0,    0,    0, 
+    0,    0,   0,   0,  -5,  -5,    0,    0,    0,    0 
 ],
 [   0,    0,   0,   0,-200,-200,    0,    0,    0,    0, // pieceKing
     0,    0, 150, -25,-125,-125,  -25,  150,    0,    0, 
@@ -116,7 +116,7 @@ Dagaz.AI.pieceAdj = [
     0,   50, 150, -25,-125,-125,  -25,  150,   50,    0, 
     0,   50, 150, -25,-125,-125,  -25,  150,   50,    0, 
     0,    0, 250,  75, -25, -25,   75,  250,    0,    0, 
-    0,    0,   0,   0, -50, -50,    0,    0,    0,    0, 
+    0,    0,   0,   0, -50, -50,    0,    0,    0,    0 
 ]];
 
 var pieceSquareAdj = new Array(8);
@@ -404,6 +404,13 @@ function MakeTable(table) {
     return result;
 }
 
+function inBoard(target) {
+  if (target < 0) return false;
+  if ((target & 0xF0) >= 0xA0) return false;
+  if ((target & 0x0F) >= 0x0A) return false;
+  return true;
+}
+
 var ResetGame = Dagaz.AI.ResetGame;
 
 Dagaz.AI.ResetGame = function() {
@@ -454,7 +461,7 @@ Dagaz.AI.ResetGame = function() {
            for (var i = pieceKnight; i <= pieceKing; i++) {
                 for (var dir = 0; dir < pieceDeltas[i].length; dir++) {
                      var target = square + pieceDeltas[i][dir]; 
-                     while (!(target & 0x88)) {
+                     while (inBoard(target)) {
                          index = square - target + (Dagaz.AI.VECTORDELTA_SIZE >> 1);
 
                          g_vectorDelta[index].pieceMask[Dagaz.AI.colorWhite >> Dagaz.AI.TYPE_SIZE] |= (1 << i);
@@ -1016,7 +1023,7 @@ Dagaz.AI.GenerateAllMoves = function(moveStack) {
 Dagaz.AI.GenerateCaptureMoves = function(moveStack) {
     var from, to, piece, pieceIdx;
     var inc = (Dagaz.AI.g_toMove == Dagaz.AI.colorWhite) ? -16 : 16;
-    var enemy = Dagaz.AI.g_toMove == Dagaz.AI.colorWhite ? 0x10 : 0x8;
+    var enemy = Dagaz.AI.g_toMove == Dagaz.AI.colorWhite ? Dagaz.AI.colorBlack : Dagaz.AI.colorWhite;
 
     // Pawn captures
     pieceIdx = (Dagaz.AI.g_toMove | piecePawn) << Dagaz.AI.COUNTER_SIZE;

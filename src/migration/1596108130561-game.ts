@@ -24,7 +24,7 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into games(id, name, filename, players_total, main_time, additional_time, max_selector) values(26, 'Reversi', 'reversi', 2, 0, 1000, 10)`);
         await queryRunner.query(`insert into games(id, name, filename, players_total, main_time, additional_time) values(27, 'Stratego', 'stratego', 2, 0, 1000)`);
         await queryRunner.query(`insert into games(id, name, filename, players_total, main_time, additional_time) values(28, 'Spock', 'spock', 2, 0, 1000)`);
-        await queryRunner.query(`insert into games(id, name, filename, players_total, main_time, additional_time) values(29, 'Hex', 'hex', 2, 0, 1000)`);
+        await queryRunner.query(`insert into games(id, name, filename, players_total, main_time, additional_time) values(29, 'Connect games', 'hex', 2, 0, 1000)`);
         await queryRunner.query(`insert into games(id, name, filename, players_total, main_time, additional_time) values(30, 'Chess', 'chess', 2, 0, 1000)`);
         await queryRunner.query(`insert into games(id, name, filename, players_total, main_time, additional_time) values(31, 'Mancala', 'oware', 2, 0, 1000)`);
         await queryRunner.query(`insert into games(id, name, filename, players_total, main_time, additional_time) values(32, 'Alquerque', 'alquerque', 2, 0, 1000)`);
@@ -261,6 +261,7 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(224, 30, 'Legan Chess', 'legan-chess', 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(225, 29, 'Hex', 'hex', 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(226, 29, 'Gonnect', 'gonnect', 2)`);
+        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(227, 24, 'Pioneer Checkers', 'pioneer-checkers', 2)`);
 
         await queryRunner.query(`insert into game_styles(id, game_id, name, suffix, player_num) values(1, 23, 'European', '', null)`);
         await queryRunner.query(`insert into game_styles(id, game_id, name, suffix, player_num) values(2, 23, 'Chinese', '-kanji', null)`);
@@ -376,6 +377,7 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_bots(id, game_id, variant_id, selector_value, player_num) values(90, 24, 146, null, null)`);
         await queryRunner.query(`insert into game_bots(id, game_id, variant_id, selector_value, player_num) values(91, 30, 32, null, null)`);
         await queryRunner.query(`insert into game_bots(id, game_id, variant_id, selector_value, player_num) values(92, 30, 123, null, null)`);
+        await queryRunner.query(`insert into game_bots(id, game_id, variant_id, selector_value, player_num) values(93, 24, 227, null, null)`);
 
         await queryRunner.query(`insert into game_setups(id, game_id, variant_id, selector_value, name) values(1, 25, 10, 1, 'Without Handicap')`);
         await queryRunner.query(`insert into game_setups(id, game_id, variant_id, selector_value, name) values(2, 25, 10, 2, 'Left-Kyo Handicap')`);
@@ -915,6 +917,7 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(582, 'benedict-chess', null, 'chess-1', 'https://www.chessvariants.com/difftaking.dir/benedict.html', '2001 W. D. Troyka')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(583, 'legan-chess', null, 'legan-chess', 'https://en.wikipedia.org/wiki/Legan_chess', '1913 L. Legan')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(584, 'gonnect', null, 'gonnect', 'https://en.wikipedia.org/wiki/Gonnect', '2000 Joao Pedro Neto')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(585, 'pioneer-checkers', null, 'pioneer')`);
 }
 
     public async down(queryRunner: QueryRunner): Promise<any> {
