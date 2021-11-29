@@ -41,6 +41,10 @@ Dagaz.Model.CheckInvariants = function(board) {
           if (piece === null) return;
           move.dropPiece(q, piece.promote(0), a[3]);
           q = design.navigate(board.player, q, 4);
+          while (q !== null) {
+              if (board.getPiece(q) === null) break;
+              q = design.navigate(board.player, q, 4);
+          }
       });
   });
   if (f) {
