@@ -22,9 +22,7 @@ ZRF = {
 };
 
 if (!_.isUndefined(Dagaz.Controller.addSound)) {
-    Dagaz.Controller.addSound(0, "sounds/wind.wav", true);
-    Dagaz.Controller.addSound(2,  "sounds/tadam.wav", true);
-    Dagaz.Controller.addSound(3, "sounds/loss.wav", true);
+    Dagaz.Controller.addSound(10, "sounds/wind.wav", true);
 }
 
 Dagaz.Model.BuildDesign = function(design) {
@@ -191,14 +189,14 @@ Dagaz.Model.BuildDesign = function(design) {
     design.addMove(0, 3, [1], 1);
 
     design.addPiece("King", 1, 100);
-    design.addMove(1, 0, [3, 3, 3], 0);
-    design.addMove(1, 0, [0, 0, 0], 0);
-    design.addMove(1, 0, [1, 1, 1], 0);
-    design.addMove(1, 0, [2, 2, 2], 0);
-    design.addMove(1, 1, [3, 3], 1);
-    design.addMove(1, 1, [0, 0], 1);
-    design.addMove(1, 1, [1, 1], 1);
-    design.addMove(1, 1, [2, 2], 1);
+    design.addMove(1, 0, [3, 3, 3], 0, 10);
+    design.addMove(1, 0, [0, 0, 0], 0, 10);
+    design.addMove(1, 0, [1, 1, 1], 0, 10);
+    design.addMove(1, 0, [2, 2, 2], 0, 10);
+    design.addMove(1, 1, [3, 3], 1, 10);
+    design.addMove(1, 1, [0, 0], 1, 10);
+    design.addMove(1, 1, [1, 1], 1, 10);
+    design.addMove(1, 1, [2, 2], 1, 10);
 
     design.setup("White", "Man", 48);
     design.setup("White", "Man", 49);
