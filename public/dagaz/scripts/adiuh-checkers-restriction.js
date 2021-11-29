@@ -33,7 +33,11 @@ var getStartPos = function(move) {
 var getCapture = function(move) {
   for (var i = 0; i < move.actions.length; i++) {
       var a = move.actions[i];
-      if ((a[0] !== null) && (a[1] === null)) return a[0][0];
+      if (a[1] === null) {
+          if (a[0] !== null) return a[0][0];
+      } else {
+          if ((a[0] !== null) && (a[0][0] == a[1][0])) return a[0][0];
+      }
   }
   return null;
 }
