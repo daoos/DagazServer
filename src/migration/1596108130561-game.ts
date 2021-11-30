@@ -262,6 +262,7 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(225, 29, 'Hex', 'hex', 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(226, 29, 'Gonnect', 'gonnect', 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(227, 24, 'Pioneer Checkers', 'pioneer-checkers', 2)`);
+        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total, is_hidden) values(228, 27, 'Stratego (8x8)', 'stratego-small', 2, 1)`);
 
         await queryRunner.query(`insert into game_styles(id, game_id, name, suffix, player_num) values(1, 23, 'European', '', null)`);
         await queryRunner.query(`insert into game_styles(id, game_id, name, suffix, player_num) values(2, 23, 'Chinese', '-kanji', null)`);
@@ -918,6 +919,7 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(583, 'legan-chess', null, 'legan-chess', 'https://en.wikipedia.org/wiki/Legan_chess', '1913 L. Legan')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(584, 'gonnect', null, 'gonnect', 'https://en.wikipedia.org/wiki/Gonnect', '2000 Joao Pedro Neto')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(585, 'pioneer-checkers', null, 'pioneer')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(586, 'stratego-small', null, 'stratego-small', 'https://en.wikipedia.org/wiki/Stratego')`);
 }
 
     public async down(queryRunner: QueryRunner): Promise<any> {
