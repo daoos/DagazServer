@@ -667,9 +667,9 @@ Dagaz.AI.ResetGame = function() {
     Dagaz.AI.g_zobristLow = new Array(256);
     Dagaz.AI.g_zobristHigh = new Array(256);
     for (var i = 0; i < 256; i++) {
-        Dagaz.AI.g_zobristLow[i] = new Array(16);
-        Dagaz.AI.g_zobristHigh[i] = new Array(16);
-        for (var j = 0; j < 16; j++) {
+        Dagaz.AI.g_zobristLow[i] = new Array(32);
+        Dagaz.AI.g_zobristHigh[i] = new Array(32);
+        for (var j = 0; j < 32; j++) {
             Dagaz.AI.g_zobristLow[i][j] = mt.next(32);
             Dagaz.AI.g_zobristHigh[i][j] = mt.next(32);
         }
@@ -684,7 +684,7 @@ Dagaz.AI.SetHash = function() {
     result.hashKeyHigh = 0;
     for (var i = 0; i < 256; i++) {
         var piece = Dagaz.AI.g_board[i];
-        if (piece & Dagaz.AI.PLAYERS_MASK) {
+        if ((piece & Dagaz.AI.PLAYERS_MASK) && (piece & Dagaz.AI.TYPE_MASK)) {
             result.hashKeyLow ^= Dagaz.AI.g_zobristLow[i][piece & Dagaz.AI.PIECE_MASK]
             result.hashKeyHigh ^= Dagaz.AI.g_zobristHigh[i][piece & Dagaz.AI.PIECE_MASK]
         }
@@ -707,7 +707,7 @@ Dagaz.AI.InitializePieceList = function() {
     for (var i = 0; i < 256; i++) {
         if (Dagaz.AI.g_board[i] & 0x80) continue;
         Dagaz.AI.g_pieceIndex[i] = 0;
-        if (Dagaz.AI.g_board[i] & Dagaz.AI.PLAYERS_MASK) {
+        if ((Dagaz.AI.g_board[i] & Dagaz.AI.PLAYERS_MASK) && (Dagaz.AI.g_board[i] & Dagaz.AI.TYPE_MASK)) {
             var piece = Dagaz.AI.g_board[i] & Dagaz.AI.PIECE_MASK;
             Dagaz.AI.g_pieceList[(piece << Dagaz.AI.COUNTER_SIZE) | Dagaz.AI.g_pieceCount[piece]] = i;
             Dagaz.AI.g_pieceIndex[i] = Dagaz.AI.g_pieceCount[piece];
