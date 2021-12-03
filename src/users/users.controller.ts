@@ -1,4 +1,4 @@
-import { Controller, Get, Res, HttpStatus, UseGuards, Post, Body, Delete, Param, Req } from '@nestjs/common';
+import { Controller, Get, Res, HttpStatus, UseGuards, Post, Body, Delete, Param, Req, UseInterceptors, UploadedFiles } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { User } from '../interfaces/user.interface';
 import { ApiOkResponse, ApiUnauthorizedResponse, ApiInternalServerErrorResponse, ApiForbiddenResponse, ApiSecurity, ApiBody, ApiCreatedResponse, ApiNotFoundResponse, ApiConflictResponse } from '@nestjs/swagger';
@@ -7,6 +7,7 @@ import { RolesGuard } from '../auth/roles.guard';
 import { Roles } from '../auth/roles.decorator';
 import { TokenGuard } from '../auth/token.guard';
 import { Request } from 'express';
+import { AnyFilesInterceptor } from '@nestjs/platform-express';
 
 @ApiSecurity('bearer')
 @Controller('api/users')
@@ -114,4 +115,17 @@ export class UsersController {
             return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ error: e.message.error.toString(), stack: e.stack});
         }
     }
-}
+
+    @UseGuards(JwtAuthGuard, TokenGuard)
+    @Post('upload')
+    @UseInterceptors(AnyFilesInterceptor())
+    @ApiOkResponse({ description: 'Successfully.'})
+    @ApiInternalServerErrorResponse({ description: 'Internal Server error.'})
+    async uploadFile(@Req() request: Request, @UploadedFiles() files, @Res() res) {
+      const user: any = request.user;
+      for (let file of files) {
+        await this.service.addFile(user.id, file);
+      }
+      return res.status(HttpStatus.OK).json(files);
+    }
+  }

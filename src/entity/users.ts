@@ -43,4 +43,7 @@ export class users {
 
     @Column({ default: 0, nullable: false })
     is_anonymous: number;
+
+    @Column({ nullable: true })
+    img: string;
 }

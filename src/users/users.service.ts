@@ -3,6 +3,7 @@ import { Repository } from 'typeorm';
 import { users } from '../entity/users';
 import { User } from '../interfaces/user.interface';
 import { tokens } from '../entity/tokens';
+import { picture } from '../entity/picture';
 
 @Injectable()
 export class UsersService {
@@ -314,6 +315,31 @@ export class UsersService {
           .execute();
           return await this.findOneById(id);
       } catch (error) {
+          console.error(error);
+          throw new InternalServerErrorException({
+              status: HttpStatus.BAD_REQUEST,
+              error: error
+          });
+        }
+      }
+
+      async addFile(user: number, file: any): Promise<void> {
+        try {
+          await this.service.createQueryBuilder("picture")
+          .insert()
+          .into(picture)
+          .values({
+              file_name: file.originalname,
+              internal_name: file.filename,
+              loaded: new Date()
+          })
+          .execute();
+          await this.service.createQueryBuilder("users")
+          .update(users)
+          .set({ img: file.filename })
+          .where("users.id = :id", {id: user})
+          .execute();
+        } catch (error) {
           console.error(error);
           throw new InternalServerErrorException({
               status: HttpStatus.BAD_REQUEST,
