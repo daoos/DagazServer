@@ -1,5 +1,7 @@
 (function() {
 
+var isProcessing = false;
+
 var checkVersion = Dagaz.Model.checkVersion;
 
 Dagaz.Model.checkVersion = function(design, name, value) {
@@ -94,6 +96,18 @@ Dagaz.Model.CheckInvariants = function(board) {
       if (checkPositions(design, b, board.player, list)) {
           move.failed = true;
           return;
+      }
+      if (isProcessing) return;
+      isProcessing = true;
+      b.generate(design);
+      isProcessing = false;
+      if (b.moves.length == 0) {
+          pos = findPiece(design, b, b.player, king);
+          list = [];
+          if (pos !== null) {
+              list.push(pos);
+              if (!checkPositions(design, b, b.player, list)) move.failed = true;
+          }
       }
   });
   CheckInvariants(board);
