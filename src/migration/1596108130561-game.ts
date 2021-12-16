@@ -263,6 +263,8 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(226, 29, 'Gonnect', 'gonnect', 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(227, 24, 'Pioneer Checkers', 'pioneer-checkers', 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total, is_hidden) values(228, 27, 'Stratego (8x8)', 'stratego-small', 2, 1)`);
+        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(229, 23, 'WojiaoQi', 'wojiaoqi', 2)`);
+        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total, is_hidden) values(230, 23, 'Dark WojiaoQi', 'dark-wojiaoqi', 2, 1)`);
 
         await queryRunner.query(`insert into game_styles(id, game_id, name, suffix, player_num) values(1, 23, 'European', '', null)`);
         await queryRunner.query(`insert into game_styles(id, game_id, name, suffix, player_num) values(2, 23, 'Chinese', '-kanji', null)`);
@@ -380,6 +382,8 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_bots(id, game_id, variant_id, selector_value, player_num) values(92, 30, 123, null, null)`);
         await queryRunner.query(`insert into game_bots(id, game_id, variant_id, selector_value, player_num) values(93, 24, 227, null, null)`);
         await queryRunner.query(`insert into game_bots(id, game_id, variant_id, selector_value, player_num) values(94, 30, 106, null, null)`);
+        await queryRunner.query(`insert into game_bots(id, game_id, variant_id, selector_value, player_num) values(95, 23, 229, null, null)`);
+        await queryRunner.query(`insert into game_bots(id, game_id, variant_id, selector_value, player_num) values(96, 23, 230, null, null)`);
 
         await queryRunner.query(`insert into game_setups(id, game_id, variant_id, selector_value, name) values(1, 25, 10, 1, 'Without Handicap')`);
         await queryRunner.query(`insert into game_setups(id, game_id, variant_id, selector_value, name) values(2, 25, 10, 2, 'Left-Kyo Handicap')`);
@@ -921,6 +925,10 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(584, 'gonnect', null, 'gonnect', 'https://en.wikipedia.org/wiki/Gonnect', '2000 Joao Pedro Neto')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(585, 'pioneer-checkers', null, 'pioneer')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(586, 'stratego-small', null, 'stratego-small', 'https://en.wikipedia.org/wiki/Stratego')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, copyright) values(587, 'wojiaoqi', null, 'wojiaoqi', '1890 Tong Xie Geng')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, copyright) values(588, 'wojiaoqi-kanji', null, 'wojiaoqi-kanji', '1890 Tong Xie Geng')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, copyright) values(589, 'dark-wojiaoqi', null, 'dark-wojiaoqi', '1890 Tong Xie Geng')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, copyright) values(590, 'dark-wojiaoqi-kanji', null, 'dark-wojiaoqi-kanji', '1890 Tong Xie Geng')`);
 }
 
     public async down(queryRunner: QueryRunner): Promise<any> {
