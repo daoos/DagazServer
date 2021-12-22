@@ -767,10 +767,12 @@ Dagaz.AI.MakeMove = function(move) {
             }
         }
     }
+    if (Dagaz.AI.g_pieceCount[pieceMaharadja | (Dagaz.AI.colorWhite - Dagaz.AI.g_toMove)] == 1) {
     var kingPos = Dagaz.AI.g_pieceList[(pieceMaharadja | (Dagaz.AI.colorWhite - Dagaz.AI.g_toMove)) << Dagaz.AI.COUNTER_SIZE];
-    if ((kingPos != 0) && IsSquareAttackable(kingPos, otherColor)) {
-        Dagaz.AI.UnmakeMove(move);
-        return false;
+        if ((kingPos != 0) && IsSquareAttackable(kingPos, otherColor)) {
+            Dagaz.AI.UnmakeMove(move);
+            return false;
+        }
     }
     
     Dagaz.AI.g_inCheck = false;
