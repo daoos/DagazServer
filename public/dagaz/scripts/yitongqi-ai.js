@@ -764,7 +764,7 @@ function IsSquareAttackableFrom(target, from){
        }
        to = from + inc; while (Dagaz.AI.g_board[to] == 0) { to += inc; }
        if (to != target) return false;
-       if ((Dagaz.AI.g_board[from] & Dagaz.AI.TYPE_MASK) == pieceKing) return true;
+       if ((Dagaz.AI.g_board[to] & Dagaz.AI.TYPE_MASK) == pieceKing) return true;
     }
     return false;
 }

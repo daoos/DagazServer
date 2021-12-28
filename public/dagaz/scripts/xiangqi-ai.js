@@ -451,7 +451,7 @@ function UndoHistory(inCheck, baseEval, hashKeyLow, hashKeyHigh, move50, capture
     this.captured = captured;
 }
 
-Dagaz.AI.MakeMove = function(move){
+Dagaz.AI.MakeMove = function(move) {
     var me = Dagaz.AI.g_toMove >> Dagaz.AI.TYPE_SIZE;
     var otherColor = Dagaz.AI.colorWhite - Dagaz.AI.g_toMove; 
     
@@ -508,10 +508,10 @@ Dagaz.AI.MakeMove = function(move){
     
     Dagaz.AI.g_inCheck = false;
     
-    var theirKingPos = Dagaz.AI.g_pieceList[(pieceKing | Dagaz.AI.g_toMove) << Dagaz.AI.COUNTER_SIZE];
+/*  var theirKingPos = Dagaz.AI.g_pieceList[(pieceKing | Dagaz.AI.g_toMove) << Dagaz.AI.COUNTER_SIZE];
     if (theirKingPos != 0) {
         Dagaz.AI.g_inCheck = IsSquareAttackable(theirKingPos, Dagaz.AI.g_toMove);
-    }
+    }*/
 
     Dagaz.AI.g_repMoveStack[Dagaz.AI.g_moveCount - 1] = Dagaz.AI.g_hashKeyLow;
     Dagaz.AI.g_move50++;
@@ -519,7 +519,7 @@ Dagaz.AI.MakeMove = function(move){
     return true;
 }
 
-Dagaz.AI.UnmakeMove = function(move){
+Dagaz.AI.UnmakeMove = function(move) {
     Dagaz.AI.g_toMove = Dagaz.AI.colorWhite - Dagaz.AI.g_toMove;
     Dagaz.AI.g_baseEval = -Dagaz.AI.g_baseEval;
     
@@ -555,7 +555,7 @@ Dagaz.AI.UnmakeMove = function(move){
     }
 }
 
-function IsSquareAttackableFrom(target, from){
+function IsSquareAttackableFrom(target, from) {
     var to, pos, piece, pieceType, adj;
 
     piece = Dagaz.AI.g_board[from];
@@ -563,13 +563,13 @@ function IsSquareAttackableFrom(target, from){
 
     if (pieceType == pieceEmpty) return false;
     var color = (piece & Dagaz.AI.colorWhite);
-    var enemy = color ? 0x10 : 0x8;
+    var enemy = color ? Dagaz.AI.colorBlack : Dagaz.AI.colorWhite;
     var inc = color ? -16 : 16;
     var me = color >> Dagaz.AI.TYPE_SIZE;
 
     if (pieceType == piecePawn) {
         adj = pieceSquareAdj[piecePawn][me == 0 ? flipTable[from] : from];
-        if (from + inc == target) return true;
+        if (+from + inc == target) return true;
         if (adj != 0) {
             if (+from + 1 == target) return true;
             if (+from - 1 == target) return true;
@@ -693,7 +693,7 @@ function IsSquareAttackableFrom(target, from){
        }
        to = from + inc; while (Dagaz.AI.g_board[to] == 0) { to += inc; }
        if (to != target) return false;
-       if ((Dagaz.AI.g_board[from] & Dagaz.AI.TYPE_MASK) == pieceKing) return true;
+       if ((Dagaz.AI.g_board[to] & Dagaz.AI.TYPE_MASK) == pieceKing) return true;
     }
     return false;
 }
@@ -723,7 +723,6 @@ function GenerateValidMoves() {
         if (Dagaz.AI.MakeMove(allMoves[i])) {
             moveList[moveList.length] = allMoves[i];
             Dagaz.AI.UnmakeMove(allMoves[i]);
-//          console.log('*** ' + Dagaz.AI.FormatMove(allMoves[i]) + ' (' + allMoves[i] + ')');
         }
     }
     return moveList;
@@ -878,7 +877,7 @@ Dagaz.AI.GenerateAllMoves = function(moveStack) {
 Dagaz.AI.GenerateCaptureMoves = function(moveStack) {
     var adj, from, to, pos, piece, pieceIdx;
     var me = Dagaz.AI.g_toMove >> Dagaz.AI.TYPE_SIZE;
-    var enemy = Dagaz.AI.g_toMove == Dagaz.AI.colorWhite ? 0x10 : 0x8;
+    var enemy = Dagaz.AI.g_toMove == Dagaz.AI.colorWhite ? Dagaz.AI.colorBlack : Dagaz.AI.colorWhite;
     var inc = (Dagaz.AI.g_toMove == Dagaz.AI.colorWhite) ? -16 : 16;
 
     // Pawn captures
