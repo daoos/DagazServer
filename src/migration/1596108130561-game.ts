@@ -265,6 +265,7 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total, is_hidden) values(228, 27, 'Stratego (8x8)', 'stratego-small', 2, 1)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(229, 23, 'WojiaoQi', 'wojiaoqi', 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total, is_hidden) values(230, 23, 'Dark WojiaoQi', 'dark-wojiaoqi', 2, 1)`);
+        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(231, 30, 'Fairy Eater Chess', 'fairy-eater', 2)`);
 
         await queryRunner.query(`insert into game_styles(id, game_id, name, suffix, player_num) values(1, 23, 'European', '', null)`);
         await queryRunner.query(`insert into game_styles(id, game_id, name, suffix, player_num) values(2, 23, 'Chinese', '-kanji', null)`);
@@ -931,6 +932,7 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, copyright) values(588, 'wojiaoqi-kanji', null, 'wojiaoqi-kanji', '1890 Tong Xie Geng')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, copyright) values(589, 'dark-wojiaoqi', null, 'dark-wojiaoqi', '1890 Tong Xie Geng')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, copyright) values(590, 'dark-wojiaoqi-kanji', null, 'dark-wojiaoqi-kanji', '1890 Tong Xie Geng')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, copyright) values(591, 'fairy-eater', null, 'fairy-eater', '2021 Vadrya Pokshtya')`);
 }
 
     public async down(queryRunner: QueryRunner): Promise<any> {
