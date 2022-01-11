@@ -1,0 +1,81 @@
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>Fairy Eater Chess</title>
+</head>
+<body>
+
+<img id="Board" style="display:none" src="images/fairy-eater/9x9.png">
+<img id="Promote" style="display:none" src="images/fairy-eater/dialog-5.png">
+<img id="WhitePawn" style="display:none" src="images/fairy-eater/wpawn.png">
+<img id="BlackPawn" style="display:none" src="images/fairy-eater/bpawn.png">
+<img id="WhiteShield" style="display:none" src="images/fairy-eater/wshield.png">
+<img id="BlackShield" style="display:none" src="images/fairy-eater/bshield.png">
+<img id="WhiteGhost" style="display:none" src="images/fairy-eater/wghost.png">
+<img id="BlackGhost" style="display:none" src="images/fairy-eater/bghost.png">
+<img id="WhiteChaos" style="display:none" src="images/fairy-eater/wchaos.png">
+<img id="BlackChaos" style="display:none" src="images/fairy-eater/bchaos.png">
+<img id="WhiteReaper" style="display:none" src="images/fairy-eater/wreaper.png">
+<img id="BlackReaper" style="display:none" src="images/fairy-eater/breaper.png">
+<img id="WhiteKnightrider" style="display:none" src="images/fairy-eater/wknightrider.png">
+<img id="BlackKnightrider" style="display:none" src="images/fairy-eater/bknightrider.png">
+<img id="WhiteKing" style="display:none" src="images/fairy-eater/wking.png">
+<img id="BlackKing" style="display:none" src="images/fairy-eater/bking.png">
+<img id="Ko" style="display:none" src="images/chess/ko.png">
+
+<table style="margin:auto; font-family:sans-serif; font-size:14px" id="Table">
+<tr><td>
+<a href="javascript:Dagaz.Controller.home()" title="Home" style="display:none" id="home"><img src="images/home.png"/></a>
+<a href="javascript:Dagaz.Controller.undo()" title="PgDown" style="display:none" id="undo"><img src="images/undo.png"/></a>
+Copyright (c) 2021 Vadrya Pokshtya
+<a target="_blank" href="https://fairyeaterchess.blogspot.com/2021/12/welcome-to-world-of-fairy-eater-chess.html#more">Rules</a>
+<a href="javascript:Dagaz.Controller.resign()">I Resign</a>
+<a href="javascript:Dagaz.Controller.sound()" id="sound">no Sound</a>
+<a href="javascript:Dagaz.Controller.redo()" title="PgUp" style="display:none" id="redo"><img src="images/redo.png"/></a>
+<div align="right" id="timer"/>
+</td></tr>
+<tr style="height:616px; vertical-align:top">
+<td id="CanvasCell" style="width:616px">
+<canvas id="Canvas" width="616" height="616" style="cursor:default">Broken canvas...</canvas>
+</td><td style="width:300px;">
+<div style="height:510px; overflow:auto" id="ScrollDiv">
+<img id="GlyphImage"><p id="HelpText"></p>
+<p id="GameSession"></p>
+</div>
+</td>
+</tr>
+<tr>
+<td>
+<div style="height:100px; width:616px; margin-left:auto; margin-right:auto">
+<table>
+<tr style="display:none" id="PieceInfo">
+<td><img id="PieceInfoImage"></td><td id="PieceInfoText"></td>
+</tr>
+</table>
+</div>
+</td>
+</tr>
+</table>
+
+<script src="vendor/underscore-min.js"></script>
+<script src="vendor/jquery-3.5.1.min.js"></script>
+<script src="common-scripts/dagaz.js"></script>
+<script src="common-scripts/zrf-model.js"></script>
+<script src="common-scripts/zobrist-v2.js"></script>
+<script src="common-scripts/2d-view-v3.js"></script>
+<script src="common-scripts/move-list-v2.js"></script>
+<script src="common-scripts/session-manager.js"></script>
+<script src="common-scripts/sound-manager-v2.js"></script>
+<script src="common-scripts/random-ai.js"></script>
+<script src="common-scripts/garbo-ai-v2.js"></script>
+<script src="common-scripts/fast-ai.js"></script>
+<script src="scripts/dark-fairy-eater-view.js"></script>
+<script src="scripts/fairy-eater-chess-ai.js"></script>
+<script src="scripts/fairy-eater-chess-fen.js"></script>
+<script src="scripts/fairy-eater-chess-invariant.js"></script>
+<script src="scripts/fairy-eater-chess-promotion.js"></script>
+<script src="scripts/dark-fairy-eater-chess-black.js"></script>
+<script src="common-scripts/app-net-v5.js"></script>
+
+</body>
+</html>
