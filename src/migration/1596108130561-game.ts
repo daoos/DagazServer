@@ -387,6 +387,7 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_bots(id, game_id, variant_id, selector_value, player_num) values(96, 23, 230, null, null)`);
         await queryRunner.query(`insert into game_bots(id, game_id, variant_id, selector_value, player_num) values(97, 30, 223, null, null)`);
         await queryRunner.query(`insert into game_bots(id, game_id, variant_id, selector_value, player_num) values(98, 23, 8, null, null)`);
+        await queryRunner.query(`insert into game_bots(id, game_id, variant_id, selector_value, player_num) values(99, 30, 231, null, null)`);
 
         await queryRunner.query(`insert into game_setups(id, game_id, variant_id, selector_value, name) values(1, 25, 10, 1, 'Without Handicap')`);
         await queryRunner.query(`insert into game_setups(id, game_id, variant_id, selector_value, name) values(2, 25, 10, 2, 'Left-Kyo Handicap')`);
@@ -932,7 +933,7 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, copyright) values(588, 'wojiaoqi-kanji', null, 'wojiaoqi-kanji', '1890 Tong Xie Geng')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, copyright) values(589, 'dark-wojiaoqi', null, 'dark-wojiaoqi', '1890 Tong Xie Geng')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, copyright) values(590, 'dark-wojiaoqi-kanji', null, 'dark-wojiaoqi-kanji', '1890 Tong Xie Geng')`);
-        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, copyright) values(591, 'fairy-eater', null, 'fairy-eater', '2021 Vadrya Pokshtya')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(591, 'fairy-eater', null, 'fairy-eater', 'https://fairyeaterchess.blogspot.com/2021/12/welcome-to-world-of-fairy-eater-chess.html#more', '2021 Vadrya Pokshtya')`);
 }
 
     public async down(queryRunner: QueryRunner): Promise<any> {
