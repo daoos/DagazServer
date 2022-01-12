@@ -490,6 +490,8 @@ Dagaz.AI.ResetGame = function() {
                              g_vectorDelta[index].delta = flip * 15;
                          } else if ((square % 17) == (target % 17)) {
                              g_vectorDelta[index].delta = flip * 17;
+                         } else {
+                             g_vectorDelta[index].delta = pieceDeltas[i][dir];
                          }
  
                          if ((i == pieceShield) && (dir >= 2)) {

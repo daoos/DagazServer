@@ -2432,6 +2432,16 @@ ZrfMove.prototype.getTarget = function() {
   return null;
 }
 
+ZrfMove.prototype.setLast = function(lastf, lastt, part) {
+  if (!part) part = 1;
+  this.actions.push([ null, null, [{
+      exec: function(obj) {
+          obj.lastf = lastf;
+          obj.lastt = lastt;
+      }
+  }], part]);
+}
+
 ZrfMove.prototype.setReserve = function(type, player, value, part) {
   if (!part) part = 1;
   this.actions.push([ null, null, [{

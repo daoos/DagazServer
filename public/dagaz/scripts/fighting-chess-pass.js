@@ -21,6 +21,9 @@ Dagaz.Model.CheckInvariants = function(board) {
       }
       pos = 64 + design.nextTurn(board);      
       move.dropPiece(pos, piece.changeOwner(design.nextPlayer(board.player)));
+      if ((move.actions[0][0] !== null) && (move.actions[0][1] !== null)) {
+          move.setLast(move.actions[0][0][0], move.actions[0][1][0]);
+      }
   });
   CheckInvariants(board);
 }
