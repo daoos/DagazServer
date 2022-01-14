@@ -334,11 +334,11 @@ export class UsersService {
               loaded: new Date()
           })
           .execute();
-          await this.service.createQueryBuilder("users")
+/*        await this.service.createQueryBuilder("users")
           .update(users)
           .set({ img: file.filename })
           .where("users.id = :id", {id: user})
-          .execute();
+          .execute();*/
         } catch (error) {
           console.error(error);
           throw new InternalServerErrorException({
