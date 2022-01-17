@@ -493,7 +493,7 @@ Dagaz.AI.ResetGame = function() {
                          } else {
                              g_vectorDelta[index].delta = pieceDeltas[i][dir];
                          }
- 
+
                          if ((i == pieceShield) && (dir >= 2)) {
                              g_vectorDelta[index].delta = pieceDeltas[i][dir];
                              break;
@@ -875,6 +875,7 @@ function IsSquareAttackableFrom(target, from) {
     if (g_vectorDelta[index].pieceMask[(piece >> Dagaz.AI.TYPE_SIZE) & 1] & (1 << (piece & Dagaz.AI.TYPE_MASK))) {
         // Yes, this square is pseudo-attackable.  Now, check for real attack
         var inc = g_vectorDelta[index].delta;
+        if ((piece & Dagaz.AI.TYPE_MASK) == pieceGhost) inc = inc * 2;
         do {
             from += inc;
             if (from == target) return true;
@@ -884,13 +885,13 @@ function IsSquareAttackableFrom(target, from) {
 }
 
 function IsSquareAttackable(target, color) {
-	// Attackable by pawns?
-	var inc = color ? -16 : 16;
-	var pawn = (color ? Dagaz.AI.colorWhite : Dagaz.AI.colorBlack) | piecePawn;
-	if (Dagaz.AI.g_board[target - (inc - 1)] == pawn) return true;
-	if (Dagaz.AI.g_board[target - (inc + 1)] == pawn) return true;
-	// Attackable by pieces?
-	for (var i = pieceGhost; i <= pieceKing; i++) {
+    // Attackable by pawns?
+    var inc = color ? -16 : 16;
+    var pawn = (color ? Dagaz.AI.colorWhite : Dagaz.AI.colorBlack) | piecePawn;
+    if (Dagaz.AI.g_board[target - (inc - 1)] == pawn) return true;
+    if (Dagaz.AI.g_board[target - (inc + 1)] == pawn) return true;
+    // Attackable by pieces?
+    for (var i = pieceGhost; i <= pieceKing; i++) {
         var index = (color | i) << Dagaz.AI.COUNTER_SIZE;
         var square = Dagaz.AI.g_pieceList[index];
         while (square != 0) {
