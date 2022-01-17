@@ -68,7 +68,7 @@ Dagaz.AI.FormatMove = function(move) {
         if (result === null) {
             result = FormatSquare(move[i] & 0xFF);
         }
-        result = result + '-' + FormatSquare((move[i] >> 8) & 0xFF);
+        result = result + FormatSquare((move[i] >> 8) & 0xFF);
     }
     return result;
 }

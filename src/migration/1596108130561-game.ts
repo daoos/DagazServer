@@ -267,6 +267,7 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total, is_hidden) values(230, 23, 'Dark WojiaoQi', 'dark-wojiaoqi', 2, 1)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(231, 30, 'Fairy Eater Chess', 'fairy-eater', 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(232, 30, 'Dark Fairy Eater', 'dark-fairy-eater', 2)`);
+        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(233, 30, 'Chaturanga', 'chaturanga', 2)`);
 
         await queryRunner.query(`insert into game_styles(id, game_id, name, suffix, player_num) values(1, 23, 'European', '', null)`);
         await queryRunner.query(`insert into game_styles(id, game_id, name, suffix, player_num) values(2, 23, 'Chinese', '-kanji', null)`);
@@ -390,6 +391,7 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_bots(id, game_id, variant_id, selector_value, player_num) values(98, 23, 8, null, null)`);
         await queryRunner.query(`insert into game_bots(id, game_id, variant_id, selector_value, player_num) values(99, 30, 231, null, null)`);
         await queryRunner.query(`insert into game_bots(id, game_id, variant_id, selector_value, player_num) values(100, 30, 232, null, null)`);
+        await queryRunner.query(`insert into game_bots(id, game_id, variant_id, selector_value, player_num) values(101, 30, 233, null, null)`);
 
         await queryRunner.query(`insert into game_setups(id, game_id, variant_id, selector_value, name) values(1, 25, 10, 1, 'Without Handicap')`);
         await queryRunner.query(`insert into game_setups(id, game_id, variant_id, selector_value, name) values(2, 25, 10, 2, 'Left-Kyo Handicap')`);
@@ -937,6 +939,7 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, copyright) values(590, 'dark-wojiaoqi-kanji', null, 'dark-wojiaoqi-kanji', '1890 Tong Xie Geng')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(591, 'fairy-eater', null, 'fairy-eater', 'https://fairyeaterchess.blogspot.com/2021/12/welcome-to-world-of-fairy-eater-chess.html#more', '2021 Vadrya Pokshtya')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(592, 'dark-fairy-eater', null, 'dark-fairy-eater', 'https://fairyeaterchess.blogspot.com/2021/12/welcome-to-world-of-fairy-eater-chess.html#more', '2021 Vadrya Pokshtya')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(593, 'chaturanga', null, 'chaturanga', 'https://en.wikipedia.org/wiki/Chaturanga')`);
 }
 
     public async down(queryRunner: QueryRunner): Promise<any> {

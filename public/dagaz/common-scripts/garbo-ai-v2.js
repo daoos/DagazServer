@@ -92,7 +92,7 @@ function HashEntry(lock, value, flags, hashDepth, bestMove, globalPly) {
     this.bestMove = bestMove;
 }
 
-function Search(finishMoveCallback, maxPly, finishPlyCallback) {
+function Search(finishMoveCallback, maxPly, finishPlyCallback, moves) {
     var lastEval;
     var alpha = minEval;
     var beta = maxEval;
@@ -109,7 +109,7 @@ function Search(finishMoveCallback, maxPly, finishPlyCallback) {
 
     var i;
     for (i = 1; i <= maxPly && g_searchValid; i++) {
-        var tmp = AlphaBeta(i, 0, alpha, beta);
+        var tmp = AlphaBeta(i, 0, alpha, beta, moves);
         if (!g_searchValid) break;
 
         value = tmp;
@@ -237,7 +237,7 @@ function IsRepDraw() {
     return false;
 }
 
-function MovePicker(hashMove, depth, killer1, killer2) {
+function MovePicker(hashMove, depth, killer1, killer2, moves) {
     this.hashMove = hashMove;
     this.depth = depth;
     this.killer1 = killer1;
@@ -265,7 +265,7 @@ function MovePicker(hashMove, depth, killer1, killer2) {
             }
 
             if (this.stage == 2) {
-                Dagaz.AI.GenerateCaptureMoves(this.moves, null);
+                Dagaz.AI.GenerateCaptureMoves(this.moves, moves);
                 this.moveCount = this.moves.length;
                 this.moveScores = new Array(this.moveCount);
                 // Move ordering
@@ -301,7 +301,7 @@ function MovePicker(hashMove, depth, killer1, killer2) {
             }
 
             if (this.stage == 5) {
-                Dagaz.AI.GenerateAllMoves(this.moves);
+                Dagaz.AI.GenerateAllMoves(this.moves, moves);
                 Dagaz.AI.GenerateDropMoves(this.moves, true);
                 this.moveCount = this.moves.length;
                 // Move ordering
@@ -539,7 +539,7 @@ function AllCutNode(ply, depth, beta, allowNull) {
     return realEval;
 }
 
-function AlphaBeta(ply, depth, alpha, beta) {
+function AlphaBeta(ply, depth, alpha, beta, moves) {
     if (ply <= 0) {
         return QSearch(alpha, beta, 0);
     }
@@ -567,7 +567,7 @@ function AlphaBeta(ply, depth, alpha, beta) {
     var moveMade = false;
     var realEval = minEval;
 
-    var movePicker = new MovePicker(hashMove, depth, g_killers[depth][0], g_killers[depth][1]);
+    var movePicker = new MovePicker(hashMove, depth, g_killers[depth][0], g_killers[depth][1], moves);
 
     for (;;) {
         var currentMove = movePicker.nextMove();
@@ -794,7 +794,7 @@ Ai.prototype.getMove = function(ctx) {
       setTimeout(function () {
             var s = Dagaz.AI.InitializeFromFen(fen);
             if (s == '') {
-                Search(garbo, 10, debugPlyCallback);
+                Search(garbo, 10, debugPlyCallback, moves);
             } else {
                 console.log(s);
             }

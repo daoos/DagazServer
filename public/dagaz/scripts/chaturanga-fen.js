@@ -9,8 +9,14 @@ Dagaz.Model.moveToString = function(move) {
   var r = "";
   _.each(move.actions, function(a) {
       if (a[1] === null) return;
-      if ((r == "") && (a[0] != null)) {
+      if (r != "") {
+          r = r + " ";
+      }
+      if (a[0] != null) {
           r = r + Dagaz.Model.posToString(a[0][0]);
+          if (a[1] !== null) {
+              r = r + '-';
+          }
       }
       if (a[1] !== null) {
           r = r + Dagaz.Model.posToString(a[1][0]);
@@ -87,10 +93,18 @@ var getTurn = function(setup) {
 }
 
 var createPiece = function(design, c) {
-  if (c == 'P') return Dagaz.Model.createPiece(design.getPieceType("Man"), 1);
-  if (c == 'p') return Dagaz.Model.createPiece(design.getPieceType("Man"), 2);
-  if (c == 'K') return Dagaz.Model.createPiece(design.getPieceType("King"), 1);
-  if (c == 'k') return Dagaz.Model.createPiece(design.getPieceType("King"), 2);
+  if (c == 'P') return Dagaz.Model.createPiece(design.getPieceType("Bhata"), 1);
+  if (c == 'p') return Dagaz.Model.createPiece(design.getPieceType("Bhata"), 2);
+  if (c == 'R') return Dagaz.Model.createPiece(design.getPieceType("Ratha"), 1);
+  if (c == 'r') return Dagaz.Model.createPiece(design.getPieceType("Ratha"), 2);
+  if (c == 'N') return Dagaz.Model.createPiece(design.getPieceType("Ashva"), 1);
+  if (c == 'n') return Dagaz.Model.createPiece(design.getPieceType("Ashva"), 2);
+  if (c == 'B') return Dagaz.Model.createPiece(design.getPieceType("Gaja"), 1);
+  if (c == 'b') return Dagaz.Model.createPiece(design.getPieceType("Gaja"), 2);
+  if (c == 'Q') return Dagaz.Model.createPiece(design.getPieceType("Mantri"), 1);
+  if (c == 'q') return Dagaz.Model.createPiece(design.getPieceType("Mantri"), 2);
+  if (c == 'K') return Dagaz.Model.createPiece(design.getPieceType("Raja"), 1);
+  if (c == 'k') return Dagaz.Model.createPiece(design.getPieceType("Raja"), 2);
   return null;
 }
 
@@ -123,8 +137,13 @@ Dagaz.Model.setup = function(board, init) {
 }
 
 var getPieceNotation = function(design, piece) {
-  var r = 'P';
-  if (piece.type == design.getPieceType("King")) r = 'K';
+  var r = 'X';
+  if (piece.type == design.getPieceType("Bhata"))  r = 'P';
+  if (piece.type == design.getPieceType("Ratha"))  r = 'R';
+  if (piece.type == design.getPieceType("Ashva"))  r = 'N';
+  if (piece.type == design.getPieceType("Gaja"))   r = 'B';
+  if (piece.type == design.getPieceType("Mantri")) r = 'Q';
+  if (piece.type == design.getPieceType("Raja"))   r = 'K';
   if (piece.player > 1) {
       return r.toLowerCase();
   }
@@ -146,10 +165,6 @@ Dagaz.Model.getSetup = function(design, board) {
        k++;
        var piece = board.getPiece(pos);
        if (piece === null) {
-           if (c > 8) {
-               str += c;
-               c = 0;
-           }
            c++;
        } else {
            if (c > 0) {
