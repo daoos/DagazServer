@@ -461,14 +461,14 @@ Ai.prototype.getMove = function(ctx) {
   if (moves.length == 0) {
       return { done: true, ai: "nothing" };
   }
-/*if (moves.length == 1) {
+  if (moves.length == 1) {
       return {
            done: true,
            move: moves[0],
            time: Date.now() - ctx.timestamp,
            ai:  "once"
       };
-  }*/
+  }
   if (resultMove !== null) {
       var bestMove = null;
       _.each(moves, function(move) {
