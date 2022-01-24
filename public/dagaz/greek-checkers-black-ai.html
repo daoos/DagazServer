@@ -1,31 +1,29 @@
 <html>
 <head>
 <META http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>80 Cells Checkers</title>
+<title>Greek Checkers</title>
 </head>
 <body>
 
-<img id="Board" style="display:none" src="images/checkers/10x8.png">
-<img id="WhiteMan" style="display:none" src="images/checkers/wman.png">
-<img id="BlackMan" style="display:none" src="images/checkers/bman.png">
+<img id="Board" style="display:none" src="images/checkers/turkish.png">
 <img id="WhiteKing" style="display:none" src="images/checkers/wdamone.png">
 <img id="BlackKing" style="display:none" src="images/checkers/bdamone.png">
+<img id="WhiteMan" style="display:none" src="images/checkers/wman.png">
+<img id="BlackMan" style="display:none" src="images/checkers/bman.png">
 
 <table style="margin:auto; font-family:sans-serif; font-size:14px" id="Table">
 <tr><td>
 <a href="javascript:Dagaz.Controller.home()" title="Home" style="display:none" id="home"><img src="images/home.png"/></a>
 <a href="javascript:Dagaz.Controller.undo()" title="PgDown" style="display:none" id="undo"><img src="images/undo.png"/></a>
-Copyright (c) Nikolay Spancireti (1916-1991)
-<a href="javascript:Dagaz.Controller.redo()" title="PgUp" style="display:none" id="redo"><img src="images/redo.png"/></a>
-<br><a target="_blank" href="https://en.wikipedia.org/wiki/Russian_draughts">Rules</a>
 <a href="javascript:Dagaz.Controller.resign()">I Resign</a>
 <a href="javascript:Dagaz.Controller.sound()" id="sound">no Sound</a>
+<a href="javascript:Dagaz.Controller.redo()" title="PgUp" style="display:none" id="redo"><img src="images/redo.png"/></a>
 <div align="right" id="timer"/>
 </td></tr>
 <tr style="height:404px; vertical-align:top">
-<td id="CanvasCell" style="width:504px">
-<canvas id="Canvas" width="504" height="404" style="cursor:default">Broken canvas...</canvas>
-</td><td style="width:504px;">
+<td id="CanvasCell" style="width:404px">
+<canvas id="Canvas" width="404" height="404" style="cursor:default">Broken canvas...</canvas>
+</td><td style="width:404px;">
 <div style="height:510px; overflow:auto" id="ScrollDiv">
 <img id="GlyphImage"><p id="HelpText"></p>
 <p id="GameSession"></p>
@@ -34,7 +32,7 @@ Copyright (c) Nikolay Spancireti (1916-1991)
 </tr>
 <tr>
 <td>
-<div style="height:100px; width:504px; margin-left:auto; margin-right:auto">
+<div style="height:100px; width:404px; margin-left:auto; margin-right:auto">
 <table>
 <tr style="display:none" id="PieceInfo">
 <td><img id="PieceInfoImage"></td><td id="PieceInfoText"></td>
@@ -56,11 +54,10 @@ Copyright (c) Nikolay Spancireti (1916-1991)
 <script src="common-scripts/session-manager.js"></script>
 <script src="common-scripts/random-ai.js"></script>
 <script src="scripts/garbo-ai-checkers.js"></script>
+<script src="scripts/greek-checkers-ai.js"></script>
 <script src="scripts/checkers-fen.js"></script>
-<script src="scripts/80-cells-checkers-ai.js"></script>
-<script src="scripts/deferred-captures.js"></script>
-<script src="scripts/russian-captures.js"></script>
-<script src="scripts/80-cells-checkers-black.js"></script>
+<script src="scripts/maximal-captures.js"></script>
+<script src="scripts/greek-checkers-black.js"></script>
 <script src="common-scripts/app-net-v2.js"></script>
 
 </body>
