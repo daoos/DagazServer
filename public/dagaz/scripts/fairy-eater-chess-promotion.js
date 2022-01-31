@@ -38,20 +38,19 @@ Dagaz.Model.CheckInvariants = function(board) {
   var pawn   = design.getPieceType("Pawn");
   _.each(board.moves, function(move) {
       if (move.isSimpleMove()) {
-          var pos = move.actions[0][0][0];
+          var pos = move.actions[0][0][0];        
           var piece = board.getPiece(pos);
-          if ((piece !== null) && (piece.type == pawn) && 
-              (move.actions[0][2] !== null) && 
-              (move.actions[0][2][0].type != pawn)) {
-              piece = move.actions[0][2][0];
-              var pieces = [];
-              pieces.push(piece.promote(design.getPieceType("Ghost")));
-              pieces.push(piece.promote(design.getPieceType("Shield")));
-              pieces.push(piece.promote(design.getPieceType("Chaos")));
-              pieces.push(piece.promote(design.getPieceType("Reaper")));
-              pieces.push(piece.promote(design.getPieceType("Knightrider")));
-              move.actions[0][2] = pieces;
-          }
+          if (piece === null) return;
+          if ((piece.type != pawn) && (piece.type != +pawn + 1)) return;
+          if (!design.inZone(0, piece.player, move.actions[0][1][0])) return;
+          piece = move.actions[0][2][0];
+          var pieces = [];
+          pieces.push(piece.promote(design.getPieceType("Ghost")));
+          pieces.push(piece.promote(design.getPieceType("Shield")));
+          pieces.push(piece.promote(design.getPieceType("Chaos")));
+          pieces.push(piece.promote(design.getPieceType("Reaper")));
+          pieces.push(piece.promote(design.getPieceType("Knightrider")));
+          move.actions[0][2] = pieces;
       }
   });
   CheckInvariants(board);

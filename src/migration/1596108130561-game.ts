@@ -266,8 +266,9 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(229, 23, 'WojiaoQi', 'wojiaoqi', 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total, is_hidden) values(230, 23, 'Dark WojiaoQi', 'dark-wojiaoqi', 2, 1)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(231, 30, 'Fairy Eater Chess', 'fairy-eater', 2)`);
-        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(232, 30, 'Dark Fairy Eater', 'dark-fairy-eater', 2)`);
+        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total, is_hidden) values(232, 30, 'Dark Fairy Eater', 'dark-fairy-eater', 2, 1)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(233, 30, 'Chaturanga', 'chaturanga', 2)`);
+        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total, is_hidden) values(234, 30, 'Esoteric Fairy Eater', 'esoteric-fairy-eater', 2, 1)`);
 
         await queryRunner.query(`insert into game_styles(id, game_id, name, suffix, player_num) values(1, 23, 'European', '', null)`);
         await queryRunner.query(`insert into game_styles(id, game_id, name, suffix, player_num) values(2, 23, 'Chinese', '-kanji', null)`);
@@ -943,6 +944,7 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(591, 'fairy-eater', null, 'fairy-eater', 'https://fairyeaterchess.blogspot.com/2021/12/welcome-to-world-of-fairy-eater-chess.html#more', '2021 Vadrya Pokshtya')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(592, 'dark-fairy-eater', null, 'dark-fairy-eater', 'https://fairyeaterchess.blogspot.com/2021/12/welcome-to-world-of-fairy-eater-chess.html#more', '2021 Vadrya Pokshtya')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(593, 'chaturanga', null, 'chaturanga', 'https://en.wikipedia.org/wiki/Chaturanga')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(594, 'esoteric-fairy-eater', null, 'esoteric-fairy-eater', 'https://fairyeaterchess.blogspot.com/2021/12/welcome-to-world-of-fairy-eater-chess.html#more', '2021 Vadrya Pokshtya')`);
 }
 
     public async down(queryRunner: QueryRunner): Promise<any> {
