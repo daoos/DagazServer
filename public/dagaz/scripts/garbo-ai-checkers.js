@@ -24,7 +24,7 @@ var moveflagPromotion   = 0x01000000;
 
 var g_moveUndoStack = new Array();
 
-var materialTable = [0, 100, 9000];
+var materialTable = [0, 100, 1000];
 
 var pieceSquareAdj = new Array(3);
 var flipTable = new Array(256);
