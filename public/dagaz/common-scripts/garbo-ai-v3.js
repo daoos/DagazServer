@@ -260,10 +260,10 @@ function AlphaBeta(ply, depth, alpha, beta) {
                         Dagaz.AI.historyTable[histPiece][histTo] >>= 1;
                     }
 
-                    if (g_killers[depth][0] != currentMove) {
+/*                  if (g_killers[depth][0] != currentMove) {
                         g_killers[depth][1] = g_killers[depth][0];
                         g_killers[depth][0] = currentMove;
-                    }
+                    }*/
                 }
 
                 StoreHash(value, hashflagBeta, ply, currentMove, depth);
