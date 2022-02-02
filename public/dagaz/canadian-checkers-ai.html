@@ -1,11 +1,11 @@
 <html>
 <head>
 <META http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>Armenian Tama</title>
+<title>Canadian Checkers</title>
 </head>
 <body>
 
-<img id="Board" style="display:none" src="images/checkers/armenian.png">
+<img id="Board" style="display:none" src="images/checkers/12x12.png">
 <img id="WhiteMan" style="display:none" src="images/checkers/wman.png">
 <img id="BlackMan" style="display:none" src="images/checkers/bman.png">
 <img id="WhiteKing" style="display:none" src="images/checkers/wdamone.png">
@@ -15,17 +15,16 @@
 <tr><td>
 <a href="javascript:Dagaz.Controller.home()" title="Home" style="display:none" id="home"><img src="images/home.png"/></a>
 <a href="javascript:Dagaz.Controller.undo()" title="PgDown" style="display:none" id="undo"><img src="images/undo.png"/></a>
-<a target="_blank" href="https://en.wikipedia.org/wiki/Armenian_draughts">Rules</a>
+<a target="_blank" href="https://en.wikipedia.org/wiki/Canadian_checkers">Rules</a>
 <a href="javascript:Dagaz.Controller.resign()">I Resign</a>
-<a href="javascript:Dagaz.Controller.drawOffer()">Offer Draw</a>
 <a href="javascript:Dagaz.Controller.sound()" id="sound">no Sound</a>
 <a href="javascript:Dagaz.Controller.redo()" title="PgUp" style="display:none" id="redo"><img src="images/redo.png"/></a>
 <div align="right" id="timer"/>
 </td></tr>
-<tr style="height:404px; vertical-align:top">
-<td id="CanvasCell" style="width:404px">
-<canvas id="Canvas" width="404" height="404" style="cursor:default">Broken canvas...</canvas>
-</td><td style="width:404px;">
+<tr style="height:604px; vertical-align:top">
+<td id="CanvasCell" style="width:604px">
+<canvas id="Canvas" width="604" height="604" style="cursor:default">Broken canvas...</canvas>
+</td><td style="width:604px;">
 <div style="height:510px; overflow:auto" id="ScrollDiv">
 <img id="GlyphImage"><p id="HelpText"></p>
 <p id="GameSession"></p>
@@ -34,7 +33,7 @@
 </tr>
 <tr>
 <td>
-<div style="height:100px; width:404px; margin-left:auto; margin-right:auto">
+<div style="height:100px; width:604px; margin-left:auto; margin-right:auto">
 <table>
 <tr style="display:none" id="PieceInfo">
 <td><img id="PieceInfoImage"></td><td id="PieceInfoText"></td>
@@ -54,10 +53,13 @@
 <script src="common-scripts/move-list-v1.js"></script>
 <script src="common-scripts/sound-manager-v2.js"></script>
 <script src="common-scripts/session-manager.js"></script>
+<script src="scripts/garbo-ai-checkers.js"></script>
+<script src="scripts/canadian-checkers-ai.js"></script>
 <script src="scripts/checkers-fen.js"></script>
 <script src="scripts/maximal-captures.js"></script>
 <script src="scripts/deferred-captures.js"></script>
-<script src="scripts/armenian-tama.js"></script>
+<script src="scripts/international-extension.js"></script>
+<script src="scripts/canadian-checkers.js"></script>
 <script src="common-scripts/app-net-v2.js"></script>
 
 </body>

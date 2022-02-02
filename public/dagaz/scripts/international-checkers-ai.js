@@ -10,36 +10,39 @@ var pieceNo               = 0x80;
 var moveflagPromotion     = 0x01000000;
 
 Dagaz.AI.pieceAdj = [
-[   0,    0,   0,   0,   0,   0,    0,    0,    0,    0, // pieceEmpty
-    0,    0,   0,   0,   0,   0,    0,    0,    0,    0,
-    0,    0,   0,   0,   0,   0,    0,    0,    0,    0,
-    0,    0,   0,   0,   0,   0,    0,    0,    0,    0, 
-    0,    0,   0,   0,   0,   0,    0,    0,    0,    0, 
-    0,    0,   0,   0,   0,   0,    0,    0,    0,    0, 
-    0,    0,   0,   0,   0,   0,    0,    0,    0,    0,
-    0,    0,   0,   0,   0,   0,    0,    0,    0,    0
+[   0,    0,    0,    0,    0,    0,    0,    0,    0,    0, // pieceEmpty
+    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
+    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
+    0,    0,    0,    0,    0,    0,    0,    0,    0,    0, 
+    0,    0,    0,    0,    0,    0,    0,    0,    0,    0, 
+    0,    0,    0,    0,    0,    0,    0,    0,    0,    0, 
+    0,    0,    0,    0,    0,    0,    0,    0,    0,    0, 
+    0,    0,    0,    0,    0,    0,    0,    0,    0,    0, 
+    0,    0,    0,    0,    0,    0,    0,    0,    0,    0, 
+    0,    0,    0,    0,    0,    0,    0,    0,    0,    0
 ],
-[   0,    0,   0,   0,   0,   0,    0,    0,    0,    0, // pieceMan
-    0,    0,   0,   0,   0,   0,    0,    0,    0,    0,
-    0,    0,   0,   0,   0,   0,    0,    0,    0,    0,
-    0,    0,   0,   0,   0,   0,    0,    0,    0,    0, 
-    0,    0,   0,   0,   0,   0,    0,    0,    0,    0, 
-    0,    0,   0,   0,   0,   0,    0,    0,    0,    0, 
-    0,    0,   0,   0,   0,   0,    0,    0,    0,    0,
-    0,    0,   0,   0,   0,   0,    0,    0,    0,    0
+[   0,    0,    0,    0,    0,    0,    0,    0,    0,    0, // pieceMan
+    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
+    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
+    0,    0,    0,    0,    0,    0,    0,    0,    0,    0, 
+    0,    0,    0,    0,    0,    0,    0,    0,    0,    0, 
+    0,    0,    0,    0,    0,    0,    0,    0,    0,    0, 
+    0,    0,    0,    0,    0,    0,    0,    0,    0,    0, 
+    0,    0,    0,    0,    0,    0,    0,    0,    0,    0, 
+    0,    0,    0,    0,    0,    0,    0,    0,    0,    0, 
+    0,    0,    0,    0,    0,    0,    0,    0,    0,    0
 ],
-[   0,    0,   0,   0,   0,   0,    0,    0,    0,    0, // pieceKing
-    0,    0,   0,   0,   0,   0,    0,    0,    0,    0,
-    0,    0,   0,   0,   0,   0,    0,    0,    0,    0,
-    0,    0,   0,   0,   0,   0,    0,    0,    0,    0, 
-    0,    0,   0,   0,   0,   0,    0,    0,    0,    0, 
-    0,    0,   0,   0,   0,   0,    0,    0,    0,    0, 
-    0,    0,   0,   0,   0,   0,    0,    0,    0,    0,
-    0,    0,   0,   0,   0,   0,    0,    0,    0,    0
+[   0,    0,    0,    0,    0,    0,    0,    0,    0,    0, // pieceKing
+    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
+    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
+    0,    0,    0,    0,    0,    0,    0,    0,    0,    0, 
+    0,    0,    0,    0,    0,    0,    0,    0,    0,    0, 
+    0,    0,    0,    0,    0,    0,    0,    0,    0,    0, 
+    0,    0,    0,    0,    0,    0,    0,    0,    0,    0, 
+    0,    0,    0,    0,    0,    0,    0,    0,    0,    0, 
+    0,    0,    0,    0,    0,    0,    0,    0,    0,    0, 
+    0,    0,    0,    0,    0,    0,    0,    0,    0,    0
 ]];
-
-var pieceSquareAdj = new Array(3);
-var flipTable = new Array(256);
 
 function GenerateCaptureMoves(moves) {
   var color = Dagaz.AI.g_toMove ? Dagaz.AI.colorWhite : Dagaz.AI.colorBlack;
@@ -59,27 +62,14 @@ function GenerateQuietMoves(moves) {
   }
 }
 
-function IsPrefix(a, b) {
-  if (a.length >= b.length) return false;
-  for (var i = 0; i < a.length; i++) {
-       if (a[i] != b[i]) return false;
-  }
-  return true;
-}
-
 function CheckInvariant(moves) {
+  var mx = 0;
+  for (var i = 0; i < moves.length; i++) {
+      if (mx < moves[i].length) mx = moves[i].length;
+  }
   var result = [];
   for (var i = 0; i < moves.length; i++) {
-       var f = true;
-       for (var j = 0; j < moves.length; j++) {
-            if ((i != j) && IsPrefix(moves[i], moves[j])) {
-                f = false;
-                break;
-            }
-       }
-       if (f) {
-           result.push(moves[i]);
-       }
+      if (moves[i].length == mx) result.push(moves[i]);
   }
   return result;
 }
@@ -117,7 +107,7 @@ function GenerateQuietStep(moves, from, to, isMan) {
     var flags = 0;
     if (isMan) {
         var row = to & 0xF0;
-        if (!Dagaz.AI.g_toMove && (row == 0x90)) {
+        if (!Dagaz.AI.g_toMove && (row == 0xB0)) {
             flags = moveflagPromotion;
         }
         if (Dagaz.AI.g_toMove && (row == 0x20)) {
@@ -141,7 +131,7 @@ function GenerateCaptureStep(from, dir, isMan) {
     var flags = 0;
     if (isMan) {
         var row = to & 0xF0;
-        if (!Dagaz.AI.g_toMove && (row == 0x90)) {
+        if (!Dagaz.AI.g_toMove && (row == 0xB0)) {
             flags = moveflagPromotion;
         }
         if (Dagaz.AI.g_toMove && (row == 0x20)) {
@@ -151,28 +141,31 @@ function GenerateCaptureStep(from, dir, isMan) {
     return from | (to << 8) | (captured << 16) | flags;
 }
 
-function GenerateCaptureMovesFromTree(moves, from, isMan, stack, restricted) {
+function GenerateCaptureMovesFromTree(moves, from, isMan, isProm, stack, restricted) {
     var r = true;
     _.each([-17, -15, 15, 17], function(dir) {
         if (restricted && (restricted == dir)) return;
         var step = GenerateCaptureStep(from, dir, isMan);
         if (step == 0) return;
-        var f = isMan;
-        if (step & moveflagPromotion) f = false;
+        var f = false;
+        if (step & moveflagPromotion) {
+            f = true;
+            step &= ~moveflagPromotion;
+        }
         var pos = (step >> 8) & 0xFF;
         stack.push(step);
         Dagaz.AI.MakeStep(step, 0);
-        if (GenerateCaptureMovesFromTree(moves, pos, f, stack, -dir)) r = false;
+        if (GenerateCaptureMovesFromTree(moves, pos, isMan, f, stack, -dir)) r = false;
         Dagaz.AI.UnmakeStep();
         stack.pop();
-        if (!f) {
+        if (!isMan) {
             pos += dir;
             while (Dagaz.AI.g_board[pos] == pieceEmpty) {
                 step &= ~0xFF00;
                 step |= pos << 8;
                 stack.push(step);
                 Dagaz.AI.MakeStep(step, 0);
-                if (GenerateCaptureMovesFromTree(moves, pos, f, stack, -dir)) r = false;
+                if (GenerateCaptureMovesFromTree(moves, pos, isMan, f, stack, -dir)) r = false;
                 Dagaz.AI.UnmakeStep();
                 stack.pop();
                 pos += dir;
@@ -182,7 +175,11 @@ function GenerateCaptureMovesFromTree(moves, from, isMan, stack, restricted) {
     if (r && (stack.length > 0)) {
         var move = new Array();
         for (var i = 0; i < stack.length; i++) {
-            move.push(stack[i]);
+             var m = stack[i];
+             if (isProm && (i == stack.length - 1)) {
+                 m |= moveflagPromotion;
+             }
+             move.push(m);
         }
         moves.push(move);
     }
@@ -191,7 +188,7 @@ function GenerateCaptureMovesFromTree(moves, from, isMan, stack, restricted) {
 
 function GenerateCaptureMovesFrom(moves, from) {
     var piece = Dagaz.AI.g_board[from] & Dagaz.AI.TYPE_MASK;   
-    GenerateCaptureMovesFromTree(moves, from, piece == pieceMan, new Array());
+    GenerateCaptureMovesFromTree(moves, from, piece == pieceMan, false, new Array());
 }
 
 function GenerateQuietMovesFrom(moves, from) {

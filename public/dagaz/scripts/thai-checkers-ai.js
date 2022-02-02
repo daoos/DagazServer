@@ -9,38 +9,6 @@ var pieceNo               = 0x80;
 
 var moveflagPromotion     = 0x01000000;
 
-Dagaz.AI.pieceAdj = [
-[   0,    0,   0,   0,   0,   0,    0,    0,    0,    0, // pieceEmpty
-    0,    0,   0,   0,   0,   0,    0,    0,    0,    0,
-    0,    0,   0,   0,   0,   0,    0,    0,    0,    0,
-    0,    0,   0,   0,   0,   0,    0,    0,    0,    0, 
-    0,    0,   0,   0,   0,   0,    0,    0,    0,    0, 
-    0,    0,   0,   0,   0,   0,    0,    0,    0,    0, 
-    0,    0,   0,   0,   0,   0,    0,    0,    0,    0,
-    0,    0,   0,   0,   0,   0,    0,    0,    0,    0
-],
-[   0,    0,   0,   0,   0,   0,    0,    0,    0,    0, // pieceMan
-    0,    0,   0,   0,   0,   0,    0,    0,    0,    0,
-    0,    0,   0,   0,   0,   0,    0,    0,    0,    0,
-    0,    0,   0,   0,   0,   0,    0,    0,    0,    0, 
-    0,    0,   0,   0,   0,   0,    0,    0,    0,    0, 
-    0,    0,   0,   0,   0,   0,    0,    0,    0,    0, 
-    0,    0,   0,   0,   0,   0,    0,    0,    0,    0,
-    0,    0,   0,   0,   0,   0,    0,    0,    0,    0
-],
-[   0,    0,   0,   0,   0,   0,    0,    0,    0,    0, // pieceKing
-    0,    0,   0,   0,   0,   0,    0,    0,    0,    0,
-    0,    0,   0,   0,   0,   0,    0,    0,    0,    0,
-    0,    0,   0,   0,   0,   0,    0,    0,    0,    0, 
-    0,    0,   0,   0,   0,   0,    0,    0,    0,    0, 
-    0,    0,   0,   0,   0,   0,    0,    0,    0,    0, 
-    0,    0,   0,   0,   0,   0,    0,    0,    0,    0,
-    0,    0,   0,   0,   0,   0,    0,    0,    0,    0
-]];
-
-var pieceSquareAdj = new Array(3);
-var flipTable = new Array(256);
-
 function GenerateCaptureMoves(moves) {
   var color = Dagaz.AI.g_toMove ? Dagaz.AI.colorWhite : Dagaz.AI.colorBlack;
   for (var pos = 0; pos < 256; pos++) {
@@ -151,38 +119,25 @@ function GenerateCaptureStep(from, dir, isMan) {
     return from | (to << 8) | (captured << 16) | flags;
 }
 
-function GenerateCaptureMovesFromTree(moves, from, isMan, stack, restricted) {
+function GenerateCaptureMovesFromTree(moves, from, isMan, stack) {
     var r = true;
-    _.each([-17, -15, 15, 17], function(dir) {
-        if (restricted && (restricted == dir)) return;
+    var inc = (Dagaz.AI.g_toMove == Dagaz.AI.colorWhite) ? -16 : 16;
+    var dirs = [-17, -15, 15, 17];
+    if (isMan) dirs = [inc - 1, inc + 1];
+    _.each(dirs, function(dir) {
         var step = GenerateCaptureStep(from, dir, isMan);
         if (step == 0) return;
-        var f = isMan;
-        if (step & moveflagPromotion) f = false;
         var pos = (step >> 8) & 0xFF;
         stack.push(step);
         Dagaz.AI.MakeStep(step, 0);
-        if (GenerateCaptureMovesFromTree(moves, pos, f, stack, -dir)) r = false;
+        if (GenerateCaptureMovesFromTree(moves, pos, isMan, stack)) r = false;
         Dagaz.AI.UnmakeStep();
         stack.pop();
-        if (!f) {
-            pos += dir;
-            while (Dagaz.AI.g_board[pos] == pieceEmpty) {
-                step &= ~0xFF00;
-                step |= pos << 8;
-                stack.push(step);
-                Dagaz.AI.MakeStep(step, 0);
-                if (GenerateCaptureMovesFromTree(moves, pos, f, stack, -dir)) r = false;
-                Dagaz.AI.UnmakeStep();
-                stack.pop();
-                pos += dir;
-            }
-        }
     });
     if (r && (stack.length > 0)) {
         var move = new Array();
         for (var i = 0; i < stack.length; i++) {
-            move.push(stack[i]);
+             move.push(stack[i]);
         }
         moves.push(move);
     }

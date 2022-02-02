@@ -51,7 +51,6 @@ export class tournaments1617176544639 implements MigrationInterface {
         await queryRunner.query(`insert into game_settings(id, name, game_id, variant_id, selector_value, tournamenttype_id, ratingtype_id) values(23, 'Stapeldammen', 24, 37, null, 1, 1)`);
         await queryRunner.query(`insert into game_settings(id, name, game_id, variant_id, selector_value, tournamenttype_id, ratingtype_id) values(24, 'Constitutional Checkers', 22, 47, null, 1, 1)`);
         await queryRunner.query(`insert into game_settings(id, name, game_id, variant_id, selector_value, tournamenttype_id, ratingtype_id) values(25, 'Dark Chess', 30, 64, null, 1, 1)`);
-        await queryRunner.query(`insert into game_settings(id, name, game_id, variant_id, selector_value, tournamenttype_id, ratingtype_id) values(26, 'Frisian Checkers', 22, 5, null, 1, 1)`);
         await queryRunner.query(`insert into game_settings(id, name, game_id, variant_id, selector_value, tournamenttype_id, ratingtype_id) values(27, 'Greek Checkers', 22, 72, null, 1, 1)`);
         await queryRunner.query(`insert into game_settings(id, name, game_id, variant_id, selector_value, tournamenttype_id, ratingtype_id) values(28, 'Stavropol Checkers', 22, 48, null, 1, 1)`);
         await queryRunner.query(`insert into game_settings(id, name, game_id, variant_id, selector_value, tournamenttype_id, ratingtype_id) values(29, 'Thai Checkers', 22, 69, null, 1, 1)`);
