@@ -6,6 +6,7 @@ Dagaz.AI.g_maxply       = 10;
 Dagaz.AI.g_timeout      = 3000;
 Dagaz.Model.WIDTH       = 8;
 Dagaz.Model.HEIGHT      = 8;
+Dagaz.AI.NOISE_FACTOR   = 0;
 
 Dagaz.AI.PIECE_MASK     = 0xF;
 Dagaz.AI.TYPE_MASK      = 0x7;
@@ -241,7 +242,12 @@ function AlphaBeta(ply, depth, alpha, beta) {
             continue;
         }
 
-        var value = -AlphaBeta(plyToSearch, depth + 1, -beta, -alpha);
+        var w = 0;
+        if (Dagaz.AI.NOISE_FACTOR && (depth == 0)) {
+            w = _.random(0, Dagaz.AI.NOISE_FACTOR);
+        }
+
+        var value = w - AlphaBeta(plyToSearch, depth + 1, -beta, -alpha);
         moveMade = true;
 
         Dagaz.AI.UnmakeMove(currentMove);
@@ -334,6 +340,14 @@ Dagaz.AI.SetHash = function() {
         result.hashKeyHigh ^= Dagaz.AI.g_zobristBlackHigh;
     }
     return result;
+}
+
+Dagaz.AI.ScoreMove = function(move) {
+    return 0;
+}
+
+Dagaz.AI.IsHashMoveValid = function(move) {
+    return false;
 }
 
 function MovePicker(hashMove, depth, killer1, killer2) {
