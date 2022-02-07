@@ -20,7 +20,6 @@ Dagaz.Model.checkGoals = function(design, board, player) {
            }
        }
   }
-
   return checkGoals(design, board, player);
 }
 

@@ -418,7 +418,7 @@ Dagaz.Model.BuildDesign = function(design) {
     design.addCommand(12, ZRF.FUNCTION,	20);	// verify
     design.addCommand(12, ZRF.PARAM,	0);	// $1
     design.addCommand(12, ZRF.FUNCTION,	22);	// navigate
-    design.addCommand(12, ZRF.PARAM,	1);	// $2
+    design.addCommand(12, ZRF.FUNCTION,	3);	// friend?
     design.addCommand(12, ZRF.FUNCTION,	0);	// not
     design.addCommand(12, ZRF.IF,	29);
     design.addCommand(12, ZRF.LITERAL,	0);	// Pawn
@@ -535,14 +535,14 @@ Dagaz.Model.BuildDesign = function(design) {
     design.addMove(11, 11, [], 0);
 
     design.addPiece("King", 12, 600000);
-    design.addMove(12, 12, [7, 0], 0);
-    design.addMove(12, 12, [1, 0], 0);
-    design.addMove(12, 12, [4, 0], 0);
-    design.addMove(12, 12, [3, 0], 0);
-    design.addMove(12, 12, [6, 0], 0);
-    design.addMove(12, 12, [2, 0], 0);
-    design.addMove(12, 12, [5, 0], 0);
-    design.addMove(12, 12, [0, 0], 0);
+    design.addMove(12, 12, [7], 0);
+    design.addMove(12, 12, [1], 0);
+    design.addMove(12, 12, [4], 0);
+    design.addMove(12, 12, [3], 0);
+    design.addMove(12, 12, [6], 0);
+    design.addMove(12, 12, [2], 0);
+    design.addMove(12, 12, [5], 0);
+    design.addMove(12, 12, [0], 0);
 
     design.addPiece("UnknownKing", 13, 0);
     design.addMove(13, 13, [], 0);

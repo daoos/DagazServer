@@ -75,8 +75,8 @@ Dagaz.Model.BuildDesign = function(design) {
     design.addDirection("s");
     design.addDirection("n");
 
-    design.addPlayer("White", [1, 0, 3, 2]);
-    design.addPlayer("Black", [0, 1, 2, 3]);
+    design.addPlayer("Blue", [1, 0, 3, 2]);
+    design.addPlayer("Red", [0, 1, 2, 3]);
 
     design.addPosition("a8", [0, 1, 8, 0]);
     design.addPosition("b8", [-1, 1, 8, 0]);
@@ -238,38 +238,38 @@ Dagaz.Model.BuildDesign = function(design) {
     design.addMove(2, 2, [0, 0, 0, 0], 0);
     design.addMove(2, 3, [0, 0, 0, 0, 0, 0], 0);
 
-    design.setup("White", "Runner", 57);
-    design.setup("White", "Runner", 58);
-    design.setup("White", "Runner", 59);
-    design.setup("White", "Runner", 60);
-    design.setup("White", "Runner", 61);
-    design.setup("White", "Runner", 62);
-    design.setup("Black", "Left", 48);
-    design.setup("Black", "Left", 40);
-    design.setup("Black", "Left", 32);
-    design.setup("Black", "Left", 24);
-    design.setup("Black", "Left", 16);
-    design.setup("Black", "Left", 8);
-    design.setup("Black", "Right", 55);
-    design.setup("Black", "Right", 47);
-    design.setup("Black", "Right", 39);
-    design.setup("Black", "Right", 31);
-    design.setup("Black", "Right", 23);
-    design.setup("Black", "Right", 15);
+    design.setup("Blue", "Runner", 57);
+    design.setup("Blue", "Runner", 58);
+    design.setup("Blue", "Runner", 59);
+    design.setup("Blue", "Runner", 60);
+    design.setup("Blue", "Runner", 61);
+    design.setup("Blue", "Runner", 62);
+    design.setup("Red", "Left", 48);
+    design.setup("Red", "Left", 40);
+    design.setup("Red", "Left", 32);
+    design.setup("Red", "Left", 24);
+    design.setup("Red", "Left", 16);
+    design.setup("Red", "Left", 8);
+    design.setup("Red", "Right", 55);
+    design.setup("Red", "Right", 47);
+    design.setup("Red", "Right", 39);
+    design.setup("Red", "Right", 31);
+    design.setup("Red", "Right", 23);
+    design.setup("Red", "Right", 15);
 
-    design.goal(0, "White", "Runner", [1]);
-    design.goal(1, "White", "Runner", [2]);
-    design.goal(2, "White", "Runner", [3]);
-    design.goal(3, "White", "Runner", [4]);
-    design.goal(4, "White", "Runner", [5]);
-    design.goal(5, "White", "Runner", [6]);
+    design.goal(0, "Blue", "Runner", [1]);
+    design.goal(1, "Blue", "Runner", [2]);
+    design.goal(2, "Blue", "Runner", [3]);
+    design.goal(3, "Blue", "Runner", [4]);
+    design.goal(4, "Blue", "Runner", [5]);
+    design.goal(5, "Blue", "Runner", [6]);
 }
 
 Dagaz.View.configure = function(view) {
     view.defBoard("Board");
-    view.defPiece("WhiteRunner", "White Runner");
-    view.defPiece("BlackLeft", "Black Left");
-    view.defPiece("BlackRight", "Black Right");
+    view.defPiece("BlueRunner", "Blue Runner");
+    view.defPiece("RedLeft", "Red Left");
+    view.defPiece("RedRight", "Red Right");
  
     view.defPosition("a8", 2, 2, 60, 60);
     view.defPosition("b8", 64, 2, 60, 60);
