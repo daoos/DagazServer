@@ -1,0 +1,115 @@
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>Elementals</title>
+</head>
+<body>
+
+<img id="Board" style="display:none" src="images/elementals/board.png">
+<img id="LightGA" style="display:none" src="images/elementals/lga.png">
+<img id="DarkGA" style="display:none" src="images/elementals/dga.png">
+<img id="LightGB" style="display:none" src="images/elementals/lgb.png">
+<img id="DarkGB" style="display:none" src="images/elementals/dgb.png">
+<img id="LightGC" style="display:none" src="images/elementals/lgc.png">
+<img id="DarkGC" style="display:none" src="images/elementals/dgc.png">
+<img id="LightGD" style="display:none" src="images/elementals/lgd.png">
+<img id="DarkGD" style="display:none" src="images/elementals/dgd.png">
+<img id="LightBYA" style="display:none" src="images/elementals/lyba.png">
+<img id="LightBYB" style="display:none" src="images/elementals/lybb.png">
+<img id="LightBYC" style="display:none" src="images/elementals/lybc.png">
+<img id="LightBYD" style="display:none" src="images/elementals/lybd.png">
+<img id="LightYBA" style="display:none" src="images/elementals/lbya.png">
+<img id="LightYBB" style="display:none" src="images/elementals/lbyb.png">
+<img id="LightYBC" style="display:none" src="images/elementals/lbyc.png">
+<img id="LightYBD" style="display:none" src="images/elementals/lbyd.png">
+<img id="LightGBA" style="display:none" src="images/elementals/lbga.png">
+<img id="DarkGBA" style="display:none" src="images/elementals/dbga.png">
+<img id="LightGBB" style="display:none" src="images/elementals/lbgb.png">
+<img id="DarkGBB" style="display:none" src="images/elementals/dbgb.png">
+<img id="LightGBC" style="display:none" src="images/elementals/lbgc.png">
+<img id="DarkGBC" style="display:none" src="images/elementals/dbgc.png">
+<img id="LightGBD" style="display:none" src="images/elementals/lbgd.png">
+<img id="DarkGBD" style="display:none" src="images/elementals/dbgd.png">
+<img id="LightBGA" style="display:none" src="images/elementals/lgba.png">
+<img id="DarkBGA" style="display:none" src="images/elementals/dgba.png">
+<img id="LightBGB" style="display:none" src="images/elementals/lgbb.png">
+<img id="DarkBGB" style="display:none" src="images/elementals/dgbb.png">
+<img id="LightBGC" style="display:none" src="images/elementals/lgbc.png">
+<img id="DarkBGC" style="display:none" src="images/elementals/dgbc.png">
+<img id="LightBGD" style="display:none" src="images/elementals/lgbd.png">
+<img id="DarkBGD" style="display:none" src="images/elementals/dgbd.png">
+<img id="LightYGA" style="display:none" src="images/elementals/lgya.png">
+<img id="LightYGB" style="display:none" src="images/elementals/lgyb.png">
+<img id="LightYGC" style="display:none" src="images/elementals/lgyc.png">
+<img id="LightYGD" style="display:none" src="images/elementals/lgyd.png">
+<img id="LightGYA" style="display:none" src="images/elementals/lyga.png">
+<img id="LightGYB" style="display:none" src="images/elementals/lygb.png">
+<img id="LightGYC" style="display:none" src="images/elementals/lygc.png">
+<img id="LightGYD" style="display:none" src="images/elementals/lygd.png">
+<img id="DarkRA" style="display:none" src="images/elementals/dra.png">
+<img id="DarkRB" style="display:none" src="images/elementals/drb.png">
+<img id="DarkRC" style="display:none" src="images/elementals/drc.png">
+<img id="DarkRD" style="display:none" src="images/elementals/drd.png">
+<img id="DarkGRA" style="display:none" src="images/elementals/drga.png">
+<img id="DarkGRB" style="display:none" src="images/elementals/drgb.png">
+<img id="DarkGRC" style="display:none" src="images/elementals/drgc.png">
+<img id="DarkGRD" style="display:none" src="images/elementals/drgd.png">
+<img id="DarkRGA" style="display:none" src="images/elementals/dgra.png">
+<img id="DarkRGB" style="display:none" src="images/elementals/dgrb.png">
+<img id="DarkRGC" style="display:none" src="images/elementals/dgrc.png">
+<img id="DarkRGD" style="display:none" src="images/elementals/dgrd.png">
+<img id="Ko" style="display:none" src="images/elementals/ice.png">
+
+<table style="margin:auto; font-family:sans-serif; font-size:14px" id="Table">
+<tr><td>
+<a href="javascript:Dagaz.Controller.home()" title="Home" style="display:none" id="home"><img src="images/home.png"/></a>
+<a href="javascript:Dagaz.Controller.undo()" title="PgDown" style="display:none" id="undo"><img src="images/undo.png"/></a>
+Copyright (c) 2017 Valentin Chelnokov
+<a href="javascript:Dagaz.Controller.resign()">I Resign</a>
+<a href="javascript:Dagaz.Controller.drawOffer()">Offer Draw</a>
+<a href="javascript:Dagaz.Controller.sound()" id="sound">no Sound</a>
+<a href="javascript:Dagaz.Controller.redo()" title="PgUp" style="display:none" id="redo"><img src="images/redo.png"/></a>
+<div align="right" id="timer"/>
+</td></tr>
+<tr style="height:705px; vertical-align:top">
+<td id="CanvasCell" style="width:705px">
+<canvas id="Canvas" width="705" height="705" style="cursor:default">Broken canvas...</canvas>
+</td><td style="width:300px;">
+<div style="height:510px; overflow:auto" id="ScrollDiv">
+<img id="GlyphImage"><p id="HelpText"></p>
+<p id="GameSession"></p>
+</div>
+</td>
+</tr>
+<tr>
+<td>
+<div style="height:100px; width:500px; margin-left:auto; margin-right:auto">
+<table>
+<tr style="display:none" id="PieceInfo">
+<td><img id="PieceInfoImage"></td><td id="PieceInfoText"></td>
+</tr>
+</table>
+</div>
+</td>
+</tr>
+</table>
+
+<script src="vendor/underscore-min.js"></script>
+<script src="vendor/jquery-3.5.1.min.js"></script>
+<script src="common-scripts/dagaz.js"></script>
+<script src="common-scripts/zrf-model.js"></script>
+<script src="common-scripts/zobrist.js"></script>
+<script src="common-scripts/common-setup-v2.js"></script>
+<script src="common-scripts/2d-view-v2.js"></script>
+<script src="common-scripts/move-list-v1.js"></script>
+<script src="common-scripts/session-manager.js"></script>
+<script src="common-scripts/sound-manager-v2.js"></script>
+<script src="scripts/elementals-goal.js"></script>
+<script src="scripts/elementals-stone.js"></script>
+<script src="scripts/elementals-ice.js"></script>
+<script src="scripts/elementals-fire.js"></script>
+<script src="scripts/elementals-north.js"></script>
+<script src="common-scripts/app-net-v2.js"></script>
+
+</body>
+</html>

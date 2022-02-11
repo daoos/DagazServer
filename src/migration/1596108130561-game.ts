@@ -270,6 +270,7 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(233, 30, 'Chaturanga', 'chaturanga', 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total, is_hidden) values(234, 30, 'Esoteric Fairy Eater', 'esoteric-fairy-eater', 2, 1)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(235, 37, 'Gauntlet', 'gauntlet', 2)`);
+        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total, max_selector) values(236, 37, 'Elementals', 'elementals', 2, 2)`);
 
         await queryRunner.query(`insert into game_styles(id, game_id, name, suffix, player_num) values(1, 23, 'European', '', null)`);
         await queryRunner.query(`insert into game_styles(id, game_id, name, suffix, player_num) values(2, 23, 'Chinese', '-kanji', null)`);
@@ -949,6 +950,8 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(593, 'chaturanga', null, 'chaturanga', 'https://en.wikipedia.org/wiki/Chaturanga')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(594, 'esoteric-fairy-eater', null, 'esoteric-fairy-eater', 'https://fairyeaterchess.blogspot.com/2021/12/welcome-to-world-of-fairy-eater-chess.html#more', '2021 Vadrya Pokshtya')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(595, 'gauntlet', null, 'gauntlet', 'http://homepages.di.fc.ul.pt/~jpn/gv/gauntlet.htm', '1980 Phillip L. Leduc')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, copyright) values(596, 'elementals', 1, 'elementals-1', '2017 Valentin Chelnokov')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, copyright) values(597, 'elementals', 2, 'elementals-2', '2017 Valentin Chelnokov')`);
 }
 
     public async down(queryRunner: QueryRunner): Promise<any> {
