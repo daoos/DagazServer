@@ -20,6 +20,18 @@ Dagaz.AI.findBot = function(type, params, parent) {
   }
 }
 
+Dagaz.AI.heuristic = function(app, design, board, move) {
+  var r = 1;
+  if ((move.actions.length > 0) && (move.actions[0][1] !== null)) {
+      var pos = move.actions[0][1][0];
+      var piece = board.getPiece(pos);
+      if (piece !== null) {
+          r = design.price[piece.type];
+      }
+  }
+  return r;
+}
+
 Ai.prototype.setContext = function(ctx, board) {
   if (this.parent) {
       this.parent.setContext(ctx, board);
