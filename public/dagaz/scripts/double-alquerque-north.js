@@ -1,5 +1,36 @@
 Dagaz.Controller.persistense = "none";
 
+Dagaz.Model.WIDTH  = 9;
+Dagaz.Model.HEIGHT = 5;
+
+Dagaz.AI.SPEC_POSITIONS  = [
+   0x22, 0x24, 0x26, 0x28, 0x2A,
+   0x33, 0x35, 0x37, 0x39,
+   0x42, 0x44, 0x46, 0x48, 0x4A,
+   0x53, 0x55, 0x57, 0x59,
+   0x62, 0x64, 0x66, 0x68, 0x6A
+];
+
+Dagaz.AI.pieceAdj = [
+[   0,   0,   0,   0,   0,   0,   0,   0,   0, // pieceEmpty
+    0,   0,   0,   0,   0,   0,   0,   0,   0,
+    0,   0,   0,   0,   0,   0,   0,   0,   0,
+    0,   0,   0,   0,   0,   0,   0,   0,   0,
+    0,   0,   0,   0,   0,   0,   0,   0,   0
+], 
+[ -20, -10,  10, -10,  10, -10,  10, -10, -20, // pieceMan
+  -10,  20,   0,  20,   0,  20,   0,  20, -10,
+   10,   0,  20,   0,  20,   0,  20,   0,  10,
+  -10,  20,   0,  20,   0,  20,   0,  20, -10,
+  -20, -10,  10, -10,  10, -10,  10, -10, -20
+], 
+[   0,   0,   0,   0,   0,   0,   0,   0,   0, // pieceKing
+    0,   0,   0,   0,   0,   0,   0,   0,   0,
+    0,   0,   0,   0,   0,   0,   0,   0,   0,
+    0,   0,   0,   0,   0,   0,   0,   0,   0,
+    0,   0,   0,   0,   0,   0,   0,   0,   0
+]];
+
 ZRF = {
     JUMP:          0,
     IF:            1,
@@ -24,8 +55,7 @@ ZRF = {
 Dagaz.Model.BuildDesign = function(design) {
     design.checkVersion("z2j", "2");
     design.checkVersion("animate-captures", "false");
-    design.checkVersion("smart-moves", "true");
-    design.checkVersion("advisor-wait", "5");
+    design.checkVersion("smart-moves", "false");
 
     design.addDirection("w");
     design.addDirection("e");

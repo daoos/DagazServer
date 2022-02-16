@@ -501,6 +501,10 @@ Dagaz.AI.FormatMove = function(move) {
     return result;
 }
 
+Dagaz.AI.Mobility = function(color) {
+    return 0;
+}
+
 Dagaz.AI.Evaluate = function() {
     var curEval = Dagaz.AI.g_baseEval;
     var evalAdjust = 0;

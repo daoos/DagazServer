@@ -1,5 +1,30 @@
 Dagaz.Controller.persistense = "none";
 
+Dagaz.Model.WIDTH  = 5;
+Dagaz.Model.HEIGHT = 5;
+
+Dagaz.AI.SPEC_POSITIONS   = [0x22, 0x24, 0x26, 0x33, 0x35, 0x42, 0x44, 0x46, 0x53, 0x55, 0x62, 0x64, 0x66];
+
+Dagaz.AI.pieceAdj = [
+[   0,   0,   0,   0,   0, // pieceEmpty
+    0,   0,   0,   0,   0,
+    0,   0,   0,   0,   0,
+    0,   0,   0,   0,   0,
+    0,   0,   0,   0,   0
+], 
+[ -20, -10,  10, -10, -20, // pieceMan
+  -10,  20,   0,  20, -10,
+   10,   0,  20,   0,  10,
+  -10,  20,   0,  20, -10,
+  -20, -10,  10, -10, -20
+],
+[   0,   0,   0,   0,   0, // pieceKing
+    0,   0,   0,   0,   0,
+    0,   0,   0,   0,   0,
+    0,   0,   0,   0,   0,
+    0,   0,   0,   0,   0
+]];
+
 ZRF = {
     JUMP:          0,
     IF:            1,
