@@ -39,6 +39,14 @@ function CheckInvariant(moves) {
   return result;
 }
 
+function CheckPromotion(moves) {
+  var result = [];
+  for (var i = 0; i < moves.length; i++) {
+      if ((moves[i].length > 0) && (moves[i][0] & moveflagPromotion)) result.push(moves[i]);
+  }
+  return result;
+}
+
 Dagaz.AI.GenerateAllMoves = function() {
   var moves = [];
   GenerateCaptureMoves(moves);
@@ -53,6 +61,10 @@ Dagaz.AI.GenerateCaptureMoves = function() {
   var moves = [];
   GenerateCaptureMoves(moves);
   moves = CheckInvariant(moves);
+  if (moves.length == 0) {
+      GenerateQuietMoves(moves);
+      moves = CheckPromotion(moves);
+  }
   return moves;
 }
 
