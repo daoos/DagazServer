@@ -1,5 +1,8 @@
 Dagaz.Controller.persistense = "none";
 
+Dagaz.Model.WIDTH  = 10;
+Dagaz.Model.HEIGHT = 10;
+
 ZRF = {
     JUMP:          0,
     IF:            1,
@@ -27,7 +30,6 @@ Dagaz.Model.BuildDesign = function(design) {
     design.checkVersion("smart-moves", "false");
     design.checkVersion("show-blink", "false");
     design.checkVersion("show-hints", "false");
-    design.checkVersion("hiashatar-invariant", "true");
 
     design.addDirection("w");
     design.addDirection("e");
