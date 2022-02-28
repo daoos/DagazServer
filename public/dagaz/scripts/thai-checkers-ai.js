@@ -2,6 +2,8 @@
 
 (function() {
 
+Dagaz.AI.NOISE_FACTOR     = 3;
+
 var pieceEmpty            = 0x00;
 var pieceMan              = 0x01;
 var pieceKing             = 0x02;
@@ -206,8 +208,30 @@ Dagaz.AI.Mobility = function(color) {
              var piece = Dagaz.AI.g_board[from] & Dagaz.AI.TYPE_MASK;
              if (piece == pieceMan) {
                  mob = 0;
-                 to = from + inc - 1; if (Dagaz.AI.g_board[to] == 0) mob++;
-                 to = from + inc + 1; if (Dagaz.AI.g_board[to] == 0) mob++;
+                 to = from + inc - 1; 
+                 if (Dagaz.AI.g_board[to] == 0) mob++;
+                 if (Dagaz.AI.g_board[to] & enemy) {
+                     pos = to - inc + 1;
+                     if (Dagaz.AI.g_board[pos] != 0) {
+                         mob += 4;
+                         to += inc - 1;
+                         if (Dagaz.AI.g_board[to] == 0) mob += 4;
+                     }
+                 }
+                 to = from + inc + 1; 
+                 if (Dagaz.AI.g_board[to] == 0) mob++;
+                 if (Dagaz.AI.g_board[to] & enemy) {
+                     pos = to - inc - 1;
+                     if (Dagaz.AI.g_board[pos] != 0) {
+                         mob += 4;
+                         to += inc + 1;
+                         if (Dagaz.AI.g_board[to] == 0) mob += 4;
+                     }
+                 }
+                 to = from - inc - 1;
+                 if (Dagaz.AI.g_board[to] & enemy) mob++;
+                 to = from - inc + 1;
+                 if (Dagaz.AI.g_board[to] & enemy) mob++;
                  to = from + (inc * 2);
                  while (Dagaz.AI.g_board[to] == 0) to += inc * 2;
                  if (Dagaz.AI.g_board[to] & enemy) mob += 2;

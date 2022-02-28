@@ -2,6 +2,8 @@
 
 (function() {
 
+Dagaz.AI.NOISE_FACTOR     = 3;
+
 var pieceEmpty            = 0x00;
 var pieceMan              = 0x01;
 var pieceKing             = 0x02;

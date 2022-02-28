@@ -22,22 +22,22 @@ Dagaz.AI.pieceAdj = [
     0,    0,   0,   0,   0,   0,    0,    0
 ], 
 [   0,    0,   0,   0,   0,   0,    0,    0, // pieceMan
-   70,   60,  60,  60,  60,  60,   60,   70, 
-   60,   50,  50,  50,  50,  50,   50,   60, 
-   50,   40,  40,  40,  40,  40,   40,   40, 
-   40,   30,  30,  30,  30,  30,   30,   40, 
-   30,   20,  20,  20,  20,  20,   20,   30, 
-   20,   10,  10,  10,  10,  10,   10,   20, 
-    0,    0,   0,   0,   0,   0,    0,    0
+   40,   50,  50,  50,  50,  50,   50,   40, 
+   30,   40,  40,  40,  40,  40,   40,   30, 
+   20,   30,  30,  30,  30,  30,   30,   20, 
+   10,   20,  20,  20,  20,  20,   20,   10, 
+  -10,   10,  10,  10,  10,  10,   10,  -10, 
+  -10,    0,   0,   0,   0,   0,    0,  -10, 
+    0,   30,  30,  30,  30,  30,   30,    0
 ], 
-[   0,    0,   0,   0,   0,   0,    0,    0, // pieceKing
-    0,    0,   0,   0,   0,   0,    0,    0, 
-    0,    0,   0,   0,   0,   0,    0,    0, 
-    0,    0,   0,   0,   0,   0,    0,    0, 
-    0,    0,   0,   0,   0,   0,    0,    0, 
-    0,    0,   0,   0,   0,   0,    0,    0, 
-    0,    0,   0,   0,   0,   0,    0,    0, 
-    0,    0,   0,   0,   0,   0,    0,    0
+[ -50,  -10, -10, -10, -10, -10,  -10,  -50, // pieceKing
+  -10,    0,   0,   0,   0,   0,    0,  -10, 
+  -10,    0,   0,   0,   0,   0,    0,  -10, 
+  -10,    0,   0,   0,   0,   0,    0,  -10, 
+  -10,    0,   0,   0,   0,   0,    0,  -10, 
+  -10,    0,   0,   0,   0,   0,    0,  -10, 
+  -10,    0,   0,   0,   0,   0,    0,  -10, 
+  -50,  -10, -10, -10, -10, -10,  -10,  -50
 ]];
 
 function GenerateCaptureMoves(moves) {
@@ -56,6 +56,21 @@ function GenerateQuietMoves(moves) {
            GenerateQuietMovesFrom(moves, pos);
        }
   }
+}
+
+function CheckKing(moves) {
+  var result = [];
+  for (var i = 0; i < moves.length; i++) {
+      for (var j = 0; j < moves[i].length; j++) {
+           var target = (moves[i][j] >> 16) & 0xFF;
+           var pieceType = Dagaz.AI.g_board[target] & Dagaz.AI.TYPE_MASK;
+           if (pieceType == pieceKing) {
+               result.push(moves[i]);
+               break;
+           }
+      }
+  }
+  return result;
 }
 
 function CheckInvariant(moves) {
@@ -81,7 +96,14 @@ function CheckPromotion(moves) {
 Dagaz.AI.GenerateAllMoves = function() {
   var moves = [];
   GenerateCaptureMoves(moves);
-  moves = CheckInvariant(moves);
+  if (moves.length > 0) {
+      var m = CheckKing(moves);
+      if (m.length > 0) {
+          moves = CheckInvariant(m);
+      } else {
+          moves = CheckInvariant(moves);
+      }
+  }
   if (moves.length == 0) {
       GenerateQuietMoves(moves);
   }
@@ -91,7 +113,14 @@ Dagaz.AI.GenerateAllMoves = function() {
 Dagaz.AI.GenerateCaptureMoves = function() {
   var moves = [];
   GenerateCaptureMoves(moves);
-  moves = CheckInvariant(moves);
+  if (moves.length > 0) {
+      var m = CheckKing(moves);
+      if (m.length > 0) {
+          moves = CheckInvariant(m);
+      } else {
+          moves = CheckInvariant(moves);
+      }
+  }
   if (moves.length == 0) {
       GenerateQuietMoves(moves);
       moves = CheckPromotion(moves);
@@ -115,14 +144,14 @@ function GenerateQuietStep(moves, from, to, isMan) {
 
 function GenerateCaptureStep(from, dir, isMan) {
     var enemy = Dagaz.AI.g_toMove == Dagaz.AI.colorWhite ? Dagaz.AI.colorBlack : Dagaz.AI.colorWhite;
-    var captured = from + dir;
+    var captured = +from + dir;
     if (!isMan) {
         while (Dagaz.AI.g_board[captured] == pieceEmpty) {
             captured += dir;
         }
     }
     if ((Dagaz.AI.g_board[captured] & enemy) == 0) return 0;
-    var to = captured + dir;
+    var to = +captured + dir;
     if (Dagaz.AI.g_board[to] != pieceEmpty) return 0;
     var flags = 0;
     if (isMan) {
@@ -140,8 +169,8 @@ function GenerateCaptureStep(from, dir, isMan) {
 function GenerateCaptureMovesFromTree(moves, from, isMan, stack, restricted, isDone) {
     var r = true;
     var inc = (Dagaz.AI.g_toMove == Dagaz.AI.colorWhite) ? -16 : 16;
-    var dirs = [-1, 1, -16, 16];
-    if (isMan) dirs = [-1, 1, inc];
+    var dirs = [-17, -15, 15, 17];
+    if (isMan) dirs = [inc - 1, inc + 1];
     _.each(dirs, function(dir) {
         if (isDone) return;
         if (restricted && (restricted == dir)) return;
@@ -188,52 +217,15 @@ function GenerateQuietMovesFrom(moves, from) {
     var piece = Dagaz.AI.g_board[from] & Dagaz.AI.TYPE_MASK;
 
     if (piece == pieceMan) {
-        to = from + inc; steps = new Array();
-        if (Dagaz.AI.g_board[to] == 0) GenerateQuietStep(steps, from, to, true);
-        moves.push(steps);
         to = from + inc - 1; steps = new Array();
         if (Dagaz.AI.g_board[to] == 0) GenerateQuietStep(steps, from, to, true);
         moves.push(steps);
         to = from + inc + 1; steps = new Array();
         if (Dagaz.AI.g_board[to] == 0) GenerateQuietStep(steps, from, to, true);
         moves.push(steps);
-        to = from + 1; steps = new Array();
-        if (Dagaz.AI.g_board[to] == 0) GenerateQuietStep(steps, from, to, true);
-        moves.push(steps);
-        to = from - 1; steps = new Array();
-        if (Dagaz.AI.g_board[to] == 0) GenerateQuietStep(steps, from, to, true);
-        moves.push(steps);
     }
 
     if (piece == pieceKing) {
-        to = from - 1;
-        while (Dagaz.AI.g_board[to] == 0) {
-            steps = new Array();
-            GenerateQuietStep(steps, from, to, false);
-            moves.push(steps);
-            to--;
-        }
-        to = from + 1;
-        while (Dagaz.AI.g_board[to] == 0) {
-            steps = new Array();
-            GenerateQuietStep(steps, from, to, false);
-            moves.push(steps);
-            to++;
-        }
-        to = from - 16;
-        while (Dagaz.AI.g_board[to] == 0) {
-            steps = new Array();
-            GenerateQuietStep(steps, from, to, false);
-            moves.push(steps);
-            to -= 16;
-        }
-        to = from + 16;
-        while (Dagaz.AI.g_board[to] == 0) {
-            steps = new Array();
-            GenerateQuietStep(steps, from, to, false);
-            moves.push(steps);
-            to += 16;
-        }
         to = from - 17;
         while (Dagaz.AI.g_board[to] == 0) {
             steps = new Array();
@@ -241,19 +233,19 @@ function GenerateQuietMovesFrom(moves, from) {
             moves.push(steps);
             to -= 17;
         }
-        to = from + 17;
-        while (Dagaz.AI.g_board[to] == 0) {
-            steps = new Array();
-            GenerateQuietStep(steps, from, to, false);
-            moves.push(steps);
-            to += 17;
-        }
         to = from - 15;
         while (Dagaz.AI.g_board[to] == 0) {
             steps = new Array();
             GenerateQuietStep(steps, from, to, false);
             moves.push(steps);
             to -= 15;
+        }
+        to = from + 17;
+        while (Dagaz.AI.g_board[to] == 0) {
+            steps = new Array();
+            GenerateQuietStep(steps, from, to, false);
+            moves.push(steps);
+            to += 17;
         }
         to = from + 15;
         while (Dagaz.AI.g_board[to] == 0) {
@@ -266,7 +258,7 @@ function GenerateQuietMovesFrom(moves, from) {
 }
 
 Dagaz.AI.Mobility = function(color) {
-    var mob, to;
+    var mob, to, pos;
     var result = 0;
     var inc = color == Dagaz.AI.colorWhite ? -16 : 16;
     var me = color == Dagaz.AI.colorWhite ? Dagaz.AI.colorWhite : Dagaz.AI.colorBlack;
@@ -276,19 +268,39 @@ Dagaz.AI.Mobility = function(color) {
              var piece = Dagaz.AI.g_board[from] & Dagaz.AI.TYPE_MASK;
              if (piece == pieceMan) {
                  mob = 0;
-                 to = from + inc; if (Dagaz.AI.g_board[to] == 0) mob++;
-                 to = from + 1; if (Dagaz.AI.g_board[to] == 0) mob++;
-                 to = from - 1; if (Dagaz.AI.g_board[to] == 0) mob++;
+                 to = from + inc - 1; 
+                 if (Dagaz.AI.g_board[to] == 0) mob++;
+                 if (Dagaz.AI.g_board[to] & enemy) {
+                     pos = to - inc + 1;
+                     if (Dagaz.AI.g_board[pos] != 0) {
+                         mob += 4;
+                         to += inc - 1;
+                         if (Dagaz.AI.g_board[to] == 0) mob += 4;
+                     }
+                 }
+                 to = from + inc + 1; 
+                 if (Dagaz.AI.g_board[to] == 0) mob++;
+                 if (Dagaz.AI.g_board[to] & enemy) {
+                     pos = to - inc - 1;
+                     if (Dagaz.AI.g_board[pos] != 0) {
+                         mob += 4;
+                         to += inc + 1;
+                         if (Dagaz.AI.g_board[to] == 0) mob += 4;
+                     }
+                 }
+                 to = from - inc - 1;
+                 if (Dagaz.AI.g_board[to] & enemy) mob++;
+                 to = from - inc + 1;
+                 if (Dagaz.AI.g_board[to] & enemy) mob++;
+                 to = from + (inc * 2);
+                 while (Dagaz.AI.g_board[to] == 0) to += inc * 2;
+                 if ((Dagaz.AI.g_board[to] & enemy) && ((Dagaz.AI.g_board[to] & Dagaz.AI.TYPE_MASK) == pieceMan)) mob += 4;
                  result += 10 * mob;
              }
              if (piece == pieceKing) {
                  mob = -2;
-                 to = from - 1;  while (Dagaz.AI.g_board[to] == 0) {to--; mob++;}
-                 to = from - 16; while (Dagaz.AI.g_board[to] == 0) {to -= 16; mob++;}
                  to = from - 17; while (Dagaz.AI.g_board[to] == 0) {to -= 17; mob++;}
                  to = from - 15; while (Dagaz.AI.g_board[to] == 0) {to -= 15; mob++;}
-                 to = from + 1;  while (Dagaz.AI.g_board[to] == 0) {to++; mob++;}
-                 to = from + 16; while (Dagaz.AI.g_board[to] == 0) {to += 16; mob++;}
                  to = from + 17; while (Dagaz.AI.g_board[to] == 0) {to += 17; mob++;}
                  to = from + 15; while (Dagaz.AI.g_board[to] == 0) {to += 15; mob++;}
                  result += 50 * mob;

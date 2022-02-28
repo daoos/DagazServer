@@ -6,6 +6,7 @@ Dagaz.AI.g_maxply       = 10;
 Dagaz.AI.g_timeout      = 5000;
 Dagaz.Model.WIDTH       = 8;
 Dagaz.Model.HEIGHT      = 8;
+Dagaz.AI.NOISE_FACTOR   = 0;
 
 Dagaz.AI.PIECE_MASK     = 0xF;
 Dagaz.AI.TYPE_MASK      = 0x7;
@@ -184,6 +185,8 @@ function QSearch(alpha, beta, ply, depth) {
     if (realEval > alpha)
         alpha = realEval;
 
+    realEval -= depth;
+
     var moveScores = new Array();
     var moves = Dagaz.AI.GenerateCaptureMoves();
 
@@ -284,7 +287,12 @@ function AlphaBeta(ply, depth, alpha, beta) {
             continue;
         }
 
-        var value = -AlphaBeta(plyToSearch, depth + 1, -beta, -alpha);
+        var w = 0;
+        if (Dagaz.AI.NOISE_FACTOR && (depth == 0)) {
+            w = _.random(0, Dagaz.AI.NOISE_FACTOR);
+        }
+
+        var value = w - AlphaBeta(plyToSearch, depth + 1, -beta, -alpha);
         moveMade = true;
 
         Dagaz.AI.UnmakeMove(currentMove);
