@@ -1,5 +1,8 @@
 Dagaz.Controller.persistense = "none";
 
+Dagaz.Model.WIDTH  = 8;
+Dagaz.Model.HEIGHT = 8;
+
 ZRF = {
     JUMP:          0,
     IF:            1,
@@ -27,8 +30,6 @@ Dagaz.Model.BuildDesign = function(design) {
     design.checkVersion("smart-moves", "false");
     design.checkVersion("show-hints", "false");
     design.checkVersion("show-blink", "true");
-    design.checkVersion("highlight-goals", "false");
-    design.checkVersion("damone-extension", "true");
 
     design.addDirection("ne"); // 0
     design.addDirection("se"); // 1
@@ -348,9 +349,6 @@ Dagaz.Model.BuildDesign = function(design) {
     design.setup("White", "Dama", 16);
     design.setup("White", "Dama", 2);
     design.setup("White", "Damone", 0);
-
-    design.goal(0, "Black", "Damone", [0]);
-    design.goal(1, "White", "Damone", [63]);
 }
 
 Dagaz.View.configure = function(view) {
