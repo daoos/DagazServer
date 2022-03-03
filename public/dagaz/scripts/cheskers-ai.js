@@ -8,66 +8,23 @@ var pieceEmpty              = 0x00;
 var pieceMan                = 0x01;
 var pieceKnight             = 0x02;
 var pieceBishop             = 0x03;
-var pieceKing               = 0x04;
+var pieceDragon             = 0x04;
+var pieceQueen              = 0x05;
+var pieceKing               = 0x06;
 var pieceNo                 = 0x80;
 
 var moveflagPromotion       = 0x01000000;
 var moveflagPromotionKnight = 0x02000000;
 var moveflagPromotionBishop = 0x04000000;
+var moveflagPromotionQueen  = 0x08000000;
+var moveflagPromotionAll    = 0x0F000000;
 
 var g_moveUndoStack = new Array();
-var materialTable = [0, 300, 3000, 3500, 20000];
-var g_mob = [0, 1, 2, 2, 9];
+var materialTable = [0, 300, 2000, 2500, 5000, 6000, 20000];
+var g_mob = [0, 1, 2, 2, 4, 5, 9];
 
 var pieceSquareAdj = new Array(5);
 Dagaz.AI.flipTable = new Array(256);
-
-Dagaz.AI.pieceAdj = [
-[   0,    0,   0,   0,   0,   0,    0,    0, // pieceEmpty
-    0,    0,   0,   0,   0,   0,    0,    0, 
-    0,    0,   0,   0,   0,   0,    0,    0, 
-    0,    0,   0,   0,   0,   0,    0,    0, 
-    0,    0,   0,   0,   0,   0,    0,    0, 
-    0,    0,   0,   0,   0,   0,    0,    0, 
-    0,    0,   0,   0,   0,   0,    0,    0, 
-    0,    0,   0,   0,   0,   0,    0,    0
-],
-[   0,    0,   0,   0,   0,   0,    0,    0, // pieceMan
-   40,   50,  50,  50,  50,  50,   50,   40, 
-   30,   40,  40,  40,  40,  40,   40,   30, 
-   20,   30,  30,  30,  30,  30,   30,   20, 
-   10,   20,  20,  20,  20,  20,   20,   10, 
-  -10,   10,  10,  10,  10,  10,   10,  -10, 
-  -10,    0,   0,   0,   0,   0,    0,  -10, 
-    0,   30,  30,  30,  30,  30,   30,    0
-], 
-[-200, -100, -50, -50, -50, -50, -100, -200, // pieceKnight
- -100,    0,   0,   0,   0,   0,    0, -100,
-  -50,    0,  60,  60,  60,  60,    0,  -50,
-  -50,    0,  30,  60,  60,  30,    0,  -50,
-  -50,    0,  30,  60,  60,  30,    0,  -50,
-  -50,    0,  30,  30,  30,  30,    0,  -50,
- -100,    0,   0,   0,   0,   0,    0,  -100,
- -200,  -50, -25, -25, -25, -25,  -50,  -200
-],
-[ -50,  -50, -25, -10, -10, -25,  -50,  -50, // pieceBishop
-  -50,  -25, -10,   0,   0, -10,  -25,  -50,
-  -25,  -10,   0,  25,  25,   0,  -10,  -25,
-  -10,    0,  25,  40,  40,  25,    0,  -10,
-  -10,    0,  25,  40,  40,  25,    0,  -10,
-  -25,  -10,   0,  25,  25,   0,  -10,  -25,
-  -50,  -25, -10,   0,   0, -10,  -25,  -50,
-  -50,  -50, -25, -10, -10, -25,  -50,  -50
-],
-[ -50,  -10, -10, -10, -10, -10,  -10,  -50, // pieceKing
-  -10,    0,   0,   0,   0,   0,    0,  -10, 
-  -10,    0,   0,   0,   0,   0,    0,  -10, 
-  -10,    0,   0,   0,   0,   0,    0,  -10, 
-  -10,    0,   0,   0,   0,   0,    0,  -10, 
-  -10,    0,   0,   0,   0,   0,    0,  -10, 
-  -10,    0,   0,   0,   0,   0,    0,  -10, 
-  -50,  -10, -10, -10, -10, -10,  -10,  -50
-]];
 
 Dagaz.AI.MakeSquare = function(row, column) {
     return ((row + 3) << 4) | (column + 2);
@@ -79,17 +36,19 @@ Dagaz.AI.FormatSquare = function(square) {
 }
 
 Dagaz.AI.FormatMove = function(move) {
-    var result = null;
+    var result = null; var f = 0;
     for (var i = 0; i < move.length; i++) {
         if (result === null) {
             result = Dagaz.AI.FormatSquare(move[i] & 0xFF);
         }
         result = result + Dagaz.AI.FormatSquare((move[i] >> 8) & 0xFF);
-        if (move[i] & moveflagPromotion) {
-            if (move[i] & moveflagPromotionBishop) result += " Bishop";
-            else if (move[i] & moveflagPromotionKnight) result += " Camel";
-            else result += " King";
-        }
+        if (move[i] & moveflagPromotion) f |= move[i] & moveflagPromotionAll
+    }
+    if (f & moveflagPromotion) {
+        if (f & moveflagPromotionBishop) result += " Bishop";
+        else if (f & moveflagPromotionKnight) result += " Camel";
+        else if (f & moveflagPromotionQueen) result += " Queen";
+        else result += " King";
     }
     return result;
 }
@@ -191,6 +150,20 @@ Dagaz.AI.Mobility = function(color) {
                  to = from - 2;  if (Dagaz.AI.g_board[to] & enemy) mob += 2;
                  result += 50 * mob;
              }
+             if (piece == pieceDragon) {
+                 mob = 0;
+                 to = from + inc - 1; while (Dagaz.AI.g_board[to] == 0) {to += inc - 1; mob++;}
+                 to = from + inc + 1; while (Dagaz.AI.g_board[to] == 0) {to += inc + 1; mob++;}
+                 result += 50 * mob;
+             }
+             if (piece == pieceQueen) {
+                 mob = -2;
+                 to = from - 17; while (Dagaz.AI.g_board[to] == 0) {to -= 17; mob++;}
+                 to = from - 15; while (Dagaz.AI.g_board[to] == 0) {to -= 15; mob++;}
+                 to = from + 17; while (Dagaz.AI.g_board[to] == 0) {to += 17; mob++;}
+                 to = from + 15; while (Dagaz.AI.g_board[to] == 0) {to += 15; mob++;}
+                 result += 50 * mob;
+             }
          }
     }
     return result;
@@ -225,6 +198,8 @@ Dagaz.AI.ResetGame = function() {
   pieceSquareAdj[pieceMan]    = MakeTable(Dagaz.AI.pieceAdj[pieceMan]);
   pieceSquareAdj[pieceKnight] = MakeTable(Dagaz.AI.pieceAdj[pieceKnight]);
   pieceSquareAdj[pieceBishop] = MakeTable(Dagaz.AI.pieceAdj[pieceBishop]);
+  pieceSquareAdj[pieceDragon] = MakeTable(Dagaz.AI.pieceAdj[pieceDragon]);
+  pieceSquareAdj[pieceQueen]  = MakeTable(Dagaz.AI.pieceAdj[pieceQueen]);
   pieceSquareAdj[pieceKing]   = MakeTable(Dagaz.AI.pieceAdj[pieceKing]);
 }
 
@@ -269,9 +244,17 @@ Dagaz.AI.InitializeFromFen = function(fen) {
                     case 'b':
                         piece |= pieceBishop;
                         break;
+                    case 'd':
+                        piece |= pieceDragon;
+                        break;
+                    case 'q':
+                        piece |= pieceQueen;
+                        break;
                 }
                 
-                Dagaz.AI.g_board[Dagaz.AI.MakeSquare(row, col)] = piece;
+                if (piece & Dagaz.AI.TYPE_MASK) {
+                    Dagaz.AI.g_board[Dagaz.AI.MakeSquare(row, col)] = piece;
+                }
                 col++;
             }
         }
@@ -344,6 +327,7 @@ Dagaz.AI.MakeStep = function(move, step) {
         var newPiece = piece & (~Dagaz.AI.TYPE_MASK);
         if (flags & moveflagPromotionKnight) newPiece |= pieceKnight;
         else if (flags & moveflagPromotionBishop) newPiece |= pieceBishop;
+        else if (flags & moveflagPromotionQueen) newPiece |= pieceQueen;
             else newPiece |= pieceKing;
 
         Dagaz.AI.g_hashKeyLow ^= Dagaz.AI.g_zobristLow[to][piece & Dagaz.AI.PIECE_MASK];
@@ -389,7 +373,8 @@ Dagaz.AI.UnmakeStep = function() {
 
     if (flags & moveflagPromotion) {
         piece = Dagaz.AI.g_board[to] & (~Dagaz.AI.TYPE_MASK);
-        piece |= pieceMan;
+        if (flags & moveflagPromotionQueen) piece |= pieceDragon;
+            else piece |= pieceMan;
 
         Dagaz.AI.g_board[from] = piece;
     } else {
@@ -519,15 +504,24 @@ function GenerateChessStep(moves, from, to) {
     moves.push(from | (to << 8) | (to << 16));
 }
 
-function GenerateQuietStep(moves, from, to, isMan) {
+function GenerateQuietStep(moves, from, to, pieceType) {
     var flags = 0;
-    if (isMan) {
+    if (pieceType == pieceMan) {
         var row = to & 0xF0;
-        if (!Dagaz.AI.g_toMove && (row == 0x90)) {
+        if (!Dagaz.AI.g_toMove && (row == 0xA0)) {
             flags = moveflagPromotion;
         }
-        if (Dagaz.AI.g_toMove && (row == 0x20)) {
+        if (Dagaz.AI.g_toMove && (row == 0x30)) {
             flags = moveflagPromotion;
+        }
+    }
+    if (pieceType == pieceDragon) {
+        var row = to & 0xF0;
+        if (!Dagaz.AI.g_toMove && (row == 0xA0)) {
+            flags = moveflagPromotionQueen;
+        }
+        if (Dagaz.AI.g_toMove && (row == 0x30)) {
+            flags = moveflagPromotionQueen;
         }
     }
     if (flags & moveflagPromotion) {
@@ -535,7 +529,8 @@ function GenerateQuietStep(moves, from, to, isMan) {
         moves.push(from | (to << 8) | flags | moveflagPromotionKnight);
         moves.push(from | (to << 8) | flags | moveflagPromotionBishop);
     } else {
-        moves.push(from | (to << 8));
+        if (flags & moveflagPromotionQueen) flags != moveflagPromotion;
+        moves.push(from | (to << 8) | flags);
     }
 }
 
@@ -548,11 +543,35 @@ function GenerateCaptureStep(from, dir, isMan) {
     var flags = 0;
     if (isMan) {
         var row = to & 0xF0;
-        if (!Dagaz.AI.g_toMove && (row == 0x90)) {
+        if (!Dagaz.AI.g_toMove && (row == 0xA0)) {
             flags = moveflagPromotion;
         }
-        if (Dagaz.AI.g_toMove && (row == 0x20)) {
+        if (Dagaz.AI.g_toMove && (row == 0x30)) {
             flags = moveflagPromotion;
+        }
+    }
+    return from | (to << 8) | (captured << 16) | flags;
+}
+
+function GenerateCaptureDragonStep(from, dir, isDragon) {
+    var enemy = Dagaz.AI.g_toMove == Dagaz.AI.colorWhite ? Dagaz.AI.colorBlack : Dagaz.AI.colorWhite;
+    var captured = +from + dir;
+    if (!isDragon) {
+        while (Dagaz.AI.g_board[captured] == pieceEmpty) {
+            captured += dir;
+        }
+    }
+    if ((Dagaz.AI.g_board[captured] & enemy) == 0) return 0;
+    var to = +captured + dir;
+    if (Dagaz.AI.g_board[to] != pieceEmpty) return 0;
+    var flags = 0;
+    if (isDragon) {
+        var row = to & 0xF0;
+        if (!Dagaz.AI.g_toMove && (row == 0xA0)) {
+            flags = moveflagPromotion | moveflagPromotionQueen;
+        }
+        if (Dagaz.AI.g_toMove && (row == 0x30)) {
+            flags = moveflagPromotion | moveflagPromotionQueen;
         }
     }
     return from | (to << 8) | (captured << 16) | flags;
@@ -590,10 +609,55 @@ function GenerateCaptureMovesFromTree(moves, from, isMan, stack, isDone) {
     return !r;
 }
 
+function GenerateCaptureDragonMovesFromTree(moves, from, isDragon, stack, restricted) {
+    var r = true;
+    var inc = (Dagaz.AI.g_toMove == Dagaz.AI.colorWhite) ? -16 : 16;
+    var dirs = [-17, -15, 15, 17];
+    if (isDragon) dirs = [inc - 1, inc + 1];
+    _.each(dirs, function(dir) {
+        if (restricted && (restricted == dir)) return;
+        var step = GenerateCaptureStep(from, dir, isDragon);
+        if (step == 0) return;
+        var f = isDragon;
+        if (step & moveflagPromotion) f = false;
+        var pos = (step >> 8) & 0xFF;
+        stack.push(step);
+        Dagaz.AI.MakeStep(step, 0);
+        if (GenerateCaptureMovesFromTree(moves, pos, f, stack, -dir)) r = false;
+        Dagaz.AI.UnmakeStep();
+        stack.pop();
+        if (!f) {
+            pos += dir;
+            while (Dagaz.AI.g_board[pos] == pieceEmpty) {
+                step &= ~0xFF00;
+                step |= pos << 8;
+                stack.push(step);
+                Dagaz.AI.MakeStep(step, 0);
+                if (GenerateCaptureMovesFromTree(moves, pos, f, stack, -dir)) r = false;
+                Dagaz.AI.UnmakeStep();
+                stack.pop();
+                pos += dir;
+            }
+        }
+    });
+    if (r && (stack.length > 0)) {
+        var move = new Array();
+        for (var i = 0; i < stack.length; i++) {
+            move.push(stack[i]);
+        }
+        moves.push(move);
+    }
+    return !r;
+}
+
 function GenerateCaptureMovesFrom(moves, from) {
     var piece = Dagaz.AI.g_board[from] & Dagaz.AI.TYPE_MASK;   
-    if ((piece != pieceMan) && (piece != pieceKing)) return;
-    GenerateCaptureMovesFromTree(moves, from, piece == pieceMan, new Array());
+    if ((piece == pieceMan) || (piece == pieceKing)) {
+        GenerateCaptureMovesFromTree(moves, from, piece == pieceMan, new Array());
+    }
+    if ((piece == pieceDragon) || (piece == pieceQueen)) {
+        GenerateCaptureMovesFromTree(moves, from, piece == pieceDragon, new Array());
+    }
 }
 
 function GenerateCaptureChessMovesFrom(moves, from) {
@@ -744,25 +808,71 @@ function GenerateQuietMovesFrom(moves, from) {
     }
     if (piece == pieceMan) {
         to = from + inc - 1; steps = new Array();
-        if (Dagaz.AI.g_board[to] == 0) GenerateQuietStep(steps, from, to, true);
+        if (Dagaz.AI.g_board[to] == 0) GenerateQuietStep(steps, from, to, piece);
         moves.push(steps);
         to = from + inc + 1; steps = new Array();
-        if (Dagaz.AI.g_board[to] == 0) GenerateQuietStep(steps, from, to, true);
+        if (Dagaz.AI.g_board[to] == 0) GenerateQuietStep(steps, from, to, piece);
         moves.push(steps);
     }
     if (piece == pieceKing) {
         to = from - 17; steps = new Array();
-        if (Dagaz.AI.g_board[to] == 0) GenerateQuietStep(steps, from, to, false);
+        if (Dagaz.AI.g_board[to] == 0) GenerateQuietStep(steps, from, to, piece);
         moves.push(steps);
         to = from + 17; steps = new Array();
-        if (Dagaz.AI.g_board[to] == 0) GenerateQuietStep(steps, from, to, false);
+        if (Dagaz.AI.g_board[to] == 0) GenerateQuietStep(steps, from, to, piece);
         moves.push(steps);
         to = from - 15; steps = new Array();
-        if (Dagaz.AI.g_board[to] == 0) GenerateQuietStep(steps, from, to, false);
+        if (Dagaz.AI.g_board[to] == 0) GenerateQuietStep(steps, from, to, piece);
         moves.push(steps);
         to = from + 15; steps = new Array();
-        if (Dagaz.AI.g_board[to] == 0) GenerateQuietStep(steps, from, to, false);
+        if (Dagaz.AI.g_board[to] == 0) GenerateQuietStep(steps, from, to, piece);
         moves.push(steps);
+    }
+    if (piece == pieceDragon) {
+        to = from + inc - 1;
+        while (Dagaz.AI.g_board[to] == 0) {
+            steps = new Array();
+            GenerateQuietStep(steps, from, to, piece);
+            moves.push(steps);
+            to += inc - 1;
+        }
+        to = from + inc + 1;
+        while (Dagaz.AI.g_board[to] == 0) {
+            steps = new Array();
+            GenerateQuietStep(steps, from, to, piece);
+            moves.push(steps);
+            to += inc + 1;
+        }
+    }
+    if (piece == pieceQueen) {
+        to = from - 17;
+        while (Dagaz.AI.g_board[to] == 0) {
+            steps = new Array();
+            GenerateQuietStep(steps, from, to, piece);
+            moves.push(steps);
+            to -= 17;
+        }
+        to = from + 17;
+        while (Dagaz.AI.g_board[to] == 0) {
+            steps = new Array();
+            GenerateQuietStep(steps, from, to, piece);
+            moves.push(steps);
+            to += 17;
+        }
+        to = from - 15;
+        while (Dagaz.AI.g_board[to] == 0) {
+            steps = new Array();
+            GenerateQuietStep(steps, from, to, piece);
+            moves.push(steps);
+            to -= 15;
+        }
+        to = from + 15;
+        while (Dagaz.AI.g_board[to] == 0) {
+            steps = new Array();
+            GenerateQuietStep(steps, from, to, piece);
+            moves.push(steps);
+            to += 15;
+        }
     }
 }
 

@@ -6,7 +6,7 @@ Dagaz.Model.HEIGHT = 8;
 (function() {
 
 Dagaz.Model.moveToString = function(move) {
-  var r = "";
+  var r = ""; var t = "";
   _.each(move.actions, function(a) {
       if (a[1] === null) return;
       if ((r == "") && (a[0] != null)) {
@@ -16,9 +16,12 @@ Dagaz.Model.moveToString = function(move) {
           r = r + Dagaz.Model.posToString(a[1][0]);
       }
       if ((a[2] !== null) && ((a[0] != null) || (a[1] !== null))) {
-          r = r + " " + a[2][0].getType();
+          t = a[2][0].getType();
       }
   });
+  if (t.length > 0) {
+      r = r + " " + t;
+  }
   return r;
 }
 
@@ -98,6 +101,10 @@ var createPiece = function(design, c) {
   if (c == 'b') return Dagaz.Model.createPiece(design.getPieceType("Bishop"), 2);
   if (c == 'N') return Dagaz.Model.createPiece(design.getPieceType("Camel"), 1);
   if (c == 'n') return Dagaz.Model.createPiece(design.getPieceType("Camel"), 2);
+  if (c == 'D') return Dagaz.Model.createPiece(design.getPieceType("Dragon"), 1);
+  if (c == 'd') return Dagaz.Model.createPiece(design.getPieceType("Dragon"), 2);
+  if (c == 'Q') return Dagaz.Model.createPiece(design.getPieceType("Queen"), 1);
+  if (c == 'q') return Dagaz.Model.createPiece(design.getPieceType("Queen"), 2);
   return null;
 }
 
@@ -135,6 +142,8 @@ var getPieceNotation = function(design, piece) {
   if (piece.type == design.getPieceType("King"))   r = 'K';
   if (piece.type == design.getPieceType("Bishop")) r = 'B';
   if (piece.type == design.getPieceType("Camel"))  r = 'N';
+  if (piece.type == design.getPieceType("Dragon")) r = 'D';
+  if (piece.type == design.getPieceType("Queen"))  r = 'Q';
   if (piece.player > 1) {
       return r.toLowerCase();
   }

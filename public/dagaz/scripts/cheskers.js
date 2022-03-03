@@ -1,5 +1,3 @@
-Dagaz.Controller.persistense = "none";
-
 Dagaz.Model.WIDTH  = 8;
 Dagaz.Model.HEIGHT = 8;
 
@@ -24,12 +22,78 @@ ZRF = {
     VERIFY:        20
 };
 
+Dagaz.AI.pieceAdj = [
+[   0,    0,   0,   0,   0,   0,    0,    0, // pieceEmpty
+    0,    0,   0,   0,   0,   0,    0,    0, 
+    0,    0,   0,   0,   0,   0,    0,    0, 
+    0,    0,   0,   0,   0,   0,    0,    0, 
+    0,    0,   0,   0,   0,   0,    0,    0, 
+    0,    0,   0,   0,   0,   0,    0,    0, 
+    0,    0,   0,   0,   0,   0,    0,    0, 
+    0,    0,   0,   0,   0,   0,    0,    0
+],
+[   0,    0,   0,   0,   0,   0,    0,    0, // pieceMan
+   40,   50,  50,  50,  50,  50,   50,   40, 
+   30,   40,  40,  40,  40,  40,   40,   30, 
+   20,   30,  30,  30,  30,  30,   30,   20, 
+   10,   20,  20,  20,  20,  20,   20,   10, 
+  -10,   10,  10,  10,  10,  10,   10,  -10, 
+  -10,    0,   0,   0,   0,   0,    0,  -10, 
+    0,   30,  30,  30,  30,  30,   30,    0
+], 
+[-200, -100, -50, -50, -50, -50, -100, -200, // pieceKnight
+ -100,    0,   0,   0,   0,   0,    0, -100,
+  -50,    0,  60,  60,  60,  60,    0,  -50,
+  -50,    0,  30,  60,  60,  30,    0,  -50,
+  -50,    0,  30,  60,  60,  30,    0,  -50,
+  -50,    0,  30,  30,  30,  30,    0,  -50,
+ -100,    0,   0,   0,   0,   0,    0,  -100,
+ -200,  -50, -25, -25, -25, -25,  -50,  -200
+],
+[ -50,  -50, -25, -10, -10, -25,  -50,  -50, // pieceBishop
+  -50,  -25, -10,   0,   0, -10,  -25,  -50,
+  -25,  -10,   0,  25,  25,   0,  -10,  -25,
+  -10,    0,  25,  40,  40,  25,    0,  -10,
+  -10,    0,  25,  40,  40,  25,    0,  -10,
+  -25,  -10,   0,  25,  25,   0,  -10,  -25,
+  -50,  -25, -10,   0,   0, -10,  -25,  -50,
+  -50,  -50, -25, -10, -10, -25,  -50,  -50
+],
+[   0,    0,   0,   0,   0,   0,    0,    0, // pieceDragon
+    0,    0,   0,   0,   0,   0,    0,    0, 
+    0,    0,   0,   0,   0,   0,    0,    0, 
+    0,    0,   0,   0,   0,   0,    0,    0, 
+    0,    0,   0,   0,   0,   0,    0,    0, 
+    0,    0,   0,   0,   0,   0,    0,    0, 
+    0,    0,   0,   0,   0,   0,    0,    0, 
+    0,    0,   0,   0,   0,   0,    0,    0
+],
+[   0,    0,   0,   0,   0,   0,    0,    0, // pieceQueen
+    0,    0,   0,   0,   0,   0,    0,    0, 
+    0,    0,   0,   0,   0,   0,    0,    0, 
+    0,    0,   0,   0,   0,   0,    0,    0, 
+    0,    0,   0,   0,   0,   0,    0,    0, 
+    0,    0,   0,   0,   0,   0,    0,    0, 
+    0,    0,   0,   0,   0,   0,    0,    0, 
+    0,    0,   0,   0,   0,   0,    0,    0
+],
+[ -50,  -10, -10, -10, -10, -10,  -10,  -50, // pieceKing
+  -10,    0,   0,   0,   0,   0,    0,  -10, 
+  -10,    0,   0,   0,   0,   0,    0,  -10, 
+  -10,    0,   0,   0,   0,   0,    0,  -10, 
+  -10,    0,   0,   0,   0,   0,    0,  -10, 
+  -10,    0,   0,   0,   0,   0,    0,  -10, 
+  -10,    0,   0,   0,   0,   0,    0,  -10, 
+  -50,  -10, -10, -10, -10, -10,  -10,  -50
+]];
+
 Dagaz.Model.BuildDesign = function(design) {
     design.checkVersion("z2j", "2");
     design.checkVersion("animate-captures", "false");
     design.checkVersion("smart-moves", "false");
     design.checkVersion("show-hints", "false");
     design.checkVersion("show-blink", "true");
+    design.checkVersion("advisor-wait", "25");
 
     design.addDirection("w");
     design.addDirection("e");
@@ -225,13 +289,13 @@ Dagaz.Model.BuildDesign = function(design) {
 //  design.addPriority(0);			// jump-type
 //  design.addPriority(1);			// normal-type
 
-    design.addPiece("Man", 0, 1);
+    design.addPiece("Man", 0, 100);
     design.addMove(0, 0, [7, 7], 0);
     design.addMove(0, 0, [3, 3], 0);
     design.addMove(0, 1, [7], 1);
     design.addMove(0, 1, [3], 1);
 
-    design.addPiece("King", 1, 100);
+    design.addPiece("King", 1, 20000);
     design.addMove(1, 2, [7, 7], 0);
     design.addMove(1, 2, [3, 3], 0);
     design.addMove(1, 2, [6, 6], 0);
@@ -241,7 +305,7 @@ Dagaz.Model.BuildDesign = function(design) {
     design.addMove(1, 3, [6], 1);
     design.addMove(1, 3, [5], 1);
 
-    design.addPiece("Bishop", 2, 15);
+    design.addPiece("Bishop", 2, 3500);
     design.addMove(2, 4, [7, 7], 0);
     design.addMove(2, 4, [3, 3], 0);
     design.addMove(2, 4, [6, 6], 0);
@@ -251,7 +315,7 @@ Dagaz.Model.BuildDesign = function(design) {
     design.addMove(2, 5, [6, 6], 1);
     design.addMove(2, 5, [5, 5], 1);
 
-    design.addPiece("Camel", 3, 20);
+    design.addPiece("Camel", 3, 3000);
     design.addMove(3, 6, [4, 4, 7], 0);
     design.addMove(3, 6, [4, 4, 3], 0);
     design.addMove(3, 6, [2, 2, 6], 0);
