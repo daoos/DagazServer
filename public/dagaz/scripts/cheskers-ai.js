@@ -530,7 +530,13 @@ function GenerateQuietStep(moves, from, to, isMan) {
             flags = moveflagPromotion;
         }
     }
-    moves.push(from | (to << 8) | flags);
+    if (flags & moveflagPromotion) {
+        moves.push(from | (to << 8) | flags);
+        moves.push(from | (to << 8) | flags | moveflagPromotionKnight);
+        moves.push(from | (to << 8) | flags | moveflagPromotionBishop);
+    } else {
+        moves.push(from | (to << 8));
+    }
 }
 
 function GenerateCaptureStep(from, dir, isMan) {
@@ -569,11 +575,17 @@ function GenerateCaptureMovesFromTree(moves, from, isMan, stack, isDone) {
         stack.pop();
     });
     if (r && (stack.length > 0)) {
-        var move = new Array();
-        for (var i = 0; i < stack.length; i++) {
-            move.push(stack[i]);
-        }
-        moves.push(move);
+        var flags = [0];
+        if (isDone) flags = [moveflagPromotion, moveflagPromotionKnight, moveflagPromotionBishop];
+        _.each(flags, function(f) {
+             var move = new Array();
+             for (var i = 0; i < stack.length; i++) {
+                  var m = stack[i];
+                  if (i == stack.length - 1) m |= f;
+                  move.push(m);
+             }
+             moves.push(move);
+        });
     }
     return !r;
 }
