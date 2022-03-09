@@ -492,7 +492,7 @@ function MovePicker(hashMove, depth, killer1, killer2) {
 }
 
 Dagaz.AI.FormatSquare = function(square) {
-    var letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l'];
+    var letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm'];
     return letters[(square & 0xF) - 2] + (((Dagaz.Model.HEIGHT + 1) - (square >> 4)) + 1);
 }
 
