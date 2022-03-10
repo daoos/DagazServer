@@ -1,11 +1,11 @@
 <html>
 <head>
 <META http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>Grand Cheskers (9x9)</title>
+<title>Grand Cheskers (10x10)</title>
 </head>
 <body>
 
-<img id="Board" style="display:none" src="images/cheskers/9x9.png">
+<img id="Board" style="display:none" src="images/cheskers/10x10.png">
 <img id="Promote" style="display:none" src="images/cheskers/dialog-3.png">
 <img id="WhiteBishop" style="display:none" src="images/cheskers/wbishop.png">
 <img id="BlackBishop" style="display:none" src="images/cheskers/bbishop.png">
@@ -32,10 +32,10 @@ Copyright (c) Peter Aronson
 <a href="javascript:Dagaz.Controller.redo()" title="PgUp" style="display:none" id="redo"><img src="images/redo.png"/></a>
 <div align="right" id="timer"/>
 </td></tr>
-<tr style="height:454px; vertical-align:top">
-<td id="CanvasCell" style="width:454px">
-<canvas id="Canvas" width="454" height="454" style="cursor:default">Broken canvas...</canvas>
-</td><td style="width:454px;">
+<tr style="height:504px; vertical-align:top">
+<td id="CanvasCell" style="width:504px">
+<canvas id="Canvas" width="504" height="504" style="cursor:default">Broken canvas...</canvas>
+</td><td style="width:504px;">
 <div style="height:510px; overflow:auto" id="ScrollDiv">
 <img id="GlyphImage"><p id="HelpText"></p>
 <p id="GameSession"></p>
@@ -44,7 +44,7 @@ Copyright (c) Peter Aronson
 </tr>
 <tr>
 <td>
-<div style="height:100px; width:454px; margin-left:auto; margin-right:auto">
+<div style="height:100px; width:504px; margin-left:auto; margin-right:auto">
 <table>
 <tr style="display:none" id="PieceInfo">
 <td><img id="PieceInfoImage"></td><td id="PieceInfoText"></td>
@@ -64,11 +64,14 @@ Copyright (c) Peter Aronson
 <script src="common-scripts/move-list-v1.js"></script>
 <script src="common-scripts/sound-manager-v2.js"></script>
 <script src="common-scripts/session-manager.js"></script>
+<script src="common-scripts/random-ai.js"></script>
+<script src="common-scripts/garbo-ai-v3.js"></script>
+<script src="scripts/cheskers-ai.js"></script>
 <script src="scripts/cheskers-fen.js"></script>
 <script src="scripts/cheskers-promotion.js"></script>
 <script src="scripts/cheskers-extension.js"></script>
 <script src="scripts/cheskers-invariant.js"></script>
-<script src="scripts/cheskers-9x9-black.js"></script>
+<script src="scripts/cheskers-10x10.js"></script>
 <script src="common-scripts/app-net-v5.js"></script>
 
 </body>

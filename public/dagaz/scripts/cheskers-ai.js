@@ -20,7 +20,7 @@ var moveflagPromotionQueen  = 0x08000000;
 var moveflagPromotionAll    = 0x0F000000;
 
 var g_moveUndoStack = new Array();
-var materialTable = [0, 300, 2000, 2500, 5000, 6000, 20000];
+var materialTable = [0, 300, 3000, 3500, 5000, 5500, 200000];
 var g_mob = [0, 1, 2, 2, 4, 5, 9];
 
 var pieceSquareAdj = new Array(5);
@@ -519,13 +519,12 @@ function GenerateQuietStep(moves, from, to, pieceType) {
     if (pieceType == pieceDragon) {
         var row = to & 0xF0;
         if (!Dagaz.AI.g_toMove && (row == (0xA0 - delta))) {
-            flags = moveflagPromotionQueen;
+            flags = moveflagPromotion | moveflagPromotionQueen;
         }
         if (Dagaz.AI.g_toMove && (row == 0x30)) {
-            flags = moveflagPromotionQueen;
+            flags = moveflagPromotion | moveflagPromotionQueen;
         }
     }
-    if (flags & moveflagPromotionQueen) flags |= moveflagPromotion;
     moves.push(from | (to << 8) | flags);
 }
 
@@ -553,10 +552,8 @@ function GenerateCaptureDragonStep(from, dir, isDragon) {
     var delta = (8 - Dagaz.Model.HEIGHT) << 4;
     var enemy = Dagaz.AI.g_toMove == Dagaz.AI.colorWhite ? Dagaz.AI.colorBlack : Dagaz.AI.colorWhite;
     var captured = +from + dir;
-    if (!isDragon) {
-        while (Dagaz.AI.g_board[captured] == pieceEmpty) {
-            captured += dir;
-        }
+    while (Dagaz.AI.g_board[captured] == pieceEmpty) {
+        captured += dir;
     }
     if ((Dagaz.AI.g_board[captured] & enemy) == 0) return 0;
     var to = +captured + dir;
@@ -613,14 +610,14 @@ function GenerateCaptureDragonMovesFromTree(moves, from, isDragon, stack, restri
     if (isDragon) dirs = [inc - 1, inc + 1];
     _.each(dirs, function(dir) {
         if (restricted && (restricted == dir)) return;
-        var step = GenerateCaptureStep(from, dir, isDragon);
+        var step = GenerateCaptureDragonStep(from, dir, isDragon);
         if (step == 0) return;
         var f = isDragon;
         if (step & moveflagPromotion) f = false;
         var pos = (step >> 8) & 0xFF;
         stack.push(step);
         Dagaz.AI.MakeStep(step, 0);
-        if (GenerateCaptureMovesFromTree(moves, pos, f, stack, -dir)) r = false;
+        if (GenerateCaptureDragonMovesFromTree(moves, pos, f, stack, -dir)) r = false;
         Dagaz.AI.UnmakeStep();
         stack.pop();
         pos += dir;
@@ -629,7 +626,7 @@ function GenerateCaptureDragonMovesFromTree(moves, from, isDragon, stack, restri
             step |= pos << 8;
             stack.push(step);
             Dagaz.AI.MakeStep(step, 0);
-            if (GenerateCaptureMovesFromTree(moves, pos, f, stack, -dir)) r = false;
+            if (GenerateCaptureDragonMovesFromTree(moves, pos, f, stack, -dir)) r = false;
             Dagaz.AI.UnmakeStep();
             stack.pop();
             pos += dir;
@@ -651,7 +648,7 @@ function GenerateCaptureMovesFrom(moves, from) {
         GenerateCaptureMovesFromTree(moves, from, piece == pieceMan, new Array());
     }
     if ((piece == pieceDragon) || (piece == pieceQueen)) {
-        GenerateCaptureMovesFromTree(moves, from, piece == pieceDragon, new Array());
+        GenerateCaptureDragonMovesFromTree(moves, from, piece == pieceDragon, new Array());
     }
 }
 
