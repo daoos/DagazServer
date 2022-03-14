@@ -964,7 +964,7 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, copyright) values(597, 'elementals', 2, 'elementals-2', '2017 Valentin Chelnokov')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(598, 'double-alquerque', null, 'double-alquerque', 'https://en.wikipedia.org/wiki/Alquerque')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(599, 'grand-dice-chess', null, 'grand-dice-chess', 'https://granddicechess.blogspot.com/2022/01/grand-dice-chess.html', '2021 Vadrya Pokshtya')`);
-        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, copyright) values(600, 'chess', null, 'chess-1', 'Michal Ryszard Wojcik')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, copyright) values(600, 'romantic-chess', null, 'chess-1', 'Michal Ryszard Wojcik')`);
 }
 
     public async down(queryRunner: QueryRunner): Promise<any> {
