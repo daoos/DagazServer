@@ -86,19 +86,20 @@ Dagaz.Model.CheckInvariants = function(board) {
         if ((dir !== null) && (piece !== null) && (+piece.type <= 2)) {
              var pos = design.navigate(0, from, dir);
              while (pos !== null) {
-                 if (isDefended(design, board, pos)) break;
+//               if (isDefended(design, board, pos)) break;
                  var p = board.getPiece(pos);
                  if ((p === null) || (p.player == piece.player)) break;
                  move.capturePiece(pos);
-                 pos = design.navigate(0, pos, dir);
+//               pos = design.navigate(0, pos, dir);
+                 return;
              }
              pos = design.navigate(board.player, to, dir);
-             while (pos !== null) {
-                 if (isDefended(design, board, pos)) break;
+             if (pos !== null) {
+//               if (isDefended(design, board, pos)) break;
                  var p = board.getPiece(pos);
-                 if ((p === null) || (p.player == piece.player)) break;
+                 if ((p === null) || (p.player == piece.player)) return;
                  move.capturePiece(pos);
-                 pos = design.navigate(board.player, pos, dir);
+//               pos = design.navigate(board.player, pos, dir);
              }
         }
     });
