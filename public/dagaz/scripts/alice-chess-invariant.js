@@ -25,7 +25,7 @@ var checkDirection = function(design, board, player, pos, dir, leapers, riders, 
   var p = design.navigate(player, pos, dir);
   if (p === null) return false;
   var piece = board.getPiece(p);
-  if (piece !== null) {
+  if ((piece !== null) && ((+piece.type % 2) == mirrored)) {
       if (piece.player == player) return false;
       if (f) {
           if (mirrored) {
@@ -36,7 +36,7 @@ var checkDirection = function(design, board, player, pos, dir, leapers, riders, 
       }
       return (_.indexOf(leapers, +piece.type) >= 0) || (_.indexOf(riders, +piece.type) >= 0);
   }
-  while (piece === null) {
+  while ((piece === null) || ((+piece.type % 2) != mirrored)) {
       p = design.navigate(player, p, dir);
       if (p === null) return false;
       piece = board.getPiece(p);
