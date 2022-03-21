@@ -21,14 +21,19 @@ Dagaz.Model.findPiece = function(design, board, player, type) {
   return null;
 }
 
-var checkDirection = function(design, board, player, pos, dir, leapers, riders, mirrored) {
+var checkDirection = function(design, board, player, pos, dir, leapers, riders, mirrored, f) {
   var p = design.navigate(player, pos, dir);
   if (p === null) return false;
   var piece = board.getPiece(p);
   if (piece !== null) {
       if (piece.player == player) return false;
-      var m = +piece.type % 2;
-      if (m != mirrored) return false;
+      if (f) {
+          if (mirrored) {
+              if ((+piece.type % 2) == 0) return false;
+          } else {
+              if ((+piece.type % 2) != 0) return false;
+          }
+      }
       return (_.indexOf(leapers, +piece.type) >= 0) || (_.indexOf(riders, +piece.type) >= 0);
   }
   while (piece === null) {
@@ -37,12 +42,17 @@ var checkDirection = function(design, board, player, pos, dir, leapers, riders, 
       piece = board.getPiece(p);
   }
   if (piece.player == player) return false;
-  var m = +piece.type % 2;
-  if (m != mirrored) return false;
+  if (f) {
+      if (mirrored) {
+          if ((+piece.type % 2) == 0) return false;
+      } else {
+          if ((+piece.type % 2) != 0) return false;
+      }
+  }
   return _.indexOf(riders, +piece.type) >= 0;
 }
 
-var checkLeap = function(design, board, player, pos, o, d, knight, mirrored) {
+var checkLeap = function(design, board, player, pos, o, d, knight, mirrored, f) {
   var p = design.navigate(player, pos, o);
   if (p === null) return false;
   p = design.navigate(player, p, d);
@@ -50,12 +60,17 @@ var checkLeap = function(design, board, player, pos, o, d, knight, mirrored) {
   var piece = board.getPiece(p);
   if (piece === null) return false;
   if (piece.player == player) return false;
-  var m = +piece.type % 2;
-  if (m != mirrored) return false;
+  if (f) {
+      if (mirrored) {
+          if ((+piece.type % 2) == 0) return false;
+      } else {
+          if ((+piece.type % 2) != 0) return false;
+      }
+  }
   return (piece.type == knight) || (piece.type == knight + 1);
 }
 
-Dagaz.Model.checkPositions = function(design, board, player, positions, mirrored) {
+Dagaz.Model.checkPositions = function(design, board, player, positions, mirrored, f) {
   var king   = design.getPieceType("King");
   var pawn   = design.getPieceType("Pawn");
   var rook   = design.getPieceType("Rook");
@@ -68,22 +83,22 @@ Dagaz.Model.checkPositions = function(design, board, player, positions, mirrored
   var ne = design.getDirection("ne"); var se = design.getDirection("se");
   for (var i = 0; i < positions.length; i++) {
        var pos = positions[i];
-       if (checkDirection(design, board, player, pos, n,  [king, king + 1], [rook, rook + 1, queen, queen + 1], mirrored)) return true;
-       if (checkDirection(design, board, player, pos, s,  [king, king + 1], [rook, rook + 1, queen, queen + 1], mirrored)) return true;
-       if (checkDirection(design, board, player, pos, w,  [king, king + 1], [rook, rook + 1, queen, queen + 1], mirrored)) return true;
-       if (checkDirection(design, board, player, pos, e,  [king, king + 1], [rook, rook + 1, queen, queen + 1], mirrored)) return true;
-       if (checkDirection(design, board, player, pos, nw, [king, king + 1, pawn, pawn + 1], [bishop, bishop + 1, queen, queen + 1], mirrored)) return true;
-       if (checkDirection(design, board, player, pos, ne, [king, king + 1, pawn, pawn + 1], [bishop, bishop + 1, queen, queen + 1], mirrored)) return true;
-       if (checkDirection(design, board, player, pos, sw, [king, king + 1], [bishop, bishop + 1, queen, queen + 1], mirrored)) return true;
-       if (checkDirection(design, board, player, pos, se, [king, king + 1], [bishop, bishop + 1, queen, queen + 1], mirrored)) return true;
-       if (checkLeap(design, board, player, pos, n, nw, knight, mirrored)) return true;
-       if (checkLeap(design, board, player, pos, n, ne, knight, mirrored)) return true;
-       if (checkLeap(design, board, player, pos, s, sw, knight, mirrored)) return true;
-       if (checkLeap(design, board, player, pos, s, se, knight, mirrored)) return true;
-       if (checkLeap(design, board, player, pos, w, nw, knight, mirrored)) return true;
-       if (checkLeap(design, board, player, pos, w, sw, knight, mirrored)) return true;
-       if (checkLeap(design, board, player, pos, e, ne, knight, mirrored)) return true;
-       if (checkLeap(design, board, player, pos, e, se, knight, mirrored)) return true;
+       if (checkDirection(design, board, player, pos, n,  [king, king + 1], [rook, rook + 1, queen, queen + 1], mirrored, f)) return true;
+       if (checkDirection(design, board, player, pos, s,  [king, king + 1], [rook, rook + 1, queen, queen + 1], mirrored, f)) return true;
+       if (checkDirection(design, board, player, pos, w,  [king, king + 1], [rook, rook + 1, queen, queen + 1], mirrored, f)) return true;
+       if (checkDirection(design, board, player, pos, e,  [king, king + 1], [rook, rook + 1, queen, queen + 1], mirrored, f)) return true;
+       if (checkDirection(design, board, player, pos, nw, [king, king + 1, pawn, pawn + 1], [bishop, bishop + 1, queen, queen + 1], mirrored, f)) return true;
+       if (checkDirection(design, board, player, pos, ne, [king, king + 1, pawn, pawn + 1], [bishop, bishop + 1, queen, queen + 1], mirrored, f)) return true;
+       if (checkDirection(design, board, player, pos, sw, [king, king + 1], [bishop, bishop + 1, queen, queen + 1], mirrored, f)) return true;
+       if (checkDirection(design, board, player, pos, se, [king, king + 1], [bishop, bishop + 1, queen, queen + 1], mirrored, f)) return true;
+       if (checkLeap(design, board, player, pos, n, nw, knight, mirrored, f)) return true;
+       if (checkLeap(design, board, player, pos, n, ne, knight, mirrored, f)) return true;
+       if (checkLeap(design, board, player, pos, s, sw, knight, mirrored, f)) return true;
+       if (checkLeap(design, board, player, pos, s, se, knight, mirrored, f)) return true;
+       if (checkLeap(design, board, player, pos, w, nw, knight, mirrored, f)) return true;
+       if (checkLeap(design, board, player, pos, w, sw, knight, mirrored, f)) return true;
+       if (checkLeap(design, board, player, pos, e, ne, knight, mirrored, f)) return true;
+       if (checkLeap(design, board, player, pos, e, se, knight, mirrored, f)) return true;
   }
   return false;
 }
@@ -125,13 +140,23 @@ Dagaz.Model.checkGoals = function(design, board, player) {
       var piece = board.getPiece(pos);
       if (piece === null) return 1;
       var mirrored = +piece.type % 2;
-      if (Dagaz.Model.checkPositions(design, board, board.player, [pos], mirrored)) {
+      if (Dagaz.Model.checkPositions(design, board, board.player, [pos], mirrored, true)) {
           return 1;
       } else {
           return 0;
       }
   }
   return checkGoals(design, board, player);
+}
+
+var checkMirrored = function(pos, move) {
+  for (var i = 0; i < move.actions.length; i++) {
+       var a = move.actions[i];
+       if ((a[0] !== null) && (a[1] !== null)) {
+           if (a[1][0] == pos) return false;
+       }
+  }
+  return true;
 }
 
 var CheckInvariants = Dagaz.Model.CheckInvariants;
@@ -153,6 +178,7 @@ Dagaz.Model.CheckInvariants = function(board) {
           return;
       }
       var mirrored = +piece.type % 2;
+      var f = checkMirrored(pos, move);
       if (move.actions.length == 2) {
           var k = getPiece(board, move.actions[0]);
           var r = getPiece(board, move.actions[1]);
@@ -165,7 +191,7 @@ Dagaz.Model.CheckInvariants = function(board) {
               list.push(move.actions[1][1][0]);
           }
       }
-      if (Dagaz.Model.checkPositions(design, b, board.player, list, mirrored)) {
+      if (Dagaz.Model.checkPositions(design, b, board.player, list, mirrored, f)) {
           move.failed = true;
           return;
       }

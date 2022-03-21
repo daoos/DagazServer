@@ -25,7 +25,7 @@ Dagaz.Model.moveToString = function(move) {
           r = r + Dagaz.Model.posToString(a[1][0]);
       }
       if ((a[2] !== null) && ((a[0] != null) || (a[1] !== null))) {
-          r = r + " " + a[2][0].toString();
+          r = r + " " + a[2][0].getType();
       }
   });
   return r;
@@ -37,6 +37,7 @@ Dagaz.Model.CheckInvariants = function(board) {
   var design = Dagaz.Model.design;
   _.each(board.moves, function(move) {
       _.each(move.actions, function(a) {
+          if (a[1] === null) return;
           var piece = board.getPiece(a[0][0]);
           if (piece !== null) {
               var m = +piece.type % 2;
