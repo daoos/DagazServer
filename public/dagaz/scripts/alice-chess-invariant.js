@@ -22,10 +22,11 @@ Dagaz.Model.findPiece = function(design, board, player, type) {
 }
 
 var checkDirection = function(design, board, player, pos, dir, leapers, riders, mirrored, f) {
+  var king = design.getPieceType("King");
   var p = design.navigate(player, pos, dir);
   if (p === null) return false;
   var piece = board.getPiece(p);
-  if ((piece !== null) && ((+piece.type % 2) == mirrored)) {
+  if ((piece !== null) && (((+piece.type % 2) == mirrored) || (piece.type == king))) {
       if (piece.player == player) return false;
       if (f) {
           if (mirrored) {
@@ -36,7 +37,7 @@ var checkDirection = function(design, board, player, pos, dir, leapers, riders, 
       }
       return (_.indexOf(leapers, +piece.type) >= 0) || (_.indexOf(riders, +piece.type) >= 0);
   }
-  while ((piece === null) || ((+piece.type % 2) != mirrored)) {
+  while ((piece === null) || (f && ((+piece.type % 2) != mirrored))) {
       p = design.navigate(player, p, dir);
       if (p === null) return false;
       piece = board.getPiece(p);
