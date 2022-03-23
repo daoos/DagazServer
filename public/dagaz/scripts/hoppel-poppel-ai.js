@@ -2,6 +2,8 @@
 
 (function() {
 
+Dagaz.AI.NOISE_FACTOR = 5;
+
 var g_timeout = 3000;
 var g_width = 8;
 var g_height = 8;
@@ -885,14 +887,19 @@ function AlphaBeta(ply, depth, alpha, beta) {
             plyToSearch++;
         }
 
+        var w = 0;
+        if (Dagaz.AI.NOISE_FACTOR && (depth == 0)) {
+            w = _.random(0, Dagaz.AI.NOISE_FACTOR);
+        }
+
         var value;
         if (moveMade) {
-            value = -AllCutNode(plyToSearch, depth + 1, -alpha, true);
+            value = w - AllCutNode(plyToSearch, depth + 1, -alpha, true);
             if (value > alpha) {
-                value = -AlphaBeta(plyToSearch, depth + 1, -beta, -alpha);
+                value = w - AlphaBeta(plyToSearch, depth + 1, -beta, -alpha);
             }
         } else {
-            value = -AlphaBeta(plyToSearch, depth + 1, -beta, -alpha);
+            value = w - AlphaBeta(plyToSearch, depth + 1, -beta, -alpha);
         }
 
         moveMade = true;

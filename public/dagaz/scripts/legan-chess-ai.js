@@ -2,6 +2,7 @@
 
 (function() {
 
+Dagaz.AI.NOISE_FACTOR     = 5;
 Dagaz.AI.PIECE_MASK       = 0xF;
 Dagaz.AI.TYPE_MASK        = 0x7;
 Dagaz.AI.PLAYERS_MASK     = 0x18;
@@ -919,7 +920,7 @@ Dagaz.AI.GenerateAllMoves = function(moveStack) {
 Dagaz.AI.GenerateCaptureMoves = function(moveStack) {
     var from, to, piece, pieceIdx;
     var inc = (Dagaz.AI.g_toMove == Dagaz.AI.colorWhite) ? -1 : 1;
-    var enemy = Dagaz.AI.g_toMove == Dagaz.AI.colorWhite ? 0x10 : 0x8;
+    var enemy = Dagaz.AI.g_toMove == Dagaz.AI.colorWhite ? Dagaz.AI.colorBlack : Dagaz.AI.colorWhite;
 
     // Pawn captures
     pieceIdx = (Dagaz.AI.g_toMove | piecePawn) << Dagaz.AI.COUNTER_SIZE;

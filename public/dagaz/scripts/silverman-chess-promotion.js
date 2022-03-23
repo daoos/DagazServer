@@ -25,7 +25,7 @@ Dagaz.Model.moveToString = function(move) {
           r = r + Dagaz.Model.posToString(a[1][0]);
       }
       if ((a[2] !== null) && ((a[0] != null) || (a[1] !== null))) {
-          r = r + " " + a[2][0].toString();
+          r = r + " " + a[2][0].getType();
       }
   });
   return r;

@@ -2,6 +2,7 @@
 
 (function() {
 
+Dagaz.AI.NOISE_FACTOR     = 3;
 Dagaz.AI.Q_SEARCH_LIMIT   = -3;
 Dagaz.AI.ALL_CUT_LIMIT    = 5;
 Dagaz.AI.CHECK_EXT_LIMIT  = 2;

@@ -2,6 +2,7 @@
 
 (function() {
 
+Dagaz.AI.NOISE_FACTOR    = 0;
 Dagaz.AI.Q_SEARCH_LIMIT  = -20;
 Dagaz.AI.ALL_CUT_LIMIT   = 100;
 Dagaz.AI.CHECK_EXT_LIMIT = 100;
@@ -586,14 +587,19 @@ function AlphaBeta(ply, depth, alpha, beta, moves) {
             if (depth < Dagaz.AI.CHECK_EXT_LIMIT) plyToSearch++;
         }
 
+        var w = 0;
+        if (Dagaz.AI.NOISE_FACTOR && (depth == 0)) {
+            w = _.random(0, Dagaz.AI.NOISE_FACTOR);
+        }
+
         var value;
         if (moveMade) {
-            value = -AllCutNode(plyToSearch, depth + 1, -alpha, true);
+            value = w - AllCutNode(plyToSearch, depth + 1, -alpha, true);
             if (value > alpha) {
-                value = -AlphaBeta(plyToSearch, depth + 1, -beta, -alpha);
+                value = w - AlphaBeta(plyToSearch, depth + 1, -beta, -alpha);
             }
         } else {
-            value = -AlphaBeta(plyToSearch, depth + 1, -beta, -alpha);
+            value = w - AlphaBeta(plyToSearch, depth + 1, -beta, -alpha);
         }
 
         moveMade = true;

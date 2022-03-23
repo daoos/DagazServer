@@ -2,6 +2,7 @@
 
 (function() {
 
+Dagaz.AI.NOISE_FACTOR     = 5;
 Dagaz.AI.PIECE_MASK       = 0x1F;
 Dagaz.AI.TYPE_MASK        = 0xF;
 Dagaz.AI.PLAYERS_MASK     = 0x30;
@@ -294,8 +295,7 @@ Dagaz.AI.IsHashMoveValid = function(hashMove) {
         }
 
         var row = to & 0xF0;
-        var delta = (8 - Dagaz.Model.HEIGHT) << 4;
-        if (((row == (0x90 - delta) && !Dagaz.AI.g_toMove) ||
+        if (((row == 0x90 && !Dagaz.AI.g_toMove) ||
              (row == 0x20 && Dagaz.AI.g_toMove)) != (hashMove & moveflagPromotion)) {
             // Handle promotions
             return false;
@@ -1081,8 +1081,7 @@ Dagaz.AI.GenerateCaptureMoves = function(moveStack) {
 
 function MovePawnTo(moveStack, start, square) {
     var row = square & 0xF0;
-    var delta = (8 - Dagaz.Model.HEIGHT) << 4;
-    if (((row == (0x90 - delta)) || (row == 0x20))) {
+    if (((row == 0x90) || (row == 0x20))) {
         moveStack[moveStack.length] = GenerateMove(start, square, moveflagPromotion);
     }
     else {

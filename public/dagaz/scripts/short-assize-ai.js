@@ -2,6 +2,7 @@
 
 (function() {
 
+Dagaz.AI.NOISE_FACTOR     = 5;
 Dagaz.AI.PIECE_MASK       = 0xF;
 Dagaz.AI.TYPE_MASK        = 0x7;
 Dagaz.AI.PLAYERS_MASK     = 0x18;
@@ -673,7 +674,7 @@ Dagaz.AI.MakeMove = function(move){
     }
     Dagaz.AI.g_board[from] = pieceEmpty;
 
-    if (flags & moveflagSplit) {
+/*  if (flags & moveflagSplit) {
         var newPiece = piece & (~Dagaz.AI.TYPE_MASK);
         newPiece |= pieceQueen;
         var promoteType = newPiece & Dagaz.AI.PIECE_MASK;
@@ -685,7 +686,7 @@ Dagaz.AI.MakeMove = function(move){
         Dagaz.AI.g_pieceIndex[from] = Dagaz.AI.g_pieceCount[promoteType];
         Dagaz.AI.g_pieceList[(promoteType << Dagaz.AI.COUNTER_SIZE) | Dagaz.AI.g_pieceIndex[from]] = from;
         Dagaz.AI.g_pieceCount[promoteType]++;
-    }
+    }*/
 
     Dagaz.AI.g_toMove = otherColor;
     Dagaz.AI.g_baseEval = -Dagaz.AI.g_baseEval;
@@ -762,7 +763,7 @@ Dagaz.AI.UnmakeMove = function(move){
     
     var piece = Dagaz.AI.g_board[to];
     
-    if (flags & moveflagSplit) {
+/*  if (flags & moveflagSplit) {
         piece = (Dagaz.AI.g_board[to] & (~Dagaz.AI.TYPE_MASK)) | pieceQueen;
         var pawnType = piece & Dagaz.AI.PIECE_MASK;
 
@@ -787,7 +788,7 @@ Dagaz.AI.UnmakeMove = function(move){
         Dagaz.AI.g_pieceList[(pawnType << Dagaz.AI.COUNTER_SIZE) | Dagaz.AI.g_pieceIndex[to]] = to;
         Dagaz.AI.g_pieceCount[pawnType]++;
 
-    } else if (flags & moveflagPromotion) {
+    } else*/ if (flags & moveflagPromotion) {
         piece = (Dagaz.AI.g_board[to] & (~Dagaz.AI.TYPE_MASK)) | piecePawn;
         Dagaz.AI.g_board[from] = piece;
 
@@ -990,7 +991,7 @@ Dagaz.AI.GenerateAllMoves = function(moveStack) {
 Dagaz.AI.GenerateCaptureMoves = function(moveStack) {
     var from, to, piece, pieceIdx;
     var inc = (Dagaz.AI.g_toMove == Dagaz.AI.colorWhite) ? -16 : 16;
-    var enemy = Dagaz.AI.g_toMove == Dagaz.AI.colorWhite ? 0x10 : 0x8;
+    var enemy = Dagaz.AI.g_toMove == Dagaz.AI.colorWhite ? Dagaz.AI.colorBlack : Dagaz.AI.colorWhite;
 
     // Pair captures
     pieceIdx = (Dagaz.AI.g_toMove | piecePair) << Dagaz.AI.COUNTER_SIZE;

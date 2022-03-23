@@ -2,6 +2,7 @@
 
 (function() {
 
+Dagaz.AI.NOISE_FACTOR     = 5;
 Dagaz.AI.PIECE_MASK       = 0x1F;
 Dagaz.AI.TYPE_MASK        = 0xF;
 Dagaz.AI.PLAYERS_MASK     = 0x30;
@@ -140,7 +141,7 @@ Dagaz.AI.pieceAdj = [
     0,    0,    0,    0,    0,    0,    0,    0,    5,   10,    5
 ]];
 
-var pieceSquareAdj = new Array(8);
+var pieceSquareAdj = new Array(9);
 var flipTable = new Array(256);
 
 var g_seeValues    = [0, 1, 1, 2, 2, 3, 4, 5, 900, 0, 0, 0, 0, 0, 0, 0,
@@ -727,22 +728,22 @@ function IsSquareAttackableFrom(target, from){
        to = from; do { to -= 16; if (to == target) return true; } while (Dagaz.AI.g_board[to] == 0);
     }
     if (pieceType == pieceCannon) {
-       to = from + 1; while (Dagaz.AI.g_board[to] == 0) { if (to == target) return true; to++; }
+       to = from + 1; while (Dagaz.AI.g_board[to] == 0) { if (to == target) return false; to++; }
        if (Dagaz.AI.g_board[to] & Dagaz.AI.PLAYERS_MASK) {
            to++; while (Dagaz.AI.g_board[to] == 0) { to++; }
            if (to == target) return true;
        }
-       to = from - 1; while (Dagaz.AI.g_board[to] == 0) { if (to == target) return true; to--; }
+       to = from - 1; while (Dagaz.AI.g_board[to] == 0) { if (to == target) return false; to--; }
        if (Dagaz.AI.g_board[to] & Dagaz.AI.PLAYERS_MASK) {
            to--; while (Dagaz.AI.g_board[to] == 0) { to--; }
            if (to == target) return true;
        }
-       to = from + 16; while (Dagaz.AI.g_board[to] == 0) { if (to == target) return true; to += 16; }
+       to = from + 16; while (Dagaz.AI.g_board[to] == 0) { if (to == target) return false; to += 16; }
        if (Dagaz.AI.g_board[to] & Dagaz.AI.PLAYERS_MASK) {
            to += 16; while (Dagaz.AI.g_board[to] == 0) { to += 16; }
            if (to == target) return true;
        }
-       to = from - 16; while (Dagaz.AI.g_board[to] == 0) { if (to == target) return true; to -= 16; }
+       to = from - 16; while (Dagaz.AI.g_board[to] == 0) { if (to == target) return false; to -= 16; }
        if (Dagaz.AI.g_board[to] & Dagaz.AI.PLAYERS_MASK) {
            to -= 16; while (Dagaz.AI.g_board[to] == 0) { to -= 16; }
            if (to == target) return true;

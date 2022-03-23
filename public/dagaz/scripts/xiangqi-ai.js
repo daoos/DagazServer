@@ -2,6 +2,7 @@
 
 (function() {
 
+Dagaz.AI.NOISE_FACTOR     = 5;
 Dagaz.AI.PIECE_MASK       = 0xF;
 Dagaz.AI.TYPE_MASK        = 0x7;
 Dagaz.AI.PLAYERS_MASK     = 0x18;
@@ -653,22 +654,22 @@ function IsSquareAttackableFrom(target, from) {
        to = from; do { to -= 16; if (to == target) return true; } while (Dagaz.AI.g_board[to] == 0);
     }
     if (pieceType == pieceCannon) {
-       to = from + 1; while (Dagaz.AI.g_board[to] == 0) { if (to == target) return true; to++; }
+       to = from + 1; while (Dagaz.AI.g_board[to] == 0) { if (to == target) return false; to++; }
        if (Dagaz.AI.g_board[to] & Dagaz.AI.PLAYERS_MASK) {
            to++; while (Dagaz.AI.g_board[to] == 0) { to++; }
            if (to == target) return true;
        }
-       to = from - 1; while (Dagaz.AI.g_board[to] == 0) { if (to == target) return true; to--; }
+       to = from - 1; while (Dagaz.AI.g_board[to] == 0) { if (to == target) return false; to--; }
        if (Dagaz.AI.g_board[to] & Dagaz.AI.PLAYERS_MASK) {
            to--; while (Dagaz.AI.g_board[to] == 0) { to--; }
            if (to == target) return true;
        }
-       to = from + 16; while (Dagaz.AI.g_board[to] == 0) { if (to == target) return true; to += 16; }
+       to = from + 16; while (Dagaz.AI.g_board[to] == 0) { if (to == target) return false; to += 16; }
        if (Dagaz.AI.g_board[to] & Dagaz.AI.PLAYERS_MASK) {
            to += 16; while (Dagaz.AI.g_board[to] == 0) { to += 16; }
            if (to == target) return true;
        }
-       to = from - 16; while (Dagaz.AI.g_board[to] == 0) { if (to == target) return true; to -= 16; }
+       to = from - 16; while (Dagaz.AI.g_board[to] == 0) { if (to == target) return false; to -= 16; }
        if (Dagaz.AI.g_board[to] & Dagaz.AI.PLAYERS_MASK) {
            to -= 16; while (Dagaz.AI.g_board[to] == 0) { to -= 16; }
            if (to == target) return true;

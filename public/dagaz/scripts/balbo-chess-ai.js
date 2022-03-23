@@ -5,6 +5,7 @@
 Dagaz.Model.WIDTH         = 11;
 Dagaz.Model.HEIGHT        = 10;
 
+Dagaz.AI.NOISE_FACTOR     = 5;
 Dagaz.AI.PIECE_MASK       = 0xF;
 Dagaz.AI.TYPE_MASK        = 0x7;
 Dagaz.AI.PLAYERS_MASK     = 0x18;
@@ -1130,7 +1131,6 @@ function GeneratePawnMoves(moveStack, from) {
     var inc = (color == Dagaz.AI.colorWhite) ? -16 : 16;
     // Quiet pawn moves
     var to = from + inc;
-    var delta = (8 - Dagaz.Model.HEIGHT) << 4;
     if (Dagaz.AI.g_board[to] == 0) {
 	MovePawnTo(moveStack, from, to, pieceEmpty);
 	// Check if we can do a 2 square jump
