@@ -399,58 +399,58 @@ function Mobility(color) {
       } else {
         if (_.indexOf(g_w, +from) >= 0) {
             to = from - 1;  while (Dagaz.AI.g_board[to] == 0) { to--; }  
-            if ((Dagaz.AI.g_board[to] & Dagaz.AI.PLAYERS_MASK) & (Dagaz.AI.g_board[to] & Dagaz.AI.TYPE_MASK != pieceCannon)) {
+            if ((Dagaz.AI.g_board[to] & Dagaz.AI.PLAYERS_MASK) & ((Dagaz.AI.g_board[to] & Dagaz.AI.TYPE_MASK) != pieceCannon)) {
                 to--; while (Dagaz.AI.g_board[to] == 0) { to--; mob++; }
-                if ((Dagaz.AI.g_board[to] & enemy) && (Dagaz.AI.g_board[to] & Dagaz.AI.TYPE_MASK != pieceCannon)) mob++;
+                if ((Dagaz.AI.g_board[to] & enemy) && ((Dagaz.AI.g_board[to] & Dagaz.AI.TYPE_MASK) != pieceCannon)) mob++;
             }
         }
         if (_.indexOf(g_e, +from) >= 0) {
             to = from + 1;  while (Dagaz.AI.g_board[to] == 0) { to++; }  
-            if ((Dagaz.AI.g_board[to] & Dagaz.AI.PLAYERS_MASK) & (Dagaz.AI.g_board[to] & Dagaz.AI.TYPE_MASK != pieceCannon)) {
+            if ((Dagaz.AI.g_board[to] & Dagaz.AI.PLAYERS_MASK) & ((Dagaz.AI.g_board[to] & Dagaz.AI.TYPE_MASK) != pieceCannon)) {
                 to++; while (Dagaz.AI.g_board[to] == 0) { to++; mob++; }
-                if ((Dagaz.AI.g_board[to] & enemy) && (Dagaz.AI.g_board[to] & Dagaz.AI.TYPE_MASK != pieceCannon)) mob++;
+                if ((Dagaz.AI.g_board[to] & enemy) && ((Dagaz.AI.g_board[to] & Dagaz.AI.TYPE_MASK) != pieceCannon)) mob++;
             }
         }
         if (_.indexOf(g_n, +from) >= 0) {
             to = from - 16;  while (Dagaz.AI.g_board[to] == 0) { to -= 16; }  
-            if ((Dagaz.AI.g_board[to] & Dagaz.AI.PLAYERS_MASK) & (Dagaz.AI.g_board[to] & Dagaz.AI.TYPE_MASK != pieceCannon)) {
+            if ((Dagaz.AI.g_board[to] & Dagaz.AI.PLAYERS_MASK) & ((Dagaz.AI.g_board[to] & Dagaz.AI.TYPE_MASK) != pieceCannon)) {
                 to -= 16; while (Dagaz.AI.g_board[to] == 0) { to -= 16; mob++; }
-                if ((Dagaz.AI.g_board[to] & enemy) && (Dagaz.AI.g_board[to] & Dagaz.AI.TYPE_MASK != pieceCannon)) mob++;
+                if ((Dagaz.AI.g_board[to] & enemy) && ((Dagaz.AI.g_board[to] & Dagaz.AI.TYPE_MASK) != pieceCannon)) mob++;
             }
         }
         if (_.indexOf(g_s, +from) >= 0) {
             to = from + 16;  while (Dagaz.AI.g_board[to] == 0) { to += 16; }  
-            if ((Dagaz.AI.g_board[to] & Dagaz.AI.PLAYERS_MASK) & (Dagaz.AI.g_board[to] & Dagaz.AI.TYPE_MASK != pieceCannon)) {
+            if ((Dagaz.AI.g_board[to] & Dagaz.AI.PLAYERS_MASK) & ((Dagaz.AI.g_board[to] & Dagaz.AI.TYPE_MASK) != pieceCannon)) {
                 to += 16; while (Dagaz.AI.g_board[to] == 0) { to += 16; mob++; }
-                if ((Dagaz.AI.g_board[to] & enemy) && (Dagaz.AI.g_board[to] & Dagaz.AI.TYPE_MASK != pieceCannon)) mob++;
+                if ((Dagaz.AI.g_board[to] & enemy) && ((Dagaz.AI.g_board[to] & Dagaz.AI.TYPE_MASK) != pieceCannon)) mob++;
             }
         }
         if (_.indexOf(g_nw, +from) >= 0) {
             to = from - 17;  while (Dagaz.AI.g_board[to] == 0) { to -= 17; }  
-            if ((Dagaz.AI.g_board[to] & Dagaz.AI.PLAYERS_MASK) & (Dagaz.AI.g_board[to] & Dagaz.AI.TYPE_MASK != pieceCannon)) {
+            if ((Dagaz.AI.g_board[to] & Dagaz.AI.PLAYERS_MASK) & ((Dagaz.AI.g_board[to] & Dagaz.AI.TYPE_MASK) != pieceCannon)) {
                 to -= 17; while (Dagaz.AI.g_board[to] == 0) { to -= 17; mob++; }
-                if ((Dagaz.AI.g_board[to] & enemy) && (Dagaz.AI.g_board[to] & Dagaz.AI.TYPE_MASK != pieceCannon)) mob++;
+                if ((Dagaz.AI.g_board[to] & enemy) && ((Dagaz.AI.g_board[to] & Dagaz.AI.TYPE_MASK) != pieceCannon)) mob++;
             }
         }
         if (_.indexOf(g_se, +from) >= 0) {
             to = from + 17;  while (Dagaz.AI.g_board[to] == 0) { to += 17; }  
-            if ((Dagaz.AI.g_board[to] & Dagaz.AI.PLAYERS_MASK) & (Dagaz.AI.g_board[to] & Dagaz.AI.TYPE_MASK != pieceCannon)) {
+            if ((Dagaz.AI.g_board[to] & Dagaz.AI.PLAYERS_MASK) & ((Dagaz.AI.g_board[to] & Dagaz.AI.TYPE_MASK) != pieceCannon)) {
                 to += 17; while (Dagaz.AI.g_board[to] == 0) { to += 17; mob++; }
-                if ((Dagaz.AI.g_board[to] & enemy) && (Dagaz.AI.g_board[to] & Dagaz.AI.TYPE_MASK != pieceCannon)) mob++;
+                if ((Dagaz.AI.g_board[to] & enemy) && ((Dagaz.AI.g_board[to] & Dagaz.AI.TYPE_MASK) != pieceCannon)) mob++;
             }
         }
         if (_.indexOf(g_ne, +from) >= 0) {
             to = from - 15;  while (Dagaz.AI.g_board[to] == 0) { to -= 15; }  
-            if ((Dagaz.AI.g_board[to] & Dagaz.AI.PLAYERS_MASK) & (Dagaz.AI.g_board[to] & Dagaz.AI.TYPE_MASK != pieceCannon)) {
+            if ((Dagaz.AI.g_board[to] & Dagaz.AI.PLAYERS_MASK) & ((Dagaz.AI.g_board[to] & Dagaz.AI.TYPE_MASK) != pieceCannon)) {
                 to -= 15; while (Dagaz.AI.g_board[to] == 0) { to -= 15; mob++; }
-                if ((Dagaz.AI.g_board[to] & enemy) && (Dagaz.AI.g_board[to] & Dagaz.AI.TYPE_MASK != pieceCannon)) mob++;
+                if ((Dagaz.AI.g_board[to] & enemy) && ((Dagaz.AI.g_board[to] & Dagaz.AI.TYPE_MASK) != pieceCannon)) mob++;
             }
         }
         if (_.indexOf(g_sw, +from) >= 0) {
             to = from + 15;  while (Dagaz.AI.g_board[to] == 0) { to += 15; }  
-            if ((Dagaz.AI.g_board[to] & Dagaz.AI.PLAYERS_MASK) & (Dagaz.AI.g_board[to] & Dagaz.AI.TYPE_MASK != pieceCannon)) {
+            if ((Dagaz.AI.g_board[to] & Dagaz.AI.PLAYERS_MASK) & ((Dagaz.AI.g_board[to] & Dagaz.AI.TYPE_MASK) != pieceCannon)) {
                 to += 15; while (Dagaz.AI.g_board[to] == 0) { to += 15; mob++; }
-                if ((Dagaz.AI.g_board[to] & enemy) && (Dagaz.AI.g_board[to] & Dagaz.AI.TYPE_MASK != pieceCannon)) mob++;
+                if ((Dagaz.AI.g_board[to] & enemy) && ((Dagaz.AI.g_board[to] & Dagaz.AI.TYPE_MASK) != pieceCannon)) mob++;
             }
         }
       }
@@ -1244,7 +1244,7 @@ function IsSquareAttackableFrom(target, from) {
       } else {
         if (_.indexOf(g_e, +from) >= 0) {
             to = from + 1; while (Dagaz.AI.g_board[to] == 0) { if (to == target) return false; to++; }
-            if ((Dagaz.AI.g_board[to] & Dagaz.AI.PLAYERS_MASK) && (Dagaz.AI.g_board[to] & Dagaz.AI.TYPE_MASK != pieceCannon)) {
+            if ((Dagaz.AI.g_board[to] & Dagaz.AI.PLAYERS_MASK) && ((Dagaz.AI.g_board[to] & Dagaz.AI.TYPE_MASK) != pieceCannon)) {
                 to++; while (Dagaz.AI.g_board[to] == 0) { if (to == target) return false; to++; }
                 if (Dagaz.AI.g_board[to] & Dagaz.AI.TYPE_MASK == pieceCannon) return false;
                 if (to == target) return true;
@@ -1252,7 +1252,7 @@ function IsSquareAttackableFrom(target, from) {
         }
         if (_.indexOf(g_w, +from) >= 0) {
             to = from - 1; while (Dagaz.AI.g_board[to] == 0) { if (to == target) return false; to--; }
-            if ((Dagaz.AI.g_board[to] & Dagaz.AI.PLAYERS_MASK) && (Dagaz.AI.g_board[to] & Dagaz.AI.TYPE_MASK != pieceCannon)) {
+            if ((Dagaz.AI.g_board[to] & Dagaz.AI.PLAYERS_MASK) && ((Dagaz.AI.g_board[to] & Dagaz.AI.TYPE_MASK) != pieceCannon)) {
                 to--; while (Dagaz.AI.g_board[to] == 0) { if (to == target) return false; to--; }
                 if (Dagaz.AI.g_board[to] & Dagaz.AI.TYPE_MASK == pieceCannon) return false;
                 if (to == target) return true;
@@ -1260,7 +1260,7 @@ function IsSquareAttackableFrom(target, from) {
         }
         if (_.indexOf(g_n, +from) >= 0) {
             to = from - 16; while (Dagaz.AI.g_board[to] == 0) { if (to == target) return false; to -= 16; }
-            if ((Dagaz.AI.g_board[to] & Dagaz.AI.PLAYERS_MASK) && (Dagaz.AI.g_board[to] & Dagaz.AI.TYPE_MASK != pieceCannon)) {
+            if ((Dagaz.AI.g_board[to] & Dagaz.AI.PLAYERS_MASK) && ((Dagaz.AI.g_board[to] & Dagaz.AI.TYPE_MASK) != pieceCannon)) {
                 to -= 16; while (Dagaz.AI.g_board[to] == 0) { if (to == target) return false; to -= 16; }
                 if (Dagaz.AI.g_board[to] & Dagaz.AI.TYPE_MASK == pieceCannon) return false;
                 if (to == target) return true;
@@ -1268,7 +1268,7 @@ function IsSquareAttackableFrom(target, from) {
         }
         if (_.indexOf(g_s, +from) >= 0) {
             to = from + 16; while (Dagaz.AI.g_board[to] == 0) { if (to == target) return false; to += 16; }
-            if ((Dagaz.AI.g_board[to] & Dagaz.AI.PLAYERS_MASK) && (Dagaz.AI.g_board[to] & Dagaz.AI.TYPE_MASK != pieceCannon)) {
+            if ((Dagaz.AI.g_board[to] & Dagaz.AI.PLAYERS_MASK) && ((Dagaz.AI.g_board[to] & Dagaz.AI.TYPE_MASK) != pieceCannon)) {
                 to += 16; while (Dagaz.AI.g_board[to] == 0) { if (to == target) return false; to += 16; }
                 if (Dagaz.AI.g_board[to] & Dagaz.AI.TYPE_MASK == pieceCannon) return false;
                 if (to == target) return true;
@@ -1276,7 +1276,7 @@ function IsSquareAttackableFrom(target, from) {
         }
         if (_.indexOf(g_nw, +from) >= 0) {
             to = from - 17; while (Dagaz.AI.g_board[to] == 0) { if (to == target) return false; to -= 17; }
-            if ((Dagaz.AI.g_board[to] & Dagaz.AI.PLAYERS_MASK) && (Dagaz.AI.g_board[to] & Dagaz.AI.TYPE_MASK != pieceCannon)) {
+            if ((Dagaz.AI.g_board[to] & Dagaz.AI.PLAYERS_MASK) && ((Dagaz.AI.g_board[to] & Dagaz.AI.TYPE_MASK) != pieceCannon)) {
                 to -= 17; while (Dagaz.AI.g_board[to] == 0) { if (to == target) return false; to -= 17; }
                 if (Dagaz.AI.g_board[to] & Dagaz.AI.TYPE_MASK == pieceCannon) return false;
                 if (to == target) return true;
@@ -1284,7 +1284,7 @@ function IsSquareAttackableFrom(target, from) {
         }
         if (_.indexOf(g_se, +from) >= 0) {
             to = from + 17; while (Dagaz.AI.g_board[to] == 0) { if (to == target) return false; to += 17; }
-            if ((Dagaz.AI.g_board[to] & Dagaz.AI.PLAYERS_MASK) && (Dagaz.AI.g_board[to] & Dagaz.AI.TYPE_MASK != pieceCannon)) {
+            if ((Dagaz.AI.g_board[to] & Dagaz.AI.PLAYERS_MASK) && ((Dagaz.AI.g_board[to] & Dagaz.AI.TYPE_MASK) != pieceCannon)) {
                 to += 17; while (Dagaz.AI.g_board[to] == 0) { if (to == target) return false; to += 17; }
                 if (Dagaz.AI.g_board[to] & Dagaz.AI.TYPE_MASK == pieceCannon) return false;
                 if (to == target) return true;
@@ -1292,7 +1292,7 @@ function IsSquareAttackableFrom(target, from) {
         }
         if (_.indexOf(g_ne, +from) >= 0) {
             to = from - 15; while (Dagaz.AI.g_board[to] == 0) { if (to == target) return false; to -= 15; }
-            if ((Dagaz.AI.g_board[to] & Dagaz.AI.PLAYERS_MASK) && (Dagaz.AI.g_board[to] & Dagaz.AI.TYPE_MASK != pieceCannon)) {
+            if ((Dagaz.AI.g_board[to] & Dagaz.AI.PLAYERS_MASK) && ((Dagaz.AI.g_board[to] & Dagaz.AI.TYPE_MASK) != pieceCannon)) {
                 to -= 15; while (Dagaz.AI.g_board[to] == 0) { if (to == target) return false; to -= 15; }
                 if (Dagaz.AI.g_board[to] & Dagaz.AI.TYPE_MASK == pieceCannon) return false;
                 if (to == target) return true;
@@ -1300,7 +1300,7 @@ function IsSquareAttackableFrom(target, from) {
         }
         if (_.indexOf(g_sw, +from) >= 0) {
             to = from + 15; while (Dagaz.AI.g_board[to] == 0) { if (to == target) return false; to += 15; }
-            if ((Dagaz.AI.g_board[to] & Dagaz.AI.PLAYERS_MASK) && (Dagaz.AI.g_board[to] & Dagaz.AI.TYPE_MASK != pieceCannon)) {
+            if ((Dagaz.AI.g_board[to] & Dagaz.AI.PLAYERS_MASK) && ((Dagaz.AI.g_board[to] & Dagaz.AI.TYPE_MASK) != pieceCannon)) {
                 to += 15; while (Dagaz.AI.g_board[to] == 0) { if (to == target) return false; to += 15; }
                 if (Dagaz.AI.g_board[to] & Dagaz.AI.TYPE_MASK == pieceCannon) return false;
                 if (to == target) return true;
@@ -1766,49 +1766,49 @@ Dagaz.AI.GenerateAllMoves = function(moveStack) {
       } else {
         if (_.indexOf(g_w, +from) >= 0) {
             to = from; do { to--; } while (Dagaz.AI.g_board[to] == 0);
-            if ((Dagaz.AI.g_board[to] & Dagaz.AI.PLAYERS_MASK) && (Dagaz.AI.g_board[to] & Dagaz.AI.TYPE_MASK != pieceCannon)) {
+            if ((Dagaz.AI.g_board[to] & Dagaz.AI.PLAYERS_MASK) && ((Dagaz.AI.g_board[to] & Dagaz.AI.TYPE_MASK) != pieceCannon)) {
                 to--; while (Dagaz.AI.g_board[to] == 0) { moveStack[moveStack.length] = GenerateMove(from, to); to--; }
             }
         }
         if (_.indexOf(g_e, +from) >= 0) {
             to = from; do { to++; } while (Dagaz.AI.g_board[to] == 0);
-            if ((Dagaz.AI.g_board[to] & Dagaz.AI.PLAYERS_MASK) && (Dagaz.AI.g_board[to] & Dagaz.AI.TYPE_MASK != pieceCannon)) {
+            if ((Dagaz.AI.g_board[to] & Dagaz.AI.PLAYERS_MASK) && ((Dagaz.AI.g_board[to] & Dagaz.AI.TYPE_MASK) != pieceCannon)) {
                 to++; while (Dagaz.AI.g_board[to] == 0) { moveStack[moveStack.length] = GenerateMove(from, to); to++; }
             }
         }
         if (_.indexOf(g_n, +from) >= 0) {
             to = from; do { to -= 16; } while (Dagaz.AI.g_board[to] == 0);
-            if ((Dagaz.AI.g_board[to] & Dagaz.AI.PLAYERS_MASK) && (Dagaz.AI.g_board[to] & Dagaz.AI.TYPE_MASK != pieceCannon)) {
+            if ((Dagaz.AI.g_board[to] & Dagaz.AI.PLAYERS_MASK) && ((Dagaz.AI.g_board[to] & Dagaz.AI.TYPE_MASK) != pieceCannon)) {
                 to -= 16; while (Dagaz.AI.g_board[to] == 0) { moveStack[moveStack.length] = GenerateMove(from, to); to -= 16; }
             }
         }
         if (_.indexOf(g_s, +from) >= 0) {
             to = from; do { to += 16; } while (Dagaz.AI.g_board[to] == 0);
-            if ((Dagaz.AI.g_board[to] & Dagaz.AI.PLAYERS_MASK) && (Dagaz.AI.g_board[to] & Dagaz.AI.TYPE_MASK != pieceCannon)) {
+            if ((Dagaz.AI.g_board[to] & Dagaz.AI.PLAYERS_MASK) && ((Dagaz.AI.g_board[to] & Dagaz.AI.TYPE_MASK) != pieceCannon)) {
                 to += 16; while (Dagaz.AI.g_board[to] == 0) { moveStack[moveStack.length] = GenerateMove(from, to); to += 16; }
             }
         }
         if (_.indexOf(g_nw, +from) >= 0) {
             to = from; do { to -= 17; } while (Dagaz.AI.g_board[to] == 0);
-            if ((Dagaz.AI.g_board[to] & Dagaz.AI.PLAYERS_MASK) && (Dagaz.AI.g_board[to] & Dagaz.AI.TYPE_MASK != pieceCannon)) {
+            if ((Dagaz.AI.g_board[to] & Dagaz.AI.PLAYERS_MASK) && ((Dagaz.AI.g_board[to] & Dagaz.AI.TYPE_MASK) != pieceCannon)) {
                 to -= 17; while (Dagaz.AI.g_board[to] == 0) { moveStack[moveStack.length] = GenerateMove(from, to); to -= 17; }
             }
         }
         if (_.indexOf(g_se, +from) >= 0) {
             to = from; do { to += 17; } while (Dagaz.AI.g_board[to] == 0);
-            if ((Dagaz.AI.g_board[to] & Dagaz.AI.PLAYERS_MASK) && (Dagaz.AI.g_board[to] & Dagaz.AI.TYPE_MASK != pieceCannon)) {
+            if ((Dagaz.AI.g_board[to] & Dagaz.AI.PLAYERS_MASK) && ((Dagaz.AI.g_board[to] & Dagaz.AI.TYPE_MASK) != pieceCannon)) {
                 to += 17; while (Dagaz.AI.g_board[to] == 0) { moveStack[moveStack.length] = GenerateMove(from, to); to += 17; }
             }
         }
         if (_.indexOf(g_ne, +from) >= 0) {
             to = from; do { to -= 15; } while (Dagaz.AI.g_board[to] == 0);
-            if ((Dagaz.AI.g_board[to] & Dagaz.AI.PLAYERS_MASK) && (Dagaz.AI.g_board[to] & Dagaz.AI.TYPE_MASK != pieceCannon)) {
+            if ((Dagaz.AI.g_board[to] & Dagaz.AI.PLAYERS_MASK) && ((Dagaz.AI.g_board[to] & Dagaz.AI.TYPE_MASK) != pieceCannon)) {
                 to -= 15; while (Dagaz.AI.g_board[to] == 0) { moveStack[moveStack.length] = GenerateMove(from, to); to -= 15; }
             }
         }
         if (_.indexOf(g_sw, +from) >= 0) {
             to = from; do { to += 15; } while (Dagaz.AI.g_board[to] == 0);
-            if ((Dagaz.AI.g_board[to] & Dagaz.AI.PLAYERS_MASK) && (Dagaz.AI.g_board[to] & Dagaz.AI.TYPE_MASK != pieceCannon)) {
+            if ((Dagaz.AI.g_board[to] & Dagaz.AI.PLAYERS_MASK) && ((Dagaz.AI.g_board[to] & Dagaz.AI.TYPE_MASK) != pieceCannon)) {
                 to += 15; while (Dagaz.AI.g_board[to] == 0) { moveStack[moveStack.length] = GenerateMove(from, to); to += 15; }
             }
         }
@@ -2288,58 +2288,58 @@ Dagaz.AI.GenerateCaptureMoves = function(moveStack) {
       } else {
         if (_.indexOf(g_w, +from) >= 0) {
             to = from; do { to--; } while (Dagaz.AI.g_board[to] == 0);
-            if ((Dagaz.AI.g_board[to] & Dagaz.AI.PLAYERS_MASK) && (Dagaz.AI.g_board[to] & Dagaz.AI.TYPE_MASK != pieceCannon)) {
+            if ((Dagaz.AI.g_board[to] & Dagaz.AI.PLAYERS_MASK) && ((Dagaz.AI.g_board[to] & Dagaz.AI.TYPE_MASK) != pieceCannon)) {
                 to--; while (Dagaz.AI.g_board[to] == 0) { to--; }
-                if ((Dagaz.AI.g_board[to] & enemy) && (Dagaz.AI.g_board[to] & Dagaz.AI.TYPE_MASK != pieceCannon)) moveStack[moveStack.length] = GenerateMove(from, to);
+                if ((Dagaz.AI.g_board[to] & enemy) && ((Dagaz.AI.g_board[to] & Dagaz.AI.TYPE_MASK) != pieceCannon)) moveStack[moveStack.length] = GenerateMove(from, to);
             }
         }
         if (_.indexOf(g_e, +from) >= 0) {
             to = from; do { to++; } while (Dagaz.AI.g_board[to] == 0);
-            if ((Dagaz.AI.g_board[to] & Dagaz.AI.PLAYERS_MASK) && (Dagaz.AI.g_board[to] & Dagaz.AI.TYPE_MASK != pieceCannon)) {
+            if ((Dagaz.AI.g_board[to] & Dagaz.AI.PLAYERS_MASK) && ((Dagaz.AI.g_board[to] & Dagaz.AI.TYPE_MASK) != pieceCannon)) {
                 to++; while (Dagaz.AI.g_board[to] == 0) { to++; }
-                if ((Dagaz.AI.g_board[to] & enemy) && (Dagaz.AI.g_board[to] & Dagaz.AI.TYPE_MASK != pieceCannon)) moveStack[moveStack.length] = GenerateMove(from, to);
+                if ((Dagaz.AI.g_board[to] & enemy) && ((Dagaz.AI.g_board[to] & Dagaz.AI.TYPE_MASK) != pieceCannon)) moveStack[moveStack.length] = GenerateMove(from, to);
             }
         }
         if (_.indexOf(g_n, +from) >= 0) {
             to = from; do { to -= 16; } while (Dagaz.AI.g_board[to] == 0);
-            if ((Dagaz.AI.g_board[to] & Dagaz.AI.PLAYERS_MASK) && (Dagaz.AI.g_board[to] & Dagaz.AI.TYPE_MASK != pieceCannon)) {
+            if ((Dagaz.AI.g_board[to] & Dagaz.AI.PLAYERS_MASK) && ((Dagaz.AI.g_board[to] & Dagaz.AI.TYPE_MASK) != pieceCannon)) {
                 to -= 16; while (Dagaz.AI.g_board[to] == 0) { to -= 16; }
-                if ((Dagaz.AI.g_board[to] & enemy) && (Dagaz.AI.g_board[to] & Dagaz.AI.TYPE_MASK != pieceCannon)) moveStack[moveStack.length] = GenerateMove(from, to);
+                if ((Dagaz.AI.g_board[to] & enemy) && ((Dagaz.AI.g_board[to] & Dagaz.AI.TYPE_MASK) != pieceCannon)) moveStack[moveStack.length] = GenerateMove(from, to);
             }
         }
         if (_.indexOf(g_s, +from) >= 0) {
             to = from; do { to += 16; } while (Dagaz.AI.g_board[to] == 0);
-            if ((Dagaz.AI.g_board[to] & Dagaz.AI.PLAYERS_MASK) && (Dagaz.AI.g_board[to] & Dagaz.AI.TYPE_MASK != pieceCannon)) {
+            if ((Dagaz.AI.g_board[to] & Dagaz.AI.PLAYERS_MASK) && ((Dagaz.AI.g_board[to] & Dagaz.AI.TYPE_MASK) != pieceCannon)) {
                 to += 16; while (Dagaz.AI.g_board[to] == 0) { to += 16; }
-                if ((Dagaz.AI.g_board[to] & enemy) && (Dagaz.AI.g_board[to] & Dagaz.AI.TYPE_MASK != pieceCannon)) moveStack[moveStack.length] = GenerateMove(from, to);
+                if ((Dagaz.AI.g_board[to] & enemy) && ((Dagaz.AI.g_board[to] & Dagaz.AI.TYPE_MASK) != pieceCannon)) moveStack[moveStack.length] = GenerateMove(from, to);
             }
         }
         if (_.indexOf(g_nw, +from) >= 0) {
             to = from; do { to -= 17; } while (Dagaz.AI.g_board[to] == 0);
-            if ((Dagaz.AI.g_board[to] & Dagaz.AI.PLAYERS_MASK) && (Dagaz.AI.g_board[to] & Dagaz.AI.TYPE_MASK != pieceCannon)) {
+            if ((Dagaz.AI.g_board[to] & Dagaz.AI.PLAYERS_MASK) && ((Dagaz.AI.g_board[to] & Dagaz.AI.TYPE_MASK) != pieceCannon)) {
                 to -= 17; while (Dagaz.AI.g_board[to] == 0) { to -= 17; }
-                if ((Dagaz.AI.g_board[to] & enemy) && (Dagaz.AI.g_board[to] & Dagaz.AI.TYPE_MASK != pieceCannon)) moveStack[moveStack.length] = GenerateMove(from, to);
+                if ((Dagaz.AI.g_board[to] & enemy) && ((Dagaz.AI.g_board[to] & Dagaz.AI.TYPE_MASK) != pieceCannon)) moveStack[moveStack.length] = GenerateMove(from, to);
             }
         }
         if (_.indexOf(g_se, +from) >= 0) {
             to = from; do { to += 17; } while (Dagaz.AI.g_board[to] == 0);
-            if ((Dagaz.AI.g_board[to] & Dagaz.AI.PLAYERS_MASK) && (Dagaz.AI.g_board[to] & Dagaz.AI.TYPE_MASK != pieceCannon)) {
+            if ((Dagaz.AI.g_board[to] & Dagaz.AI.PLAYERS_MASK) && ((Dagaz.AI.g_board[to] & Dagaz.AI.TYPE_MASK) != pieceCannon)) {
                 to += 17; while (Dagaz.AI.g_board[to] == 0) { to += 17; }
-                if ((Dagaz.AI.g_board[to] & enemy) && (Dagaz.AI.g_board[to] & Dagaz.AI.TYPE_MASK != pieceCannon)) moveStack[moveStack.length] = GenerateMove(from, to);
+                if ((Dagaz.AI.g_board[to] & enemy) && ((Dagaz.AI.g_board[to] & Dagaz.AI.TYPE_MASK) != pieceCannon)) moveStack[moveStack.length] = GenerateMove(from, to);
             }
         }
         if (_.indexOf(g_ne, +from) >= 0) {
             to = from; do { to -= 15; } while (Dagaz.AI.g_board[to] == 0);
-            if ((Dagaz.AI.g_board[to] & Dagaz.AI.PLAYERS_MASK) && (Dagaz.AI.g_board[to] & Dagaz.AI.TYPE_MASK != pieceCannon)) {
+            if ((Dagaz.AI.g_board[to] & Dagaz.AI.PLAYERS_MASK) && ((Dagaz.AI.g_board[to] & Dagaz.AI.TYPE_MASK) != pieceCannon)) {
                 to -= 15; while (Dagaz.AI.g_board[to] == 0) { to -= 15; }
-                if ((Dagaz.AI.g_board[to] & enemy) && (Dagaz.AI.g_board[to] & Dagaz.AI.TYPE_MASK != pieceCannon)) moveStack[moveStack.length] = GenerateMove(from, to);
+                if ((Dagaz.AI.g_board[to] & enemy) && ((Dagaz.AI.g_board[to] & Dagaz.AI.TYPE_MASK) != pieceCannon)) moveStack[moveStack.length] = GenerateMove(from, to);
             }
         }
         if (_.indexOf(g_sw, +from) >= 0) {
             to = from; do { to += 15; } while (Dagaz.AI.g_board[to] == 0);
-            if ((Dagaz.AI.g_board[to] & Dagaz.AI.PLAYERS_MASK) && (Dagaz.AI.g_board[to] & Dagaz.AI.TYPE_MASK != pieceCannon)) {
+            if ((Dagaz.AI.g_board[to] & Dagaz.AI.PLAYERS_MASK) && ((Dagaz.AI.g_board[to] & Dagaz.AI.TYPE_MASK) != pieceCannon)) {
                 to += 15; while (Dagaz.AI.g_board[to] == 0) { to += 15; }
-                if ((Dagaz.AI.g_board[to] & enemy) && (Dagaz.AI.g_board[to] & Dagaz.AI.TYPE_MASK != pieceCannon)) moveStack[moveStack.length] = GenerateMove(from, to);
+                if ((Dagaz.AI.g_board[to] & enemy) && ((Dagaz.AI.g_board[to] & Dagaz.AI.TYPE_MASK) != pieceCannon)) moveStack[moveStack.length] = GenerateMove(from, to);
             }
         }
       }
