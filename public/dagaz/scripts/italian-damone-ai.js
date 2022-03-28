@@ -3,6 +3,7 @@
 (function() {
 
 Dagaz.AI.NOISE_FACTOR     = 5;
+Dagaz.AI.g_timeout        = 7000;
 
 var pieceEmpty            = 0x00;
 var pieceMan              = 0x01;
@@ -411,27 +412,14 @@ function CheckGoal() {
   return pieceType >= pieceKingP;
 }
 
-function IsPrefix(a, b) {
-  if (a.length >= b.length) return false;
-  for (var i = 0; i < a.length; i++) {
-       if (a[i] != b[i]) return false;
-  }
-  return true;
-}
-
 function CheckInvariant(moves) {
+  var mx = 0;
+  for (var i = 0; i < moves.length; i++) {
+      if (mx < moves[i].length) mx = moves[i].length;
+  }
   var result = [];
   for (var i = 0; i < moves.length; i++) {
-       var f = true;
-       for (var j = 0; j < moves.length; j++) {
-            if ((i != j) && IsPrefix(moves[i], moves[j])) {
-                f = false;
-                break;
-            }
-       }
-       if (f) {
-           result.push(moves[i]);
-       }
+      if (moves[i].length == mx) result.push(moves[i]);
   }
   return result;
 }
