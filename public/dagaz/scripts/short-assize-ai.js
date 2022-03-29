@@ -674,20 +674,6 @@ Dagaz.AI.MakeMove = function(move){
     }
     Dagaz.AI.g_board[from] = pieceEmpty;
 
-/*  if (flags & moveflagSplit) {
-        var newPiece = piece & (~Dagaz.AI.TYPE_MASK);
-        newPiece |= pieceQueen;
-        var promoteType = newPiece & Dagaz.AI.PIECE_MASK;
-
-        Dagaz.AI.g_hashKeyLow ^= Dagaz.AI.g_zobristLow[from][newPiece & Dagaz.AI.PIECE_MASK];
-        Dagaz.AI.g_hashKeyHigh ^= Dagaz.AI.g_zobristHigh[from][newPiece & Dagaz.AI.PIECE_MASK];
-        Dagaz.AI.g_baseEval += pieceSquareAdj[newPiece & Dagaz.AI.TYPE_MASK][me == 0 ? flipTable[from] : from];
-
-        Dagaz.AI.g_pieceIndex[from] = Dagaz.AI.g_pieceCount[promoteType];
-        Dagaz.AI.g_pieceList[(promoteType << Dagaz.AI.COUNTER_SIZE) | Dagaz.AI.g_pieceIndex[from]] = from;
-        Dagaz.AI.g_pieceCount[promoteType]++;
-    }*/
-
     Dagaz.AI.g_toMove = otherColor;
     Dagaz.AI.g_baseEval = -Dagaz.AI.g_baseEval;
     
@@ -760,20 +746,23 @@ Dagaz.AI.UnmakeMove = function(move){
     var captured = g_moveUndoStack[Dagaz.AI.g_moveCount].captured;
     var to = (move >> 8) & 0xFF;
     var from = move & 0xFF;
+
+    if (flags & moveflagSplit) {
+        var promoteType = Dagaz.AI.g_board[from] & Dagaz.AI.PIECE_MASK;
+
+        Dagaz.AI.g_pieceCount[promoteType]--;
+        var lastPromoteSquare = Dagaz.AI.g_pieceList[(promoteType << Dagaz.AI.COUNTER_SIZE) | Dagaz.AI.g_pieceCount[promoteType]];
+        Dagaz.AI.g_pieceIndex[lastPromoteSquare] = Dagaz.AI.g_pieceIndex[to];
+        Dagaz.AI.g_pieceList[(promoteType << Dagaz.AI.COUNTER_SIZE) | Dagaz.AI.g_pieceIndex[lastPromoteSquare]] = lastPromoteSquare;
+        Dagaz.AI.g_pieceList[(promoteType << Dagaz.AI.COUNTER_SIZE) | Dagaz.AI.g_pieceCount[promoteType]] = 0;
+    }
     
     var piece = Dagaz.AI.g_board[to];
-    
-/*  if (flags & moveflagSplit) {
-        piece = (Dagaz.AI.g_board[to] & (~Dagaz.AI.TYPE_MASK)) | pieceQueen;
-        var pawnType = piece & Dagaz.AI.PIECE_MASK;
+    if (flags & (moveflagPromotion | moveflagSplit)) {
+        piece = (Dagaz.AI.g_board[to] & (~Dagaz.AI.TYPE_MASK));
+        if (flags & moveflagSplit) piece |= piecePair;
+            else piece |= piecePawn;
 
-        Dagaz.AI.g_pieceCount[pawnType]--;
-        var lastPawnSquare = Dagaz.AI.g_pieceList[(pawnType << Dagaz.AI.COUNTER_SIZE) | Dagaz.AI.g_pieceCount[pawnType]];
-        Dagaz.AI.g_pieceIndex[lastPawnSquare] = Dagaz.AI.g_pieceIndex[from];
-        Dagaz.AI.g_pieceList[(pawnType << Dagaz.AI.COUNTER_SIZE) | Dagaz.AI.g_pieceIndex[lastPawnSquare]] = lastPawnSquare;
-        Dagaz.AI.g_pieceList[(pawnType << Dagaz.AI.COUNTER_SIZE) | Dagaz.AI.g_pieceCount[pawnType]] = 0;
-
-        piece = (Dagaz.AI.g_board[to] & (~Dagaz.AI.TYPE_MASK)) | piecePair;
         Dagaz.AI.g_board[from] = piece;
 
         var pawnType = Dagaz.AI.g_board[from] & Dagaz.AI.PIECE_MASK;
@@ -784,27 +773,11 @@ Dagaz.AI.UnmakeMove = function(move){
         Dagaz.AI.g_pieceIndex[lastPromoteSquare] = Dagaz.AI.g_pieceIndex[to];
         Dagaz.AI.g_pieceList[(promoteType << Dagaz.AI.COUNTER_SIZE) | Dagaz.AI.g_pieceIndex[lastPromoteSquare]] = lastPromoteSquare;
         Dagaz.AI.g_pieceList[(promoteType << Dagaz.AI.COUNTER_SIZE) | Dagaz.AI.g_pieceCount[promoteType]] = 0;
+
         Dagaz.AI.g_pieceIndex[to] = Dagaz.AI.g_pieceCount[pawnType];
         Dagaz.AI.g_pieceList[(pawnType << Dagaz.AI.COUNTER_SIZE) | Dagaz.AI.g_pieceIndex[to]] = to;
         Dagaz.AI.g_pieceCount[pawnType]++;
-
-    } else*/ if (flags & moveflagPromotion) {
-        piece = (Dagaz.AI.g_board[to] & (~Dagaz.AI.TYPE_MASK)) | piecePawn;
-        Dagaz.AI.g_board[from] = piece;
-
-        var pawnType = Dagaz.AI.g_board[from] & Dagaz.AI.PIECE_MASK;
-        var promoteType = Dagaz.AI.g_board[to] & Dagaz.AI.PIECE_MASK;
-
-        Dagaz.AI.g_pieceCount[promoteType]--;
-        var lastPromoteSquare = Dagaz.AI.g_pieceList[(promoteType << Dagaz.AI.COUNTER_SIZE) | Dagaz.AI.g_pieceCount[promoteType]];
-        Dagaz.AI.g_pieceIndex[lastPromoteSquare] = Dagaz.AI.g_pieceIndex[to];
-        Dagaz.AI.g_pieceList[(promoteType << Dagaz.AI.COUNTER_SIZE) | Dagaz.AI.g_pieceIndex[lastPromoteSquare]] = lastPromoteSquare;
-        Dagaz.AI.g_pieceList[(promoteType << Dagaz.AI.COUNTER_SIZE) | Dagaz.AI.g_pieceCount[promoteType]] = 0;
-        Dagaz.AI.g_pieceIndex[to] = Dagaz.AI.g_pieceCount[pawnType];
-        Dagaz.AI.g_pieceList[(pawnType << Dagaz.AI.COUNTER_SIZE) | Dagaz.AI.g_pieceIndex[to]] = to;
-        Dagaz.AI.g_pieceCount[pawnType]++;
-    }
-    else {
+    } else {
         Dagaz.AI.g_board[from] = Dagaz.AI.g_board[to];
     }
 

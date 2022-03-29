@@ -147,6 +147,11 @@ Dagaz.Model.setup = function(board, init) {
       }
       var turn = getTurn(init);
       if (turn) {
+          if (design.turns.length > 10) {
+              if (turn < 16) turn = +turn + 8;
+          } else {
+              if (turn > 9) turn = +turn - 8;
+          }
           board.turn   = +turn;
           board.player = design.currPlayer(board.turn);
       }
