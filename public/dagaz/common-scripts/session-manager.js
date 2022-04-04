@@ -7,6 +7,26 @@ var branch    = 1;
 var isAuto    = true;
 var isStarted = false;
 
+Dagaz.Model.moveToString = function(move) {
+  var r = "";
+  for (var i = 0; i < move.actions.length; i++) {
+       if (move.actions[i][1] !== null) {
+           if (r != "") {
+               r = r + "-";
+           }
+           if (move.actions[i][0] !== null) {
+               r = r + Dagaz.Model.posToString(move.actions[i][0][0]);
+           } else if (Dagaz.Model.DETAIL_MOVE_DESCRIPTION && (move.actions[i][2] !== null)) {
+               r = r + move.actions[i][2][0].toString() + " ";
+           }
+           if (move.actions[i][1] !== null) {
+               r = r + Dagaz.Model.posToString(move.actions[i][1][0]);
+           }
+       }
+  }
+  return r;
+}
+
 Dagaz.Controller.init = function(setup, player) {
   root = {
       parent: null,

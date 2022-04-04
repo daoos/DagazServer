@@ -2,6 +2,8 @@
 
 (function() {
 
+Dagaz.AI.MIN_TURN         = 8;
+
 Dagaz.AI.PIECE_MASK       = 0xF;
 Dagaz.AI.TYPE_MASK        = 0x7;
 Dagaz.AI.PLAYERS_MASK     = 0x18;

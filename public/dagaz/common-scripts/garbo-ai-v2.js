@@ -3,6 +3,7 @@
 (function() {
 
 Dagaz.AI.NOISE_FACTOR    = 0;
+Dagaz.AI.MIN_TURN        = 0;
 Dagaz.AI.Q_SEARCH_LIMIT  = -20;
 Dagaz.AI.ALL_CUT_LIMIT   = 100;
 Dagaz.AI.CHECK_EXT_LIMIT = 100;
@@ -794,7 +795,7 @@ Ai.prototype.getMove = function(ctx) {
   }
   var setup = Dagaz.Model.getSetup(ctx.design, ctx.board);
   var result = setup.match(/[?&]setup=(.*)/);
-  if (result) {
+  if (result && (ctx.board.turn >= Dagaz.AI.MIN_TURN)) {
       inProgress = true;
       var fen = result[1];
       setTimeout(function () {

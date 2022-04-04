@@ -12,7 +12,10 @@ var getName = function() {
   }
 }
 
+var moveToString = Dagaz.Model.moveToString;
+
 Dagaz.Model.moveToString = function(move) {
+  if (!move.isSimpleMove()) return moveToString(move);
   var r = "";
   _.each(move.actions, function(a) {
       if (a[1] === null) return;
@@ -177,7 +180,7 @@ Dagaz.Model.getSetup = function(design, board) {
   if (c > 0) {
       str += c;
   }
-  if (board.turn == 0) {
+  if (design.turns[board.turn].player == 1) {
       str += " w";
   } else {
       str += " b";
