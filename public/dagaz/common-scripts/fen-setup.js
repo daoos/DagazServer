@@ -218,6 +218,10 @@ Dagaz.Model.getSetup = function(design, board) {
        k++;
        var piece = board.getPiece(pos);
        if (piece === null) {
+           if (c > 8) {
+               str += c;
+               c = 0;
+           }
            c++;
        } else {
            if (c > 0) {

@@ -1,6 +1,9 @@
 Dagaz.Controller.persistense = "none";
 Dagaz.Model.DETAIL_MOVE_DESCRIPTION = true;
 
+Dagaz.Model.WIDTH  = 9;
+Dagaz.Model.HEIGHT = 10;
+
 ZRF = {
     JUMP:          0,
     IF:            1,
@@ -31,7 +34,7 @@ Dagaz.Model.BuildDesign = function(design) {
     design.checkVersion("show-hints", "false");
     design.checkVersion("show-drops", "true");
     design.checkVersion("show-captures", "false");
-    design.checkVersion("pass-turn", "forced");
+//  design.checkVersion("pass-turn", "forced");
 
     design.addDirection("w");
     design.addDirection("e");
