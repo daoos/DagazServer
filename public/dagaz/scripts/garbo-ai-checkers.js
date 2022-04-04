@@ -82,8 +82,6 @@ var g_hashMask = g_hashSize - 1;
 var g_hashTable;
 var g_killers;
 
-Dagaz.AI.historyTable = new Array(32);
-
 var hashflagAlpha = 1;
 var hashflagBeta  = 2;
 var hashflagExact = 3;
@@ -304,20 +302,6 @@ function AlphaBeta(ply, depth, alpha, beta) {
 
         if (value > realEval) {
             if (value >= beta) {
-                var histTo = (currentMove >> 8) & 0xFF;
-                if (Dagaz.AI.g_board[histTo] == 0) {
-                    var histPiece = Dagaz.AI.g_board[currentMove & 0xFF] & Dagaz.AI.PIECE_MASK;
-                    Dagaz.AI.historyTable[histPiece][histTo] += ply * ply;
-                    if (Dagaz.AI.historyTable[histPiece][histTo] > 32767) {
-                        Dagaz.AI.historyTable[histPiece][histTo] >>= 1;
-                    }
-
-/*                  if (g_killers[depth][0] != currentMove) {
-                        g_killers[depth][1] = g_killers[depth][0];
-                        g_killers[depth][0] = currentMove;
-                    }*/
-                }
-
                 StoreHash(value, hashflagBeta, ply, currentMove, depth);
                 return value;
             }
@@ -347,12 +331,6 @@ Dagaz.AI.ResetGame = function() {
     }
 
     g_hashTable = new Array(g_hashSize);
-
-    for (var i = 0; i < 32; i++) {
-        Dagaz.AI.historyTable[i] = new Array(256);
-        for (var j = 0; j < 256; j++)
-            Dagaz.AI.historyTable[i][j] = 0;
-    }
 
     var mt = new Dagaz.AI.MT(0x1badf00d);
 
@@ -552,8 +530,6 @@ Dagaz.AI.ScoreMove = function(move) {
          if (captured != pieceEmpty) {
              var pieceType = piece & Dagaz.AI.TYPE_MASK;
              score += (captured << 5) - pieceType;
-         } else {
-             score += Dagaz.AI.historyTable[piece & Dagaz.AI.PIECE_MASK][to];
          }
          if (move[i] & moveflagPromotion) {
              score += 1000;
