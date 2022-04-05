@@ -145,7 +145,7 @@ function Search(finishMoveCallback, maxPly, finishPlyCallback, moves) {
 function QSearch(alpha, beta, ply) {
     g_qNodeCount++;
 
-    var realEval = Dagaz.AI.g_inCheck ? (minEval + 1) : Dagaz.AI.Evaluate();
+    var realEval = Dagaz.AI.g_inCheck ? (minEval + 10) : Dagaz.AI.Evaluate();
     
     if (realEval >= beta) 
         return realEval;
@@ -386,7 +386,7 @@ function AllCutNode(ply, depth, beta, allowNull) {
     if (IsRepDraw()) return 0;
 
     // Mate distance pruning
-    if (minEval + depth >= beta)
+    if (minEval + depth * 10 >= beta)
        return beta;
 
     if (maxEval - (depth + 1) < beta)
@@ -457,7 +457,7 @@ function AllCutNode(ply, depth, beta, allowNull) {
     }
 
     var moveMade = false;
-    var realEval = minEval - 1;
+    var realEval = minEval - 10;
     var inCheck = Dagaz.AI.g_inCheck;
 
     var movePicker = new MovePicker(hashMove, depth, g_killers[depth][0], g_killers[depth][1]);
@@ -531,7 +531,7 @@ function AllCutNode(ply, depth, beta, allowNull) {
         // If we have no valid moves it's either stalemate or checkmate
         if (Dagaz.AI.g_inCheck || Dagaz.AI.STALMATED)
             // Checkmate.
-            return minEval + depth;
+            return minEval + depth * 10;
         else 
             // Stalemate
             return 0;
@@ -552,8 +552,8 @@ function AlphaBeta(ply, depth, alpha, beta, moves) {
 
     // Mate distance pruning
     var oldAlpha = alpha;
-    alpha = alpha < minEval + depth ? alpha : minEval + depth;
-    beta = beta > maxEval - (depth + 1) ? beta : maxEval - (depth + 1);
+    alpha = alpha < minEval + depth * 10 ? alpha : minEval + depth * 10;
+    beta = beta > maxEval - (depth + 1) * 10 ? beta : maxEval - (depth + 1) * 10;
     if (alpha >= beta)
        return alpha;
 
@@ -645,7 +645,7 @@ function AlphaBeta(ply, depth, alpha, beta, moves) {
         // If we have no valid moves it's either stalemate or checkmate
         if (Dagaz.AI.g_inCheck || Dagaz.AI.STALMATED) 
             // Checkmate.
-            return minEval + depth;
+            return minEval + depth * 10;
         else 
             // Stalemate
             return 0;

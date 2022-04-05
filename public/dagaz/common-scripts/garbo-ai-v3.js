@@ -54,7 +54,7 @@ function Ai(parent) {
 var findBot = Dagaz.AI.findBot;
 
 Dagaz.AI.findBot = function(type, params, parent) {
-  if ((type == "external") || (type == "smart") /*|| (type == "1")*/ || (type == "2")) {
+  if ((type == "external") || (type == "smart") || (type == "1") || (type == "2")) {
       return new Ai(parent);
   } else {
       return findBot(type, params, parent);
@@ -211,8 +211,8 @@ function AlphaBeta(ply, depth, alpha, beta) {
 
     // Mate distance pruning
     var oldAlpha = alpha;
-    alpha = alpha < minEval + depth ? alpha : minEval + depth;
-    beta = beta > maxEval - (depth + 1) ? beta : maxEval - (depth + 1);
+    alpha = alpha < minEval + depth * 10 ? alpha : minEval + depth * 10;
+    beta = beta > maxEval - (depth + 1) * 10 ? beta : maxEval - (depth + 1) * 10;
     if (alpha >= beta)
        return alpha;
 
@@ -271,7 +271,7 @@ function AlphaBeta(ply, depth, alpha, beta) {
 
     if (!moveMade) {
         // If we have no valid moves it's either stalemate or checkmate
-        return minEval + depth;
+        return minEval + depth * 10;
     }
 
     StoreHash(realEval, hashFlag, ply, hashMove, depth);

@@ -45,7 +45,7 @@ var g_moveUndoStack = new Array();
 // Evaulation variables
 var g_mobUnit;
 
-var materialTable = [0, 0, 800, 800, 3350, 3350, 3450, 3450, 5000, 5000, 9750, 9750, 600000, 600000];
+var materialTable = [0, 0, 100, 100, 3350, 3350, 3450, 3450, 5000, 5000, 9750, 9750, 600000, 600000];
 
 Dagaz.AI.pieceAdj = [
 [   0,    0,   0,   0,   0,   0,    0,    0, // pieceEmpty
@@ -447,62 +447,7 @@ Dagaz.AI.ScoreMove = function(move) {
 }
 
 Dagaz.AI.IsHashMoveValid = function(hashMove) {
-    var from = hashMove & 0xFF;
-    var to = (hashMove >> 8) & 0xFF;
-    var ourPiece = Dagaz.AI.g_board[from];
-    var pieceType = ourPiece & Dagaz.AI.TYPE_MASK;
-    if (pieceType < piecePawn || pieceType > pieceKing) return false;
-    // Can't move a piece we don't control
-    if (Dagaz.AI.g_toMove != (ourPiece & Dagaz.AI.colorWhite)) return false;
-    // Can't move to a square that has something of the same color
-    if (Dagaz.AI.g_board[to] != 0 && (Dagaz.AI.g_toMove == (Dagaz.AI.g_board[to] & Dagaz.AI.colorWhite))) return false;
-    // Can't attack mirrored piece
-    if ((Dagaz.AI.g_board[from] & pieceMirrored) != (Dagaz.AI.g_board[to] & pieceMirrored)) return false;
-    if (pieceType == piecePawn) {
-        if (hashMove & moveflagEPC) {
-            return false;
-        }
-        // Valid moves are push, capture, double push, promotions
-        var dir = to - from;
-        if ((Dagaz.AI.g_toMove == Dagaz.AI.colorWhite) != (dir < 0))  {
-            // Pawns have to move in the right direction
-            return false;
-        }
-
-        var row = to & 0xF0;
-        var delta = (8 - Dagaz.Model.HEIGHT) << 4;
-        if (((row == (0x90 - delta) && !Dagaz.AI.g_toMove) ||
-             (row == 0x20 && Dagaz.AI.g_toMove)) != (hashMove & moveflagPromotion)) {
-            // Handle promotions
-            return false;
-        }
-
-        if (dir == -16 || dir == 16) {
-            // White/Black push
-            return Dagaz.AI.g_board[to] == 0;
-        } else if (dir == -15 || dir == -17 || dir == 15 || dir == 17) {
-            // White/Black capture
-            return Dagaz.AI.g_board[to] != 0;
-        } else if (dir == -32) {
-            // Double white push
-            if (row != 0x60) return false;
-            if (Dagaz.AI.g_board[to] != 0) return false;
-            if (Dagaz.AI.g_board[from - 16] != 0) return false;
-        } else if (dir == 32) {
-            // Double black push
-            if (row != 0x50) return false;
-            if (Dagaz.AI.g_board[to] != 0) return false;
-            if (Dagaz.AI.g_board[from + 16] != 0) return false;
-        } else {
-            return false;
-        }
-
-        return true;
-    } else {
-        // This validates that this piece type can actually make the attack
-        if (hashMove >> 16) return false;
-        return IsSquareAttackableFrom(to, from, true);
-    }
+    return false;
 }
 
 Dagaz.AI.isNoZugzwang = function() {
@@ -1170,6 +1115,7 @@ function IsSquareOnPieceLine(target, from) {
 function IsSquareAttackableFrom(target, from, checkMirrored) {
     var index = from - target + 128;
     var piece = Dagaz.AI.g_board[from];
+    var pos = from;
     if (g_vectorDelta[index].pieceMask[(piece >> Dagaz.AI.TYPE_SIZE) & 1] & (1 << (piece & Dagaz.AI.TYPE_MASK))) {
         // Yes, this square is pseudo-attackable.  Now, check for real attack
         var inc = g_vectorDelta[index].delta;
@@ -1177,7 +1123,7 @@ function IsSquareAttackableFrom(target, from, checkMirrored) {
             from += inc;
             if (from == target)
                 return !checkMirrored ? true : ((piece & pieceMirrored) == (Dagaz.AI.g_board[from] & pieceMirrored));
-        } while (Dagaz.AI.g_board[from] == 0);
+        } while (isEmpty(from, Dagaz.AI.g_board[pos] & pieceMirrored));
     }
     return false;
 }
@@ -1395,7 +1341,7 @@ function isEmpty(to, mirrored) {
     if (Dagaz.AI.g_board[to] == 0) return true;
     if (Dagaz.AI.g_board[to] & pieceNo) return false;
     if (mirrored) return !(Dagaz.AI.g_board[to] & pieceMirrored);
-        else Dagaz.AI.g_board[to] & pieceMirrored;
+        else return Dagaz.AI.g_board[to] & pieceMirrored;
 }
 
 Dagaz.AI.GenerateCaptureMoves = function(moveStack) {
