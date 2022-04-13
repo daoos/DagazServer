@@ -53,22 +53,33 @@ Dagaz.Model.BuildDesign = function(design) {
     design.addPlayer("White", [6, 7, 5, 4, 3, 2, 0, 1, 8]);
     design.addPlayer("Black", [5, 7, 6, 3, 4, 0, 2, 1, 8]);
 
-    design.addRandom(1, [6]);                    // 0
-    design.addRandom(1, [6]);                    // 1
-    design.addRandom(1, [6]);                    // 2
-    design.addRandom(1, [6]);                    // 3
-    design.addTurn(1, [0, 1, 2, 3, 4, 5, 7, 8]); // 4
-    design.addTurn(1, [0, 1, 2, 3, 4, 5, 7, 8]); // 5
-    design.addTurn(1, [0, 1, 2, 3, 4, 5, 7, 8]); // 6
-    design.addTurn(1, [0, 1, 2, 3, 4, 5, 7, 8]); // 7
-    design.addRandom(2, [6]);                    // 8
-    design.addRandom(2, [6]);                    // 9
-    design.addRandom(2, [6]);                    // 10
-    design.addRandom(2, [6]);                    // 11
-    design.addTurn(2, [0, 1, 2, 3, 4, 5, 7, 8]); // 12
-    design.addTurn(2, [0, 1, 2, 3, 4, 5, 7, 8]); // 13
-    design.addTurn(2, [0, 1, 2, 3, 4, 5, 7, 8]); // 14
-    design.addTurn(2, [0, 1, 2, 3, 4, 5, 7, 8]); // 15
+    design.setupSelector(2);
+
+    design.addRandom(1, [9]);                       // 0
+    design.addRandom(1, [9]);                       // 1
+    design.addRandom(1, [6], 2);                    // 2
+    design.addRandom(1, [6], 2);                    // 3
+    design.addTurn(1, [0, 1, 2, 3, 4, 5, 7, 8]);    // 4
+    design.addTurn(1, [0, 1, 2, 3, 4, 5, 7, 8]);    // 5
+    design.addTurn(1, [0, 1, 2, 3, 4, 5, 7, 8], 2); // 6
+    design.addTurn(1, [0, 1, 2, 3, 4, 5, 7, 8], 2); // 7
+    design.repeatMark();
+    design.addRandom(2, [6]);                       // 8
+    design.addRandom(2, [6]);                       // 9
+    design.addRandom(2, [6]);                       // 10
+    design.addRandom(2, [6]);                       // 11
+    design.addTurn(2, [0, 1, 2, 3, 4, 5, 7, 8]);    // 12
+    design.addTurn(2, [0, 1, 2, 3, 4, 5, 7, 8]);    // 13
+    design.addTurn(2, [0, 1, 2, 3, 4, 5, 7, 8]);    // 14
+    design.addTurn(2, [0, 1, 2, 3, 4, 5, 7, 8]);    // 15
+    design.addRandom(1, [6]);                       // 16
+    design.addRandom(1, [6]);                       // 17
+    design.addRandom(1, [6]);                       // 18
+    design.addRandom(1, [6]);                       // 19
+    design.addTurn(1, [0, 1, 2, 3, 4, 5, 7, 8]);    // 20
+    design.addTurn(1, [0, 1, 2, 3, 4, 5, 7, 8]);    // 21
+    design.addTurn(1, [0, 1, 2, 3, 4, 5, 7, 8]);    // 22
+    design.addTurn(1, [0, 1, 2, 3, 4, 5, 7, 8]);    // 23
 
     design.addPosition("a12", [13, 12, 0, 1, 0, 0, 0, 0, 144]);
     design.addPosition("b12", [13, 12, 11, 1, -1, 0, 0, 0, 0]);
@@ -227,6 +238,8 @@ Dagaz.Model.BuildDesign = function(design) {
     design.addZone("last-rank", 2, [132, 133, 134, 135, 136, 137, 138, 139, 140, 141, 142, 143]);
     design.addZone("dices", 1, [144, 145, 146, 147]);
     design.addZone("dices", 2, [144, 145, 146, 147]);
+    design.addZone("init", 1, [144, 145]);
+    design.addZone("init", 2, [144, 145]);
 
     design.addCommand(0, ZRF.IN_ZONE,	1);	// dices
     design.addCommand(0, ZRF.FUNCTION,	20);	// verify
@@ -307,28 +320,42 @@ Dagaz.Model.BuildDesign = function(design) {
     design.addCommand(6, ZRF.FUNCTION,	25);	// to
     design.addCommand(6, ZRF.FUNCTION,	28);	// end
 
+    design.addCommand(7, ZRF.IN_ZONE,	2);	// init
+    design.addCommand(7, ZRF.FUNCTION,	20);	// verify
+    design.addCommand(7, ZRF.FUNCTION,	3);	// friend?
+    design.addCommand(7, ZRF.FUNCTION,	0);	// not
+    design.addCommand(7, ZRF.FUNCTION,	20);	// verify
+    design.addCommand(7, ZRF.FUNCTION,	25);	// to
+    design.addCommand(7, ZRF.FUNCTION,	28);	// end
+
     design.addPiece("dp", 0);
     design.addDrop(0, 0, [], 6, 16);
+    design.addDrop(0, 7, [], 9, 16);
     design.addMove(0, 6, [], 7, 17);
 
     design.addPiece("dn", 1);
     design.addDrop(1, 0, [], 6, 16);
+    design.addDrop(1, 7, [], 9, 16);
     design.addMove(1, 6, [], 8, 17);
 
     design.addPiece("db", 2);
     design.addDrop(2, 0, [], 6, 16);
+    design.addDrop(2, 7, [], 9, 16);
     design.addMove(2, 6, [], 8, 17);
 
     design.addPiece("dr", 3);
     design.addDrop(3, 0, [], 6, 16);
+    design.addDrop(3, 7, [], 9, 16);
     design.addMove(3, 6, [], 8, 17);
 
     design.addPiece("dq", 4);
     design.addDrop(4, 0, [], 6, 16);
+    design.addDrop(4, 7, [], 9, 16);
     design.addMove(4, 6, [], 8, 17);
 
     design.addPiece("dk", 5);
     design.addDrop(5, 0, [], 6, 16);
+    design.addDrop(5, 7, [], 9, 16);
     design.addMove(5, 6, [], 8, 17);
 
     design.addPiece("Pawn", 6, 100);

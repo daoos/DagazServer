@@ -951,7 +951,8 @@ ZrfDesign.prototype.addTurn = function(player, modes, selector) {
   });
 }
 
-ZrfDesign.prototype.addRandom = function(player, modes) {
+ZrfDesign.prototype.addRandom = function(player, modes, selector) {
+  if (!_.isUndefined(selector) && (selector != Dagaz.Model.getResourceSelector())) return;
   if (_.isUndefined(this.turns)) {
       this.turns = [];
   }

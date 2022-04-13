@@ -272,7 +272,7 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(235, 37, 'Gauntlet', 'gauntlet', 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total, max_selector) values(236, 37, 'Elementals', 'elementals', 2, 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(237, 32, 'Double Alquerque', 'double-alquerque', 2)`);
-        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total, is_dice) values(238, 45, 'Grand Dice Chess', 'grand-dice-chess', 2, 1)`);
+        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total, is_dice, max_selector) values(238, 45, 'Grand Dice Chess', 'grand-dice-chess', 2, 1, 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(239, 30, 'Romantic Chess', 'romantic-chess', 2)`);
 
         await queryRunner.query(`insert into game_styles(id, game_id, name, suffix, player_num) values(1, 23, 'European', '', null)`);
@@ -967,8 +967,9 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, copyright) values(596, 'elementals', 1, 'elementals-1', '2017 Valentin Chelnokov')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, copyright) values(597, 'elementals', 2, 'elementals-2', '2017 Valentin Chelnokov')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(598, 'double-alquerque', null, 'double-alquerque', 'https://en.wikipedia.org/wiki/Alquerque')`);
-        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(599, 'grand-dice-chess', null, 'grand-dice-chess', 'https://granddicechess.blogspot.com/2022/01/grand-dice-chess.html', '2021 Vadrya Pokshtya')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(599, 'grand-dice-chess', 1, 'grand-dice-chess', 'https://granddicechess.blogspot.com/2022/01/grand-dice-chess.html', '2021 Vadrya Pokshtya')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, copyright) values(600, 'romantic-chess', null, 'chess-1', 'Michal Ryszard Wojcik')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(601, 'grand-dice-chess', 2, 'grand-dice-chess', 'https://granddicechess.blogspot.com/2022/01/grand-dice-chess.html', '2021 Vadrya Pokshtya')`);
 }
 
     public async down(queryRunner: QueryRunner): Promise<any> {
