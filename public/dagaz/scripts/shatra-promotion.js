@@ -65,7 +65,6 @@ var CheckInvariants = Dagaz.Model.CheckInvariants;
 
 Dagaz.Model.CheckInvariants = function(board) {
   var design = Dagaz.Model.design;
-  if (Dagaz.Model.getSetupSelector() == 1) {
   _.each(board.moves, function(m) {
       var piece     = null;
       var promoted  = null;
@@ -101,7 +100,6 @@ Dagaz.Model.CheckInvariants = function(board) {
           });
       }
   });  
-  }
   CheckInvariants(board);
 }
 

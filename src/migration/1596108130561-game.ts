@@ -153,7 +153,7 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(110, 37, 'Gala', 'gala', 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(111, 37, 'Thud!', 'thud', 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(112, 37, 'Surakarta', 'surakarta', 2)`);
-        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total, max_selector) values(113, 36, 'Altai Shatra', 'shatra', 2, 2)`);
+        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(113, 36, 'Altai Shatra', 'shatra', 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(114, 25, 'Micro Shogi', 'micro-shogi', 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(115, 25, 'Kyoto Shogi', 'kyoto-shogi', 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(116, 25, 'Hexagonal Kyoto Shogi', 'hex-kyoto-shogi', 2)`);
@@ -414,6 +414,7 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_bots(id, game_id, variant_id, selector_value, player_num) values(115, 30, 59, null, 1)`);
         await queryRunner.query(`insert into game_bots(id, game_id, variant_id, selector_value, player_num) values(116, 30, 98, null, null)`);
         await queryRunner.query(`insert into game_bots(id, game_id, variant_id, selector_value, player_num) values(117, 23, 57, null, null)`);
+        await queryRunner.query(`insert into game_bots(id, game_id, variant_id, selector_value, player_num) values(118, 36, 113, null, null)`);
 
         await queryRunner.query(`insert into game_setups(id, game_id, variant_id, selector_value, name) values(1, 25, 10, 1, 'Without Handicap')`);
         await queryRunner.query(`insert into game_setups(id, game_id, variant_id, selector_value, name) values(2, 25, 10, 2, 'Left-Kyo Handicap')`);
@@ -683,8 +684,7 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(244, 'gala', null, 'gala', 'https://www.chessvariants.com/historic.dir/gala.html')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(245, 'thud', null, 'thud', 'https://en.wikipedia.org/wiki/Games_of_the_Discworld#Thud', '2002 Trevor Truran')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(246, 'surakarta', null, 'surakarta', 'https://en.wikipedia.org/wiki/Surakarta_(game)')`);
-        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(247, 'shatra', 1, 'shatra-1')`);
-        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(248, 'shatra', 2, 'shatra-2')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(247, 'shatra', null, 'shatra-1')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(249, 'micro-shogi', null, 'micro-shogi', 'https://en.wikipedia.org/wiki/Micro_shogi', '1982 Oyama Yasuharu')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(250, 'micro-shogi-kanji', null, 'micro-shogi-kanji', 'https://en.wikipedia.org/wiki/Micro_shogi', '1982 Oyama Yasuharu')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(251, 'kyoto-shogi', null, 'kyoto-shogi', 'https://en.wikipedia.org/wiki/Kyoto_shogi', '1976 Tamiya Katsuya')`);
