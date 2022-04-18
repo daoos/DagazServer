@@ -126,6 +126,7 @@ Dagaz.Model.CheckInvariants = function(board) {
   var moves  = [];
   var isKing = false;
   _.each(board.moves, function(m) {
+      if (!_.isUndefined(m.failed)) return;
       if (m.actions.length > 1) {
           moves.push(m);
           var pos = null;
@@ -143,6 +144,7 @@ Dagaz.Model.CheckInvariants = function(board) {
   if (isKing) {
       moves = [];
       _.each(board.moves, function(m) {
+          if (!_.isUndefined(m.failed)) return;
           if (m.actions.length > 0) {
               var piece = null;
               _.each(m.actions, function(a) {

@@ -125,6 +125,7 @@ Dagaz.AI.pieceAdj = [
 ]];
 
 var g_mob = [0, 1, 3, 3, 5, 10];
+var g_enPassentSquare;
 
 Dagaz.AI.MakeSquare = function(row, column) {
     return ((row + 1) << 4) | (column + 2);
@@ -357,6 +358,13 @@ Dagaz.AI.InitializeFromFen = function(fen) {
 
     Dagaz.AI.g_toMove = chunks[1].charAt(0) == 'w' ? Dagaz.AI.colorWhite : pieceEmpty;
 
+    g_enPassentSquare = -1;
+    if (chunks[2].indexOf('-') == -1) {
+	var col = chunks[2].charAt(0).charCodeAt() - 'a'.charCodeAt();
+	var row = Dagaz.Model.HEIGHT - (chunks[2].charAt(1).charCodeAt() - '0'.charCodeAt());
+	g_enPassentSquare = Dagaz.AI.MakeSquare(row, col);
+    }
+
     var hashResult = Dagaz.AI.SetHash();
     Dagaz.AI.g_hashKeyLow = hashResult.hashKeyLow;
     Dagaz.AI.g_hashKeyHigh = hashResult.hashKeyHigh;
@@ -377,9 +385,10 @@ Dagaz.AI.InitializeFromFen = function(fen) {
     return '';
 }
 
-function UndoHistory(move, step, baseEval, hashKeyLow, hashKeyHigh, move50, captured) {
+function UndoHistory(move, step, ep, baseEval, hashKeyLow, hashKeyHigh, move50, captured) {
     this.move = move;
     this.step = step;
+    this.ep = ep;
     this.baseEval = baseEval;
     this.hashKeyLow = hashKeyLow;
     this.hashKeyHigh = hashKeyHigh;
@@ -397,8 +406,10 @@ Dagaz.AI.MakeStep = function(move, step) {
     var captured = target ? Dagaz.AI.g_board[target] : pieceEmpty;
     var piece = Dagaz.AI.g_board[from];
 
-    g_moveUndoStack[Dagaz.AI.g_moveCount] = new UndoHistory(move, step, Dagaz.AI.g_baseEval, Dagaz.AI.g_hashKeyLow, Dagaz.AI.g_hashKeyHigh, Dagaz.AI.g_move50, captured);
+    g_moveUndoStack[Dagaz.AI.g_moveCount] = new UndoHistory(move, step, g_enPassentSquare, Dagaz.AI.g_baseEval, Dagaz.AI.g_hashKeyLow, Dagaz.AI.g_hashKeyHigh, Dagaz.AI.g_move50, captured);
     Dagaz.AI.g_moveCount++;
+
+    g_enPassentSquare = -1;
 
     if (captured) {
         var capturedType = captured & Dagaz.AI.PIECE_MASK;
@@ -408,6 +419,13 @@ Dagaz.AI.MakeStep = function(move, step) {
 
         Dagaz.AI.g_hashKeyLow ^= Dagaz.AI.g_zobristLow[target][capturedType];
         Dagaz.AI.g_hashKeyHigh ^= Dagaz.AI.g_zobristHigh[target][capturedType];
+        Dagaz.AI.g_move50 = 0;
+    } else if ((piece & Dagaz.AI.TYPE_MASK) == piecePawn) {
+        var diff = to - from;
+        if (diff < 0) diff = -diff;
+        if (diff > 16) {
+            g_enPassentSquare = me ? (to + 16) : (to - 16);
+        }
         Dagaz.AI.g_move50 = 0;
     }
 
@@ -448,6 +466,7 @@ Dagaz.AI.MakeStep = function(move, step) {
 Dagaz.AI.UnmakeStep = function() {
     Dagaz.AI.g_moveCount--;
     var move = g_moveUndoStack[Dagaz.AI.g_moveCount].move;
+    g_enPassentSquare = g_moveUndoStack[Dagaz.AI.g_moveCount].ep;
     Dagaz.AI.g_baseEval = g_moveUndoStack[Dagaz.AI.g_moveCount].baseEval;
     Dagaz.AI.g_hashKeyLow = g_moveUndoStack[Dagaz.AI.g_moveCount].hashKeyLow;
     Dagaz.AI.g_hashKeyHigh = g_moveUndoStack[Dagaz.AI.g_moveCount].hashKeyHigh;
@@ -643,13 +662,19 @@ function CheckReserve(pos, pieceType, flags) {
   return false;
 }
 
-function GenerateCaptureStep(from, dir, pieceType, flags) {
+function GenerateCaptureStep(from, dir, pieceType, flags, isFirst) {
     var enemy = Dagaz.AI.g_toMove == Dagaz.AI.colorWhite ? Dagaz.AI.colorBlack : Dagaz.AI.colorWhite;
     var captured = from + dir;
     if ((pieceType > piecePawn) && (pieceType < pieceKing)) {
         while (Dagaz.AI.g_board[captured] == pieceEmpty) {
             captured += dir;
         }
+    }
+    if (isFirst && (pieceType == piecePawn) && (g_enPassentSquare == captured)) {
+        var to = captured + dir;
+        captured = Dagaz.AI.g_toMove ? captured + 16 : captured - 16;
+        if (Dagaz.AI.g_board[to] != pieceEmpty) return 0;
+        return from | (to << 8) | (captured << 16);
     }
     if ((Dagaz.AI.g_board[captured] & enemy) == 0) return 0;
     var to = captured + dir;
@@ -686,7 +711,7 @@ function GenerateCaptureMovesFromTree(moves, from, pieceType, flags, stack, rest
     if (pieceType == pieceRook) dirs = [-1, 1, -16, 16];
     _.each(dirs, function(dir) {
         if (restricted && (restricted == dir)) return;
-        var step = GenerateCaptureStep(from, dir, pieceType, flags);
+        var step = GenerateCaptureStep(from, dir, pieceType, flags, stack.length == 0);
         if (step == 0) return;
         var pos = (step >> 8) & 0xFF;
         _.each(promoteTypes(pieceType, pos, flags), function(t) {
@@ -731,30 +756,55 @@ function GenerateQuietMovesFrom(moves, from, flags) {
     var piece = Dagaz.AI.g_board[from] & Dagaz.AI.TYPE_MASK;
     var row = from & 0xF0;
 
-    if (Dagaz.AI.g_toMove && (row > 0xB0)) {
-        for (to = 0x82; to < 0xB0; to++) {
-             if ((Dagaz.AI.g_flags & moveflagClearway) && ((to & 0x0F) == 5)) continue;
-             if (Dagaz.AI.g_board[to] == 0) {
-                 steps = new Array();
-                 GenerateQuietStep(steps, from, to, piece, 0);
-                 moves.push(steps);
-             }
+    if (Dagaz.AI.g_toMove) {
+        if (row > 0xB0) {
+            for (to = 0x82; to < 0xB0; to++) {
+                 if ((Dagaz.AI.g_flags & moveflagClearway) && ((to & 0x0F) == 5)) continue;
+                 if (Dagaz.AI.g_board[to] == 0) {
+                     steps = new Array();
+                     GenerateQuietStep(steps, from, to, piece, 0);
+                     moves.push(steps);
+                 }
+            }
+            return;
         }
-        return;
+        if (row < 0x40) {
+            for (to = 0x52; to < 0x80; to++) {
+                 if ((Dagaz.AI.g_flags & moveflagClearway) && ((to & 0x0F) == 5)) continue;
+                 if (Dagaz.AI.g_board[to] == 0) {
+                     steps = new Array();
+                     GenerateQuietStep(steps, from, to, piece, 0);
+                     moves.push(steps);
+                 }
+            }
+        }
     }
 
-    if (!Dagaz.AI.g_toMove && (row < 0x40)) {
-        for (to = 0x52; to < 0x80; to++) {
-             if ((Dagaz.AI.g_flags & moveflagClearway) && ((to & 0x0F) == 5)) continue;
-             if (Dagaz.AI.g_board[to] == 0) {
-                 steps = new Array();
-                 GenerateQuietStep(steps, from, to, piece, 0);
-                 moves.push(steps);
-             }
+    if (!Dagaz.AI.g_toMove) {
+        if (row < 0x40) {
+            for (to = 0x52; to < 0x80; to++) {
+                 if ((Dagaz.AI.g_flags & moveflagClearway) && ((to & 0x0F) == 5)) continue;
+                 if (Dagaz.AI.g_board[to] == 0) {
+                     steps = new Array();
+                     GenerateQuietStep(steps, from, to, piece, 0);
+                     moves.push(steps);
+                 }
+            }
+            return;
         }
-        return;
+        if (row > 0xB0) {
+            for (to = 0x82; to < 0xB0; to++) {
+                 if ((Dagaz.AI.g_flags & moveflagClearway) && ((to & 0x0F) == 5)) continue;
+                 if (Dagaz.AI.g_board[to] == 0) {
+                     steps = new Array();
+                     GenerateQuietStep(steps, from, to, piece, 0);
+                     moves.push(steps);
+                 }
+            }
+        }
     }
 
+    var flags = getFlags();
     if (piece == piecePawn) {
         to = from + inc; 
         if (Dagaz.AI.g_board[to] == 0) {

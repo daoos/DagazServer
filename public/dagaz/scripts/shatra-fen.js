@@ -100,9 +100,13 @@ var createPiece = function(design, c) {
   return null;
 }
 
-var getPosition = function(design, board, piece) {
-  var pos = _.random(0, design.positions.length - 1);
-  return pos;
+var checkPassant = function(board, pos) {
+  var piece = board.getPiece(pos);
+  if (piece !== null) {
+      board.lastt = pos;
+  } else {
+      board.lastf = pos;
+  }
 }
 
 Dagaz.Model.setup = function(board, init) {
@@ -125,22 +129,16 @@ Dagaz.Model.setup = function(board, init) {
                if (pos >= Dagaz.Model.WIDTH * Dagaz.Model.HEIGHT) break;
            }
       }
+      var r = setup.match(/[wb]-([a-g]\d+)/);
+      if (r) {
+          var pos = Dagaz.Model.stringToPos(r[1], design);
+          checkPassant(board, pos + 7);
+          checkPassant(board, pos - 7);
+      }
       var turn = getTurn(init);
       if (turn) {
           board.turn   = +turn;
           board.player = design.currPlayer(board.turn);
-      }
-  } else {
-      if (!_.isUndefined(design.reserve)) {
-          _.each(_.keys(design.reserve), function(type) {
-              _.each(_.keys(design.reserve[type]), function(player) {
-                   var piece = Dagaz.Model.createPiece(+type, +player);
-                   for (var i = 0; i < design.reserve[type][player]; i++) {
-                        var pos = getPosition(design, board, piece);
-                        board.setPiece(pos, piece);
-                   }
-              });
-          });
       }
   }
 }
@@ -154,6 +152,22 @@ var getPieceNotation = function(design, piece) {
   if (piece.type == design.getPieceType("King"))   r = 'K';
   if (piece.player > 1) {
       return r.toLowerCase();
+  }
+  return r;
+}
+
+var getEnPassant = function(design, board) {
+  var r = "-";
+  if (board.lastt) {
+      var piece = board.getPiece(board.lastt);
+      if (piece === null) return r;
+      if (piece.type != 0) return r;
+      var pos = design.navigate(piece.player, board.lastt, 2);
+      if (pos === null) return r;
+      if (board.getPiece(pos) !== null) return r;
+      var p = design.navigate(piece.player, pos, 2);
+      if (p === null) return r;
+      if (p == board.lastf) r = "-" + Dagaz.Model.posToString(pos, design);
   }
   return r;
 }
@@ -202,6 +216,7 @@ Dagaz.Model.getSetup = function(design, board) {
   } else {
       str += "-b";
   }
+  str += getEnPassant(design, board);
   if (Dagaz.Controller.persistense == "setup") {
       var s = str + "&game=" + getName() + "*";
       localStorage.setItem('dagaz.setup', s);
