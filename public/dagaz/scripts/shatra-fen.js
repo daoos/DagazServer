@@ -158,7 +158,8 @@ var getPieceNotation = function(design, piece) {
 
 var getEnPassant = function(design, board) {
   var r = "-";
-  if (board.lastt) {
+  if (board.lastt && board.move) {
+      if (board.move.actions.length > 1) return r;
       var piece = board.getPiece(board.lastt);
       if (piece === null) return r;
       if (piece.type != 0) return r;
