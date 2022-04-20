@@ -41,13 +41,11 @@ var promotePiece = function(design, board, player, piece) {
   if (cnt >= 1) {
       type = 3;
       cnt  = calcPieces(design, board, player, type);
-  }
-  if (cnt >= 2) {
-      type = 2;
-      cnt  = calcPieces(design, board, player, type);
-  }
-  if (cnt >= 2) {
-      type = 0;
+      if (cnt >= 2) {
+          type = 2;
+          cnt  = calcPieces(design, board, player, type);
+          if (cnt >= 2) type = 0;
+      }
   }
   if (piece.type == type) return piece;
   return piece.promote(type);
@@ -72,9 +70,18 @@ Dagaz.Model.CheckInvariants = function(board) {
   var design = Dagaz.Model.design;
   _.each(board.moves, function(move) {
       var piece = null; 
+      if (move.actions.length == 1) {
+          var a = move.actions[0];
+          if ((a[0] !== null) && (a[1] !== null) && (a[2] !== null)) {
+              piece = board.getPiece(a[0][0]);
+              if ((piece !== null) && (piece.type != a[2][0].type)) {
+                   a[2] = [ promotePiece(design, board, board.player, a[2][0]) ];
+              }
+          }
+          return;
+      }
       var r = null; var f = true;
       _.each(move.actions, function(a) {
-           if (move.actions.length == 1) return;
            if ((a[0] !== null) && (a[1] !== null)) {
                 if (piece === null) piece = board.getPiece(a[0][0]);
                 if (piece !== null) {
