@@ -95,6 +95,15 @@ var checkCastling = function(board, pos, m) {
   piece.setValue(0, true);
 }
 
+var checkPassant = function(board, pos) {
+  var piece = board.getPiece(pos);
+  if (piece !== null) {
+      board.lastt = pos;
+  } else {
+      board.lastf = pos;
+  }
+}
+
 Dagaz.Model.setup = function(board, init) {
   var design = Dagaz.Model.design;
   var setup  = getSetup(init);
@@ -123,6 +132,12 @@ Dagaz.Model.setup = function(board, init) {
           checkCastling(board, 56, mask[1]);
           checkCastling(board,  7, mask[2]);
           checkCastling(board,  0, mask[3]);
+      }
+      var r = setup.match(/([a-g]\d+)\s0\s1/);
+      if (r) {
+          var pos = Dagaz.Model.stringToPos(r[1], design);
+          checkPassant(board, pos + 8);
+          checkPassant(board, pos - 8);
       }
       var turn = getTurn(init);
       if (turn) {
@@ -195,6 +210,7 @@ var getEnPassant = function(design, board) {
       if (piece.type != 0) return r;
       var pos = design.navigate(piece.player, board.lastt, 2);
       if (pos === null) return r;
+      if (!design.inZone(1, piece.player, pos)) return r;
       if (board.getPiece(pos) !== null) return r;
       var p = design.navigate(piece.player, pos, 2);
       if (p === null) return r;
