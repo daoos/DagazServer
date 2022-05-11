@@ -274,6 +274,7 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(237, 32, 'Double Alquerque', 'double-alquerque', 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total, is_dice, max_selector) values(238, 45, 'Grand Dice Chess', 'grand-dice-chess', 2, 1, 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(239, 30, 'Romantic Chess', 'romantic-chess', 2)`);
+        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(240, 37, 'Andalusia', 'andalusia', 2)`);
 
         await queryRunner.query(`insert into game_styles(id, game_id, name, suffix, player_num) values(1, 23, 'European', '', null)`);
         await queryRunner.query(`insert into game_styles(id, game_id, name, suffix, player_num) values(2, 23, 'Chinese', '-kanji', null)`);
@@ -415,6 +416,7 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_bots(id, game_id, variant_id, selector_value, player_num) values(116, 30, 98, null, null)`);
         await queryRunner.query(`insert into game_bots(id, game_id, variant_id, selector_value, player_num) values(117, 23, 57, null, null)`);
         await queryRunner.query(`insert into game_bots(id, game_id, variant_id, selector_value, player_num) values(118, 36, 113, null, null)`);
+        await queryRunner.query(`insert into game_bots(id, game_id, variant_id, selector_value, player_num) values(119, 37, 240, null, null)`);
 
         await queryRunner.query(`insert into game_setups(id, game_id, variant_id, selector_value, name) values(1, 25, 10, 1, 'Without Handicap')`);
         await queryRunner.query(`insert into game_setups(id, game_id, variant_id, selector_value, name) values(2, 25, 10, 2, 'Left-Kyo Handicap')`);
@@ -970,6 +972,7 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(599, 'grand-dice-chess', 1, 'grand-dice-chess', 'https://granddicechess.blogspot.com/2022/01/grand-dice-chess.html', '2021 Vadrya Pokshtya')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, copyright) values(600, 'romantic-chess', null, 'chess-1', 'Michal Ryszard Wojcik')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(601, 'grand-dice-chess', 2, 'grand-dice-chess', 'https://granddicechess.blogspot.com/2022/01/grand-dice-chess.html', '2021 Vadrya Pokshtya')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(602, 'andalusia', null, 'andalusia', 'https://www.zillions-of-games.com/cgi-bin/zilligames/submissions.cgi?do=show;id=1733', '2009 Chris Huntoon')`);
 }
 
     public async down(queryRunner: QueryRunner): Promise<any> {
