@@ -180,7 +180,7 @@ Dagaz.Model.getSetup = function(design, board) {
   if (c > 0) {
       str += c;
   }
-  if (design.turns[board.turn].player == 1) {
+  if (board.turn % 2 == 0) {
       str += " w";
   } else {
       str += " b";
