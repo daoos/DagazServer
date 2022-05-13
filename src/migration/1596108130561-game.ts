@@ -978,7 +978,7 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(601, 'grand-dice-chess', 2, 'grand-dice-chess', 'https://granddicechess.blogspot.com/2022/01/grand-dice-chess.html', '2021 Vadrya Pokshtya')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(602, 'andalusia', null, 'andalusia', 'https://www.zillions-of-games.com/cgi-bin/zilligames/submissions.cgi?do=show;id=1733', '2009 Chris Huntoon')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, copyright) values(603, '80-cells-columns', null, '80-cells-columns', 'Nikolay Spancireti (1916-1991)')`);
-        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(604, 'lika', null, 'lika')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(604, 'lika', null, 'russian-checkers-1')`);
 }
 
     public async down(queryRunner: QueryRunner): Promise<any> {
