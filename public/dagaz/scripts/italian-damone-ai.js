@@ -329,10 +329,6 @@ Dagaz.AI.UnmakeStep = function() {
     Dagaz.AI.g_hashKeyHigh = g_moveUndoStack[Dagaz.AI.g_moveCount].hashKeyHigh;
     Dagaz.AI.g_move50 = g_moveUndoStack[Dagaz.AI.g_moveCount].move50;
 
-    var otherColor = Dagaz.AI.colorWhite - Dagaz.AI.g_toMove;
-    var me = Dagaz.AI.g_toMove >> Dagaz.AI.TYPE_SIZE;
-    var them = otherColor >> Dagaz.AI.TYPE_SIZE;
-
     var flags = move & 0xFF000000;
     var captured = g_moveUndoStack[Dagaz.AI.g_moveCount].captured;
     var to = (move >> 8) & 0xFF;
@@ -544,28 +540,49 @@ function GenerateQuietMovesFrom(moves, from) {
     var inc = (Dagaz.AI.g_toMove == Dagaz.AI.colorWhite) ? -17 : 17;
     var piece = Dagaz.AI.g_board[from] & Dagaz.AI.TYPE_MASK;
     if (piece == pieceMan) {
-        to = from + inc; steps = new Array();
-        if (Dagaz.AI.g_board[to] == 0) GenerateQuietStep(steps, from, to, piece);
-        moves.push(steps);
-        to = from + 15; steps = new Array();
-        if (Dagaz.AI.g_board[to] == 0) GenerateQuietStep(steps, from, to, piece);
-        moves.push(steps);
-        to = from - 15; steps = new Array();
-        if (Dagaz.AI.g_board[to] == 0) GenerateQuietStep(steps, from, to, piece);
-        moves.push(steps);
+        to = from + inc;
+        if (Dagaz.AI.g_board[to] == 0) {
+            steps = new Array();
+            GenerateQuietStep(steps, from, to, piece);
+            moves.push(steps);
+        }
+        to = from + 15; 
+        if (Dagaz.AI.g_board[to] == 0) {
+            steps = new Array();
+            GenerateQuietStep(steps, from, to, piece);
+            moves.push(steps);
+        }
+        to = from - 15; 
+        if (Dagaz.AI.g_board[to] == 0) {
+            steps = new Array();
+            GenerateQuietStep(steps, from, to, piece);
+            moves.push(steps);
+        }
     } else {
-        to = from + 15; steps = new Array();
-        if (Dagaz.AI.g_board[to] == 0) GenerateQuietStep(steps, from, to, piece);
-        moves.push(steps);
-        to = from - 15; steps = new Array();
-        if (Dagaz.AI.g_board[to] == 0) GenerateQuietStep(steps, from, to, piece);
-        moves.push(steps);
-        to = from + 17; steps = new Array();
-        if (Dagaz.AI.g_board[to] == 0) GenerateQuietStep(steps, from, to, piece);
-        moves.push(steps);
-        to = from - 17; steps = new Array();
-        if (Dagaz.AI.g_board[to] == 0) GenerateQuietStep(steps, from, to, piece);
-        moves.push(steps);
+        to = from + 15; 
+        if (Dagaz.AI.g_board[to] == 0) {
+            steps = new Array();
+            GenerateQuietStep(steps, from, to, piece);
+            moves.push(steps);
+        }
+        to = from - 15; 
+        if (Dagaz.AI.g_board[to] == 0) {
+            steps = new Array();
+            GenerateQuietStep(steps, from, to, piece);
+            moves.push(steps);
+        }
+        to = from + 17; 
+        if (Dagaz.AI.g_board[to] == 0) {
+            steps = new Array();
+            GenerateQuietStep(steps, from, to, piece);
+            moves.push(steps);
+        }
+        to = from - 17; 
+        if (Dagaz.AI.g_board[to] == 0) {
+            steps = new Array();
+            GenerateQuietStep(steps, from, to, piece);
+            moves.push(steps);
+        }
     }
 }
 

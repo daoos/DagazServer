@@ -799,42 +799,60 @@ function GenerateQuietMovesFrom(moves, from) {
         }
     }
     if (piece == pieceMan) {
-        to = from + inc - 1; steps = new Array();
-        if (Dagaz.AI.g_board[to] == 0) GenerateQuietStep(steps, from, to, piece);
-        if (steps[0] & moveflagPromotion) {
-            steps[0] |= moveflagPromotionKnight;
+        to = from + inc - 1;
+        if (Dagaz.AI.g_board[to] == 0) { 
+            steps = new Array();
+            GenerateQuietStep(steps, from, to, piece);
+            if (steps[0] & moveflagPromotion) {
+                steps[0] |= moveflagPromotionKnight;
+                moves.push(steps);
+                steps[0] &= ~moveflagPromotionKnight;
+                steps[0] |= moveflagPromotionBishop;
+                moves.push(steps);
+                steps[0] &= ~moveflagPromotionBishop;
+            }
             moves.push(steps);
-            steps[0] &= ~moveflagPromotionKnight;
-            steps[0] |= moveflagPromotionBishop;
-            moves.push(steps);
-            steps[0] &= ~moveflagPromotionBishop;
         }
-        moves.push(steps);
-        to = from + inc + 1; steps = new Array();
-        if (Dagaz.AI.g_board[to] == 0) GenerateQuietStep(steps, from, to, piece);
-        if (steps[0] & moveflagPromotion) {
-            steps[0] |= moveflagPromotionKnight;
+        to = from + inc + 1;
+        if (Dagaz.AI.g_board[to] == 0) {
+            steps = new Array();
+            GenerateQuietStep(steps, from, to, piece);
+            if (steps[0] & moveflagPromotion) {
+                steps[0] |= moveflagPromotionKnight;
+                moves.push(steps);
+                steps[0] &= ~moveflagPromotionKnight;
+                steps[0] |= moveflagPromotionBishop;
+                moves.push(steps);
+                steps[0] &= ~moveflagPromotionBishop;
+            }
             moves.push(steps);
-            steps[0] &= ~moveflagPromotionKnight;
-            steps[0] |= moveflagPromotionBishop;
-            moves.push(steps);
-            steps[0] &= ~moveflagPromotionBishop;
         }
-        moves.push(steps);
     }
     if (piece == pieceKing) {
-        to = from - 17; steps = new Array();
-        if (Dagaz.AI.g_board[to] == 0) GenerateQuietStep(steps, from, to, piece);
-        moves.push(steps);
-        to = from + 17; steps = new Array();
-        if (Dagaz.AI.g_board[to] == 0) GenerateQuietStep(steps, from, to, piece);
-        moves.push(steps);
-        to = from - 15; steps = new Array();
-        if (Dagaz.AI.g_board[to] == 0) GenerateQuietStep(steps, from, to, piece);
-        moves.push(steps);
-        to = from + 15; steps = new Array();
-        if (Dagaz.AI.g_board[to] == 0) GenerateQuietStep(steps, from, to, piece);
-        moves.push(steps);
+        to = from - 17;
+        if (Dagaz.AI.g_board[to] == 0) {
+            steps = new Array();
+            GenerateQuietStep(steps, from, to, piece);
+            moves.push(steps);
+        }
+        to = from + 17; 
+        if (Dagaz.AI.g_board[to] == 0) {
+            steps = new Array();
+            GenerateQuietStep(steps, from, to, piece);
+            moves.push(steps);
+        }
+        to = from - 15; 
+        if (Dagaz.AI.g_board[to] == 0) {
+            steps = new Array();
+            GenerateQuietStep(steps, from, to, piece);
+            moves.push(steps);
+        }
+        to = from + 15; 
+        if (Dagaz.AI.g_board[to] == 0) {
+            steps = new Array();
+            GenerateQuietStep(steps, from, to, piece);
+            moves.push(steps);
+        }
     }
     if (piece == pieceDragon) {
         to = from + inc - 1;

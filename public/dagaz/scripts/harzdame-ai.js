@@ -187,12 +187,18 @@ function GenerateQuietMovesFrom(moves, from) {
     var piece = Dagaz.AI.g_board[from] & Dagaz.AI.TYPE_MASK;
 
     if (piece == pieceMan) {
-        to = from - inc; steps = new Array();
-        if (Dagaz.AI.g_board[to] == 0) GenerateQuietStep(steps, from, to, true);
-        moves.push(steps);
-        to = from - (-16 * inc); steps = new Array();
-        if (Dagaz.AI.g_board[to] == 0) GenerateQuietStep(steps, from, to, true);
-        moves.push(steps);
+        to = from - inc; 
+        if (Dagaz.AI.g_board[to] == 0) {
+            steps = new Array();
+            GenerateQuietStep(steps, from, to, true);
+            moves.push(steps);
+        }
+        to = from - (-16 * inc); 
+        if (Dagaz.AI.g_board[to] == 0) {
+            steps = new Array();
+            GenerateQuietStep(steps, from, to, true);
+            moves.push(steps);
+        }
     }
 
     if (piece == pieceKing) {

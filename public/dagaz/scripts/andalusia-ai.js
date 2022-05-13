@@ -2,7 +2,7 @@
 
 (function() {
 
-Dagaz.AI.NOISE_FACTOR     = 5;
+Dagaz.AI.NOISE_FACTOR     = 1;
 Dagaz.AI.g_timeout        = 10000;
 
 Dagaz.AI.PIECE_MASK       = 0xF;

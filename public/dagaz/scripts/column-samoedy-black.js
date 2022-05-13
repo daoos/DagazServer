@@ -22,7 +22,7 @@ ZRF = {
 };
 
 if (!_.isUndefined(Dagaz.Controller.addSound)) {
-    Dagaz.Controller.addSound(10, "sounds/wind.wav");
+    Dagaz.Controller.addSound(10, "sounds/wind.wav", true);
 }
 
 Dagaz.Model.BuildDesign = function(design) {
