@@ -12,7 +12,7 @@ Dagaz.Model.moveToString = function(move) {
       if ((r == "") && (a[0] != null)) {
           r = r + Dagaz.Model.posToString(a[0][0]);
       }
-      if (a[1] !== null) {
+      if ((a[1] !== null) && (a[0][0] != a[1][0])) {
           r = r + Dagaz.Model.posToString(a[1][0]);
       }
   });
