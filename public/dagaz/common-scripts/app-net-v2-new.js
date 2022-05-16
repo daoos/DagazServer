@@ -17,6 +17,7 @@ var lastPosition = null;
 var determinated = null;
 var dropIndex = 0;
 var onceGameOver = true;
+var onceTimer = true;
 
 var inProgress = false;
 var auth = null;
@@ -1096,6 +1097,10 @@ App.prototype.updateTimer = function() {
       s = '0' + s;
   }
   timer.innerHTML = '<b style="color:' + c + ';">' + s + '</b>';
+  if (onceTimer) {
+      Canvas.height = Canvas.height + 10;
+      onceTimer = false;
+  }
 }
 
 App.prototype.isRandom = function() {
