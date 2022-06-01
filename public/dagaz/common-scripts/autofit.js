@@ -84,7 +84,7 @@
 
     var FitBox = function() {
         windowWidth = window.innerWidth ;
-        windowHeight = window.innerHeight ;
+        windowHeight = window.innerHeight - 30 ;
         if(windowWidth < windowHeight) {
             windowWidth -= 40;
             windowHeight *= 0.8;

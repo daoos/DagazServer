@@ -156,6 +156,10 @@ View2D.prototype.defBoard = function(img, x, y, selector, turns) {
      x: x ? x : 0,
      y: y ? y : 0
   };
+  if (Dagaz.View.CHECK_CANVAS) {
+      Canvas.width = board.h.width;
+      Canvas.height = board.h.height;
+  }
   this.res.push(board);
   this.board.push(board);
 }

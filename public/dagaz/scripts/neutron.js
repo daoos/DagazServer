@@ -1,4 +1,5 @@
 Dagaz.Controller.persistense = "none";
+Dagaz.View.CHECK_CANVAS = true;
 
 ZRF = {
     JUMP:          0,
