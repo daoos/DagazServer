@@ -59,9 +59,22 @@ var canEat = function(design, board, pos) {
   }
 }
 
+var findPiece = function(design, board, player, type) {
+  var positions = design.allPositions();
+  for (var i = 0; i < positions.length; i++) {
+       var piece = board.getPiece(positions[i]);
+       if ((piece !== null) && (piece.type == type) && (piece.player == player)) {
+           return positions[i];
+       }
+  }
+  return null;
+}
+
 var checkGoals = Dagaz.Model.checkGoals;
 
 Dagaz.Model.checkGoals = function(design, board, player) {
+  var king = design.getPieceType("King");
+  if (findPiece(design, board, player, king) === null) return -1;
   board.generate(design);
   if (board.moves.length == 0) {
       for (var pos = 0; pos < 64; pos++) {
@@ -72,17 +85,6 @@ Dagaz.Model.checkGoals = function(design, board, player) {
       }
   }
   return checkGoals(design, board, player);
-}
-
-var findPiece = function(design, board, player, type) {
-  var positions = design.allPositions();
-  for (var i = 0; i < positions.length; i++) {
-       var piece = board.getPiece(positions[i]);
-       if ((piece !== null) && (piece.type == type) && (piece.player == player)) {
-           return positions[i];
-       }
-  }
-  return null;
 }
 
 var notSafe = function(design, board, player, king) {

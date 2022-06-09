@@ -1,5 +1,7 @@
 Dagaz.Controller.persistense = "none";
 
+Dagaz.AI.g_flags = 0;
+
 ZRF = {
     JUMP:          0,
     IF:            1,
