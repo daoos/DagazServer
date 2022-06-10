@@ -50,9 +50,13 @@ Dagaz.AI.pieceAdj = [
     0,    0,   0,   0,   0,   0,    0,    0, 
     0,    0,   0,   0,   0,   0,    0,    0, 
     0,    0,   0,   0,   0,   0,    0,    0, 
+    0,    0,   0,   0,   0,   0,    0,    0, 
+    0,    0,   0,   0,   0,   0,    0,    0, 
     0,    0,   0,   0,   0,   0,    0,    0 
 ], 
 [   0,    0,   0,   0,   0,   0,    0,    0, // pieceMan
+    0,    0,   0,   0,   0,   0,    0,    0, 
+    0,    0,   0,   0,   0,   0,    0,    0, 
     0,    0,   0,   0,   0,   0,    0,    0, 
     0,    0,   0,   0,   0,   0,    0,    0, 
     0,    0,   0,   0,   0,   0,    0,    0, 
@@ -64,6 +68,8 @@ Dagaz.AI.pieceAdj = [
 [   0,    0,   0,   0,   0,   0,    0,    0, // piecePawn
   -25,  105, 135, 270, 270, 135,  105,  -25,
   -80,    0,  30, 176, 176,  30,    0,  -80,
+  -85,   -5,  25, 175, 175,  25,   -5,  -85,
+  -85,   -5,  25, 175, 175,  25,   -5,  -85,
   -85,   -5,  25, 175, 175,  25,   -5,  -85,
   -90,  -10,  20, 125, 125,  20,  -10,  -90,
   -95,  -15,  15,  75,  75,  15,  -15,  -95, 
@@ -77,11 +83,15 @@ Dagaz.AI.pieceAdj = [
     0,    0,   0,   0,   0,   0,    0,    0, 
     0,    0,   0,   0,   0,   0,    0,    0, 
     0,    0,   0,   0,   0,   0,    0,    0, 
+    0,    0,   0,   0,   0,   0,    0,    0, 
+    0,    0,   0,   0,   0,   0,    0,    0, 
     0,    0,   0,   0,   0,   0,    0,    0 
 ], 
 [-200, -100, -50, -50, -50, -50, -100, -200, // pieceKnight
  -100,    0,   0,   0,   0,   0,    0, -100,
   -50,    0,  60,  60,  60,  60,    0,  -50,
+  -50,    0,  30,  60,  60,  30,    0,  -50,
+  -50,    0,  30,  60,  60,  30,    0,  -50,
   -50,    0,  30,  60,  60,  30,    0,  -50,
   -50,    0,  30,  60,  60,  30,    0,  -50,
   -50,    0,  30,  30,  30,  30,    0,  -50,
@@ -93,12 +103,16 @@ Dagaz.AI.pieceAdj = [
   -25,  -10,    0, 25,  25,   0,  -10,   -25,
   -10,    0,   25, 40,  40,  25,    0,   -10,
   -10,    0,   25, 40,  40,  25,    0,   -10,
+  -10,    0,   25, 40,  40,  25,    0,   -10,
+  -10,    0,   25, 40,  40,  25,    0,   -10,
   -25,  -10,    0, 25,  25,   0,  -10,   -25,
   -50,  -25,  -10,  0,   0, -10,  -25,   -50,
   -50,  -50,  -25,-10, -10, -25,  -50,   -50
 ],
 [ -60,  -30,  -10, 20,  20, -10,  -30,   -60, // pieceRook
    40,   70,   90,120, 120,  90,   70,    40,
+  -60,  -30,  -10, 20,  20, -10,  -30,   -60,
+  -60,  -30,  -10, 20,  20, -10,  -30,   -60,
   -60,  -30,  -10, 20,  20, -10,  -30,   -60,
   -60,  -30,  -10, 20,  20, -10,  -30,   -60,
   -60,  -30,  -10, 20,  20, -10,  -30,   -60,
@@ -114,8 +128,12 @@ Dagaz.AI.pieceAdj = [
     0,    0,   0,   0,   0,   0,    0,    0, 
     0,    0,   0,   0,   0,   0,    0,    0, 
     0,    0,   0,   0,   0,   0,    0,    0, 
+    0,    0,   0,   0,   0,   0,    0,    0, 
+    0,    0,   0,   0,   0,   0,    0,    0, 
 ], 
 [  50,  150, -25, -125, -125, -25, 150,  50, // pieceKing
+   50,  150, -25, -125, -125, -25, 150,  50,
+   50,  150, -25, -125, -125, -25, 150,  50,
    50,  150, -25, -125, -125, -25, 150,  50,
    50,  150, -25, -125, -125, -25, 150,  50,
    50,  150, -25, -125, -125, -25, 150,  50,
@@ -138,7 +156,7 @@ var g_queenDeltas  = [-1, +1, -15, +15, -17, +17, -16, +16];
 var g_seeValues = [0, 1, 1, 2, 3, 3, 5, 7, 900, 0, 0, 0, 0, 0, 0, 0,
                    0, 1, 1, 2, 3, 3, 5, 7, 900, 0, 0, 0, 0, 0, 0, 0];
 
-Dagaz.AI.g_flags = moveflagCastleKing | moveflagCastleQueen;
+Dagaz.AI.g_flags = 0;
 
 var g_castleRightsMask = [
 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -374,7 +392,8 @@ var isHashMoveValid = function(step) {
         }
 
         var row = to & 0xF0;
-        if (((row == 0x90 && !Dagaz.AI.g_toMove) ||
+        var delta = (8 - Dagaz.Model.HEIGHT) << 4;
+        if (((row == (0x90 - delta) && !Dagaz.AI.g_toMove) ||
              (row == 0x20 && Dagaz.AI.g_toMove)) != (step & moveflagPromotion)) {
             // Handle promotions
             return false;
@@ -657,14 +676,14 @@ Dagaz.AI.InitializeFromFen = function(fen) {
     if (!Dagaz.AI.g_toMove) Dagaz.AI.g_baseEval = -Dagaz.AI.g_baseEval;
 
     Dagaz.AI.g_move50 = 0;
-/*  var kingPos = Dagaz.AI.g_pieceList[(Dagaz.AI.g_toMove | pieceKing) << Dagaz.AI.COUNTER_SIZE];
+    var kingPos = Dagaz.AI.g_pieceList[(Dagaz.AI.g_toMove | pieceKing) << Dagaz.AI.COUNTER_SIZE];
     Dagaz.AI.g_inCheck = false;
     if (kingPos != 0) {
         Dagaz.AI.g_inCheck = IsSquareAttackable(kingPos, them);
     }
 
     // Check for king capture (invalid FEN)
-    kingPos = Dagaz.AI.g_pieceList[(them | pieceKing) << Dagaz.AI.COUNTER_SIZE]
+/*  kingPos = Dagaz.AI.g_pieceList[(them | pieceKing) << Dagaz.AI.COUNTER_SIZE]
     if ((kingPos != 0) && IsSquareAttackable(kingPos, Dagaz.AI.g_toMove)) {
         return 'Invalid FEN: Can capture king';
     }
@@ -1037,16 +1056,12 @@ function NoKing() {
 
 Dagaz.AI.GenerateCaptureMoves = function(allMoves) {
     if (NoKing()) return;
-    Dagaz.AI.isPrioritied = false;
     GenerateCheckersCaptures(allMoves);
-    if (allMoves.length == 0) {
-        GenerateChessCaptures(allMoves);
-    } else {
-        Dagaz.AI.isPrioritied = true;
-    }
+    GenerateChessCaptures(allMoves);
 }
 
 function GenerateCaptureStep(from, dir, isMan) {
+    var delta = (8 - Dagaz.Model.HEIGHT) << 4;
     var enemy = Dagaz.AI.g_toMove == Dagaz.AI.colorWhite ? Dagaz.AI.colorBlack : Dagaz.AI.colorWhite;
     var captured = from + dir;
     if (!isMan) {
@@ -1060,7 +1075,7 @@ function GenerateCaptureStep(from, dir, isMan) {
     var flags = 0;
     if (isMan) {
         var row = to & 0xF0;
-        if (!Dagaz.AI.g_toMove && (row == 0x90)) {
+        if (!Dagaz.AI.g_toMove && (row == (0x90 - delta))) {
             flags = moveflagPromotion;
         }
         if (Dagaz.AI.g_toMove && (row == 0x20)) {
@@ -1134,7 +1149,8 @@ function GenerateMove(from, to, flags) {
 
 function MovePawnTo(moveStack, start, square) {
     var row = square & 0xF0;
-    if (((row == 0x90) || (row == 0x20))) {
+    var delta = (8 - Dagaz.Model.HEIGHT) << 4;
+    if (((row == (0x90 - delta)) || (row == 0x20))) {
         moveStack[moveStack.length] = GenerateMove(start, square, moveflagPromotion | moveflagPromoteQueen);
         moveStack[moveStack.length] = GenerateMove(start, square, moveflagPromotion | moveflagPromoteKnight);
         moveStack[moveStack.length] = GenerateMove(start, square, moveflagPromotion | moveflagPromoteBishop);
@@ -1243,7 +1259,7 @@ function GenerateChessCaptures(moveStack) {
 }
 
 Dagaz.AI.GenerateAllMoves = function(moveStack) {
-    if (Dagaz.AI.isPrioritied || NoKing()) return;
+    if (NoKing()) return;
     var from, to, piece, pieceIdx;
     var inc = (Dagaz.AI.g_toMove == Dagaz.AI.colorWhite) ? -16 : 16;
 
