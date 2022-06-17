@@ -7,6 +7,8 @@ Dagaz.AI.g_timeout      = 3000;
 Dagaz.Model.WIDTH       = 8;
 Dagaz.Model.HEIGHT      = 8;
 Dagaz.AI.NOISE_FACTOR   = 0;
+Dagaz.AI.Q_SEARCH_LIMIT = -20;
+Dagaz.AI.Q_SEARCH_ARITY = 100;
 
 Dagaz.AI.PIECE_MASK     = 0xF;
 Dagaz.AI.TYPE_MASK      = 0x7;
@@ -140,10 +142,37 @@ function QSearch(alpha, beta, ply, depth) {
     if (realEval > alpha)
         alpha = realEval;
 
+    if (ply < Dagaz.AI.Q_SEARCH_LIMIT) return realEval;
+
     var moveScores = new Array();
     var moves = Dagaz.AI.GenerateCaptureMoves();
 
+    if (Dagaz.AI.QScoreMove) {
+        for (var i = 0; i < moves.length; i++) {
+            moveScores[i] = Dagaz.AI.QScoreMove(moves[i]);
+        }
+    }
+
     for (var i = 0; i < moves.length; i++) {
+        if (Dagaz.AI.Q_SEARCH_ARITY && (i >= Dagaz.AI.Q_SEARCH_ARITY)) break;
+
+        if (Dagaz.AI.QScoreMove) {
+            var bestMove = i;
+            for (var j = moves.length - 1; j > i; j--) {
+                if (moveScores[j] > moveScores[bestMove]) {
+                    bestMove = j;
+                }
+            }
+
+            var tmpMove = moves[i];
+            moves[i] = moves[bestMove];
+            moves[bestMove] = tmpMove;
+            
+            var tmpScore = moveScores[i];
+            moveScores[i] = moveScores[bestMove];
+            moveScores[bestMove] = tmpScore;
+        }
+
         if (!Dagaz.AI.MakeMove(moves[i])) {
             continue;
         }

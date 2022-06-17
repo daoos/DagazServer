@@ -28,8 +28,6 @@ Dagaz.Model.BuildDesign = function(design) {
     design.checkVersion("show-blink", "false");
     design.checkVersion("pass-partial", "true");
     design.checkVersion("animate-captures", "false");
-    design.checkVersion("fanorona-extension", "true");
-    design.checkVersion("fanorona-invariant", "true");
 
     design.addDirection("w");  // 0
     design.addDirection("e");  // 1
@@ -89,74 +87,7 @@ Dagaz.Model.BuildDesign = function(design) {
     design.addPosition("h1", [-1, 1, 0, -9, 0, 0, 0, 0]);
     design.addPosition("i1", [-1, 0, 0, -9, 0, 0, -10, 0]);
 
-    design.addCommand(0, ZRF.FUNCTION,	24);	// from
-    design.addCommand(0, ZRF.PARAM,	0);	// $1
-    design.addCommand(0, ZRF.FUNCTION,	22);	// navigate
-    design.addCommand(0, ZRF.FUNCTION,	1);	// empty?
-    design.addCommand(0, ZRF.FUNCTION,	20);	// verify
-    design.addCommand(0, ZRF.PARAM,	1);	// $2
-    design.addCommand(0, ZRF.FUNCTION,	22);	// navigate
-    design.addCommand(0, ZRF.FUNCTION,	2);	// enemy?
-    design.addCommand(0, ZRF.FUNCTION,	20);	// verify
-    design.addCommand(0, ZRF.FUNCTION,	26);	// capture
-    design.addCommand(0, ZRF.PARAM,	2);	// $3
-    design.addCommand(0, ZRF.FUNCTION,	22);	// navigate
-    design.addCommand(0, ZRF.MODE,	0);	// priority-type
-    design.addCommand(0, ZRF.FUNCTION,	25);	// to
-    design.addCommand(0, ZRF.FUNCTION,	28);	// end
-
-    design.addCommand(1, ZRF.FUNCTION,	24);	// from
-    design.addCommand(1, ZRF.PARAM,	0);	// $1
-    design.addCommand(1, ZRF.FUNCTION,	22);	// navigate
-    design.addCommand(1, ZRF.FUNCTION,	2);	// enemy?
-    design.addCommand(1, ZRF.FUNCTION,	20);	// verify
-    design.addCommand(1, ZRF.FUNCTION,	26);	// capture
-    design.addCommand(1, ZRF.PARAM,	1);	// $2
-    design.addCommand(1, ZRF.FUNCTION,	22);	// navigate
-    design.addCommand(1, ZRF.PARAM,	2);	// $3
-    design.addCommand(1, ZRF.FUNCTION,	22);	// navigate
-    design.addCommand(1, ZRF.FUNCTION,	1);	// empty?
-    design.addCommand(1, ZRF.FUNCTION,	20);	// verify
-    design.addCommand(1, ZRF.MODE,	0);	// priority-type
-    design.addCommand(1, ZRF.FUNCTION,	25);	// to
-    design.addCommand(1, ZRF.FUNCTION,	28);	// end
-
-    design.addCommand(2, ZRF.FUNCTION,	24);	// from
-    design.addCommand(2, ZRF.PARAM,	0);	// $1
-    design.addCommand(2, ZRF.FUNCTION,	22);	// navigate
-    design.addCommand(2, ZRF.FUNCTION,	1);	// empty?
-    design.addCommand(2, ZRF.FUNCTION,	20);	// verify
-    design.addCommand(2, ZRF.FUNCTION,	25);	// to
-    design.addCommand(2, ZRF.FUNCTION,	28);	// end
-
-    design.addPriority(0);			// priority-type
-    design.addPriority(1);			// normal-type
-
     design.addPiece("Stone", 0);
-    design.addMove(0, 0, [3, 3, 2], 0);
-    design.addMove(0, 0, [6, 6, 7], 0);
-    design.addMove(0, 0, [2, 2, 3], 0);
-    design.addMove(0, 0, [7, 7, 6], 0);
-    design.addMove(0, 0, [0, 0, 1], 0);
-    design.addMove(0, 0, [5, 5, 4], 0);
-    design.addMove(0, 0, [1, 1, 0], 0);
-    design.addMove(0, 0, [4, 4, 5], 0);
-    design.addMove(0, 1, [3, 2, 2], 0);
-    design.addMove(0, 1, [6, 7, 7], 0);
-    design.addMove(0, 1, [2, 3, 3], 0);
-    design.addMove(0, 1, [7, 6, 6], 0);
-    design.addMove(0, 1, [0, 1, 1], 0);
-    design.addMove(0, 1, [5, 4, 4], 0);
-    design.addMove(0, 1, [1, 0, 0], 0);
-    design.addMove(0, 1, [4, 5, 5], 0);
-    design.addMove(0, 2, [3], 1);
-    design.addMove(0, 2, [6], 1);
-    design.addMove(0, 2, [2], 1);
-    design.addMove(0, 2, [7], 1);
-    design.addMove(0, 2, [0], 1);
-    design.addMove(0, 2, [5], 1);
-    design.addMove(0, 2, [1], 1);
-    design.addMove(0, 2, [4], 1);
 
     design.setup("White", "Stone", 36);
     design.setup("White", "Stone", 27);
@@ -209,49 +140,49 @@ Dagaz.View.configure = function(view) {
     view.defPiece("WhiteStone", "White Stone");
     view.defPiece("BlackStone", "Black Stone");
  
-    view.defPosition("a5", 600, 298, 75, 75);
-    view.defPosition("b5", 525, 298, 75, 75);
-    view.defPosition("c5", 450, 298, 75, 75);
-    view.defPosition("d5", 375, 298, 75, 75);
-    view.defPosition("e5", 300, 298, 75, 75);
-    view.defPosition("f5", 225, 298, 75, 75);
-    view.defPosition("g5", 150, 298, 75, 75);
-    view.defPosition("h5", 75, 298, 75, 75);
-    view.defPosition("i5", 0, 298, 75, 75);
-    view.defPosition("a4", 600, 223, 75, 75);
-    view.defPosition("b4", 525, 223, 75, 75);
-    view.defPosition("c4", 450, 223, 75, 75);
-    view.defPosition("d4", 375, 223, 75, 75);
-    view.defPosition("e4", 300, 223, 75, 75);
-    view.defPosition("f4", 225, 223, 75, 75);
-    view.defPosition("g4", 150, 223, 75, 75);
-    view.defPosition("h4", 75, 223, 75, 75);
-    view.defPosition("i4", 0, 223, 75, 75);
-    view.defPosition("a3", 600, 148, 75, 75);
-    view.defPosition("b3", 525, 148, 75, 75);
-    view.defPosition("c3", 450, 148, 75, 75);
-    view.defPosition("d3", 375, 148, 75, 75);
-    view.defPosition("e3", 300, 148, 75, 75);
-    view.defPosition("f3", 225, 148, 75, 75);
-    view.defPosition("g3", 150, 148, 75, 75);
-    view.defPosition("h3", 75, 148, 75, 75);
-    view.defPosition("i3", 0, 148, 75, 75);
-    view.defPosition("a2", 600, 73, 75, 75);
-    view.defPosition("b2", 525, 73, 75, 75);
-    view.defPosition("c2", 450, 73, 75, 75);
-    view.defPosition("d2", 375, 73, 75, 75);
-    view.defPosition("e2", 300, 73, 75, 75);
-    view.defPosition("f2", 225, 73, 75, 75);
-    view.defPosition("g2", 150, 73, 75, 75);
-    view.defPosition("h2", 75, 73, 75, 75);
-    view.defPosition("i2", 0, 73, 75, 75);
-    view.defPosition("a1", 600, -2, 75, 75);
-    view.defPosition("b1", 525, -2, 75, 75);
-    view.defPosition("c1", 450, -2, 75, 75);
-    view.defPosition("d1", 375, -2, 75, 75);
-    view.defPosition("e1", 300, -2, 75, 75);
-    view.defPosition("f1", 225, -2, 75, 75);
-    view.defPosition("g1", 150, -2, 75, 75);
-    view.defPosition("h1", 75, -2, 75, 75);
-    view.defPosition("i1", 0, -2, 75, 75);
+    view.defPosition("a5", 709, 357, 59, 59);
+    view.defPosition("b5", 621, 357, 59, 59);
+    view.defPosition("c5", 533, 357, 59, 59);
+    view.defPosition("d5", 445, 357, 59, 59);
+    view.defPosition("e5", 357, 357, 59, 59);
+    view.defPosition("f5", 269, 357, 59, 59);
+    view.defPosition("g5", 181, 357, 59, 59);
+    view.defPosition("h5", 93, 357, 59, 59);
+    view.defPosition("i5", 5, 357, 59, 59);
+    view.defPosition("a4", 709, 269, 59, 59);
+    view.defPosition("b4", 621, 269, 59, 59);
+    view.defPosition("c4", 533, 269, 59, 59);
+    view.defPosition("d4", 445, 269, 59, 59);
+    view.defPosition("e4", 357, 269, 59, 59);
+    view.defPosition("f4", 269, 269, 59, 59);
+    view.defPosition("g4", 181, 269, 59, 59);
+    view.defPosition("h4", 93, 269, 59, 59);
+    view.defPosition("i4", 5, 269, 59, 59);
+    view.defPosition("a3", 709, 181, 59, 59);
+    view.defPosition("b3", 621, 181, 59, 59);
+    view.defPosition("c3", 533, 181, 59, 59);
+    view.defPosition("d3", 445, 181, 59, 59);
+    view.defPosition("e3", 357, 181, 59, 59);
+    view.defPosition("f3", 269, 181, 59, 59);
+    view.defPosition("g3", 181, 181, 59, 59);
+    view.defPosition("h3", 93, 181, 59, 59);
+    view.defPosition("i3", 5, 181, 59, 59);
+    view.defPosition("a2", 709, 93, 59, 59);
+    view.defPosition("b2", 621, 93, 59, 59);
+    view.defPosition("c2", 533, 93, 59, 59);
+    view.defPosition("d2", 445, 93, 59, 59);
+    view.defPosition("e2", 357, 93, 59, 59);
+    view.defPosition("f2", 269, 93, 59, 59);
+    view.defPosition("g2", 181, 93, 59, 59);
+    view.defPosition("h2", 93, 93, 59, 59);
+    view.defPosition("i2", 5, 93, 59, 59);
+    view.defPosition("a1", 709, 5, 59, 59);
+    view.defPosition("b1", 621, 5, 59, 59);
+    view.defPosition("c1", 533, 5, 59, 59);
+    view.defPosition("d1", 445, 5, 59, 59);
+    view.defPosition("e1", 357, 5, 59, 59);
+    view.defPosition("f1", 269, 5, 59, 59);
+    view.defPosition("g1", 181, 5, 59, 59);
+    view.defPosition("h1", 93, 5, 59, 59);
+    view.defPosition("i1", 5, 5, 59, 59);
 }
