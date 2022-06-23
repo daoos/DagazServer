@@ -234,6 +234,20 @@ Dagaz.View.configure = function(view) {
     view.defPiece("BlackKing", "Black King");
     view.defPiece("WhiteSoldier", "White Soldier");
     view.defPiece("BlackSoldier", "Black Soldier");
+    view.defPiece("WhiteB", "WhiteB");
+    view.defPiece("BlackB", "BlackB");
+    view.defPiece("WhiteBN", "WhiteBN");
+    view.defPiece("BlackBN", "BlackBN");
+    view.defPiece("WhiteN", "WhiteN");
+    view.defPiece("BlackN", "BlackN");
+    view.defPiece("WhiteR", "WhiteR");
+    view.defPiece("BlackR", "BlackR");
+    view.defPiece("WhiteRB", "WhiteRB");
+    view.defPiece("BlackRB", "BlackRB");
+    view.defPiece("WhiteRBN", "WhiteRBN");
+    view.defPiece("BlackRBN", "BlackRBN");
+    view.defPiece("WhiteRN", "WhiteRN");
+    view.defPiece("BlackRN", "BlackRN");
  
     view.defPosition("x9", 476, 544, 68, 68);
     view.defPosition("a9", 408, 544, 68, 68);

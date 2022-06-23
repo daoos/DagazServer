@@ -66,7 +66,7 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total, is_hidden) values(21, 27, 'Luzhanqi', 'luzhanqi', 2, 1)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total, is_hidden) values(22, 27, 'Game of Generals', 'gog', 2, 1)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(23, 32, 'Alquerque', 'alquerque', 2)`);
-        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(24, 32, 'Fanorona', 'fanorona', 2)`);
+        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total, max_selector) values(24, 32, 'Fanorona', 'fanorona', 2, 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(25, 32, 'Zamma', 'zamma', 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(26, 32, 'Dablot Asele', 'dablot-asele', 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(27, 32, 'Dablot Frostviken (Child)', 'dablot-child', 2)`);
@@ -446,6 +446,8 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_setups(id, game_id, variant_id, selector_value, name) values(19, 37, 189, 4, '7x7')`);
         await queryRunner.query(`insert into game_setups(id, game_id, variant_id, selector_value, name) values(20, 37, 206, 1, 'Standard')`);
         await queryRunner.query(`insert into game_setups(id, game_id, variant_id, selector_value, name) values(21, 37, 206, 2, 'Random')`);
+        await queryRunner.query(`insert into game_setups(id, game_id, variant_id, selector_value, name) values(22, 32, 24, 1, 'Riatra')`);
+        await queryRunner.query(`insert into game_setups(id, game_id, variant_id, selector_value, name) values(23, 32, 24, 2, 'Velo')`);
 
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(1, 'doubutsu-shogi', null, 'doubutsu-shogi', 'https://en.wikipedia.org/wiki/D%C5%8Dbutsu_sh%C5%8Dgi', 'Madoka Kitao')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(2, 'atari-go', null, 'atari-go', 'https://en.wikipedia.org/wiki/Go_variants#First_Capture')`);
@@ -497,7 +499,7 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(48, 'luzhanqi', null, 'luzhanqi', 'https://en.wikipedia.org/wiki/Luzhanqi')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(49, 'gog', null, 'gog', 'https://en.wikipedia.org/wiki/Game_of_the_Generals', '1970 Sofronio H. Pasola, Jr.')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(50, 'alquerque', null, 'alquerque', 'https://en.wikipedia.org/wiki/Alquerque')`);
-        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(51, 'fanorona', null, 'fanorona', 'https://en.wikipedia.org/wiki/Fanorona')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(51, 'fanorona', 1, 'fanorona', 'https://en.wikipedia.org/wiki/Fanorona')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(52, 'zamma', null, 'zamma', 'https://en.wikipedia.org/wiki/Zamma')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(53, 'dablot-asele', null, 'dablot-asele', 'https://en.wikipedia.org/wiki/Dablot_Prejjesne')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(54, 'dablot-child', null, 'dablot-child', 'https://en.wikipedia.org/wiki/Dablot_Prejjesne')`);
@@ -983,6 +985,7 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, copyright) values(603, '80-cells-columns', null, '80-cells-columns', 'Nikolay Spancireti (1916-1991)')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(604, 'lika', null, 'russian-checkers-1')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, copyright) values(605, 'nubia', null, 'nubia', '2009 Chris Huntoon')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(606, 'fanorona', 2, 'fanorona', 'https://en.wikipedia.org/wiki/Fanorona')`);
 }
 
     public async down(queryRunner: QueryRunner): Promise<any> {

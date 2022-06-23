@@ -2,8 +2,12 @@
 
 var checkVersion = Dagaz.Model.checkVersion;
 
+Dagaz.AI.veloPlayer = null;
+
 Dagaz.Model.checkVersion = function(design, name, value) {
-  if (name != "fanorona-moves") {
+  if (name == "fanorona-moves") {
+     Dagaz.AI.veloPlayer = value;
+  } else {
      checkVersion(design, name, value);
   }
 }
@@ -30,6 +34,29 @@ var calcDual = function(stack, n) {
       if (stack[i].isDual) r++;
   }
   return r;
+}
+
+var checkVelo = function(design, board, move) {
+  if (Dagaz.AI.veloPlayer === null) return true;
+  cnt = 0;
+  _.each(design.allPositions(), function(pos) {
+      var piece = board.getPiece(pos);
+      if (piece === null) return;
+      if (piece.player == Dagaz.AI.veloPlayer) return;
+      cnt++;
+  });
+  if (cnt <= 5) return true;
+  var captured = 0;
+  _.each(move.actions, function(a) {
+      if (a[0] === null) return;
+      if (a[1] !== null) return;
+      captured++;
+  });
+  if (Dagaz.AI.veloPlayer == board.player) {
+      return captured != 1;
+  } else {
+      return captured == 0;
+  }
 }
 
 var genCaptures = function(design, board, pos, piece, isReversed, history, stack, restricted) {
@@ -72,7 +99,9 @@ var genCaptures = function(design, board, pos, piece, isReversed, history, stack
                m.capturePiece(t, i + rn);
           });
       }
-      board.moves.push(m);
+      if (checkVelo(design, board, m)) {
+          board.moves.push(m);
+      }
       genCaptures(design, board, p, piece, false, history, stack, dir);
       genCaptures(design, board, p, piece, true, history, stack, dir);
       _.each(s.capturing, function(t) {

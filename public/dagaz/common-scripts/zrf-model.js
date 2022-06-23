@@ -32,7 +32,10 @@ Dagaz.Model.completePartial = false;
 Dagaz.Model.zrfCompatible   = false;
 Dagaz.Model.showLose        = false;
 
-Dagaz.Model.checkVersion = function(design, name, value) {  
+Dagaz.Model.checkVersion = function(design, name, value, selector) {  
+  if (!_.isUndefined(selector) && (selector != Dagaz.Model.getSetupSelector())) {
+      return;
+  }
   if (name == "z2j") {
      if (value > Z2J_VERSION) {
          design.failed = true;

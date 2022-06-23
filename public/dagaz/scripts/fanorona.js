@@ -22,12 +22,15 @@ ZRF = {
 };
 
 Dagaz.Model.BuildDesign = function(design) {
+    design.setupSelector(2);
+
     design.checkVersion("z2j", "2");
     design.checkVersion("smart-moves", "false");
     design.checkVersion("show-hints", "false");
     design.checkVersion("show-blink", "false");
     design.checkVersion("pass-partial", "true");
     design.checkVersion("animate-captures", "false");
+    design.checkVersion("fanorona-moves", "1", 2);
 
     design.addDirection("w");  // 0
     design.addDirection("e");  // 1

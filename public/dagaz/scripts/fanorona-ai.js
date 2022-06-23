@@ -33,9 +33,9 @@ Dagaz.AI.pieceAdj = [
     0,   0,   0,   0,   0,   0,   0,   0,   0
 ], 
 [ -20, -10,  10, -10,  10, -10,  10, -10, -20, // pieceMan
-  -10, 100,   0, 100,   0, 100,   0, 100, -10,
-  100,   0, 200,   0, 200,   0, 200,   0,  10,
-  -10, 100,   0, 100,   0, 100,   0, 100, -10,
+  -10,  20,   0,  20,   0,  20,   0,  20, -10,
+   10,   0,  20,   0,  20,   0,  20,   0,  10,
+  -10,  20,   0,  20,   0,  20,   0,  20, -10,
   -20, -10,  10, -10,  10, -10,  10, -10, -20
 ]];
 
@@ -351,6 +351,38 @@ function isEq(a, b) {
   return true;
 }
 
+function checkVelo(move) {
+  if (Dagaz.AI.veloPlayer === null) return true;
+  var cnt = 0;
+  for (var pos = 0; pos < 256; pos++) {
+      if (Dagaz.AI.g_board[pos] & Dagaz.AI.colorBlack) cnt++;
+  }
+  if (cnt <= 5) return true;
+  var me = Dagaz.AI.g_toMove ? Dagaz.AI.colorWhite : Dagaz.AI.colorBlack;
+  if (me == Dagaz.AI.colorBlack) {
+      if (move.length > 1) return false;
+      var target = (move[0] >> 16) & 0xFF;
+      return !target;
+  } else {
+      if (move.length > 1) return true;
+      var c = 0;
+      var target = (move[0] >> 16) & 0xFF;
+      if (!target) return false;
+      var to = (move >> 8) & 0xFF;
+      var from = move & 0xFF;
+      var inc = getDirection(from, to, target);
+      var enemy = Dagaz.AI.g_toMove ? Dagaz.AI.colorBlack : Dagaz.AI.colorWhite;
+      if (inc == 0) return false;
+      for (var p = target; ; p += inc) {
+           var captured = Dagaz.AI.g_board[p];
+           if ((captured & enemy) == 0) break;
+           if (captured & pieceNo) break;
+           c++;
+      }
+      return c > 1;
+  }
+}
+
 function addMove(moves, stack) {
   var move = new Array();
   for (var i = 0; i < stack.length; i++) {
@@ -359,6 +391,7 @@ function addMove(moves, stack) {
   for (var i = 0; i < moves.length; i++) {
       if (isEq(moves[i], move)) return;
   }
+  if (!checkVelo(move)) return;
   moves.push(move);
 }
 
