@@ -9,9 +9,11 @@ Dagaz.Model.HEIGHT      = 8;
 Dagaz.AI.NOISE_FACTOR   = 0;
 Dagaz.AI.Q_SEARCH_LIMIT = -20;
 Dagaz.AI.Q_SEARCH_ARITY = 100;
+Dagaz.AI.STALMATED      = true;
+Dagaz.AI.INC_CHECK_PLY  = true;
 
-Dagaz.AI.PIECE_MASK     = 0xF;
-Dagaz.AI.TYPE_MASK      = 0x7;
+Dagaz.AI.PIECE_MASK     = 0x0F;
+Dagaz.AI.TYPE_MASK      = 0x07;
 Dagaz.AI.PLAYERS_MASK   = 0x18;
 Dagaz.AI.TYPE_SIZE      = 3;
 
@@ -24,6 +26,7 @@ Dagaz.AI.g_toMove = 0;
 Dagaz.AI.g_baseEval    = 0;
 Dagaz.AI.g_hashKeyLow  = 0;
 Dagaz.AI.g_hashKeyHigh = 0;
+Dagaz.AI.g_inCheck     = false;
 
 Dagaz.AI.g_zobristLow = 0;
 Dagaz.AI.g_zobristHigh = 0;
@@ -134,7 +137,7 @@ function Search(finishMoveCallback, maxPly, finishPlyCallback) {
 function QSearch(alpha, beta, ply, depth) {
     g_qNodeCount++;
 
-    var realEval = Dagaz.AI.Evaluate();
+    var realEval = Dagaz.AI.g_inCheck ? (minEval + 10) : Dagaz.AI.Evaluate();
     
     if (realEval >= beta) 
         return realEval;
@@ -142,10 +145,26 @@ function QSearch(alpha, beta, ply, depth) {
     if (realEval > alpha)
         alpha = realEval;
 
+    if (!g_searchValid) return realEval;
     if (ply < Dagaz.AI.Q_SEARCH_LIMIT) return realEval;
 
+    if ((g_nodeCount & 127) == 127) {
+        if ((new Date()).getTime() - g_startTime > Dagaz.AI.g_timeout) {
+            // Time cutoff
+            g_searchValid = false;
+            return beta - 1;
+        }
+    }
+
+    var moves = new Array();
     var moveScores = new Array();
-    var moves = Dagaz.AI.GenerateCaptureMoves();
+    var wasInCheck = Dagaz.AI.g_inCheck;
+
+    if (wasInCheck) {
+        moves = Dagaz.AI.GenerateAllMoves();
+    } else {
+        moves = Dagaz.AI.GenerateCaptureMoves();
+    }
 
     if (Dagaz.AI.QScoreMove) {
         for (var i = 0; i < moves.length; i++) {
@@ -252,6 +271,8 @@ function AlphaBeta(ply, depth, alpha, beta) {
         hashMove = hashNode.bestMove;
     }
 
+    var inCheck  = Dagaz.AI.g_inCheck;
+
     var moveMade = false;
     var realEval = minEval;
 
@@ -267,6 +288,11 @@ function AlphaBeta(ply, depth, alpha, beta) {
 
         if (!Dagaz.AI.MakeMove(currentMove)) {
             continue;
+        }
+
+        if (Dagaz.AI.g_inCheck && Dagaz.AI.INC_CHECK_PLY) {
+            // Check extensions
+            if (depth < Dagaz.AI.CHECK_EXT_LIMIT) plyToSearch++;
         }
 
         var w = 0;
@@ -300,7 +326,12 @@ function AlphaBeta(ply, depth, alpha, beta) {
 
     if (!moveMade) {
         // If we have no valid moves it's either stalemate or checkmate
-        return minEval + depth * 10;
+        if (Dagaz.AI.g_inCheck || Dagaz.AI.STALMATED) 
+            // Checkmate.
+            return minEval + depth * 10;
+        else 
+            // Stalemate
+            return 0;
     }
 
     StoreHash(realEval, hashFlag, ply, hashMove, depth);
@@ -315,20 +346,20 @@ Dagaz.AI.ResetGame = function() {
 
     g_hashTable = new Array(g_hashSize);
 
-    var mt = new Dagaz.AI.MT(0x1badf00d);
+    Dagaz.AI.rand = new Dagaz.AI.MT(0x1badf00d);
 
     Dagaz.AI.g_zobristLow = new Array(256);
     Dagaz.AI.g_zobristHigh = new Array(256);
     for (var i = 0; i < 256; i++) {
         Dagaz.AI.g_zobristLow[i] = new Array(32);
         Dagaz.AI.g_zobristHigh[i] = new Array(32);
-        for (var j = 0; j < 32; j++) {
-            Dagaz.AI.g_zobristLow[i][j] = mt.next(32);
-            Dagaz.AI.g_zobristHigh[i][j] = mt.next(32);
+        for (var j = 0; j < 64; j++) {
+            Dagaz.AI.g_zobristLow[i][j] = Dagaz.AI.rand.next(32);
+            Dagaz.AI.g_zobristHigh[i][j] = Dagaz.AI.rand.next(32);
         }
     }
-    Dagaz.AI.g_zobristBlackLow = mt.next(32);
-    Dagaz.AI.g_zobristBlackHigh = mt.next(32);
+    Dagaz.AI.g_zobristBlackLow = Dagaz.AI.rand.next(32);
+    Dagaz.AI.g_zobristBlackHigh = Dagaz.AI.rand.next(32);
 }
 
 Dagaz.AI.SetHash = function() {
