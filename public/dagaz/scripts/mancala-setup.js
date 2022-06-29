@@ -192,7 +192,7 @@ Dagaz.Model.setup = function(board, init) {
                        cnt += +r.res[pos].attrs[i];
                   }
               }
-              if (cnt > 0) {
+              if (cnt != 0) {
                   board.setPiece(pos, piece);
               } else {
                   board.setPiece(pos, null);

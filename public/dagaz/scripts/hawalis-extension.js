@@ -36,6 +36,7 @@ Dagaz.Model.CheckInvariants = function(board) {
   _.each(board.moves, function(move) {
       var fr = 0;
       if (move.isSimpleMove()) {
+          var isPart = false;
           var pos = move.actions[0][0][0];
           if (design.inZone(0, board.player, pos)) {
               move.failed = true;
@@ -97,6 +98,7 @@ Dagaz.Model.CheckInvariants = function(board) {
           for (var ix = 0; ix < result.length; ix++) {
                var player = board.player;
                var piece = Dagaz.Model.createPiece(0, player).setValue(0, result[ix]);
+               if (result[ix] < 0) isPart = true;
                if (result[ix] == 0) {
                    if (ix > 0) {
                        move.capturePiece(pos);
@@ -115,11 +117,12 @@ Dagaz.Model.CheckInvariants = function(board) {
                                move.dropPiece(pos, piece);
                            }
                        }
-                   }
+                   }                   
                }
                pos = design.navigate(board.player, pos, 0);
           }
           toReserve(design, board, board.player, move, fr);
+          if (isPart) move.goTo(board.turn);
       }
   });
   var ko = [];
