@@ -278,7 +278,7 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(241, 24, 'Column Checkers (10x8)', '80-cells-columns', 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(242, 22, 'Lika', 'lika', 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(243, 37, 'Nubia', 'nubia', 2)`);
-//      await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(244, 31, 'Hawalis', 'hawalis', 2)`);
+        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(244, 31, 'Hawalis', 'hawalis', 2)`);
 
         await queryRunner.query(`insert into game_styles(id, game_id, name, suffix, player_num) values(1, 23, 'European', '', null)`);
         await queryRunner.query(`insert into game_styles(id, game_id, name, suffix, player_num) values(2, 23, 'Chinese', '-kanji', null)`);
@@ -426,7 +426,7 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_bots(id, game_id, variant_id, selector_value, player_num) values(122, 37, 243, null, null)`);
         await queryRunner.query(`insert into game_bots(id, game_id, variant_id, selector_value, player_num) values(123, 36, 207, null, null)`);
         await queryRunner.query(`insert into game_bots(id, game_id, variant_id, selector_value, player_num) values(124, 30, 147, null, null)`);
-//      await queryRunner.query(`insert into game_bots(id, game_id, variant_id, selector_value, player_num) values(125, 31, 244, null, null)`);
+        await queryRunner.query(`insert into game_bots(id, game_id, variant_id, selector_value, player_num) values(125, 31, 244, null, null)`);
 
         await queryRunner.query(`insert into game_setups(id, game_id, variant_id, selector_value, name) values(1, 25, 10, 1, 'Without Handicap')`);
         await queryRunner.query(`insert into game_setups(id, game_id, variant_id, selector_value, name) values(2, 25, 10, 2, 'Left-Kyo Handicap')`);
@@ -989,8 +989,8 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(604, 'lika', null, 'russian-checkers-1')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, copyright) values(605, 'nubia', null, 'nubia', '2009 Chris Huntoon')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(606, 'fanorona', 2, 'fanorona', 'https://en.wikipedia.org/wiki/Fanorona')`);
-//      await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(607, 'hawalis', null, 'hawalis', 'https://mancala.fandom.com/wiki/Hawalis')`);
-//      await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(608, 'hawalis-alt', null, 'hawalis-alt', 'https://mancala.fandom.com/wiki/Hawalis')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(607, 'hawalis', null, 'hawalis', 'https://mancala.fandom.com/wiki/Hawalis')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(608, 'hawalis-alt', null, 'hawalis-alt', 'https://mancala.fandom.com/wiki/Hawalis')`);
 }
 
     public async down(queryRunner: QueryRunner): Promise<any> {

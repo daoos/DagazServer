@@ -122,7 +122,7 @@ Dagaz.Model.CheckInvariants = function(board) {
                pos = design.navigate(board.player, pos, 0);
           }
           toReserve(design, board, board.player, move, fr);
-          if (isPart) move.goTo(board.turn);
+          if (isPart && (Dagaz.Model.checkGoals(design, board, board.player) === null)) move.goTo(board.turn);
       }
   });
   var ko = [];
