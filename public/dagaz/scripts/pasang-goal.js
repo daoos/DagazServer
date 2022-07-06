@@ -35,12 +35,20 @@ Dagaz.Model.checkGoals = function(design, board, player) {
       var x = board.getValue(1);
       var y = board.getValue(2);
       console.log("Score: player-1 = " + x + ", player-2 = " + y);
-      if ((x !== null) && (y !== null) && (x != y)) {
-          var p = _.max([x, y]);
-          if (p == player) {
-              return -1;
+      if ((x !== null) && (y !== null)) {
+          if (x == y) return 0;
+          if (x > y) {
+              if (player == 1) {
+                  return 1;
+              } else {
+                  return -1;
+              }
           } else {
-              return 1;
+              if (player == 1) {
+                  return -1;
+              } else {
+                  return 1;
+              }
           }
       }
   }
