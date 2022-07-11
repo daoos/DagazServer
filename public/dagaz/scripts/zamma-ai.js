@@ -108,22 +108,25 @@ function GenerateCaptureStep(from, dir, isMan) {
     return from | (to << 8) | (captured << 16) | flags;
 }
 
-function GenerateCaptureMovesFromTree(moves, from, isMan, stack, restricted, isDone) {
+function GenerateCaptureMovesFromTree(moves, from, isMan, isProm, stack, restricted) {
     var r = true;
     var dirs = [1, -1, 16, -16];
     if (_.indexOf(Dagaz.AI.SPEC_POSITIONS, +from) >= 0) {
         dirs = [1, -1, 16, -16, -17, -15, 15, 17];
     }
     _.each(dirs, function(dir) {
-        if (isDone) return;
         if (restricted && (restricted == dir)) return;
         var step = GenerateCaptureStep(from, dir, isMan);
         if (step == 0) return;
-        var f = (step & moveflagPromotion);
+        var f = false;
+        if (step & moveflagPromotion) {
+            f = true;
+            step &= ~moveflagPromotion;
+        }
         var pos = (step >> 8) & 0xFF;
         stack.push(step);
         Dagaz.AI.MakeStep(step, 0);
-        if (GenerateCaptureMovesFromTree(moves, pos, isMan, stack, -dir, f)) r = false;
+        if (GenerateCaptureMovesFromTree(moves, pos, isMan, f, stack, -dir)) r = false;
         Dagaz.AI.UnmakeStep();
         stack.pop();
         if (!isMan) {
@@ -133,7 +136,7 @@ function GenerateCaptureMovesFromTree(moves, from, isMan, stack, restricted, isD
                 step |= pos << 8;
                 stack.push(step);
                 Dagaz.AI.MakeStep(step, 0);
-                if (GenerateCaptureMovesFromTree(moves, pos, isMan, stack, -dir)) r = false;
+                if (GenerateCaptureMovesFromTree(moves, pos, isMan, f, stack, -dir)) r = false;
                 Dagaz.AI.UnmakeStep();
                 stack.pop();
                 pos += dir;
@@ -143,7 +146,11 @@ function GenerateCaptureMovesFromTree(moves, from, isMan, stack, restricted, isD
     if (r && (stack.length > 0)) {
         var move = new Array();
         for (var i = 0; i < stack.length; i++) {
-            move.push(stack[i]);
+             var m = stack[i];
+             if (isProm && (i == stack.length - 1)) {
+                 m |= moveflagPromotion;
+             }
+             move.push(m);
         }
         moves.push(move);
     }
@@ -152,7 +159,7 @@ function GenerateCaptureMovesFromTree(moves, from, isMan, stack, restricted, isD
 
 function GenerateCaptureMovesFrom(moves, from) {
     var piece = Dagaz.AI.g_board[from] & Dagaz.AI.TYPE_MASK;   
-    GenerateCaptureMovesFromTree(moves, from, piece == pieceMan, new Array());
+    GenerateCaptureMovesFromTree(moves, from, piece == pieceMan, false, new Array());
 }
 
 function GenerateQuietMovesFrom(moves, from) {
@@ -161,22 +168,25 @@ function GenerateQuietMovesFrom(moves, from) {
     var piece = Dagaz.AI.g_board[from] & Dagaz.AI.TYPE_MASK;
 
     if (piece == pieceMan) {
-        to = from - 1; steps = new Array();
-        if (Dagaz.AI.g_board[to] == 0) GenerateQuietStep(steps, from, to, true);
-        moves.push(steps);
-        to = +from + 1; steps = new Array();
-        if (Dagaz.AI.g_board[to] == 0) GenerateQuietStep(steps, from, to, true);
-        moves.push(steps);
-        to = +from + inc; steps = new Array();
-        if (Dagaz.AI.g_board[to] == 0) GenerateQuietStep(steps, from, to, true);
-        moves.push(steps);
+        to = +from + inc; 
+        if (Dagaz.AI.g_board[to] == 0) {
+            steps = new Array();
+            GenerateQuietStep(steps, from, to, true);
+            moves.push(steps);
+        }
         if (_.indexOf(Dagaz.AI.SPEC_POSITIONS, +from) < 0) return;
-        to = +from + inc - 1; steps = new Array();
-        if (Dagaz.AI.g_board[to] == 0) GenerateQuietStep(steps, from, to, true);
-        moves.push(steps);
-        to = +from + inc + 1; steps = new Array();
-        if (Dagaz.AI.g_board[to] == 0) GenerateQuietStep(steps, from, to, true);
-        moves.push(steps);
+        to = +from + inc - 1; 
+        if (Dagaz.AI.g_board[to] == 0) {
+            steps = new Array();
+            GenerateQuietStep(steps, from, to, true);
+            moves.push(steps);
+        }
+        to = +from + inc + 1; 
+        if (Dagaz.AI.g_board[to] == 0) {
+            steps = new Array();
+            GenerateQuietStep(steps, from, to, true);
+            moves.push(steps);
+        }
     }
 
     if (piece == pieceKing) {

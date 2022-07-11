@@ -192,12 +192,6 @@ Dagaz.Model.BuildDesign = function(design) {
     design.addCommand(1, ZRF.FUNCTION,	22);	// navigate
     design.addCommand(1, ZRF.FUNCTION,	1);	// empty?
     design.addCommand(1, ZRF.FUNCTION,	20);	// verify
-    design.addCommand(1, ZRF.IN_ZONE,	0);	// promotion
-    design.addCommand(1, ZRF.FUNCTION,	0);	// not
-    design.addCommand(1, ZRF.IF,	4);
-    design.addCommand(1, ZRF.PROMOTE,	1);	// King
-    design.addCommand(1, ZRF.FUNCTION,	25);	// to
-    design.addCommand(1, ZRF.JUMP,	3);
     design.addCommand(1, ZRF.MODE,	0);	// jump-type
     design.addCommand(1, ZRF.FUNCTION,	25);	// to
     design.addCommand(1, ZRF.FUNCTION,	28);	// end
@@ -294,8 +288,6 @@ Dagaz.Model.BuildDesign = function(design) {
 
     design.addPiece("Man", 0, 100);
     design.addMove(0, 0, [0], 1);
-    design.addMove(0, 0, [3], 1);
-    design.addMove(0, 0, [2], 1);
     design.addMove(0, 0, [6], 1);
     design.addMove(0, 0, [4], 1);
     design.addMove(0, 1, [0, 0], 0);
