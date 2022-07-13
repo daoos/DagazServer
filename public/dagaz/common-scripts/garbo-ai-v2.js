@@ -22,7 +22,7 @@ Dagaz.AI.TYPE_SIZE       = 3;
 Dagaz.AI.colorBlack      = 0x10;
 Dagaz.AI.colorWhite      = 0x08;
 
-Dagaz.AI.g_board = new Array(256); // Sentinel 0x80, pieces are in low 4 bits, 0x8 for color, 0x7 bits for piece type
+Dagaz.AI.g_board = new Array(512); // Sentinel 0x80, pieces are in low 4 bits, 0x8 for color, 0x7 bits for piece type
 Dagaz.AI.g_toMove = 0; // side to move, 0 or 8, 0 = black, 8 = white
 
 Dagaz.AI.g_baseEval    = 0;
