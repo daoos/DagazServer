@@ -40,18 +40,17 @@ var g_mobUnit;
 var materialTable = [0, 800, 3350, 3450, 5000, 9750, 600000];
 
 Dagaz.AI.pieceAdj = [
-[   0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0, // pieceEmpty
-    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
-    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0, 
-    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0, 
-    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0, 
-    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0, 
-    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0, 
-    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
-    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0, 
-    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0, 
-    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0, 
-    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0
+[   0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0, // pieceEmpty
+    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
+    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
+    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
+    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
+    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
+    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
+    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
+    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
+    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
+    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0
 ]];
 
 var pieceSquareAdj = new Array(8);
@@ -184,9 +183,6 @@ Dagaz.AI.IsHashMoveValid = function(hashMove) {
 
         // Valid moves are push, capture, double push, promotions
         var dir = to - from;
-        if (Math.abs(dir) == 1) {
-            dir = -dir;
-        }
         if ((Dagaz.AI.g_toMove == Dagaz.AI.colorWhite) != (dir < 0))  {
             // Pawns have to move in the right direction
             return false;
@@ -266,7 +262,7 @@ Dagaz.AI.ResetGame = function() {
   for (var row = 0; row < Dagaz.Model.HEIGHT; row++) {
        for (var col = 0; col < Dagaz.Model.WIDTH; col++) {
             var square = MakeSquare(row, col);
-            flipTable[square] = MakeSquare((Dagaz.Model.HEIGHT - 1) - row, col);
+            flipTable[square] = MakeSquare((Dagaz.Model.HEIGHT - 1) - row, (Dagaz.Model.WIDTH - 1) - col);
        }
   }
 
@@ -324,8 +320,6 @@ Dagaz.AI.ResetGame = function() {
                              g_vectorDelta[index].delta = flip * 16;
                          } else if ((square % 15) == (target % 15)) {
                              g_vectorDelta[index].delta = flip * 15;
-                         } else if ((square % 17) == (target % 17)) {
-                             g_vectorDelta[index].delta = flip * 17;
                          } else if ((square % 18) == (target % 18)) {
                              g_vectorDelta[index].delta = flip * 18;
                          } else if ((square % 33) == (target % 33)) {

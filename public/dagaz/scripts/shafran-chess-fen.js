@@ -155,7 +155,11 @@ var getEnPassant = function(design, board) {
       if (board.getPiece(pos) !== null) return r;
       var p = design.navigate(piece.player, pos, 1);
       if (p === null) return r;
-      if (p == board.lastf) r = Dagaz.Model.posToString(pos, design);
+      if (p == board.lastf) return Dagaz.Model.posToString(pos, design);
+      if (board.getPiece(p) !== null) return r;
+      var q = design.navigate(piece.player, p, 1);
+      if (q === null) return r;
+      if (q == board.lastf) r = Dagaz.Model.posToString(pos, design);
   }
   return r;
 }

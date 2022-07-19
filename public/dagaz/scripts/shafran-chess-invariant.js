@@ -1,43 +1,16 @@
 (function() {
 
-Dagaz.Model.WIDTH  = 11;
-Dagaz.Model.HEIGHT = 11;
+Dagaz.Model.WIDTH  = 9;
+Dagaz.Model.HEIGHT = 10;
 
-var letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'k', 'l'];
+var letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i'];
 
 var checkVersion = Dagaz.Model.checkVersion;
 
 Dagaz.Model.checkVersion = function(design, name, value) {
-  if (name != "mccooey-chess-invariant") {
+  if (name != "shafran-chess-invariant") {
      checkVersion(design, name, value);
   }
-}
-
-var stringToPos = Dagaz.Model.stringToPos;
-
-Dagaz.Model.stringToPos = function(str) {
-  var r = null;
-  var g = str.match(/([a-l])(\d+)/);
-  if (g) {
-      var col = _.indexOf(letters, g[1]);
-      var row = +g[2];
-      if (col >= 0) {
-          if (col < 5) row += 5 - col;
-          r = (Dagaz.Model.HEIGHT - row) * Dagaz.Model.WIDTH + col;
-      }
-  } else {
-      r = stringToPos(str);
-  }
-  return r;
-}
-
-Dagaz.Model.posToString = function(pos) {
-  var row = Dagaz.Model.HEIGHT - Dagaz.Model.getY(pos);
-  var col = Dagaz.Model.getX(pos);
-  if (col < 5) {
-      row -= 5 - col;
-  }
-  return letters[col] + row;
 }
 
 var checkDirection = function(design, board, player, pos, dir, leapers, riders) {
