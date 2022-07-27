@@ -53,7 +53,7 @@ Dagaz.Model.BuildDesign = function(design) {
     design.addPlayer("White", [6, 7, 5, 4, 3, 2, 0, 1, 8]);
     design.addPlayer("Black", [5, 7, 6, 3, 4, 0, 2, 1, 8]);
 
-    design.setupSelector(2);
+    design.setupSelector(3);
 
     design.addRandom(1, [9]);                       // 0
     design.addRandom(1, [9]);                       // 1
@@ -64,22 +64,30 @@ Dagaz.Model.BuildDesign = function(design) {
     design.addTurn(1, [0, 1, 2, 3, 4, 5, 7, 8], 2); // 6
     design.addTurn(1, [0, 1, 2, 3, 4, 5, 7, 8], 2); // 7
     design.repeatMark();
-    design.addRandom(2, [6]);                       // 8
-    design.addRandom(2, [6]);                       // 9
-    design.addRandom(2, [6]);                       // 10
-    design.addRandom(2, [6]);                       // 11
+    design.addRandom(2, [9]);                       // 8
+    design.addRandom(2, [9]);                       // 9
+    design.addRandom(2, [6], 1);                    // 10
+    design.addRandom(2, [6], 1);                    // 11
+    design.addRandom(2, [6], 2);                    // 10
+    design.addRandom(2, [6], 2);                    // 11
     design.addTurn(2, [0, 1, 2, 3, 4, 5, 7, 8]);    // 12
     design.addTurn(2, [0, 1, 2, 3, 4, 5, 7, 8]);    // 13
-    design.addTurn(2, [0, 1, 2, 3, 4, 5, 7, 8]);    // 14
-    design.addTurn(2, [0, 1, 2, 3, 4, 5, 7, 8]);    // 15
-    design.addRandom(1, [6]);                       // 16
-    design.addRandom(1, [6]);                       // 17
-    design.addRandom(1, [6]);                       // 18
-    design.addRandom(1, [6]);                       // 19
+    design.addTurn(2, [0, 1, 2, 3, 4, 5, 7, 8], 1); // 14
+    design.addTurn(2, [0, 1, 2, 3, 4, 5, 7, 8], 1); // 15
+    design.addTurn(2, [0, 1, 2, 3, 4, 5, 7, 8], 2); // 14
+    design.addTurn(2, [0, 1, 2, 3, 4, 5, 7, 8], 2); // 15
+    design.addRandom(1, [9]);                       // 16
+    design.addRandom(1, [9]);                       // 17
+    design.addRandom(1, [6], 1);                    // 18
+    design.addRandom(1, [6], 1);                    // 19
+    design.addRandom(1, [6], 2);                    // 18
+    design.addRandom(1, [6], 2);                    // 19
     design.addTurn(1, [0, 1, 2, 3, 4, 5, 7, 8]);    // 20
     design.addTurn(1, [0, 1, 2, 3, 4, 5, 7, 8]);    // 21
-    design.addTurn(1, [0, 1, 2, 3, 4, 5, 7, 8]);    // 22
-    design.addTurn(1, [0, 1, 2, 3, 4, 5, 7, 8]);    // 23
+    design.addTurn(1, [0, 1, 2, 3, 4, 5, 7, 8], 1); // 22
+    design.addTurn(1, [0, 1, 2, 3, 4, 5, 7, 8], 1); // 23
+    design.addTurn(1, [0, 1, 2, 3, 4, 5, 7, 8], 2); // 22
+    design.addTurn(1, [0, 1, 2, 3, 4, 5, 7, 8], 2); // 23
 
     design.addPosition("a12", [13, 12, 0, 1, 0, 0, 0, 0, 144]);
     design.addPosition("b12", [13, 12, 11, 1, -1, 0, 0, 0, 0]);
