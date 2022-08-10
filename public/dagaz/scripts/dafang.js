@@ -1,3 +1,5 @@
+Dagaz.Controller.persistense = "none";
+
 Dagaz.Model.WIDTH  = 6;
 Dagaz.Model.HEIGHT = 6;
 
