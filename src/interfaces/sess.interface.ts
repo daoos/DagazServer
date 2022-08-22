@@ -103,4 +103,7 @@ export class Sess {
 
     @ApiPropertyOptional()
     is_admin: boolean;
+
+    @ApiPropertyOptional()
+    is_protected: boolean;
 }

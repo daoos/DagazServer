@@ -76,7 +76,7 @@ export class SessionService {
                               else f.name
                             end || ' (' || e.player_num || 
                         ')', ' / ' order by e.player_num) as player_name,
-                        coalesce(a.last_turn, 0) as last_turn, coalesce(a.selector_value, 0) as selector_value, x.id as ai
+                        coalesce(a.last_turn, 0) as last_turn, coalesce(a.selector_value, 0) as selector_value, x.id as ai, a.is_protected
                  from   game_sessions a
                  inner  join games b on (b.id = a.game_id)
                  inner  join users c on (c.id = a.user_id)
@@ -89,7 +89,7 @@ export class SessionService {
                  left   join game_styles h on (h.game_id = b.id and h.player_num = j.player_num)
                  left   join user_games k on (k.session_id = a.id and k.user_id = $3)
                  where  coalesce(k.user_id, 0) = $4
-                 group  by a.id, a.status_id, a.game_id, d.id, d.name, b.name, d.filename, b.filename, a.created, c.name, b.players_total, a.last_setup, x.id, h.suffix`, [tourn, auth, user, user]);
+                 group  by a.id, a.status_id, a.game_id, d.id, d.name, b.name, d.filename, b.filename, a.created, c.name, b.players_total, a.last_setup, x.id, h.suffix, a.is_protected`, [tourn, auth, user, user]);
                  let l: Sess[] = x.map(x => {
                     let it = new Sess();
                     it.id = x.id;
@@ -105,6 +105,7 @@ export class SessionService {
                     it.last_turn = x.last_turn;
                     it.selector_value = x.selector_value;
                     it.ai = x.ai;
+                    it.is_protected = x.is_protected;
                     return it;
                 });
                 return l;
@@ -162,7 +163,7 @@ export class SessionService {
                               else f.name
                             end || ' (' || e.player_num || ')', ' / ' order by e.player_num) as player_name,
                         coalesce(a.last_turn, 0) as last_turn, coalesce(a.selector_value, 0) as selector_value, x.id as ai, a.changed as changed,
-                        a.timecontrol_id, t.name as timecontrol
+                        a.timecontrol_id, t.name as timecontrol, a.is_protected
                  from   game_sessions a
                  inner  join games b on (b.id = a.game_id)
                  inner  join users c on (c.id = a.user_id and c.realm_id = $1)
@@ -175,7 +176,7 @@ export class SessionService {
                  left   join user_games x on (x.session_id = a.id and x.is_ai = 1)
                  left   join time_controls t on (t.id = a.timecontrol_id)
                  where  a.status_id = 2 and a.closed is null
-                 group  by a.id, a.status_id, a.game_id, d.id, d.name, b.name, d.filename, b.filename, a.created, c.name, b.players_total, a.last_setup, h.suffix, x.id, a.timecontrol_id, t.name
+                 group  by a.id, a.status_id, a.game_id, d.id, d.name, b.name, d.filename, b.filename, a.created, c.name, b.players_total, a.last_setup, h.suffix, x.id, a.timecontrol_id, t.name, a.is_protected
                  union
                  select a.id as id, a.status_id as status, a.game_id as game_id, d.id as variant_id,
                         coalesce(d.name, e.name) || ' (' || a.id || ')' as game, coalesce(d.filename, e.filename) || coalesce(h.suffix, '') as filename,
@@ -186,7 +187,7 @@ export class SessionService {
                               else f.name
                             end || ' (' || k.player_num || ')', ' / ' order by k.player_num) as player_name,
                         coalesce(a.last_turn, 0) as last_turn, coalesce(a.selector_value, 0) as selector_value, x.id as ai, a.changed as changed,
-                        a.timecontrol_id, t.name as timecontrol
+                        a.timecontrol_id, t.name as timecontrol, a.is_protected
                  from   game_sessions a
                  inner  join user_games b on (b.session_id = a.id and b.player_num = 1 and b.user_id = $5)
                  left   join game_moves c on (c.session_id = a.id)
@@ -200,7 +201,7 @@ export class SessionService {
                  left   join user_games x on (x.session_id = a.id and x.is_ai = 1)
                  left   join time_controls t on (t.id = a.timecontrol_id)
                  where  c.id is null and a.closed is null
-                 group  by a.id, a.status_id, a.game_id, d.id, d.name, e.name, d.filename, e.filename, a.created, e.players_total, a.last_setup, h.suffix, x.id, j.name, a.timecontrol_id, t.name
+                 group  by a.id, a.status_id, a.game_id, d.id, d.name, e.name, d.filename, e.filename, a.created, e.players_total, a.last_setup, h.suffix, x.id, j.name, a.timecontrol_id, t.name, a.is_protected
                  order  by changed desc`, [realm, realm, user, user, user, user, realm, realm]);
                  let l: Sess[] = x.map(x => {
                     let it = new Sess();
@@ -219,6 +220,7 @@ export class SessionService {
                     it.timecontrol_id = x.timecontrol_id;
                     it.timecontrol = x.timecontrol;
                     it.ai = x.ai;
+                    it.is_protected = x.is_protected;
                     return it;
                 });
                 return l;
@@ -245,7 +247,7 @@ export class SessionService {
                             end || ' (' || e.player_num || 
                         ')', ' / ' order by e.player_num) as player_name,
                         coalesce(a.last_turn, 0) as last_turn, coalesce(a.selector_value, 0) as selector_value, x.id as ai,
-                        a.timecontrol_id, t.name as timecontrol
+                        a.timecontrol_id, t.name as timecontrol, a.is_protected
                  from   game_sessions a
                  inner  join games b on (b.id = a.game_id and coalesce($1, b.id) = b.id)
                  inner  join users c on (c.id = a.user_id and c.realm_id = $2)
@@ -258,7 +260,7 @@ export class SessionService {
                  left   join time_controls t on (t.id = a.timecontrol_id)
                  where  coalesce(a.last_turn, 0) > 0
                  and  ( coalesce($5, d.id) = d.id or d.id is null )
-                 group  by a.id, a.status_id, a.game_id, d.id, d.name, b.name, d.filename, b.filename, a.created, c.name, b.players_total, a.last_setup, h.suffix, x.id, a.timecontrol_id, t.name
+                 group  by a.id, a.status_id, a.game_id, d.id, d.name, b.name, d.filename, b.filename, a.created, c.name, b.players_total, a.last_setup, h.suffix, x.id, a.timecontrol_id, t.name, a.is_protected
                  order  by a.changed desc`, [game, realm, realm, user, variant]);
                  let l: Sess[] = x.map(x => {
                     let it = new Sess();
@@ -277,6 +279,7 @@ export class SessionService {
                     it.timecontrol_id = x.timecontrol_id;
                     it.timecontrol = x.timecontrol;
                     it.ai = x.ai;
+                    it.is_protected = x.is_protected;
                     return it;
                 });
                 return l;
@@ -297,7 +300,7 @@ export class SessionService {
                         coalesce(d.name, b.name) || ' (' || a.id || ')' as game, coalesce(d.filename, b.filename) as filename, 
                         a.created as created, c.name  || ' (' || e.player_num || ')' as creator, b.players_total as players_total,
                         a.last_setup as last_setup, e.player_num as player_num, coalesce(a.selector_value, 0) as selector_value,
-                        a.timecontrol_id, g.name as timecontrol
+                        a.timecontrol_id, g.name as timecontrol, a.is_protected
                  from   game_sessions a
                  inner  join games b on (b.id = a.game_id and coalesce($1, b.id) = b.id)
                  inner  join users c on (c.id = a.user_id and c.realm_id = $2)
@@ -329,6 +332,7 @@ export class SessionService {
                     it.selector_value = x.selector_value;
                     it.timecontrol_id = x.timecontrol_id;
                     it.timecontrol = x.timecontrol;
+                    it.is_protected = x.is_protected;
                     return it;
                 });
                 return l;
@@ -355,7 +359,7 @@ export class SessionService {
                             end || ' (' || e.player_num || 
                         ')', ' / ' order by e.player_num) as player_name,
                         coalesce(a.last_turn, 0) as last_turn, coalesce(a.selector_value, 0) as selector_value, x.id as ai,
-                        a.timecontrol_id, t.name as timecontrol
+                        a.timecontrol_id, t.name as timecontrol, a.is_protected
                  from   game_sessions a
                  inner  join games b on (b.id = a.game_id)
                  inner  join users c on (c.id = a.user_id and c.realm_id = $1)
@@ -367,7 +371,7 @@ export class SessionService {
                  left   join user_games x on (x.session_id = a.id and x.is_ai = 1)
                  left   join time_controls t on (t.id = a.timecontrol_id)
                  where  a.status_id = 2 and a.closed is null
-                 group  by a.id, a.status_id, a.game_id, d.id, d.name, b.name, d.filename, b.filename, a.created, c.name, b.players_total, a.last_setup, h.suffix, x.id, a.timecontrol_id, t.name
+                 group  by a.id, a.status_id, a.game_id, d.id, d.name, b.name, d.filename, b.filename, a.created, c.name, b.players_total, a.last_setup, h.suffix, x.id, a.timecontrol_id, t.name, a.is_protected
                  order  by a.changed desc`, [realm, realm, user]);
                  let l: Sess[] = x.map(x => {
                     let it = new Sess();
@@ -386,6 +390,7 @@ export class SessionService {
                     it.timecontrol_id = x.timecontrol_id;
                     it.timecontrol = x.timecontrol;
                     it.ai = x.ai;
+                    it.is_protected = x.is_protected;
                     return it;
                 });
                 return l;
@@ -412,7 +417,7 @@ export class SessionService {
                             end || ' (' || e.player_num || 
                         ')', ' / ' order by e.player_num) as player_name,
                         coalesce(a.last_turn, 0) as last_turn, coalesce(a.selector_value, 0) as selector_value, x.id as ai,
-                        a.timecontrol_id, t.name as timecontrol
+                        a.timecontrol_id, t.name as timecontrol, a.is_protected
                  from   game_sessions a
                  inner  join games b on (b.id = a.game_id)
                  inner  join users c on (c.id = a.user_id and c.realm_id = $1)
@@ -424,7 +429,7 @@ export class SessionService {
                  left   join user_games x on (x.session_id = a.id and x.is_ai = 1)
                  left   join time_controls t on (t.id = a.timecontrol_id)
                  where  a.status_id = 3
-                 group  by a.id, a.status_id, a.game_id, d.id, d.name, b.name, d.filename, b.filename, a.created, c.name, b.players_total, a.last_setup, h.suffix, x.id, a.timecontrol_id, t.name
+                 group  by a.id, a.status_id, a.game_id, d.id, d.name, b.name, d.filename, b.filename, a.created, c.name, b.players_total, a.last_setup, h.suffix, x.id, a.timecontrol_id, t.name, a.is_protected
                  order  by a.changed desc`, [realm, realm, user]);
                  let l: Sess[] = x.map(x => {
                     let it = new Sess();
@@ -443,6 +448,7 @@ export class SessionService {
                     it.timecontrol_id = x.timecontrol_id;
                     it.timecontrol = x.timecontrol;
                     it.ai = x.ai;
+                    it.is_protected = x.is_protected;
                     return it;
                 });
                 return l;
@@ -469,7 +475,7 @@ export class SessionService {
                             end || ' (' || e.player_num || 
                         ')', ' / ' order by e.player_num) as player_name,
                         coalesce(a.last_turn, 0) as last_turn, coalesce(a.selector_value, 0) as selector_value, x.id as ai,
-                        a.timecontrol_id, t.name as timecontrol
+                        a.timecontrol_id, t.name as timecontrol, a.is_protected
                  from   game_sessions a
                  inner  join games b on (b.id = a.game_id)
                  inner  join users c on (c.id = a.user_id and c.realm_id = $1)
@@ -480,7 +486,7 @@ export class SessionService {
                  left   join game_styles h on (h.game_id = b.id and h.player_num = g.player_num)
                  left   join user_games x on (x.session_id = a.id and x.is_ai = 1)
                  left   join time_controls t on (t.id = a.timecontrol_id)
-                 group  by a.id, a.status_id, a.game_id, d.id, d.name, b.name, d.filename, b.filename, a.created, c.name, b.players_total, a.last_setup, h.suffix, x.id, a.timecontrol_id, t.name
+                 group  by a.id, a.status_id, a.game_id, d.id, d.name, b.name, d.filename, b.filename, a.created, c.name, b.players_total, a.last_setup, h.suffix, x.id, a.timecontrol_id, t.name, a.is_protected
                  order  by a.changed desc`, [realm, realm, user]);
                  let l: Sess[] = x.map(x => {
                     let it = new Sess();
@@ -499,6 +505,7 @@ export class SessionService {
                     it.timecontrol_id = x.timecontrol_id;
                     it.timecontrol = x.timecontrol;
                     it.ai = x.ai;
+                    it.is_protected = x.is_protected;
                     return it;
                 });
                 return l;
@@ -1606,6 +1613,25 @@ export class SessionService {
              where  a.id = $1`, [sid]);
         if (!x || x.length == 0) return null;
         return x[0].id;
+    }
+
+    async saveSession(x: Sess): Promise<Sess> {
+        try {
+            await this.service.createQueryBuilder("game_sessions")
+            .update(game_sessions)
+            .set({ 
+                is_protected: 1
+             })
+            .where("id = :id", {id: x.id})
+            .execute();
+            return x;
+        } catch (error) {
+            console.error(error);
+            throw new InternalServerErrorException({
+                status: HttpStatus.BAD_REQUEST,
+                error: error
+            });
+        }
     }
 
     async closeSession(x: Sess): Promise<Sess> {

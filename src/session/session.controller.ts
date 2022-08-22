@@ -333,6 +333,27 @@ export class SessionController {
 
     @UseGuards(JwtAuthGuard, RolesGuard, TokenGuard)
     @Roles('admin')
+    @Post('save')
+    @ApiBody({ type: Sess })
+    @ApiOkResponse({ description: 'Successfully.'})
+    @ApiUnauthorizedResponse({ description: 'Unauthorized.'})
+    @ApiForbiddenResponse({ description: 'Forbidden.'})
+    @ApiInternalServerErrorResponse({ description: 'Internal Server error.'})
+    async save(@Res() res, @Body() x: Sess): Promise<Sess> {
+        try {
+            const r = await this.service.saveSession(x);
+            if (!r) {
+                return res.status(HttpStatus.FORBIDDEN).json(x);
+            } else {
+                return res.status(HttpStatus.OK).json(r);
+            }
+        } catch (e) {
+            return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ error: e.message.error.toString(), stack: e.stack});
+        }
+    }
+
+    @UseGuards(JwtAuthGuard, RolesGuard, TokenGuard)
+    @Roles('admin')
     @Delete(':id')
     @ApiOkResponse({ description: 'Successfully.'})
     @ApiUnauthorizedResponse({ description: 'Unauthorized.'})
