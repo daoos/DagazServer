@@ -913,6 +913,12 @@ Dagaz.Controller.drawOffer = function() {
   }
 }
 
+Dagaz.Controller.analyze = function(name) {
+  var app = Dagaz.Controller.app;
+  var s = Dagaz.Model.getSetup(app.design, app.board);
+  window.open(name + '.html' + s, '_blank');
+}
+
 App.prototype.getContext = function(player, forced) {
   if (Dagaz.AI.isFriend(player_num, player)) return null;
   if (_.isUndefined(this.context)) {
