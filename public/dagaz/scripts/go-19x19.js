@@ -32,6 +32,7 @@ Dagaz.Model.BuildDesign = function(design) {
     design.checkVersion("show-captures", "false");
     design.checkVersion("show-drops", "true");
     design.checkVersion("animate-redo", "false");
+    design.checkVersion("advisor-wait", "10");
     design.checkVersion("ko", "true");
 
     design.addDirection("w");
@@ -421,6 +422,8 @@ Dagaz.View.configure = function(view) {
     view.defPiece("Small", "Small");
     view.defPiece("RBig", "RBig");
     view.defPiece("RSmall", "RSmall");
+    view.defPiece("GBig", "GBig");
+    view.defPiece("GSmall", "GSmall");
     view.defPiece("BM", "BM");
     view.defPiece("WM", "WM");
     view.defPiece("Ko", "Ko");
@@ -429,6 +432,8 @@ Dagaz.View.configure = function(view) {
     view.defMark(6, "Small");
     view.defMark(7, "RBig");
     view.defMark(8, "RSmall");
+    view.defMark(9, "GBig");
+    view.defMark(10, "GSmall");
  
     view.defPosition("a19", 6, 6, 30, 30);
     view.defPosition("b19", 36, 6, 30, 30);

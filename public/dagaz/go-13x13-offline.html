@@ -14,15 +14,10 @@
 <div class="center-body">
     <div class="canvas-wrap" id="canvasFit">
         <div class="section-menu" style="position:absolute;left:0;right:0;bottom:100%;padding-bottom:2px;">
-        <a href="javascript:Dagaz.Controller.home()" title="Home" style="display:none" id="home"><img src="images/home.png"/></a>
         <a href="javascript:Dagaz.Controller.undo()" title="PgDown" style="display:none" id="undo"><img src="images/undo.png"/></a>
         <a target="_blank" href="https://en.wikipedia.org/wiki/Rules_of_Go">Rules</a>
-        <a href="javascript:Dagaz.Controller.resign()">I Resign</a>
-        <a href="javascript:Dagaz.Controller.drawOffer()">Offer Draw</a>
         <a href="javascript:Dagaz.Controller.sound()" id="sound">no Sound</a>
-        <a href="javascript:Dagaz.Controller.analyze('go-13x13-offline')">Analyze</a>
         <a href="javascript:Dagaz.Controller.redo()" title="PgUp" style="display:none" id="redo"><img src="images/redo.png"/></a>
-        <div align="right" id="timer"></div>
         </div>
         <div class="cc2">
         <canvas id="Canvas" width="426" height="426" style="cursor:default" class="canvas-body">Broken canvas...</canvas>
@@ -31,7 +26,6 @@
 </div>
 
 <script src="vendor/underscore-min.js"></script>
-<script src="vendor/jquery-3.5.1.min.js"></script>
 <script src="common-scripts/autofit.js"></script>
 <script src="common-scripts/dagaz.js"></script>
 <script src="common-scripts/zrf-model.js"></script>
@@ -40,12 +34,12 @@
 <script src="common-scripts/2d-view-v2.js"></script>
 <script src="common-scripts/move-list-v3.js"></script>
 <script src="common-scripts/sound-manager-v2.js"></script>
-<script src="common-scripts/session-manager.js"></script>
+<script src="common-scripts/offline-session.js"></script>
 <script src="scripts/go-view.js"></script>
 <script src="scripts/go-ko.js"></script>
 <script src="scripts/go-extension.js"></script>
 <script src="scripts/go-13x13.js"></script>
-<script src="common-scripts/app-net-v2.js"></script>
+<script src="common-scripts/app-v2.js"></script>
 
 </body>
 </html>
