@@ -48,7 +48,7 @@ var checkLeap = function(design, board, player, pos, o, d, knight) {
 
 Dagaz.Model.checkPositions = function(design, board, player, positions) {
   var king   = design.getPieceType("King");
-  var pawn   = design.getPieceType("Pawn");
+  var pawn   = design.getPieceType("BerolinaPawn");
   var rook   = design.getPieceType("Rook");
   var knight = design.getPieceType("Knight");
   var bishop = design.getPieceType("Bishop");
@@ -59,12 +59,12 @@ Dagaz.Model.checkPositions = function(design, board, player, positions) {
   var ne = design.getDirection("ne"); var se = design.getDirection("se");
   for (var i = 0; i < positions.length; i++) {
        var pos = positions[i];
-       if (checkDirection(design, board, player, pos, n,  [king], [rook, queen])) return true;
+       if (checkDirection(design, board, player, pos, n,  [king, pawn], [rook, queen])) return true;
        if (checkDirection(design, board, player, pos, s,  [king], [rook, queen])) return true;
        if (checkDirection(design, board, player, pos, w,  [king], [rook, queen])) return true;
        if (checkDirection(design, board, player, pos, e,  [king], [rook, queen])) return true;
-       if (checkDirection(design, board, player, pos, nw, [king, pawn], [bishop, queen])) return true;
-       if (checkDirection(design, board, player, pos, ne, [king, pawn], [bishop, queen])) return true;
+       if (checkDirection(design, board, player, pos, nw, [king], [bishop, queen])) return true;
+       if (checkDirection(design, board, player, pos, ne, [king], [bishop, queen])) return true;
        if (checkDirection(design, board, player, pos, sw, [king], [bishop, queen])) return true;
        if (checkDirection(design, board, player, pos, se, [king], [bishop, queen])) return true;
        if (checkLeap(design, board, player, pos, n, nw, knight)) return true;
@@ -114,9 +114,11 @@ Dagaz.Model.CheckInvariants = function(board) {
       var b = board.apply(move);
       var list = [];
       var pos  = Dagaz.Model.findPiece(design, b, board.player, king);
-      if (pos !== null) {
-          list.push(pos);
+      if (pos === null) {
+          move.failed = true;
+          return;
       }
+      list.push(pos);
       if (move.actions.length == 2) {
           var k = getPiece(board, move.actions[0]);
           var r = getPiece(board, move.actions[1]);
