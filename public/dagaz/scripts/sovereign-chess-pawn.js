@@ -16,7 +16,13 @@ var isRestricted = function(design, pos, dir) {
       if (dir == 3) { // e
           if (!design.inZone(13, 1, pos)) return false; // v-zone
       }
-      return (dir != 5) && (dir != 6) && (dir != 0); // ne, nw, se
+      if (dir == 6) { // nw
+          if (design.inZone(14, 1, pos)) return true; // h-zone
+      }
+      if (dir == 0) { // se
+          if (design.inZone(13, 1, pos)) return true; // v-zone
+      }
+      return (dir != 5); // ne
   }
   if (design.inZone(16, 1, pos)) { // nw-zone
       if (dir == 1) { // s
@@ -25,7 +31,13 @@ var isRestricted = function(design, pos, dir) {
       if (dir == 3) { // e
           if (!design.inZone(13, 1, pos)) return false; // v-zone
       }
-      return (dir != 0) && (dir != 5) && (dir != 2); // se, ne, sw
+      if (dir == 5) { // ne
+          if (design.inZone(13, 1, pos)) return true; // v-zone
+      }
+      if (dir == 2) { // sw
+          if (design.inZone(14, 1, pos)) return true; // h-zone
+      }
+      return (dir != 0); // se
   }
   if (design.inZone(17, 1, pos)) { // ne-zone
       if (dir == 1) { // s
@@ -34,7 +46,13 @@ var isRestricted = function(design, pos, dir) {
       if (dir == 4) { // w
           if (!design.inZone(13, 1, pos)) return false; // v-zone
       }
-      return (dir != 2) && (dir != 0) && (dir != 6); // sw, se, nw
+      if (dir == 0) { // se
+          if (design.inZone(14, 1, pos)) return true; // h-zone
+      }
+      if (dir == 6) { // nw
+          if (design.inZone(13, 1, pos)) return true; // v-zone
+      }
+      return (dir != 2); // sw
   }
   if (design.inZone(18, 1, pos)) { // se-zone
       if (dir == 7) { // n
@@ -43,7 +61,13 @@ var isRestricted = function(design, pos, dir) {
       if (dir == 4) { // w
           if (!design.inZone(13, 1, pos)) return false; // v-zone
       }
-      return (dir != 6) && (dir != 2) && (dir != 5); // nw, sw, ne
+      if (dir == 2) { // sw
+          if (design.inZone(13, 1, pos)) return true; // v-zone
+      }
+      if (dir == 5) { // ne
+          if (design.inZone(14, 1, pos)) return true; // h-zone
+      }
+      return (dir != 6); // nw, sw, ne
   }
   return false;
 }
