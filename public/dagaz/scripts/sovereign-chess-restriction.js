@@ -35,7 +35,7 @@ var getColors = function(design, board, val) {
 
 Dagaz.Model.expandColors = function(design, board, colors, restricted) {
   for (var ix = 0; ix < colors.length; ix++) {
-       _.each(design.allPositions(), function(pos) {
+       _.each(_.range(Dagaz.Model.WIDTH * Dagaz.Model.HEIGHT), function(pos) {
            var piece = board.getPiece(pos);
            if (piece === null) return;
            if (piece.player != colors[ix]) return;

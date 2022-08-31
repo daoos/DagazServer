@@ -127,7 +127,7 @@ Dagaz.Model.checkGoals = function(design, board, player) {
       p = player;
   }
   var f = null; var e = null;
-  _.each(design.allPositions(), function(pos) {
+  _.each(_.range(Dagaz.Model.WIDTH * Dagaz.Model.HEIGHT), function(pos) {
       var piece = board.getPiece(pos);
       if (piece === null) return;
       if (piece.type != 5) return;
@@ -164,7 +164,7 @@ Dagaz.Model.CheckInvariants = function(board) {
   var design = Dagaz.Model.design;
   var c = getColors(board);
   var king = null;
-  _.each(design.allPositions(), function(pos) {
+  _.each(_.range(Dagaz.Model.WIDTH * Dagaz.Model.HEIGHT), function(pos) {
       if (king !== null) return;
       var piece = board.getPiece(pos);
       if (piece === null) return;

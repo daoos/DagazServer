@@ -40,7 +40,7 @@ Dagaz.Model.PostProcessing = function(board, moves) {
       player = board.player;
   }
   var king = null;
-  _.each(design.allPositions(), function(pos) {
+  _.each(_.range(Dagaz.Model.WIDTH * Dagaz.Model.HEIGHT), function(pos) {
       if (king !== null) return;
       var piece = board.getPiece(pos);
       if (piece === null) return;
