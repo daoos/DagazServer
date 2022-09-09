@@ -81,18 +81,7 @@ Dagaz.Model.CheckInvariants = function(board) {
       });
       if (design.inZone(piece.player, 1, pos)) move.failed = true;
       if (v === null) {
-          move.setValue(0, 0);
-          return;
-      }
-      if (v == 0) {
           move.setValue(0, piece.player);
-          if (piece.player == 1) {
-              move.setValue(1, 2);
-              move.setValue(2, 1);
-          } else {
-              move.setValue(1, 1);
-              move.setValue(2, 2);
-          }
           return;
       }
   });

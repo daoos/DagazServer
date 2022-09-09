@@ -49,16 +49,16 @@ Dagaz.Model.CheckInvariants = function(board) {
       _.each(rooks, function(r) {
           var p = design.navigate(1, king, r.dir);
           var m = Dagaz.Model.createMove(0);
-          m.movePiece(r.pos, king, board.getPiece(r.pos));
-          m.movePiece(king, p, board.getPiece(king));
+          m.movePiece(r.pos, king, board.getPiece(r.pos).setValue(0, 1));
+          m.movePiece(king, p, board.getPiece(king).setValue(0, 1));
           m.mode = 1;
           board.moves.push(m);
           p = design.navigate(1, p, r.dir);
           while (p !== null) {
               if (board.getPiece(p) !== null) return;
               m = Dagaz.Model.createMove(0);
-              m.movePiece(king, p, board.getPiece(king));
-              m.movePiece(r.pos, design.navigate(0, p, r.dir), board.getPiece(r.pos));
+              m.movePiece(king, p, board.getPiece(king).setValue(0, 1));
+              m.movePiece(r.pos, design.navigate(0, p, r.dir), board.getPiece(r.pos).setValue(0, 1));
               m.mode = 1;
               board.moves.push(m);
               p = design.navigate(1, p, r.dir);

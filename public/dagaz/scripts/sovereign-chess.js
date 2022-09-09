@@ -63,8 +63,11 @@ Dagaz.Model.BuildDesign = function(design) {
     design.addPlayer("Ash", [0, 1, 2, 3, 4, 5, 6, 7]);
     design.addPlayer("Slate", [0, 1, 2, 3, 4, 5, 6, 7]);
 
-    design.addTurn(1);
-    design.addTurn(2);
+    design.addTurn(1);   // 0
+    design.addTurn(2);   // 1
+    design.repeatMark(); 
+    design.addTurn(1);   // 2
+    design.addTurn(2);   // 3
 
     design.addPosition("a16", [17, 16, 0, 1, 0, 0, 0, 0]);
     design.addPosition("b16", [17, 16, 15, 1, -1, 0, 0, 0]);

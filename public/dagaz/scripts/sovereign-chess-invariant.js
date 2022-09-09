@@ -8,26 +8,6 @@ Dagaz.Model.checkVersion = function(design, name, value) {
   }
 }
 
-var applyMoves = function(design, board, move) {
-  var undo = Dagaz.Model.createMove(0);
-  _.each(move.actions, function(a) {
-      if (a[1] === null) return;
-      if (a[2] === null) return;
-      if (a[0] === null) {
-          board.setPiece(a[1][0], a[2][0]);
-          return;
-      }
-      undo.movePiece(a[1][0], a[0][0], a[2][0]);
-      var piece = board.getPiece(a[1][0]);
-      if (piece !== null) {
-          undo.dropPiece(a[1][0], piece);
-      }
-      board.setPiece(a[1][0], a[2][0]);
-      board.setPiece(a[0][0], null);
-  });
-  return undo;
-}
-
 var checkDirection = function(design, board, colors, pos, dir, leapers, riders) {
   var c = 8;
   var p = design.navigate(1, pos, dir); c--;
@@ -188,17 +168,18 @@ Dagaz.Model.CheckInvariants = function(board) {
                                    getRestrictions(design, board, king, 4, move)); // w
                positions.push(pos);
            }
-           var undo = applyMoves(design, board, move);
+           var b = board.apply(move);
            var x = {
                friend: copy(c.friend),
                enemy:  copy(c.enemy)
            };
-           Dagaz.Model.expandColors(design, board, x.friend, x.enemy);
-           Dagaz.Model.expandColors(design, board, x.enemy, x.friend);
-           if (Dagaz.Model.checkPositions(design, board, x, positions)) {
+           Dagaz.Model.expandColors(design, b, x.friend, x.enemy);
+           Dagaz.Model.expandColors(design, b, x.enemy, x.friend);
+           b.turn = board.turn;
+           b.player = board.player;
+           if (Dagaz.Model.checkPositions(design, b, x, positions)) {
                move.failed = true;
            }
-           applyMoves(design, board, undo);
       });
   }
   CheckInvariants(board);

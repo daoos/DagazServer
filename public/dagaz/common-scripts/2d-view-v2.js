@@ -2,6 +2,8 @@
 
 Dagaz.View.SHIFT_X      = 0;
 Dagaz.View.SHIFT_Y      = 0;
+Dagaz.View.LX           = 0;
+Dagaz.View.LY           = 0;
 
 Dagaz.View.STRIKE_ALPHA = 0.5;
 Dagaz.View.DROPS_ALPHA  = 0.5;
@@ -400,9 +402,10 @@ var drawLabels = function(ctx, view) {
         var piece = view.piece[view.marks[i]];
         _.each(view.labels[i], function(pos) {
               var p = view.pos[pos];
+              if (_.isUndefined(p)) return;
               var x = ( p.x + (p.dx - piece.dx) / 2) | 0;
               var y = ( p.y + (p.dy - piece.dy) / 2) | 0;
-              ctx.drawImage(piece.h, x, y, piece.dx, piece.dy);
+              ctx.drawImage(piece.h, x + Dagaz.View.LX, y + Dagaz.View.LY, piece.dx, piece.dy);
         });
    }
 }
@@ -582,7 +585,6 @@ View2D.prototype.animate = function() {
 Dagaz.View.showMarks = function(view, ctx) {
   drawMarks(ctx, view, view.target, Dagaz.View.TARGET_COLOR);
   drawMarks(ctx, view, view.goal,   "#FFFF00");
-  drawLabels(ctx, view);
 }
 
 Dagaz.View.showPiece = function(view, ctx, frame, pos, piece, model, x, y) {
@@ -650,6 +652,7 @@ View2D.prototype.draw = function(canvas) {
            var board = this.controller.getBoard();
            Dagaz.View.showBoard(board, ctx);
       }
+      drawLabels(ctx, this);
       _.chain(_.range(this.setup.length))
        .sortBy(function(ix) {
            var piece = this.setup[ix];

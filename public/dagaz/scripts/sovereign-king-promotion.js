@@ -55,14 +55,16 @@ var CheckInvariants = Dagaz.Model.CheckInvariants;
 Dagaz.Model.CheckInvariants = function(board) {
   var design = Dagaz.Model.design;
   var c = getColors(board);
-  var king = null;
+  var king = null; var opposite = null;
   _.each(_.range(Dagaz.Model.WIDTH * Dagaz.Model.HEIGHT), function(pos) {
-      if (king !== null) return;
       var piece = board.getPiece(pos);
       if (piece === null) return;
-      if (_.indexOf(c.friend, piece.player) < 0) return;
       if (piece.type != 5) return;
-      king = pos;
+      if (_.indexOf(c.friend, piece.player) >= 0) {
+          king = pos;
+      } else {
+          opposite = pos;
+      }
   });
   Dagaz.Model.expandColors(design, board, c.friend, c.enemy);
   Dagaz.Model.expandColors(design, board, c.enemy, c.friend);
@@ -78,6 +80,22 @@ Dagaz.Model.CheckInvariants = function(board) {
           m.setValue(board.player, piece.player);
           board.moves.push(m);
           piece.isVisible = true;
+      }
+  }
+  if (opposite !== null) {
+      if (board.turn == 1) {
+          var pos = Dagaz.Model.WIDTH * Dagaz.Model.HEIGHT;
+          var piece = board.getPiece(pos);
+          if (piece !== null) {
+              piece.isVisible = true;
+              var m = Dagaz.Model.createMove(0);
+              m.movePiece(pos, opposite, piece);
+              m.dropPiece(pos, piece);
+              m.setValue(0, piece.player);
+              m.setValue(1, 2);
+              m.setValue(2, 1);
+              board.moves.push(m);
+          }
       }
   }
   CheckInvariants(board);
