@@ -145,6 +145,7 @@ Dagaz.Model.getSetup = function(design, board) {
            str += "/";
            k = 0;
            c = 0;
+           p = 0;
        }
        k++;
        var piece = board.getPiece(pos);
