@@ -90,13 +90,13 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(46, 22, 'Turkish Dama', 'turkish-dama', 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(47, 22, 'Constitutional Checkers', 'constitutional-checkers', 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(48, 22, 'Stavropol Checkers', 'stavropol-checkers', 2)`);
-        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(49, 35, 'Nine Men's Morris', 'morris-9', 2)`);
-        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(50, 35, 'Three Men's Morris', 'triangle', 2)`);
-        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(51, 35, 'Windmill', 'windmill', 2)`);
-        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(52, 35, 'Eight Men's Morris', 'morris-8', 2)`);
-        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(53, 35, 'Seven Men's Morris', 'morris-7', 2)`);
-        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(54, 35, 'Twelve Men's Morris', 'morris-12', 2)`);
-        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(55, 35, 'Morabaraba', 'morabaraba', 2)`);
+        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total, max_selector) values(49, 35, 'Nine Men's Morris', 'morris-9', 2, 2)`);
+        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total, max_selector) values(50, 35, 'Three Men's Morris', 'triangle', 2, 2)`);
+        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total, max_selector) values(51, 35, 'Windmill', 'windmill', 2, 2)`);
+        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total, max_selector) values(52, 35, 'Eight Men's Morris', 'morris-8', 2, 2)`);
+        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total, max_selector) values(53, 35, 'Seven Men's Morris', 'morris-7', 2, 2)`);
+        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total, max_selector) values(54, 35, 'Twelve Men's Morris', 'morris-12', 2, 2)`);
+        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total, max_selector) values(55, 35, 'Morabaraba', 'morabaraba', 2, 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(56, 30, 'Turnover', 'turnover', 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(57, 23, 'Janggi', 'janggi', 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(58, 30, 'Sittuyin', 'sittuyin', 2)`);
@@ -178,7 +178,7 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(135, 30, 'Knight''s Court', 'knights-court', 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(136, 31, 'Mini Mancala', 'mini-mancala', 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(137, 30, 'Chessball', 'chessball', 2)`);
-        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(138, 35, 'Six Men''s Morris', 'morris-6', 2)`);
+        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total, max_selector) values(138, 35, 'Six Men''s Morris', 'morris-6', 2, 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total, max_selector) values(139, 42, 'Makyek', 'makyek', 2, 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(140, 37, 'Ultima', 'ultima', 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(141, 17, 'Dual Go (9x9)', 'dual-go-9x9', 2)`);
@@ -468,6 +468,22 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_setups(id, game_id, variant_id, selector_value, name) values(21, 37, 206, 2, 'Random')`);
         await queryRunner.query(`insert into game_setups(id, game_id, variant_id, selector_value, name) values(22, 32, 24, 1, 'Riatra')`);
         await queryRunner.query(`insert into game_setups(id, game_id, variant_id, selector_value, name) values(23, 32, 24, 2, 'Velo')`);
+        await queryRunner.query(`insert into game_setups(id, game_id, variant_id, selector_value, name) values(24, 35, 49, 1, 'Morris')`);
+        await queryRunner.query(`insert into game_setups(id, game_id, variant_id, selector_value, name) values(25, 35, 49, 2, 'Dyzym')`);
+        await queryRunner.query(`insert into game_setups(id, game_id, variant_id, selector_value, name) values(26, 35, 52, 1, 'Morris')`);
+        await queryRunner.query(`insert into game_setups(id, game_id, variant_id, selector_value, name) values(27, 35, 52, 2, 'Dyzym')`);
+        await queryRunner.query(`insert into game_setups(id, game_id, variant_id, selector_value, name) values(28, 35, 53, 1, 'Morris')`);
+        await queryRunner.query(`insert into game_setups(id, game_id, variant_id, selector_value, name) values(29, 35, 53, 2, 'Dyzym')`);
+        await queryRunner.query(`insert into game_setups(id, game_id, variant_id, selector_value, name) values(30, 35, 54, 1, 'Morris')`);
+        await queryRunner.query(`insert into game_setups(id, game_id, variant_id, selector_value, name) values(31, 35, 54, 2, 'Dyzym')`);
+        await queryRunner.query(`insert into game_setups(id, game_id, variant_id, selector_value, name) values(32, 35, 55, 1, 'Morris')`);
+        await queryRunner.query(`insert into game_setups(id, game_id, variant_id, selector_value, name) values(33, 35, 55, 2, 'Dyzym')`);
+        await queryRunner.query(`insert into game_setups(id, game_id, variant_id, selector_value, name) values(34, 35, 138, 1, 'Morris')`);
+        await queryRunner.query(`insert into game_setups(id, game_id, variant_id, selector_value, name) values(35, 35, 138, 2, 'Dyzym')`);
+        await queryRunner.query(`insert into game_setups(id, game_id, variant_id, selector_value, name) values(36, 35, 50, 1, 'Morris')`);
+        await queryRunner.query(`insert into game_setups(id, game_id, variant_id, selector_value, name) values(37, 35, 50, 2, 'Dyzym')`);
+        await queryRunner.query(`insert into game_setups(id, game_id, variant_id, selector_value, name) values(38, 35, 51, 1, 'Morris')`);
+        await queryRunner.query(`insert into game_setups(id, game_id, variant_id, selector_value, name) values(39, 35, 51, 2, 'Dyzym')`);
 
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(1, 'doubutsu-shogi', null, 'doubutsu-shogi', 'https://en.wikipedia.org/wiki/D%C5%8Dbutsu_sh%C5%8Dgi', 'Madoka Kitao')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(2, 'atari-go', null, 'atari-go', 'https://en.wikipedia.org/wiki/Go_variants#First_Capture')`);
@@ -634,17 +650,17 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(163, 'serpents', null, 'serpents', 'https://www.bead.game/games/traditional/fighting-serpents')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(164, 'litter-chess', null, 'litter')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, copyright) values(165, 'passive-chess', null, 'passive', '2018 Valentin Chelnokov')`);
-        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(166, 'morris-9', null, '9-men', 'https://en.wikipedia.org/wiki/Nine_Men%27s_Morris')`);
-        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(167, 'triangle', null, '3-men', 'https://en.wikipedia.org/wiki/Nine_Men%27s_Morris')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(166, 'morris-9', 1, '9-men', 'https://en.wikipedia.org/wiki/Nine_Men%27s_Morris')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(167, 'triangle', 1, '3-men', 'https://en.wikipedia.org/wiki/Nine_Men%27s_Morris')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(168, 'english-checkers', null, 'english-checkers', 'https://en.wikipedia.org/wiki/English_draughts')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(169, 'turkish-dama', null, 'turkish-dama', 'https://en.wikipedia.org/wiki/Turkish_draughts')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, copyright) values(170, 'constitutional-checkers', null, 'international-checkers', '2020 Michal Zapala')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(171, 'stavropol-checkers', null, 'russian-checkers-1')`);
-        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(172, 'windmill', null, 'windmill', 'https://en.wikipedia.org/wiki/Nine_Men%27s_Morris')`);
-        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(173, 'morris-8', null, '8-men', 'https://en.wikipedia.org/wiki/Nine_Men%27s_Morris')`);
-        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(174, 'morris-7', null, '7-men', 'https://en.wikipedia.org/wiki/Nine_Men%27s_Morris')`);
-        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(175, 'morris-12', null, '12-men', 'https://en.wikipedia.org/wiki/Nine_Men%27s_Morris')`);
-        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(176, 'morabaraba', null, 'morabaraba', 'https://en.wikipedia.org/wiki/Morabaraba')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(172, 'windmill', 1, 'windmill', 'https://en.wikipedia.org/wiki/Nine_Men%27s_Morris')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(173, 'morris-8', 1, '8-men', 'https://en.wikipedia.org/wiki/Nine_Men%27s_Morris')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(174, 'morris-7', 1, '7-men', 'https://en.wikipedia.org/wiki/Nine_Men%27s_Morris')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(175, 'morris-12', 1, '12-men', 'https://en.wikipedia.org/wiki/Nine_Men%27s_Morris')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(176, 'morabaraba', 1, 'morabaraba', 'https://en.wikipedia.org/wiki/Morabaraba')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(177, 'turnover', null, 'turnover', 'https://www.chessvariants.com/rules/turnover', '2019 Lucio Jose Patrocinio Filho')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(178, 'janggi', null, 'janggi', 'https://en.wikipedia.org/wiki/Janggi')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(179, 'janggi-kanji', null, 'janggi-kanji', 'https://en.wikipedia.org/wiki/Janggi')`);
@@ -758,7 +774,7 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, copyright) values(288, 'mini-mancala', null, 'mini-mancala', '1980 Christian Freeling')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, copyright) values(289, 'mini-mancala-alt', null, 'mini-mancala-alt', '1980 Christian Freeling')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(290, 'chessball', null, 'chessball', 'https://www.poznovatelno.ru/free/games/12489.html', '1957 Kamzolov J.N.')`);
-        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(291, 'morris-6', null, '6-men', 'https://en.wikipedia.org/wiki/Nine_Men%27s_Morris')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(291, 'morris-6', 1, '6-men', 'https://en.wikipedia.org/wiki/Nine_Men%27s_Morris')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(292, 'makyek', 1, 'makyek-1', 'https://en.wikipedia.org/wiki/Mak-yek')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(293, 'makyek', 2, 'makyek-2', 'https://en.wikipedia.org/wiki/Mak-yek')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(294, 'ultima', null, 'ultima', 'https://www.chessvariants.com/other.dir/ultima.html', '1962 Robert Abbott')`);
@@ -1017,6 +1033,14 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(615, 'khans', null, 'khans')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(616, 'adiuh-checkers-10x10', null, 'adiuh-checkers-10x10', 'https://ru.wikipedia.org/wiki/Столбовые_шашки#Шашки_Адиюх', '2007 Viktor Pankovich')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(617, 'tavrida-8x10', null, 'adiuh-checkers-8x10', 'https://ru.wikipedia.org/wiki/Столбовые_шашки#Шашки_Адиюх', '2007 Viktor Pankovich')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(618, 'morris-9', 2, '9-men', 'https://en.wikipedia.org/wiki/Nine_Men%27s_Morris')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(619, 'triangle', 2, '3-men', 'https://en.wikipedia.org/wiki/Nine_Men%27s_Morris')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(620, 'windmill', 2, 'windmill', 'https://en.wikipedia.org/wiki/Nine_Men%27s_Morris')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(621, 'morris-8', 2, '8-men', 'https://en.wikipedia.org/wiki/Nine_Men%27s_Morris')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(622, 'morris-7', 2, '7-men', 'https://en.wikipedia.org/wiki/Nine_Men%27s_Morris')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(623, 'morris-12', 2, '12-men', 'https://en.wikipedia.org/wiki/Nine_Men%27s_Morris')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(624, 'morabaraba', 2, 'morabaraba', 'https://en.wikipedia.org/wiki/Morabaraba')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(625, 'morris-6', 2, '6-men', 'https://en.wikipedia.org/wiki/Nine_Men%27s_Morris')`);
 }
 
     public async down(queryRunner: QueryRunner): Promise<any> {

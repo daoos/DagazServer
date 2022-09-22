@@ -66,8 +66,25 @@ Dagaz.Model.BuildDesign = function(design) {
     design.addCommand(1, ZRF.FUNCTION,	25);	// to
     design.addCommand(1, ZRF.FUNCTION,	28);	// end
 
+    design.addCommand(2, ZRF.FUNCTION,	24);	// from
+    design.addCommand(2, ZRF.FUNCTION,	3);	// friend?
+    design.addCommand(2, ZRF.FUNCTION,	20);	// verify
+    design.addCommand(2, ZRF.PARAM,	0);	// $1
+    design.addCommand(2, ZRF.FUNCTION,	22);	// navigate
+    design.addCommand(2, ZRF.FUNCTION,	1);	// empty?
+    design.addCommand(2, ZRF.FUNCTION,	0);	// not
+    design.addCommand(2, ZRF.FUNCTION,	20);	// verify
+    design.addCommand(2, ZRF.PARAM,	1);	// $2
+    design.addCommand(2, ZRF.FUNCTION,	22);	// navigate
+    design.addCommand(2, ZRF.FUNCTION,	1);	// empty?
+    design.addCommand(2, ZRF.FUNCTION,	20);	// verify
+    design.addCommand(2, ZRF.FUNCTION,	25);	// to
+    design.addCommand(2, ZRF.FUNCTION,	28);	// end
+
     design.addPriority(1);			// drop-type
     design.addPriority(0);			// normal-type
+
+    design.setupSelector(2);
 
     design.addPiece("Stone", 0);
     design.addDrop(0, 0, [], 1);
@@ -79,6 +96,14 @@ Dagaz.Model.BuildDesign = function(design) {
     design.addMove(0, 1, [7], 0);
     design.addMove(0, 1, [5], 0);
     design.addMove(0, 1, [4], 0);
+    design.addMove(0, 2, [0, 0], 0, undefined, 2);
+    design.addMove(0, 2, [3, 3], 0, undefined, 2);
+    design.addMove(0, 2, [2, 2], 0, undefined, 2);
+    design.addMove(0, 2, [1, 1], 0, undefined, 2);
+    design.addMove(0, 2, [5, 5], 0, undefined, 2);
+    design.addMove(0, 2, [6, 6], 0, undefined, 2);
+    design.addMove(0, 2, [7, 7], 0, undefined, 2);
+    design.addMove(0, 2, [4, 4], 0, undefined, 2);
 
     design.reserve("Blue", "Stone", 3);
     design.reserve("Red", "Stone", 3);
