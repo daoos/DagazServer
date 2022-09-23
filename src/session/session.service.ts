@@ -1475,7 +1475,7 @@ export class SessionService {
 
     async getTournament(sess: number): Promise<Tourn> {
         const x = await this.service.query(
-            `select b.id, coalesce(c.scores, 0) as win_scores, coalesce(d.scores, 0) as lose_scores, coalesce(e.scores, 0) as draw_scores,
+            `select b.id, coalesce(c.scores, 1) as win_scores, coalesce(d.scores, 0) as lose_scores, coalesce(e.scores, 0.5) as draw_scores,
                     a.player_a, a.player_b, b.ratingtype_id
              from   tournament_games a
              inner  join tournaments b on (b.id = a.tournament_id)

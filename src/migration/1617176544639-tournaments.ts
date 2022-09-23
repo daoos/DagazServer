@@ -25,6 +25,12 @@ export class tournaments1617176544639 implements MigrationInterface {
         await queryRunner.query(`insert into game_scores(id, game_id, variant_id, result_id, scores) values(16, 31, null, 1, 1)`);
         await queryRunner.query(`insert into game_scores(id, game_id, variant_id, result_id, scores) values(17, 31, null, 2, 0)`);
         await queryRunner.query(`insert into game_scores(id, game_id, variant_id, result_id, scores) values(18, 31, null, 3, 0.5)`);
+        await queryRunner.query(`insert into game_scores(id, game_id, variant_id, result_id, scores) values(19, 45, null, 1, 1)`);
+        await queryRunner.query(`insert into game_scores(id, game_id, variant_id, result_id, scores) values(20, 45, null, 2, 0)`);
+        await queryRunner.query(`insert into game_scores(id, game_id, variant_id, result_id, scores) values(21, 45, null, 3, 0.5)`);
+        await queryRunner.query(`insert into game_scores(id, game_id, variant_id, result_id, scores) values(22, 29, null, 1, 1)`);
+        await queryRunner.query(`insert into game_scores(id, game_id, variant_id, result_id, scores) values(23, 29, null, 2, 0)`);
+        await queryRunner.query(`insert into game_scores(id, game_id, variant_id, result_id, scores) values(24, 29, null, 3, 0.5)`);
 
         await queryRunner.query(`insert into game_settings(id, name, game_id, variant_id, selector_value, tournamenttype_id, ratingtype_id) values(1, 'Chess', 30, 31, 1, 1, 1)`);
         await queryRunner.query(`insert into game_settings(id, name, game_id, variant_id, selector_value, tournamenttype_id, ratingtype_id) values(2, 'Chess (Mini)', 30, 125, 1, 1, 1)`);
@@ -61,6 +67,7 @@ export class tournaments1617176544639 implements MigrationInterface {
         await queryRunner.query(`insert into game_settings(id, name, game_id, variant_id, selector_value, tournamenttype_id, ratingtype_id) values(34, 'Oware', 31, 18, null, 1, 1)`);
         await queryRunner.query(`insert into game_settings(id, name, game_id, variant_id, selector_value, tournamenttype_id, ratingtype_id) values(35, 'Toguz Kumalak', 31, 20, null, 1, 1)`);
         await queryRunner.query(`insert into game_settings(id, name, game_id, variant_id, selector_value, tournamenttype_id, ratingtype_id) values(36, 'Grand Dice Chess', 45, 238, null, 1, 1)`);
+        await queryRunner.query(`insert into game_settings(id, name, game_id, variant_id, selector_value, tournamenttype_id, ratingtype_id) values(37, 'Hex', 29, 225, null, 1, 1)`);
 
         await queryRunner.query(`insert into time_controls(id, name, main_time, additional_time, order_num) values(1, '02:00:00+01:00', 7200, 60, 2)`);
         await queryRunner.query(`insert into time_controls(id, name, main_time, additional_time, order_num) values(2, '00:30:00+00:20', 1800, 20, 1)`);
