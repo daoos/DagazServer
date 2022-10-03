@@ -23,7 +23,9 @@ var countGenerals = function(design, board, player) {
 var checkGoals = Dagaz.Model.checkGoals;
 
 Dagaz.Model.checkGoals = function(design, board, player) {
-  if (countGenerals(design, board, player) == 0) return -1;
+  if (board.parent !== null) {
+      if (countGenerals(design, board, board.parent.player) == 0) return -1;
+  }
   return checkGoals(design, board, player);
 }
 

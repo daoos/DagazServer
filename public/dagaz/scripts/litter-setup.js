@@ -116,4 +116,3 @@ Dagaz.Model.setup = function(board, init) {
 }
 
 })();
-9
