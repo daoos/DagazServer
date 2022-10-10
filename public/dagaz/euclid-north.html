@@ -1,29 +1,32 @@
 <html>
 <head>
 <META http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>Archimedes</title>
+<title>Euclid</title>
 <link rel="stylesheet" href="css/style-7eb2a9d6.css"/>
 </head>
 <body>
 
-<img id="Board" style="display:none" src="images/archimedes/board.png">
-<img id="WhiteMan" style="display:none" src="images/archimedes/manwhite.png">
-<img id="BlackMan" style="display:none" src="images/archimedes/manblack.png">
+<img id="Board" style="display:none" src="images/euclid/board.png">
+<img id="WhiteMan" style="display:none" src="images/euclid/wman.png">
+<img id="BlackMan" style="display:none" src="images/euclid/bman.png">
+<img id="WhiteKing" style="display:none" src="images/euclid/wking.png">
+<img id="BlackKing" style="display:none" src="images/euclid/bking.png">
 
 <div class="center-body">
     <div class="canvas-wrap" id="canvasFit">
         <div class="section-menu" style="position:absolute;left:0;right:0;bottom:100%;padding-bottom:2px;">
         <a href="javascript:Dagaz.Controller.home()" title="Home" style="display:none" id="home"><img src="images/home.png"/></a>
         <a href="javascript:Dagaz.Controller.undo()" title="PgDown" style="display:none" id="undo"><img src="images/undo.png"/></a>
-        Copyright (c) 1988 Scott Marley and Philip Cohen
-        <a target="_blank" href="http://www.di.fc.ul.pt/~jpn/gv/archimedes.htm">Rules</a>
+        Copyright (c) 2003 Chris Huntoon
+        <a target="_blank" href="http://www.di.fc.ul.pt/~jpn/gv/euclid.htm">Rules</a>
         <a href="javascript:Dagaz.Controller.resign()">I Resign</a>
+        <a href="javascript:Dagaz.Controller.drawOffer()">Offer Draw</a>
         <a href="javascript:Dagaz.Controller.sound()" id="sound">no Sound</a>
         <a href="javascript:Dagaz.Controller.redo()" title="PgUp" style="display:none" id="redo"><img src="images/redo.png"/></a>
         <div align="right" id="timer"></div>
         </div>
         <div class="cc2">
-        <canvas id="Canvas" width="548" height="548" style="cursor:default" class="canvas-body">Broken canvas...</canvas>
+        <canvas id="Canvas" width="404" height="404" style="cursor:default" class="canvas-body">Broken canvas...</canvas>
         </div>
     </div>
 </div>
@@ -37,11 +40,10 @@
 <script src="common-scripts/common-setup-v2.js"></script>
 <script src="common-scripts/2d-view-v2.js"></script>
 <script src="common-scripts/move-list-v2.js"></script>
-<script src="common-scripts/sound-manager-v2.js"></script>
 <script src="common-scripts/session-manager.js"></script>
-<script src="common-scripts/maxmin-ai-v2.js"></script>
-<script src="scripts/archimedes-extension.js"></script>
-<script src="scripts/archimedes.js"></script>
+<script src="common-scripts/sound-manager-v2.js"></script>
+<script src="scripts/euclid-extension.js"></script>
+<script src="scripts/euclid-north.js"></script>
 <script src="common-scripts/app-net-v2.js"></script>
 
 </body>

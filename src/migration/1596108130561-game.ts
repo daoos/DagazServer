@@ -288,6 +288,9 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(251, 32, 'Khans', 'khans', 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(252, 24, 'Shashki Adiyukh (10x10)', 'adiuh-checkers-10x10', 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(253, 24, 'Tavrida', 'tavrida-8x10', 2)`);
+        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(254, 37, 'Crazy Tile Chess', 'tile-chess', 2)`);
+//      await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total, is_dice) values(255, 45, 'Sahkku', 'sahkku', 2, 1)`);
+        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total, max_selector) values(256, 37, 'Euclid', 'euclid', 2, 2)`);
 
         await queryRunner.query(`insert into game_styles(id, game_id, name, suffix, player_num) values(1, 23, 'European', '', null)`);
         await queryRunner.query(`insert into game_styles(id, game_id, name, suffix, player_num) values(2, 23, 'Chinese', '-kanji', null)`);
@@ -444,6 +447,9 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_bots(id, game_id, variant_id, selector_value, player_num) values(131, 24, 252, null, null)`);
         await queryRunner.query(`insert into game_bots(id, game_id, variant_id, selector_value, player_num) values(132, 24, 253, null, null)`);
         await queryRunner.query(`insert into game_bots(id, game_id, variant_id, selector_value, player_num) values(133, 30, 38, null, null)`);
+        await queryRunner.query(`insert into game_bots(id, game_id, variant_id, selector_value, player_num) values(134, 37, 254, null, null)`);
+//      await queryRunner.query(`insert into game_bots(id, game_id, variant_id, selector_value, player_num) values(135, 45, 255, null, null)`);
+        await queryRunner.query(`insert into game_bots(id, game_id, variant_id, selector_value, player_num) values(136, 37, 256, null, null)`);
 
         await queryRunner.query(`insert into game_setups(id, game_id, variant_id, selector_value, name) values(1, 25, 10, 1, 'Without Handicap')`);
         await queryRunner.query(`insert into game_setups(id, game_id, variant_id, selector_value, name) values(2, 25, 10, 2, 'Left-Kyo Handicap')`);
@@ -1041,7 +1047,11 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(623, 'morris-12', 2, '12-men', 'https://en.wikipedia.org/wiki/Nine_Men%27s_Morris')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(624, 'morabaraba', 2, 'morabaraba', 'https://en.wikipedia.org/wiki/Morabaraba')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(625, 'morris-6', 2, '6-men', 'https://en.wikipedia.org/wiki/Nine_Men%27s_Morris')`);
-}
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(626, 'tile-chess', null, 'tile-chess', 'https://www.chess.com/forum/view/chess-variants/crazy-tiles-chess', '2022 Vadrya Pokshtya')`);
+//      await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(627, 'sahkku', null, 'sahkku', 'https://en.wikipedia.org/wiki/S%C3%A1hkku')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(628, 'euclid', 1, 'euclid-1', 'http://www.di.fc.ul.pt/~jpn/gv/euclid.htm', '2003 Chris Huntoon')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(629, 'euclid', 2, 'euclid-2', 'http://www.di.fc.ul.pt/~jpn/gv/euclid.htm', '2003 Chris Huntoon')`);
+    }
 
     public async down(queryRunner: QueryRunner): Promise<any> {
         await queryRunner.query(`delete from game_previews`);
