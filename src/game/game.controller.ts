@@ -125,7 +125,21 @@ export class GameController {
     @ApiInternalServerErrorResponse({ description: 'Internal Server error.'})
     async getStyles(@Res() res, @Param('id') id): Promise<Style[]> {
         try {
-            const r = await this.service.getStyles(id);
+            const r = await this.service.getStyles(id, null);
+            return res.status(HttpStatus.OK).json(r);
+        } catch(e) {
+            return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ error: e.message.error.toString(), stack: e.stack});
+        }
+    }
+
+    @UseGuards(JwtAuthGuard, TokenGuard)
+    @Get(':game/:variant/styles')
+    @ApiOkResponse({ description: 'Successfully.'})
+    @ApiUnauthorizedResponse({ description: 'Unauthorized.'})
+    @ApiInternalServerErrorResponse({ description: 'Internal Server error.'})
+    async getStylesEx(@Res() res, @Param('game') game, @Param('variant') variant): Promise<Style[]> {
+        try {
+            const r = await this.service.getStyles(game, variant);
             return res.status(HttpStatus.OK).json(r);
         } catch(e) {
             return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ error: e.message.error.toString(), stack: e.stack});

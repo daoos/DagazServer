@@ -291,6 +291,7 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(254, 37, 'Crazy Tile Chess', 'tile-chess', 2)`);
 //      await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total, is_dice) values(255, 45, 'Sahkku', 'sahkku', 2, 1)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total, max_selector) values(256, 37, 'Euclid', 'euclid', 2, 2)`);
+        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(257, 25, 'Tenjiku Shogi', 'tenjiku-shogi', 2)`);
 
         await queryRunner.query(`insert into game_styles(id, game_id, name, suffix, player_num) values(1, 23, 'European', '', null)`);
         await queryRunner.query(`insert into game_styles(id, game_id, name, suffix, player_num) values(2, 23, 'Chinese', '-kanji', null)`);
@@ -314,6 +315,7 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_styles(id, game_id, name, suffix, player_num) values(24, 41, 'Opposite', '-north', 2)`);
         await queryRunner.query(`insert into game_styles(id, game_id, name, suffix, player_num) values(25, 45, 'Opposite', '-north', 2)`);
         await queryRunner.query(`insert into game_styles(id, game_id, name, suffix, player_num) values(26, 46, 'Opposite', '-north', 2)`);
+        await queryRunner.query(`insert into game_styles(id, variant_id, name, suffix, player_num) values(27, 257, 'European', '', null)`);
 
         await queryRunner.query(`insert into game_bots(id, game_id, variant_id, selector_value, player_num) values(1, 35, 50, null, null)`);
         await queryRunner.query(`insert into game_bots(id, game_id, variant_id, selector_value, player_num) values(2, 31, null, null, null)`);
@@ -1051,6 +1053,7 @@ export class game1596108130561 implements MigrationInterface {
 //      await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(627, 'sahkku', null, 'sahkku', 'https://en.wikipedia.org/wiki/S%C3%A1hkku')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(628, 'euclid', 1, 'euclid-1', 'http://www.di.fc.ul.pt/~jpn/gv/euclid.htm', '2003 Chris Huntoon')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(629, 'euclid', 2, 'euclid-2', 'http://www.di.fc.ul.pt/~jpn/gv/euclid.htm', '2003 Chris Huntoon')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(630, 'tenjiku-shogi', null, 'tenjiku-shogi', 'https://en.wikipedia.org/wiki/Tenjiku_shogi')`);
     }
 
     public async down(queryRunner: QueryRunner): Promise<any> {

@@ -13,4 +13,7 @@ export class Style {
 
     @ApiPropertyOptional()
     game_id: number;
+
+    @ApiPropertyOptional()
+    variant_id: number;
 }

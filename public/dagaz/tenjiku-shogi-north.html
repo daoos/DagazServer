@@ -1,0 +1,168 @@
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>Tenjiku Shogi</title>
+<link rel="stylesheet" href="css/style-7eb2a9d6.css"/>
+</head>
+<body>
+
+<img id="Board" style="display:none" src="images/tenjiku/16x16.png">
+<img id="BlackKnight" style="display:none" src="images/tenjiku/rknight_w.png">
+<img id="WhiteKnight" style="display:none" src="images/tenjiku/rknight_b.png">
+<img id="BlackIron-General" style="display:none" src="images/tenjiku/riron_w.png">
+<img id="WhiteIron-General" style="display:none" src="images/tenjiku/riron_b.png">
+<img id="BlackPawn" style="display:none" src="images/tenjiku/rpawn_w.png">
+<img id="WhitePawn" style="display:none" src="images/tenjiku/rpawn_b.png">
+<img id="BlackBishop" style="display:none" src="images/tenjiku/rbishop_w.png">
+<img id="WhiteBishop" style="display:none" src="images/tenjiku/rbishop_b.png">
+<img id="BlackBishop!" style="display:none" src="images/tenjiku/rpbishop_w.png">
+<img id="WhiteBishop!" style="display:none" src="images/tenjiku/rpbishop_b.png">
+<img id="BlackRook" style="display:none" src="images/tenjiku/rrook_w.png">
+<img id="WhiteRook" style="display:none" src="images/tenjiku/rrook_b.png">
+<img id="BlackRook!" style="display:none" src="images/tenjiku/rprook_w.png">
+<img id="WhiteRook!" style="display:none" src="images/tenjiku/rprook_b.png">
+<img id="BlackQueen" style="display:none" src="images/tenjiku/rqueen_w.png">
+<img id="WhiteQueen" style="display:none" src="images/tenjiku/rqueen_b.png">
+<img id="BlackQueen!" style="display:none" src="images/tenjiku/rpqueen_w.png">
+<img id="WhiteQueen!" style="display:none" src="images/tenjiku/rpqueen_b.png">
+<img id="BlackFlying-Ox" style="display:none" src="images/tenjiku/rpox_w.png">
+<img id="WhiteFlying-Ox" style="display:none" src="images/tenjiku/rpox_b.png">
+<img id="BlackFree-Boar" style="display:none" src="images/tenjiku/rfboar_w.png">
+<img id="WhiteFree-Boar" style="display:none" src="images/tenjiku/rfboar_b.png">
+<img id="BlackHorned-Falcon" style="display:none" src="images/tenjiku/rfalcon_w.png">
+<img id="WhiteHorned-Falcon" style="display:none" src="images/tenjiku/rfalcon_b.png">
+<img id="BlackHorned-Falcon!" style="display:none" src="images/tenjiku/rpfalcon_w.png">
+<img id="WhiteHorned-Falcon!" style="display:none" src="images/tenjiku/rpfalcon_b.png">
+<img id="BlackSoaring-Eagle" style="display:none" src="images/tenjiku/reagle_w.png">
+<img id="WhiteSoaring-Eagle" style="display:none" src="images/tenjiku/reagle_b.png">
+<img id="BlackSoaring-Eagle!" style="display:none" src="images/tenjiku/rpeagle_w.png">
+<img id="WhiteSoaring-Eagle!" style="display:none" src="images/tenjiku/rpeagle_b.png">
+<img id="BlackWhale" style="display:none" src="images/tenjiku/rwhale_w.png">
+<img id="WhiteWhale" style="display:none" src="images/tenjiku/rwhale_b.png">
+<img id="BlackWhite-Horse" style="display:none" src="images/tenjiku/rwhorse_w.png">
+<img id="WhiteWhite-Horse" style="display:none" src="images/tenjiku/rwhorse_b.png">
+<img id="BlackLion" style="display:none" src="images/tenjiku/rlion_w.png">
+<img id="WhiteLion" style="display:none" src="images/tenjiku/rlion_b.png">
+<img id="BlackLion!" style="display:none" src="images/tenjiku/rplion_w.png">
+<img id="WhiteLion!" style="display:none" src="images/tenjiku/rplion_b.png">
+<img id="BlackDragon-King" style="display:none" src="images/tenjiku/rdragon_w.png">
+<img id="WhiteDragon-King" style="display:none" src="images/tenjiku/rdragon_b.png">
+<img id="BlackDragon-King!" style="display:none" src="images/tenjiku/rpdragon_w.png">
+<img id="WhiteDragon-King!" style="display:none" src="images/tenjiku/rpdragon_b.png">
+<img id="BlackDragon-Horse" style="display:none" src="images/tenjiku/rhorse_w.png">
+<img id="WhiteDragon-Horse" style="display:none" src="images/tenjiku/rhorse_b.png">
+<img id="BlackDragon-Horse!" style="display:none" src="images/tenjiku/rphorse_w.png">
+<img id="WhiteDragon-Horse!" style="display:none" src="images/tenjiku/rphorse_b.png">
+<img id="BlackKylin" style="display:none" src="images/tenjiku/rkylin_w.png">
+<img id="WhiteKylin" style="display:none" src="images/tenjiku/rkylin_b.png">
+<img id="BlackPhoenix" style="display:none" src="images/tenjiku/rphoenix_w.png">
+<img id="WhitePhoenix" style="display:none" src="images/tenjiku/rphoenix_b.png">
+<img id="BlackReverse-Chariot" style="display:none" src="images/tenjiku/rreverse_w.png">
+<img id="WhiteReverse-Chariot" style="display:none" src="images/tenjiku/rreverse_b.png">
+<img id="BlackSide-Mover" style="display:none" src="images/tenjiku/rside_w.png">
+<img id="WhiteSide-Mover" style="display:none" src="images/tenjiku/rside_b.png">
+<img id="BlackSide-Mover!" style="display:none" src="images/tenjiku/rpside_w.png">
+<img id="WhiteSide-Mover!" style="display:none" src="images/tenjiku/rpside_b.png">
+<img id="BlackVertical-Mover" style="display:none" src="images/tenjiku/rvertical_w.png">
+<img id="WhiteVertical-Mover" style="display:none" src="images/tenjiku/rvertical_b.png">
+<img id="BlackVertical-Mover!" style="display:none" src="images/tenjiku/rpvertical_w.png">
+<img id="WhiteVertical-Mover!" style="display:none" src="images/tenjiku/rpvertical_b.png">
+<img id="BlackFlying-Stag" style="display:none" src="images/tenjiku/rstag_w.png">
+<img id="WhiteFlying-Stag" style="display:none" src="images/tenjiku/rstag_b.png">
+<img id="BlackLance" style="display:none" src="images/tenjiku/rlance_w.png">
+<img id="WhiteLance" style="display:none" src="images/tenjiku/rlance_b.png">
+<img id="BlackKing" style="display:none" src="images/tenjiku/rking_w.png">
+<img id="WhiteKing" style="display:none" src="images/tenjiku/rking_b.png">
+<img id="BlackPrince" style="display:none" src="images/tenjiku/rprince_w.png">
+<img id="WhitePrince" style="display:none" src="images/tenjiku/rprince_b.png">
+<img id="BlackBlind-Tiger" style="display:none" src="images/tenjiku/rtiger_w.png">
+<img id="WhiteBlind-Tiger" style="display:none" src="images/tenjiku/rtiger_b.png">
+<img id="BlackDrunk-Elephant" style="display:none" src="images/tenjiku/relephant_w.png">
+<img id="WhiteDrunk-Elephant" style="display:none" src="images/tenjiku/relephant_b.png">
+<img id="BlackFerocious-Leopard" style="display:none" src="images/tenjiku/rleopard_w.png">
+<img id="WhiteFerocious-Leopard" style="display:none" src="images/tenjiku/rleopard_b.png">
+<img id="BlackGold-General" style="display:none" src="images/tenjiku/rgold_w.png">
+<img id="WhiteGold-General" style="display:none" src="images/tenjiku/rgold_b.png">
+<img id="BlackGold-General!" style="display:none" src="images/tenjiku/rpgold_w.png">
+<img id="WhiteGold-General!" style="display:none" src="images/tenjiku/rpgold_b.png">
+<img id="BlackSilver-General" style="display:none" src="images/tenjiku/rsilver_w.png">
+<img id="WhiteSilver-General" style="display:none" src="images/tenjiku/rsilver_b.png">
+<img id="BlackCopper-General" style="display:none" src="images/tenjiku/rcopper_w.png">
+<img id="WhiteCopper-General" style="display:none" src="images/tenjiku/rcopper_b.png">
+<img id="BlackChariot-Soldier" style="display:none" src="images/tenjiku/rchariotsoldier_w.png">
+<img id="WhiteChariot-Soldier" style="display:none" src="images/tenjiku/rchariotsoldier_b.png">
+<img id="BlackChariot-Soldier!" style="display:none" src="images/tenjiku/rpchariotsoldier_w.png">
+<img id="WhiteChariot-Soldier!" style="display:none" src="images/tenjiku/rpchariotsoldier_b.png">
+<img id="BlackDog" style="display:none" src="images/tenjiku/rdog_w.png">
+<img id="WhiteDog" style="display:none" src="images/tenjiku/rdog_b.png">
+<img id="BlackBishop-General" style="display:none" src="images/tenjiku/rbishopgeneral_w.png">
+<img id="WhiteBishop-General" style="display:none" src="images/tenjiku/rbishopgeneral_b.png">
+<img id="BlackBishop-General!" style="display:none" src="images/tenjiku/rpbishopgeneral_w.png">
+<img id="WhiteBishop-General!" style="display:none" src="images/tenjiku/rpbishopgeneral_b.png">
+<img id="BlackRook-General" style="display:none" src="images/tenjiku/rrookgeneral_w.png">
+<img id="WhiteRook-General" style="display:none" src="images/tenjiku/rrookgeneral_b.png">
+<img id="BlackRook-General!" style="display:none" src="images/tenjiku/rprookgeneral_w.png">
+<img id="WhiteRook-General!" style="display:none" src="images/tenjiku/rprookgeneral_b.png">
+<img id="BlackVice-General" style="display:none" src="images/tenjiku/rvicegeneral_w.png">
+<img id="WhiteVice-General" style="display:none" src="images/tenjiku/rvicegeneral_b.png">
+<img id="BlackGreat-General" style="display:none" src="images/tenjiku/rgreatgeneral_w.png">
+<img id="WhiteGreat-General" style="display:none" src="images/tenjiku/rgreatgeneral_b.png">
+<img id="BlackSide-Soldier" style="display:none" src="images/tenjiku/rsidesoldier_w.png">
+<img id="WhiteSide-Soldier" style="display:none" src="images/tenjiku/rsidesoldier_b.png">
+<img id="BlackSide-Soldier!" style="display:none" src="images/tenjiku/rpsidesoldier_w.png">
+<img id="WhiteSide-Soldier!" style="display:none" src="images/tenjiku/rpsidesoldier_b.png">
+<img id="BlackVertical-Soldier" style="display:none" src="images/tenjiku/rverticalsoldier_w.png">
+<img id="WhiteVertical-Soldier" style="display:none" src="images/tenjiku/rverticalsoldier_b.png">
+<img id="BlackVertical-Soldier!" style="display:none" src="images/tenjiku/rpverticalsoldier_w.png">
+<img id="WhiteVertical-Soldier!" style="display:none" src="images/tenjiku/rpverticalsoldier_b.png">
+<img id="BlackWater-Buffalo" style="display:none" src="images/tenjiku/rwaterbuffalo_w.png">
+<img id="WhiteWater-Buffalo" style="display:none" src="images/tenjiku/rwaterbuffalo_b.png">
+<img id="BlackWater-Buffalo!" style="display:none" src="images/tenjiku/rpwaterbuffalo_w.png">
+<img id="WhiteWater-Buffalo!" style="display:none" src="images/tenjiku/rpwaterbuffalo_b.png">
+<img id="BlackFire-Demon" style="display:none" src="images/tenjiku/rfiredemon_w.png">
+<img id="WhiteFire-Demon" style="display:none" src="images/tenjiku/rfiredemon_b.png">
+<img id="BlackFree-Eagle" style="display:none" src="images/tenjiku/rfreeeagle_w.png">
+<img id="WhiteFree-Eagle" style="display:none" src="images/tenjiku/rfreeeagle_b.png">
+<img id="BlackLion-Hawk" style="display:none" src="images/tenjiku/rlion-hawk_w.png">
+<img id="WhiteLion-Hawk" style="display:none" src="images/tenjiku/rlion-hawk_b.png">
+<img id="BlackHeavenly-Tetrarch" style="display:none" src="images/tenjiku/rheaven_w.png">
+<img id="WhiteHeavenly-Tetrarch" style="display:none" src="images/tenjiku/rheaven_b.png">
+<img id="BlackMulti-General" style="display:none" src="images/tenjiku/rmulti-general_w.png">
+<img id="WhiteMulti-General" style="display:none" src="images/tenjiku/rmulti-general_b.png">
+
+<div class="center-body">
+    <div class="canvas-wrap" id="canvasFit">
+        <div class="section-menu" style="position:absolute;left:0;right:0;bottom:100%;padding-bottom:2px;">
+        <a href="javascript:Dagaz.Controller.home()" title="Home" style="display:none" id="home"><img src="images/home.png"/></a>
+        <a href="javascript:Dagaz.Controller.undo()" title="PgDown" style="display:none" id="undo"><img src="images/undo.png"/></a>
+        <a target="_blank" href="https://en.wikipedia.org/wiki/Tenjiku_shogi">Rules</a>
+        <a href="javascript:Dagaz.Controller.resign()">I Resign</a>
+        <a href="javascript:Dagaz.Controller.drawOffer()">Offer Draw</a>
+        <a href="javascript:Dagaz.Controller.sound()" id="sound">no Sound</a>
+        <a href="javascript:Dagaz.Controller.redo()" title="PgUp" style="display:none" id="redo"><img src="images/redo.png"/></a>
+        <div align="right" id="timer"></div>
+        </div>
+        <div class="cc2">
+        <canvas id="Canvas" width="599" height="599" style="cursor:default" class="canvas-body">Broken canvas...</canvas>
+        </div>
+    </div>
+</div>
+
+<script src="vendor/underscore-min.js"></script>
+<script src="vendor/jquery-3.5.1.min.js"></script>
+<script src="common-scripts/autofit.js"></script>
+<script src="common-scripts/dagaz.js"></script>
+<script src="common-scripts/zrf-model.js"></script>
+<script src="common-scripts/zobrist.js"></script>
+<script src="common-scripts/common-setup-v2.js"></script>
+<script src="common-scripts/2d-view-v3.js"></script>
+<script src="common-scripts/move-list-v1.js"></script>
+<script src="common-scripts/session-manager.js"></script>
+<script src="common-scripts/sound-manager-v2.js"></script>
+<script src="scripts/tenjiku-shogi-promotion.js"></script>
+<script src="scripts/tenjiku-shogi-extension.js"></script>
+<script src="scripts/tenjiku-shogi-north.js"></script>
+<script src="common-scripts/app-net-v5.js"></script>
+
+</body>
+</html>

@@ -219,7 +219,8 @@ export class GameService {
     async getAllStyles(): Promise<Style[]> {
         try {
             const x = await this.service.query(
-                `select a.id as id, a.name as name, a.suffix as suffix, a.game_id as game_id
+                `select a.id as id, a.name as name, a.suffix as suffix, 
+                        a.game_id as game_id, a.variant_id as variant_id
                  from   game_styles a
                  where  a.player_num is null 
                  order  by a.id`);
@@ -229,6 +230,7 @@ export class GameService {
                 it.name = x.name;
                 it.suffix = x.suffix;
                 it.game_id = x.game_id;
+                it.variant_id = x.variant_id;
                 return it;
             });
             return l;
@@ -241,8 +243,17 @@ export class GameService {
         }
     }
 
-    async getStyles(game: number): Promise<Style[]> {
+    async getStyles(game: number, variant: number): Promise<Style[]> {
         try {
+            if (variant !== null) {
+                const z = await this.service.query(
+                `select a.id
+                 from   game_styles a
+                 where  a.variant_id = $1`, [variant]);
+                if (z.length > 0) {
+                    return [];
+                }
+            }
             const x = await this.service.query(
                 `select a.id as id, a.name as name, a.suffix as suffix
                  from   game_styles a
