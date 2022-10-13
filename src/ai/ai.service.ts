@@ -20,7 +20,7 @@ export class AiService {
 
     async getRequest(sid: number): Promise<AiRequest> {
         const x = await this.service.query(
-            `select a.setup, a.completed, a.variant_id
+            `select a.setup, a.completed, a.variant_id, a.ai_level
              from   ai_request a
              where  a.session_id = $1`, [sid]);
         if (!x || x.length != 1) return null;
@@ -29,6 +29,7 @@ export class AiService {
         r.setup = x[0].setup;
         r.completed = x[0].completed;
         r.variant_id = x[0].variant_id;
+        r.level = x[0].ai_level;
         return r;
     }
 
@@ -66,7 +67,7 @@ export class AiService {
     async get(id: number): Promise<AiRequest[]> {
         try {
             const x = await this.service.query(
-                `select a.session_id, a.setup, a.coeff, a.variant_id
+                `select a.session_id, a.setup, a.coeff, a.variant_id, a.ai_level
                  from   ai_request a
                  where  a.variant_id = $1 and a.completed is null and a.requested is null
                  order  by a.created`, [id]);
@@ -78,6 +79,7 @@ export class AiService {
                 it.variant_id = x[0].variant_id;
                 it.setup = x[0].setup;
                 it.coeff = x[0].coeff;            
+                it.level = x[0].ai_level;
                 r.push(it);
                 ids.push(x[0].session_id);
             }
@@ -111,7 +113,8 @@ export class AiService {
                     session_id: x.sid,
                     variant_id: x.variant_id,
                     setup: x.setup,
-                    coeff: x.coeff
+                    coeff: x.coeff,
+                    ai_level: x.level
                 })
                 .execute();
                 return [];

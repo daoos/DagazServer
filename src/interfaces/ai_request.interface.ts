@@ -16,4 +16,7 @@ export class AiRequest {
 
     @ApiPropertyOptional()
     completed: Date;
+
+    @ApiPropertyOptional()
+    level: number;
 }
