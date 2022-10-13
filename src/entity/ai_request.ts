@@ -27,4 +27,7 @@ export class ai_request {
 
     @Column({ nullable: true })
     requested: Date;
+
+    @Column({ type: "int", nullable: false, default: 1 })
+    ai_level: number;
 }
