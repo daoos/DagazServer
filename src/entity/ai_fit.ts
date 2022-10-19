@@ -18,4 +18,15 @@ export class ai_fit {
 
     @Column({ nullable: false })
     move: number;
+
+    @Column({ type: "float", default: 0, nullable: false })
+    estimate: number;
+
+    @Index()
+    @Column({ nullable: true })
+    rd: number;
+
+    @Index()
+    @Column({ type: "integer", nullable: true })
+    winner: number;
 }
