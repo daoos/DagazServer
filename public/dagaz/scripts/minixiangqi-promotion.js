@@ -26,9 +26,11 @@ Dagaz.Model.CheckInvariants = function(board) {
               var pieces = [];
               pieces.push(piece.promote(design.getPieceType("Soldier")));
               pieces.push(piece.promote(design.getPieceType("Horse")));
-              pieces.push(piece.promote(design.getPieceType("Chariot")));
+              if (Dagaz.Model.getSetupSelector() == 1) {
+                  pieces.push(piece.promote(design.getPieceType("Leopard")));
+              }
               pieces.push(piece.promote(design.getPieceType("Cannon")));
-              pieces.push(piece.promote(design.getPieceType("Leopard")));
+              pieces.push(piece.promote(design.getPieceType("Chariot")));
               move.actions[0][2] = pieces;
           }
       }

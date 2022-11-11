@@ -1195,7 +1195,7 @@ Dagaz.AI.See = function(move) {
 
     // Slider attacks
     Dagaz.AI.g_board[from] = 0;
-    for (var pieceType = pieceDun; pieceType <= pieceCannon; pieceType++) {
+    for (var pieceType = pieceDun; pieceType <= pieceRook; pieceType++) {
         if (SeeAddSliderAttacks(to, them, themAttacks, pieceType)) {
             if (captureDeficit > g_seeValues[pieceType]) {
                 Dagaz.AI.g_board[from] = fromPiece;

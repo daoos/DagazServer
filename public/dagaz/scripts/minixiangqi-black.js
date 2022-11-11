@@ -3,6 +3,8 @@ Dagaz.Controller.persistense = "none";
 Dagaz.Model.WIDTH  = 7;
 Dagaz.Model.HEIGHT = 7;
 
+Dagaz.AI.g_flags = 0x3C << 16;
+
 ZRF = {
     JUMP:          0,
     IF:            1,
@@ -245,6 +247,12 @@ Dagaz.Model.BuildDesign = function(design) {
     design.addMove(5, 6, [4], 0);
     design.addMove(5, 6, [3], 0);
 
+    design.setupSelector(2);
+
+    if (Dagaz.Model.getSetupSelector() != 1) {
+        Dagaz.AI.g_flags = 0x34 << 16;
+    }
+
     design.setup("Red", "Soldier", 35);
     design.setup("Red", "Soldier", 37);
     design.setup("Red", "Soldier", 38);
@@ -254,10 +262,6 @@ Dagaz.Model.BuildDesign = function(design) {
     design.setup("Red", "Horse", 46);
     design.setup("Red", "Chariot", 42);
     design.setup("Red", "Chariot", 48);
-    design.setup("Red", "Cannon", 36);
-    design.setup("Red", "Cannon", 40);
-    design.setup("Red", "Leopard", 43);
-    design.setup("Red", "Leopard", 47);
     design.setup("Red", "General", 45);
     design.setup("Black", "Soldier", 7);
     design.setup("Black", "Soldier", 9);
@@ -268,11 +272,21 @@ Dagaz.Model.BuildDesign = function(design) {
     design.setup("Black", "Horse", 4);
     design.setup("Black", "Chariot", 0);
     design.setup("Black", "Chariot", 6);
-    design.setup("Black", "Cannon", 8);
-    design.setup("Black", "Cannon", 12);
-    design.setup("Black", "Leopard", 1);
-    design.setup("Black", "Leopard", 5);
     design.setup("Black", "General", 3);
+
+    design.setup("Red", "Cannon", 36, 1);
+    design.setup("Red", "Cannon", 40, 1);
+    design.setup("Red", "Leopard", 43, 1);
+    design.setup("Red", "Leopard", 47, 1);
+    design.setup("Black", "Cannon", 8, 1);
+    design.setup("Black", "Cannon", 12, 1);
+    design.setup("Black", "Leopard", 1, 1);
+    design.setup("Black", "Leopard", 5, 1);
+
+    design.setup("Red", "Cannon", 43, 2);
+    design.setup("Red", "Cannon", 47, 2);
+    design.setup("Black", "Cannon", 1, 2);
+    design.setup("Black", "Cannon", 5, 2);
 }
 
 Dagaz.View.configure = function(view) {
@@ -340,10 +354,16 @@ Dagaz.View.configure = function(view) {
     view.defPosition("f1", 49, 5, 42, 42);
     view.defPosition("g1", 4, 5, 42, 42);
 
-    view.defPopup("Promote", 26, 100);
+    view.defPopup("Promote-5", 26, 100);
     view.defPopupPosition("X1", 0, 7, 68, 68);
     view.defPopupPosition("X2", 50, 7, 68, 68);
     view.defPopupPosition("X3", 100, 7, 68, 68);
     view.defPopupPosition("X4", 150, 7, 68, 68);
     view.defPopupPosition("X5", 200, 7, 68, 68);
+
+    view.defPopup("Promote-4", 51, 100);
+    view.defPopupPosition("X1", 0, 7, 68, 68);
+    view.defPopupPosition("X2", 50, 7, 68, 68);
+    view.defPopupPosition("X3", 100, 7, 68, 68);
+    view.defPopupPosition("X4", 150, 7, 68, 68);
 }

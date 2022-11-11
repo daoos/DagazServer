@@ -295,7 +295,7 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(258, 22, 'Shafran Checkers', 'shafran-checkers', 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(259, 22, 'Croda', 'croda', 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(260, 24, 'Frisian Columns', 'frisian-columns', 2)`);
-        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(261, 23, 'Mini Xiangqi', 'minixiangqi', 2)`);
+        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total, max_selector) values(261, 23, 'Mini Xiangqi', 'minixiangqi', 2, 2)`);
 
         await queryRunner.query(`insert into game_styles(id, game_id, name, suffix, player_num) values(1, 23, 'European', '', null)`);
         await queryRunner.query(`insert into game_styles(id, game_id, name, suffix, player_num) values(2, 23, 'Chinese', '-kanji', null)`);
@@ -1065,8 +1065,10 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, copyright) values(631, 'shafran-checkers', null, 'shafran', 'Isaak Shafran')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(632, 'croda', null, 'croda', 'http://www.di.fc.ul.pt/~jpn/gv/croda.htm', '1995 Ljuban Dedic')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(633, 'frisian-columns', null, 'frisian-columns')`);
-        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, copyright) values(634, 'minixiangqi', null, 'minixiangqi', '1973 S. Kusumoto')`);
-        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, copyright) values(635, 'minixiangqi-kanji', null, 'minixiangqi-kanji', '1973 S. Kusumoto')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, copyright) values(634, 'minixiangqi', 1, 'minixiangqi', '1973 S. Kusumoto')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, copyright) values(635, 'minixiangqi-kanji', 1, 'minixiangqi-kanji', '1973 S. Kusumoto')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, copyright) values(636, 'minixiangqi', 2, 'minixiangqi-2', '1973 S. Kusumoto')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, copyright) values(637, 'minixiangqi-kanji', 2, 'minixiangqi-kanji-2', '1973 S. Kusumoto')`);
     }
 
     public async down(queryRunner: QueryRunner): Promise<any> {
