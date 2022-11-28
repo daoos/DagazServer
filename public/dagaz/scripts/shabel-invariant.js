@@ -43,20 +43,17 @@ var canEatDama = function(design, board, pos, dir) {
   return board.getPiece(p) === null;
 }
 
-var canEat = function(design, board, pos) {
+var canEat = function(design, board, player, pos) {
   var piece = board.getPiece(pos);
   if (piece === null) return false;
-  if (piece.type == 0) {
-      return canEatMan(design, board, pos, 3) || 
-             canEatMan(design, board, pos, 5) ||
-             canEatMan(design, board, pos, 6) ||
-             canEatMan(design, board, pos, 7);
-  } else {
-      return canEatDama(design, board, pos, 3) || 
-             canEatDama(design, board, pos, 5) ||
-             canEatDama(design, board, pos, 6) ||
-             canEatDama(design, board, pos, 7);
+  for (var ix = 0; ix < Dagaz.Model.DIRS.length; ix++) {
+      if (piece.type == Dagaz.Model.MAN) {
+          if (canEatMan(design, board, pos, Dagaz.Model.DIRS[ix])) return true;
+      } else {
+          if (canEatDama(design, board, pos, Dagaz.Model.DIRS[ix])) return true;
+      }
   }
+  return false;
 }
 
 var findPiece = function(design, board, player, type) {
@@ -80,7 +77,7 @@ Dagaz.Model.checkGoals = function(design, board, player) {
       for (var pos = 0; pos < 64; pos++) {
            var piece = board.getPiece(pos);
            if ((piece !== null) && (piece.player == board.player) && (piece.type < 2)) {
-               if (canEat(design, board, pos)) return 1;
+               if (canEat(design, board, piece.player, pos)) return 1;
            }
       }
   }
@@ -110,6 +107,17 @@ var notSafe = function(design, board, player, king) {
   return r;
 }
 
+var noMen = function(design, board, player) {
+  for (var pos = 0; pos < design.positions.length; pos++) {
+     var piece = board.getPiece(pos);
+     if (piece === null) continue;
+     if (piece.player == player) continue;
+     if ((piece.type != Dagaz.Model.MAN) && (piece.type != Dagaz.Model.MAN + 1))  continue;
+     if (canEat(design, board, piece.player, pos)) return false;
+  }
+  return true;
+}
+
 var CheckInvariants = Dagaz.Model.CheckInvariants;
 
 Dagaz.Model.CheckInvariants = function(board) {
@@ -121,6 +129,7 @@ Dagaz.Model.CheckInvariants = function(board) {
     })
    .each(function(move) {
        var b = board.apply(move);
+       if (noMen(design, b, board.player)) return;
        if (notSafe(design, b, board.player, king)) {
            move.failed = true;
        }

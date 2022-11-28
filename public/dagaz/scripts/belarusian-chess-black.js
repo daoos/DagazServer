@@ -1,5 +1,8 @@
 Dagaz.Controller.persistense = "none";
 
+Dagaz.Model.DIRS = [3, 5, 6, 7];
+Dagaz.Model.MAN  = 0;
+
 Dagaz.AI.g_flags = 0;
 
 ZRF = {

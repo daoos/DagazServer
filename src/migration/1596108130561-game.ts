@@ -297,6 +297,8 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(260, 24, 'Frisian Columns', 'frisian-columns', 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total, max_selector) values(261, 23, 'Mini Xiangqi', 'minixiangqi', 2, 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(262, 22, 'Pskov Checkers', 'pskov-checkers', 2)`);
+        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(263, 23, 'Gwangsanghui', 'gwangsanghui', 2)`);
+        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(264, 36, 'Glinski''s Cheskers', 'glinski-cheskers', 2)`);
 
         await queryRunner.query(`insert into game_styles(id, game_id, name, suffix, player_num) values(1, 23, 'European', '', null)`);
         await queryRunner.query(`insert into game_styles(id, game_id, name, suffix, player_num) values(2, 23, 'Chinese', '-kanji', null)`);
@@ -321,6 +323,7 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_styles(id, game_id, name, suffix, player_num) values(25, 45, 'Opposite', '-north', 2)`);
         await queryRunner.query(`insert into game_styles(id, game_id, name, suffix, player_num) values(26, 46, 'Opposite', '-north', 2)`);
         await queryRunner.query(`insert into game_styles(id, variant_id, name, suffix, player_num) values(27, 257, 'European', '', null)`);
+        await queryRunner.query(`insert into game_styles(id, variant_id, name, suffix, player_num) values(28, 263, 'Chinese', '', null)`);
 
         await queryRunner.query(`insert into game_bots(id, game_id, variant_id, selector_value, player_num) values(1, 35, 50, null, null)`);
         await queryRunner.query(`insert into game_bots(id, game_id, variant_id, selector_value, player_num) values(2, 31, null, null, null)`);
@@ -462,6 +465,7 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_bots(id, game_id, variant_id, selector_value, player_num) values(139, 24, 260, null, null)`);
         await queryRunner.query(`insert into game_bots(id, game_id, variant_id, selector_value, player_num) values(140, 23, 261, null, null)`);
         await queryRunner.query(`insert into game_bots(id, game_id, variant_id, selector_value, player_num) values(141, 22, 262, null, null)`);
+        await queryRunner.query(`insert into game_bots(id, game_id, variant_id, selector_value, player_num) values(142, 36, 264, null, null)`);
 
         await queryRunner.query(`insert into game_setups(id, game_id, variant_id, selector_value, name) values(1, 25, 10, 1, 'Without Handicap')`);
         await queryRunner.query(`insert into game_setups(id, game_id, variant_id, selector_value, name) values(2, 25, 10, 2, 'Left-Kyo Handicap')`);
@@ -1072,6 +1076,8 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, copyright) values(636, 'minixiangqi', 2, 'minixiangqi-2', '1973 S. Kusumoto')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, copyright) values(637, 'minixiangqi-kanji', 2, 'minixiangqi-kanji-2', '1973 S. Kusumoto')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(638, 'pskov-checkers', null, 'pskov-checkers')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(639, 'gwangsanghui', null, 'gwangsanghui', 'https://en.wikipedia.org/wiki/Janggi_variants#Gwangsanghui')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(640, 'glinski-cheskers', null, 'glinski-cheskers', 'https://en.wikipedia.org/wiki/Hexagonal_chess#Gli%C5%84ski''s_hexagonal_chess', '1936 Wladyslaw Glinski')`);
     }
 
     public async down(queryRunner: QueryRunner): Promise<any> {
