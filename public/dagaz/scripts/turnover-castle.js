@@ -119,13 +119,14 @@ Dagaz.Model.CheckInvariants = function(board) {
            if (!isAttacked(design, board, board.player, pos)) return;
        }
        _.each(_.range(8), function(dir) {
-            var move = Dagaz.Model.createMove(16, 15);
-            var p = pos;
+            var move = Dagaz.Model.createMove(16);
+            var p = pos; var target = null;
             while (p !== null) {
                 var piece = board.getPiece(p);
                 if (piece === null) return;
                 var q = design.navigate(1, p, dir);
                 if (q === null) return;
+                if (target === null) target = q;
                 var t = board.getPiece(q);
                 if ((t !== null) && (t.player == board.player)) return;
                 move.movePiece(p, q, piece);
@@ -141,7 +142,16 @@ Dagaz.Model.CheckInvariants = function(board) {
                 }
             }
             disableMoves(design, board, pos, dir);
-            board.moves.push(move);
+            if (design.inZone(0, board.player, target)) {
+                var m = Dagaz.Model.createMove(16);
+                m.movePiece(move.actions[0][0][0], move.actions[0][1][0], move.actions[0][2][0]);
+                m.movePiece(move.actions[1][0][0], move.actions[1][1][0], move.actions[1][2][0]);
+                m.movePiece(move.actions[2][0][0], move.actions[2][1][0], move.actions[2][2][0]);
+                m.capturePiece(move.actions[0][1][0]);
+                board.moves.push(m);
+            } else {
+                board.moves.push(move);
+            }
        });
   });
   if (f.length == 1) {
