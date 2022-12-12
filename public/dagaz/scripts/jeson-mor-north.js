@@ -154,7 +154,7 @@ Dagaz.Model.BuildDesign = function(design) {
     design.addCommand(1, ZRF.FUNCTION,	25);	// to
     design.addCommand(1, ZRF.FUNCTION,	28);	// end
 
-    design.addPiece("Knight", 0);
+    design.addPiece("Knight", 0, 100);
     design.addMove(0, 0, [4, 7], 0);
     design.addMove(0, 0, [4, 3], 0);
     design.addMove(0, 0, [2, 6], 0);
@@ -164,7 +164,7 @@ Dagaz.Model.BuildDesign = function(design) {
     design.addMove(0, 0, [1, 3], 0);
     design.addMove(0, 0, [1, 5], 0);
 
-    design.addPiece("RoyalKnight", 1);
+    design.addPiece("RoyalKnight", 1, 20000);
     design.addMove(1, 1, [4, 7], 0);
     design.addMove(1, 1, [4, 3], 0);
     design.addMove(1, 1, [2, 6], 0);

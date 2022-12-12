@@ -142,7 +142,7 @@ Dagaz.Model.CheckInvariants = function(board) {
                 }
             }
             disableMoves(design, board, pos, dir);
-            if (design.inZone(0, board.player, target)) {
+            if (design.inZone(0, board.player, target) && (f.length > 1)) {
                 var m = Dagaz.Model.createMove(16);
                 m.movePiece(move.actions[0][0][0], move.actions[0][1][0], move.actions[0][2][0]);
                 m.movePiece(move.actions[1][0][0], move.actions[1][1][0], move.actions[1][2][0]);
