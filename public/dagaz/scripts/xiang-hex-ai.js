@@ -329,7 +329,7 @@ Dagaz.AI.ResetGame = function() {
   for (var row = 0; row < Dagaz.Model.HEIGHT; row++) {
        for (var col = 0; col < Dagaz.Model.WIDTH; col++) {
             var square = MakeSquare(row, col);
-            flipTable[square] = MakeSquare((Dagaz.Model.HEIGHT - 1) - row, col);
+            flipTable[square] = MakeSquare((Dagaz.Model.HEIGHT - 1) - row, (Dagaz.Model.WIDTH - 1) - col);
        }
   }
 
