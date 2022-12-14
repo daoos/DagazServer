@@ -1,5 +1,7 @@
 Dagaz.Controller.persistense = "none";
 
+Dagaz.AI.NOISE_FACTOR = 1000;
+
 Dagaz.Model.WIDTH  = 11;
 Dagaz.Model.HEIGHT = 11;
 

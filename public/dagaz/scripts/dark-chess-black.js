@@ -1,5 +1,7 @@
 Dagaz.Controller.persistense = "none";
 
+Dagaz.AI.NOISE_FACTOR = 1000;
+
 ZRF = {
     JUMP:          0,
     IF:            1,
