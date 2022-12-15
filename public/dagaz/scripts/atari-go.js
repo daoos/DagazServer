@@ -1,5 +1,7 @@
-Dagaz.AI.selector = true;
 Dagaz.Controller.persistense = "none";
+
+Dagaz.Model.WIDTH  = 9;
+Dagaz.Model.HEIGHT = 9;
 
 ZRF = {
     JUMP:          0,
@@ -30,7 +32,6 @@ Dagaz.Model.BuildDesign = function(design) {
     design.checkVersion("show-hints", "false");
     design.checkVersion("show-drops", "true");
     design.checkVersion("show-captures", "false");
-    design.checkVersion("go-extension", "true");
     design.checkVersion("animate-redo", "false");
     design.checkVersion("atari-go-goal", "true");
 

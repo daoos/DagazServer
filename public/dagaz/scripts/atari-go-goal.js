@@ -35,7 +35,7 @@ var getPattern = function(board, x, y) {
   }
 }
 
-var findPattern = function(pattern) {
+Dagaz.AI.findPattern = function(pattern) {
   for (var i = 0; i < Dagaz.AI.Patterns.length; i++) {
       var result = pattern.match(Dagaz.AI.Patterns[i].re);
       if (result) {
@@ -69,7 +69,7 @@ Dagaz.AI.heuristic = function(ai, design, board, move) {
           }
       }
       if (f) return -1;
-      v = findPattern(p);
+      v = Dagaz.AI.findPattern(p);
       if (v !== null) r = v;
   }
   return r;
