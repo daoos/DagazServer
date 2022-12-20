@@ -119,8 +119,20 @@ Dagaz.Model.CheckInvariants = function(board) {
            if (!isAttacked(design, board, board.player, pos)) return;
        }
        _.each(_.range(8), function(dir) {
+            var p = design.navigate(1, pos, dir);
+            if (p === null) return;
+            var forbidden = false;
+            _.each(_.range(8), function(d) {
+                var q = design.navigate(1, p, d);
+                if (q === null) return;
+                var piece = board.getPiece(q);
+                if (piece === null) return;
+                if (piece.player == board.player) return;
+                if (isCastle(design, board, q)) forbidden = true;
+            });
+            if (forbidden) return;
             var move = Dagaz.Model.createMove(16);
-            var p = pos; var target = null;
+            p = pos; var target = null;
             while (p !== null) {
                 var piece = board.getPiece(p);
                 if (piece === null) return;

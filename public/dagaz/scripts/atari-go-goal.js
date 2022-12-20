@@ -42,7 +42,7 @@ Dagaz.AI.findPattern = function(pattern) {
           return Dagaz.AI.Patterns[i].price;
       }
   }
-  return null;
+  return 0;
 }
 
 Dagaz.AI.heuristic = function(ai, design, board, move) {

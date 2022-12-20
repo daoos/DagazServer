@@ -24,7 +24,7 @@ function Ai(parent) {
 var findBot = Dagaz.AI.findBot;
 
 Dagaz.AI.findBot = function(type, params, parent) {
-  if ((type == "external") || (type == "smart") /*|| (type == "1")*/ || (type == "2")) {
+  if ((type == "external") || (type == "smart") || (type == "1") || (type == "2")) {
       return new Ai(parent);
   } else {
       return findBot(type, params, parent);
@@ -85,45 +85,59 @@ function InitializeFromFen(fen, board, size, player) {
     }
 }
 
-function analyze(board, size, ix) {
+function analyze(board, size, map) {
   let r = []; let done = [];
+  r.push({
+      player: 0,
+      group:  [],
+      edges:  [],
+      dame:   []
+  });
   for (let pos = 0; pos < size * size; pos++) {
       if (board[pos] == 0) continue;
       if (_.indexOf(done, pos) >= 0) continue;
       const p = board[pos];
-      let g = [pos]; let d = [];
+      let g = [pos]; let d = []; let e = [];
       for (let i = 0; i < g.length; i++) {          
           _.each([-1, 1, -size, size], function(dir) {
                const q = navigate(g[i], dir, size);
                if (q === null) return;
                if (_.indexOf(g, q) >= 0) return;
-               if (board[q] * p < 0) return;
+               if (board[q] * p < 0) {
+                   if (_.indexOf(e, q) < 0) e.push(q);
+                   return;
+               }
                if (board[q] * p > 0) {
                    g.push(q);
                    return;
                }
-               d.push(q);
+               if (_.indexOf(d, q) < 0) d.push(q);
           });
           done.push(g[i]);
       }
-      if (!_.isUndefined(ix)) {
-          ix[pos] = r.length;
+      if (!_.isUndefined(map)) {
+          _.each(g, function(p) {
+               map[p] = r.length;
+          });
       }
       r.push({
           player: p,
           group:  g,
+          edges:  e,
           dame:   d
       });
   }
   return r;
 }
 
-function getMoveByStat(stat, player) {
+function getMoveByStat(board, size, stat, player) {
   for (let i = 0; i < stat.length; i++) {
       if ((stat[i].player != player) && (stat[i].dame.length == 1)) return stat[i].dame[0];
   }
   for (let i = 0; i < stat.length; i++) {
-      if ((stat[i].player == player) && (stat[i].dame.length == 1)) return stat[i].dame[0];
+      if ((stat[i].player == player) && (stat[i].dame.length == 1)) {
+           if (noSuicide(board, size, stat[i].dame[0])) return stat[i].dame[0];
+      }
   }
   return null;
 }
@@ -146,6 +160,7 @@ function getMoves(board, size, move) {
         _.each([-1, 1, SIZE, -SIZE, SIZE - 1, SIZE + 1, -SIZE - 1, -SIZE + 1], function(dir) {
             const p = navigate(pos, dir, size);
             if (p === null) return;
+            if ((move !== null) && (move == p)) c++;
             if (board[p] > 0) c++;
             if (board[p] < 0) c++;
         });
@@ -175,25 +190,61 @@ function getPattern(board, x, y, stat, ix) {
   }
 }
 
-function getWeight(board, move, stat, ix) {
+function show(map) {
+  for (let y = 0; y < SIZE; y++) {
+    let s = '';
+    for (let x = 0; x < SIZE; x++) {
+        s = s + map[y * SIZE + x] + ' ';
+    }
+    console.log(s);
+  }
+}
+
+function sameai(board, move, stat, map) {
+  var fd = 0; var ed = 0; var c = 0;
+  _.each([1, -1, SIZE, -SIZE], function (dir) {
+      const pos = navigate(move, dir, SIZE);
+      if (pos === null) {
+          c += 3;
+          return;
+      }
+      const ix = map[pos];
+      if (ix == 0) {
+          fd++;
+          return;
+      }
+      if (stat[ix].player > 0) {
+          fd += stat[ix].dame.length - 1;
+          c++;
+      } else {
+          if ((ed == 0) || (ed > stat[ix].dame.length)) ed = stat[ix].dame.length - 1;
+      }
+  });
+  if ((c < 2) && (ed > 0) && (fd > ed)) return 900;
+  return 0;
+}
+
+function getWeight(board, move, stat, map) {
     const X = Dagaz.Model.getX(move);
     const Y = Dagaz.Model.getY(move);
     let p = "";
     for (let j = Y - 2; j <= Y + 2; j++) {
          for (let i = X - 2; i <= X + 2; i++) {
-              p = p + getPattern(board, i, j, stat, ix);
+              p = p + getPattern(board, i, j, stat, map);
          }
     }
     let v = Dagaz.AI.findPattern(p);
-    if (v > 1000) v = 1000;
+    v += sameai(board, move, stat, map);
+    if (v > 3000) v = 3000;
     return v / 100;
 }
-
-Node.prototype.getUCT = function(board, size, stat, ix) {
+  
+Node.prototype.getUCT = function(board, size, stat, map) {
     const m = getAvail(this);
     if (m !== null) {
         const moves = getMoves(board, size, m);
-        const r = new Child(m, moves, moves, getWeight(board, m, stat, ix));
+        // TODO: prior
+        const r = new Child(m, [], moves, getWeight(board, m, stat, map));
         this.childs.push(r);
         return r;
     }
@@ -204,12 +255,12 @@ Node.prototype.getUCT = function(board, size, stat, ix) {
 }
 
 function Child(move, prior, avail, p) {
-    this.prior = prior;
     this.move  = move;
+    this.prior = prior;
     this.avail = avail;
+    this.p = p;
     this.n = 1;
     this.w = 0;
-    this.p = p;
     this.moves = [];
 }
 
@@ -244,15 +295,15 @@ function getAvail(node) {
 }
 
 function simulate(board, player, size, move) {
-    let g = null;
+    let g = 0;
     let undo = [];
+    let p = player;
     if (move !== null) {
         undo.push(move);
-        board[move] = -1;
-        var p = player;
+        board[move] = -p;
         for (let i = 0; i < size * size; i++) {
             const s = analyze(board, size);
-            let m = getMoveByStat(s, player);
+            let m = getMoveByStat(board, size, s, p);
             if (m === null) {
                 let moves = getMoves(board, size);
                 if (moves.length == 0) break;
@@ -262,12 +313,9 @@ function simulate(board, player, size, move) {
             }
             undo.push(m);
             board[m] = p;
-            g = checkGoal(board, size, m);
+            g = checkGoal(board, p, size, m);
 //          dump(board, size);
-            if (g !== null) {
-                if (g < 0) continue;
-                break;
-            }
+            if (g != 0) break;
             p = -p;
         }
     }
@@ -277,13 +325,22 @@ function simulate(board, player, size, move) {
     return g * p;
 }
 
+function noSuicide(board, size, move) {
+    board[move] = 1;
+    var group = [move];
+    var dame = expand(board, size, group, 1);
+    board[move] = 0;
+    return dame > 0;
+}
+
 function findMove(fen, player, callback) {
     const t0 = Date.now();
     InitializeFromFen(fen, board, SIZE, player);
+    player = 1;
 
     let map = new Int32Array(SIZE * SIZE);
     const s = analyze(board, SIZE, map);
-    const m = getMoveByStat(s, player);
+    const m = getMoveByStat(board, SIZE, s, player);
     if (m !== null) {
         const t1 = Date.now();
         console.log('Time = ' + (t1 - t0));
@@ -294,12 +351,15 @@ function findMove(fen, player, callback) {
     let moves = getMoves(board, SIZE);
     const root = new Node(moves);
 
-    let cnt = 0;
     for (let i = 0; i < DO_TOTAL; i++) {
         const c = root.getUCT(board, SIZE, s, map);
         if (c === null) break;
-        board[c.move] = 1;
-        const move = c.getRandom(board, SIZE);
+        board[c.move] = player;
+        if (!noSuicide(board, SIZE, c.move)) {
+            board[c.move] = 0;
+            continue;
+        }
+        const move = c.getRandom();
         if (simulate(board, player, SIZE, move) > 0) {
             c.w++;
         }
@@ -309,7 +369,6 @@ function findMove(fen, player, callback) {
         if (i % 100 == 0) {
             if (Date.now() - t0 > MAX_TIME) break;
         }
-        cnt++;
     }
 
     const r = _.sortBy(root.childs, function(c) {
@@ -321,14 +380,14 @@ function findMove(fen, player, callback) {
     for (let i = 0; i < r.length; i++) {
         const m = r[i].move;
         console.log(FormatMove(m, SIZE) + ': n = ' + r[i].n + ', w = ' + r[i].w + ', p = ' + r[i].p);
-        if (r[i].w > mx) {
+/*      if (r[i].w > mx) {
             mx = r[i].w;
             ix = i;
-        }
+        }*/
         if (i >= 9) break;
     }
 
-    console.log('Time = ' + (t1 - t0) + ', N = ' + cnt);
+    console.log('Time = ' + (t1 - t0) + ', N = ' + root.n);
     callback(r[ix].move, (r[ix].n / root.n) * 1000, t1 - t0);
 }
 
@@ -376,17 +435,17 @@ function expand(board, size, group, player) {
     return dame;
 }
 
-function checkGoal(board, size, move) {
+function checkGoal(board, player, size, move) {
     let captured = null;
     let dame = 0; let group = [move]; 
     _.each([1, -1, SIZE, -SIZE], function(dir) {
         if (captured !== null) return;
         const p = navigate(move, dir, size);
         if (p === null) return;
-        if (board[p] > 0) return;
-        if (board[p] < 0) {
+        if (board[p] * player > 0) return;
+        if (board[p] * player < 0) {
             let g = [p];
-            const d = expand(board, size, g, -1);
+            const d = expand(board, size, g, -player);
             if (d == 0) captured = p;
             return;
         }
@@ -394,10 +453,10 @@ function checkGoal(board, size, move) {
     });
     if (captured !== null) return 1;
     if (dame == 0) {
-        dame = expand(board, size, group, 1);
+        dame = expand(board, size, group, player);
         if (dame == 0) return -1;
     }
-    return null;
+    return 0;
 }
 
 Ai.prototype.setContext = function(ctx, board) {
@@ -425,6 +484,8 @@ Ai.prototype.getMove = function(ctx) {
   if (moves.length == 0) {
       return { done: true, ai: "nothing" };
   }
+  var setup = Dagaz.Model.getSetup(ctx.design, ctx.board);
+  var result = setup.match(/[?&]setup=(.*)/);
   if (resultMove !== null) {
       var bestMove = null;
       _.each(moves, function(move) {
@@ -452,13 +513,15 @@ Ai.prototype.getMove = function(ctx) {
            ai:  "mcts"
       };
   }
-  var setup = Dagaz.Model.getSetup(ctx.design, ctx.board);
-  var result = setup.match(/[?&]setup=(.*)/);
   if (result) {
       inProgress = true;
       var fen = result[1];
       setTimeout(function () {
-         findMove(fen, ctx.board.player == 1 ? 1 : -1, callback);
+         if (fen == '9/9/9/9/9/9/9/9/9') {
+             callback(40, 1000, Date.now() - ctx.timestamp);
+         } else {
+             findMove(fen, ctx.board.player == 1 ? 1 : -1, callback);
+         }
       }, 100);
       return {
            done: false,
