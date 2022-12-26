@@ -300,6 +300,8 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(263, 23, 'Gwangsanghui', 'gwangsanghui', 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(264, 36, 'Glinski''s Cheskers', 'glinski-cheskers', 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(265, 23, 'Xiang Hex', 'xiang-hex', 2)`);
+        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total, max_selector) values(266, 32, 'Fandango', 'fandango', 2, 2)`);
+        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(267, 22, 'Kentish Draughts', 'kentish-draughts', 2)`);
 
         await queryRunner.query(`insert into game_styles(id, game_id, name, suffix, player_num) values(1, 23, 'European', '', null)`);
         await queryRunner.query(`insert into game_styles(id, game_id, name, suffix, player_num) values(2, 23, 'Chinese', '-kanji', null)`);
@@ -469,6 +471,8 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_bots(id, game_id, variant_id, selector_value, player_num) values(142, 36, 264, null, null)`);
         await queryRunner.query(`insert into game_bots(id, game_id, variant_id, selector_value, player_num) values(143, 23, 265, null, null)`);
         await queryRunner.query(`insert into game_bots(id, game_id, variant_id, selector_value, player_num) values(144, 37, 174, null, null)`);
+        await queryRunner.query(`insert into game_bots(id, game_id, variant_id, selector_value, player_num) values(145, 32, 266, null, null)`);
+        await queryRunner.query(`insert into game_bots(id, game_id, variant_id, selector_value, player_num) values(146, 22, 267, null, null)`);
 
         await queryRunner.query(`insert into game_setups(id, game_id, variant_id, selector_value, name) values(1, 25, 10, 1, 'Without Handicap')`);
         await queryRunner.query(`insert into game_setups(id, game_id, variant_id, selector_value, name) values(2, 25, 10, 2, 'Left-Kyo Handicap')`);
@@ -1083,6 +1087,9 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(640, 'glinski-cheskers', null, 'glinski-cheskers', 'https://en.wikipedia.org/wiki/Hexagonal_chess#Gli%C5%84ski''s_hexagonal_chess', '1936 Wladyslaw Glinski')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, copyright) values(641, 'xiang-hex', null, 'xiang-hex', '2008 L. Lynn Smith')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, copyright) values(642, 'xiang-hex-kanji', null, 'xiang-hex-kanji', '2008 L. Lynn Smith')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(643, 'fandango', 1, 'fandango-1', 'https://www.zillions-of-games.com/cgi-bin/zilligames/submissions.cgi?do=show;id=407', '2003 Chris Huntoon')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(644, 'fandango', 2, 'fandango-2', 'https://www.zillions-of-games.com/cgi-bin/zilligames/submissions.cgi?do=show;id=407', '2003 Chris Huntoon')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, copyright) values(645, 'kentish-draughts', null, 'kentish-draughts', '1985 Chris Munns')`);
     }
 
     public async down(queryRunner: QueryRunner): Promise<any> {

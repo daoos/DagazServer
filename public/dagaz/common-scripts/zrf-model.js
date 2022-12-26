@@ -924,6 +924,10 @@ ZrfDesign.prototype.addDirection = function(name) {
   this.dirs.push(name);
 }
 
+ZrfDesign.prototype.opposite = function(dir) {
+  return this.players[0][dir];
+}
+
 ZrfDesign.prototype.addPlayer = function(player, symmetries, selector) {
   if (!_.isUndefined(selector) && (selector != Dagaz.Model.getResourceSelector())) return;
   var ix = this.playerNames.length;
