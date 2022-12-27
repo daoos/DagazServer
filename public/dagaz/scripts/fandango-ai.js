@@ -12,7 +12,7 @@ var pieceNo               = 0x80;
 var moveflagPromotion     = 0x01000000;
 
 var g_moveUndoStack = new Array();
-var materialTable = [0, 100, 1000];
+var materialTable = [0, 1000, 3000];
 
 var pieceSquareAdj = new Array(2);
 Dagaz.AI.flipTable = new Array(256);
@@ -426,7 +426,7 @@ function GenerateCaptureMovesFromTree(moves, from, isReversed, history, stack, i
          if ((Dagaz.AI.g_board[target] & enemy) == 0) return;
          if (Dagaz.AI.g_board[target] & pieceNo) return;
          var step = from | (to << 8) | (target << 16);
-/*       if (isMan) {
+         if (isMan) {
             var row = to & 0xF0;
             if (!Dagaz.AI.g_toMove && (row == 0x90)) {
                 step |= moveflagPromotion;
@@ -436,7 +436,7 @@ function GenerateCaptureMovesFromTree(moves, from, isReversed, history, stack, i
                 step |= moveflagPromotion;
                 promoted = true;
             }
-         }*/
+         }
          history.push(to);
          stack.push(step);
          Dagaz.AI.MakeStep(step, 0);
@@ -459,7 +459,7 @@ function GenerateCaptureMovesFrom(moves, from) {
 
 function GenerateStep(moves, from, to, isMan) {
   var flags = 0;
-/*if (isMan) {
+  if (isMan) {
       var row = to & 0xF0;
       if (!Dagaz.AI.g_toMove && (row == 0x90)) {
           flags = moveflagPromotion;
@@ -467,7 +467,7 @@ function GenerateStep(moves, from, to, isMan) {
       if (Dagaz.AI.g_toMove && (row == 0x20)) {
           flags = moveflagPromotion;
       }
-  }*/
+  }
   moves.push([from | (to << 8) | flags]);
 }
 
