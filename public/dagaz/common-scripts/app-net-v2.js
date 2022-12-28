@@ -1029,6 +1029,7 @@ Dagaz.AI.callback = function(result) {
   }
   Dagaz.Model.Done(app.design, app.board);
   addMove(move.toString(), s, bot);
+  move.applyAll(app.view);
   app.move = move;
   app.state = STATE.EXEC;
 }
