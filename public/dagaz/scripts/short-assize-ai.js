@@ -581,13 +581,14 @@ Dagaz.AI.InitializeFromFen = function(fen) {
     return '';
 }
 
-function UndoHistory(inCheck, baseEval, hashKeyLow, hashKeyHigh, move50, captured) {
+function UndoHistory(inCheck, baseEval, hashKeyLow, hashKeyHigh, move50, captured, piece) {
     this.inCheck = inCheck;
     this.baseEval = baseEval;
     this.hashKeyLow = hashKeyLow;
     this.hashKeyHigh = hashKeyHigh;
     this.move50 = move50;
     this.captured = captured;
+    this.piece = piece;
 }
 
 Dagaz.AI.MakeMove = function(move){
@@ -600,7 +601,7 @@ Dagaz.AI.MakeMove = function(move){
     var captured = Dagaz.AI.g_board[to];
     var piece = Dagaz.AI.g_board[from];
 
-    g_moveUndoStack[Dagaz.AI.g_moveCount] = new UndoHistory(Dagaz.AI.g_inCheck, Dagaz.AI.g_baseEval, Dagaz.AI.g_hashKeyLow, Dagaz.AI.g_hashKeyHigh, Dagaz.AI.g_move50, captured);
+    g_moveUndoStack[Dagaz.AI.g_moveCount] = new UndoHistory(Dagaz.AI.g_inCheck, Dagaz.AI.g_baseEval, Dagaz.AI.g_hashKeyLow, Dagaz.AI.g_hashKeyHigh, Dagaz.AI.g_move50, captured, piece);
     Dagaz.AI.g_moveCount++;
 
     if (captured) {
@@ -672,7 +673,25 @@ Dagaz.AI.MakeMove = function(move){
         Dagaz.AI.g_board[to] = Dagaz.AI.g_board[from];
         Dagaz.AI.g_baseEval += pieceSquareAdj[piece & Dagaz.AI.TYPE_MASK][me == 0 ? flipTable[to] : to];
     }
-    Dagaz.AI.g_board[from] = pieceEmpty;
+
+    if (flags & moveflagSplit) {
+        var newPiece = piece & (~Dagaz.AI.TYPE_MASK);
+        newPiece |= pieceQueen;
+
+        Dagaz.AI.g_board[from] = newPiece;
+        Dagaz.AI.g_baseEval += materialTable[newPiece & Dagaz.AI.TYPE_MASK];
+        Dagaz.AI.g_baseEval += pieceSquareAdj[newPiece & Dagaz.AI.TYPE_MASK][me == 0 ? flipTable[from] : from];
+
+        var pieceType = newPiece & Dagaz.AI.PIECE_MASK;
+        Dagaz.AI.g_hashKeyLow ^= Dagaz.AI.g_zobristLow[from][pieceType];
+        Dagaz.AI.g_hashKeyHigh ^= Dagaz.AI.g_zobristHigh[from][pieceType];
+
+        Dagaz.AI.g_pieceIndex[from] = Dagaz.AI.g_pieceCount[pieceType];
+        Dagaz.AI.g_pieceList[(pieceType << Dagaz.AI.COUNTER_SIZE) | Dagaz.AI.g_pieceCount[pieceType]] = from;
+        Dagaz.AI.g_pieceCount[pieceType]++;
+    } else {
+        Dagaz.AI.g_board[from] = pieceEmpty;
+    }
 
     Dagaz.AI.g_toMove = otherColor;
     Dagaz.AI.g_baseEval = -Dagaz.AI.g_baseEval;
@@ -711,8 +730,7 @@ Dagaz.AI.MakeMove = function(move){
                 }
             }
         }
-    }
-    else {
+    } else {
         // split or promotion, slow check
         Dagaz.AI.g_inCheck = false;
         var kingPos = Dagaz.AI.g_pieceList[(pieceKing | Dagaz.AI.g_toMove) << Dagaz.AI.COUNTER_SIZE];
@@ -746,46 +764,38 @@ Dagaz.AI.UnmakeMove = function(move){
     var captured = g_moveUndoStack[Dagaz.AI.g_moveCount].captured;
     var to = (move >> 8) & 0xFF;
     var from = move & 0xFF;
+    var piece = g_moveUndoStack[Dagaz.AI.g_moveCount].piece;
 
-    if (flags & moveflagSplit) {
-        var promoteType = Dagaz.AI.g_board[from] & Dagaz.AI.PIECE_MASK;
-
-        Dagaz.AI.g_pieceCount[promoteType]--;
-        var lastPromoteSquare = Dagaz.AI.g_pieceList[(promoteType << Dagaz.AI.COUNTER_SIZE) | Dagaz.AI.g_pieceCount[promoteType]];
-        Dagaz.AI.g_pieceIndex[lastPromoteSquare] = Dagaz.AI.g_pieceIndex[to];
-        Dagaz.AI.g_pieceList[(promoteType << Dagaz.AI.COUNTER_SIZE) | Dagaz.AI.g_pieceIndex[lastPromoteSquare]] = lastPromoteSquare;
-        Dagaz.AI.g_pieceList[(promoteType << Dagaz.AI.COUNTER_SIZE) | Dagaz.AI.g_pieceCount[promoteType]] = 0;
+    if (Dagaz.AI.g_board[from]) {
+        var capturedType = Dagaz.AI.g_board[from] & Dagaz.AI.PIECE_MASK;
+        Dagaz.AI.g_pieceCount[capturedType]--;
+        var lastPieceSquare = Dagaz.AI.g_pieceList[(capturedType << Dagaz.AI.COUNTER_SIZE) | Dagaz.AI.g_pieceCount[capturedType]];
+        Dagaz.AI.g_pieceIndex[lastPieceSquare] = Dagaz.AI.g_pieceIndex[from];
+        Dagaz.AI.g_pieceList[(capturedType << Dagaz.AI.COUNTER_SIZE) | Dagaz.AI.g_pieceIndex[lastPieceSquare]] = lastPieceSquare;
+        Dagaz.AI.g_pieceList[(capturedType << Dagaz.AI.COUNTER_SIZE) | Dagaz.AI.g_pieceCount[capturedType]] = 0;
     }
-    
-    var piece = Dagaz.AI.g_board[to];
-    if (flags & (moveflagPromotion | moveflagSplit)) {
-        piece = (Dagaz.AI.g_board[to] & (~Dagaz.AI.TYPE_MASK));
-        if (flags & moveflagSplit) piece |= piecePair;
-            else piece |= piecePawn;
 
-        Dagaz.AI.g_board[from] = piece;
-
+    Dagaz.AI.g_board[from] = piece;
+    if (Dagaz.AI.g_board[to] != piece) {
         var pawnType = Dagaz.AI.g_board[from] & Dagaz.AI.PIECE_MASK;
         var promoteType = Dagaz.AI.g_board[to] & Dagaz.AI.PIECE_MASK;
 
         Dagaz.AI.g_pieceCount[promoteType]--;
+
         var lastPromoteSquare = Dagaz.AI.g_pieceList[(promoteType << Dagaz.AI.COUNTER_SIZE) | Dagaz.AI.g_pieceCount[promoteType]];
         Dagaz.AI.g_pieceIndex[lastPromoteSquare] = Dagaz.AI.g_pieceIndex[to];
         Dagaz.AI.g_pieceList[(promoteType << Dagaz.AI.COUNTER_SIZE) | Dagaz.AI.g_pieceIndex[lastPromoteSquare]] = lastPromoteSquare;
         Dagaz.AI.g_pieceList[(promoteType << Dagaz.AI.COUNTER_SIZE) | Dagaz.AI.g_pieceCount[promoteType]] = 0;
-
         Dagaz.AI.g_pieceIndex[to] = Dagaz.AI.g_pieceCount[pawnType];
         Dagaz.AI.g_pieceList[(pawnType << Dagaz.AI.COUNTER_SIZE) | Dagaz.AI.g_pieceIndex[to]] = to;
         Dagaz.AI.g_pieceCount[pawnType]++;
-    } else {
-        Dagaz.AI.g_board[from] = Dagaz.AI.g_board[to];
     }
-
-    Dagaz.AI.g_board[to] = captured;
-
+    
     // Move our piece in the piece list
     Dagaz.AI.g_pieceIndex[from] = Dagaz.AI.g_pieceIndex[to];
     Dagaz.AI.g_pieceList[((piece & Dagaz.AI.PIECE_MASK) << Dagaz.AI.COUNTER_SIZE) | Dagaz.AI.g_pieceIndex[from]] = from;
+
+    Dagaz.AI.g_board[to] = captured;
 
     if (captured) {
         // Restore our piece to the piece list
