@@ -21,12 +21,15 @@ ZRF = {
     VERIFY:        20
 };
 
+Dagaz.Controller.addSound(2, "sounds/tadam.wav", true);
+Dagaz.Controller.addSound(3, "sounds/loss.wav", true);
 Dagaz.Controller.addSound(10, "sounds/pawn.wav", true);
 Dagaz.Controller.addSound(11, "sounds/knight.wav", true);
 Dagaz.Controller.addSound(12, "sounds/bishop.wav", true);
 Dagaz.Controller.addSound(13, "sounds/queen.wav", true);
 Dagaz.Controller.addSound(14, "sounds/rook.wav", true);
 Dagaz.Controller.addSound(15, "sounds/castle.wav", true);
+Dagaz.Controller.addSound(16, "sounds/fire.wav", true);
 
 Dagaz.Model.BuildDesign = function(design) {
     design.checkVersion("z2j", "2");

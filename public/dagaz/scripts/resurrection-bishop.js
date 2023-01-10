@@ -29,6 +29,7 @@ Dagaz.Model.CheckInvariants = function(board) {
       move.actions[0][2] = [piece];
       pos = move.actions[0][0][0];
       move.dropPiece(pos, bishop);
+      move.sound = 16;
   });
   CheckInvariants(board);
 }
