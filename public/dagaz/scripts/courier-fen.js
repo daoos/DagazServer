@@ -139,13 +139,6 @@ var getPieceNotation = function(design, piece) {
   return r;
 }
 
-var isMoved = function(design, board, pos, type) {
-  var piece = board.getPiece(pos);
-  if (piece === null) return true;
-  if (piece.type != type) return true;
-  return piece.getValue(0) !== null;
-}
-
 Dagaz.Model.getSetup = function(design, board) {
   var str = "?turn=" + board.turn + ";&setup=";
   var k = 0; var c = 0;

@@ -221,6 +221,7 @@ Dagaz.Model.CheckInvariants = function(board) {
           var r = board.getPiece(move.actions[1][0][0]);
           if (k.getValue(0) || r.getValue(0)) {
               move.failed = true;
+              return;
           }
           list.push(move.actions[0][0][0]);
           list.push(move.actions[1][1][0]);

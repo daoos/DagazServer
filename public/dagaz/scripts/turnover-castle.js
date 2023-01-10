@@ -160,8 +160,10 @@ Dagaz.Model.CheckInvariants = function(board) {
                 m.movePiece(move.actions[1][0][0], move.actions[1][1][0], move.actions[1][2][0]);
                 m.movePiece(move.actions[2][0][0], move.actions[2][1][0], move.actions[2][2][0]);
                 m.capturePiece(move.actions[0][1][0]);
+                m.sound = 15;
                 board.moves.push(m);
             } else {
+                move.sound = 15;
                 board.moves.push(move);
             }
        });

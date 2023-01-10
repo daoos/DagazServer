@@ -365,7 +365,7 @@ Dagaz.Model.BuildDesign = function(design) {
     design.addPriority(0);			// jump-type
     design.addPriority(1);			// normal-type
 
-    design.addPiece("Man", 0, 1, 50);
+    design.addPiece("Man", 0, 50);
     design.addMove(0, 0, [7, 7], 0);
     design.addMove(0, 0, [3, 3], 0);
     design.addMove(0, 0, [6, 6], 0);
@@ -373,7 +373,7 @@ Dagaz.Model.BuildDesign = function(design) {
     design.addMove(0, 1, [7], 1);
     design.addMove(0, 1, [3], 1);
 
-    design.addPiece("Dama", 1, 5, 250);
+    design.addPiece("Dama", 1, 250);
     design.addMove(1, 2, [7, 7, 7, 7, 7], 0, 10);
     design.addMove(1, 2, [3, 3, 3, 3, 3], 0, 10);
     design.addMove(1, 2, [6, 6, 6, 6, 6], 0, 10);
