@@ -36,7 +36,7 @@ Dagaz.Model.CheckInvariants = function(board) {
                       move.capturePiece(target);
                   }
               }
-              var init = [];
+              var init = [pos];
               _.each(design.allDirections(), function(d) {
                   var p = design.navigate(board.player, pos, d);
                   if (p !== null) {
@@ -65,9 +65,22 @@ Dagaz.Model.CheckInvariants = function(board) {
                   move.capturePiece(q);
               });
               moves.push(move);
+              var isBreaked = false;
+              if ((board.getPiece(target) !== null) && (_.indexOf(init, target) < 0)) {
+                  isBreaked = true;
+              }
+              _.each(design.allDirections(), function(d) {
+                  var q = design.navigate(board.player, target, d);
+                  if ((q === null) || design.inZone(0, board.player, q)) return;
+                  if ((board.getPiece(q) !== null) && (_.indexOf(init, q) < 0)) {
+                       isBreaked = true;
+                  }
+              });
               for (;c > 0; c--) {
+                  if (isBreaked) break;
                   target = design.navigate(board.player, target, dir);
                   if (target === null) break;
+                  if (design.inZone(0, 1, target)) break;
                   var m = Dagaz.Model.createMove(move.mode);
                   var piece = Dagaz.Model.createPiece(1, board.player);
                   m.dropPiece(pos + Dagaz.Model.BOARD_SIZE, piece);
@@ -87,7 +100,6 @@ Dagaz.Model.CheckInvariants = function(board) {
                           m.capturePiece(target);
                       }
                   }
-                  var isBreaked = false;
                   if ((board.getPiece(target) !== null) && (_.indexOf(init, target) < 0)) {
                       isBreaked = true;
                   }
@@ -116,7 +128,6 @@ Dagaz.Model.CheckInvariants = function(board) {
                       m.capturePiece(q);
                   });
                   moves.push(m);
-                  if (isBreaked) break;
               }
           }
       }
