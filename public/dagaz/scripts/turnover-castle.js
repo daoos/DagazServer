@@ -130,7 +130,7 @@ Dagaz.Model.CheckInvariants = function(board) {
                 if (piece.player == board.player) return;
                 if (isCastle(design, board, q)) forbidden = true;
             });
-            if (forbidden) return;
+            if (forbidden && (f.length == 1)) return;
             var move = Dagaz.Model.createMove(16);
             p = pos; var target = null;
             while (p !== null) {
