@@ -2,9 +2,9 @@
 
 (function() {
 
-Dagaz.AI.NOISE_FACTOR     = 5;
+Dagaz.AI.NOISE_FACTOR     = 3;
 Dagaz.AI.g_maxply         = 20;
-Dagaz.AI.STALMATED        = false;
+Dagaz.AI.STALMATED        = true;
 
 Dagaz.AI.PIECE_MASK       = 0x1F;
 Dagaz.AI.TYPE_MASK        = 0xF;
@@ -148,12 +148,9 @@ var flipTable = new Array(256);
 
 var g_vectorDelta  = new Array(512);
 
-var g_squireDeltas  = [31, 33, 14, 18];
-var g_priestDeltas  = [15, 17];
-var g_ravenDeltas   = [1, -1, 16];
-var g_bishopDeltas  = [-15, -17, 15, 17];
-var g_knightDeltas  = [31, 33, 14, -14, -31, -33, 18, -18];
-var g_rookDeltas    = [-1, +1, -16, +16];
+var g_bishopDeltas = [-15, -17, 15, 17];
+var g_knightDeltas = [31, 33, 14, -14, -31, -33, 18, -18];
+var g_rookDeltas   = [-1, +1, -16, +16];
 var g_kingDeltas   = [-1, +1, -15, +15, -17, +17, -16, +16];
 
 var g_seeValues = [0, 1, 2, 2, 3, 4, 5, 5, 9, 900, 0, 0, 0, 0, 0, 0,
@@ -380,7 +377,6 @@ Dagaz.AI.ResetGame = function() {
   pieceSquareAdj[pieceRook]    = MakeTable(Dagaz.AI.pieceAdj[pieceRook]);
   pieceSquareAdj[pieceKing]    = MakeTable(Dagaz.AI.pieceAdj[pieceKing]);
 
-  // TODO: Squire, Priest, Raven
   var pieceDeltas = [[], [], g_rookDeltas, g_knightDeltas, g_bishopDeltas, g_knightDeltas, g_bishopDeltas, g_rookDeltas, g_rookDeltas, g_kingDeltas, g_kingDeltas];
 
   for (var i = 0; i < 512; i++) {
@@ -420,6 +416,13 @@ Dagaz.AI.ResetGame = function() {
 
            for (var i = pieceGold; i <= pieceDummy; i++) {
                 for (var dir = 0; dir < pieceDeltas[i].length; dir++) {
+                     if (_.indexOf([pieceSquire, piecePriest, pieceRaven], i) >= 0) {
+                         if (Dagaz.AI.g_toMove == 0) {
+                             if (pieceDeltas[i][dir] < -1) continue;
+                         } else {
+                             if (pieceDeltas[i][dir] > 1) continue;
+                         }
+                     }
                      var target = square + pieceDeltas[i][dir];
                      while (inBoard(target)) {
                          index = square - target + 256;
@@ -907,7 +910,14 @@ function GeneratePawnMoves(moveStack, from) {
     }
 }
 
+function noCaptureMoves() {
+    var moveStack = [];
+    Dagaz.AI.GenerateCaptureMoves(moveStack);
+    return moveStack.length == 0;
+}
+
 Dagaz.AI.GenerateAllMoves = function(moveStack) {
+    if (!noCaptureMoves()) return;
     var from, to, piece, pieceIdx;
     var inc = (Dagaz.AI.g_toMove == Dagaz.AI.colorWhite) ? -16 : 16;
 

@@ -2,6 +2,9 @@
 
 (function() {
 
+var g_trace              = false;
+Dagaz.AI.g_maxply        = 10;
+
 Dagaz.AI.NOISE_FACTOR    = 0;
 Dagaz.AI.MIN_TURN        = 0;
 Dagaz.AI.Q_SEARCH_LIMIT  = -20;
@@ -12,6 +15,7 @@ Dagaz.Model.WIDTH        = 8;
 Dagaz.Model.HEIGHT       = 8;
 Dagaz.AI.STALMATED       = false;
 Dagaz.AI.INC_CHECK_PLY   = true;
+Dagaz.AI.USE_HIST_TABLE  = true;
 
 Dagaz.AI.PIECE_MASK      = 0xF;
 Dagaz.AI.TYPE_MASK       = 0x7;
@@ -138,7 +142,7 @@ function Search(finishMoveCallback, maxPly, finishPlyCallback, moves) {
     }
 
     if (finishMoveCallback != null) {
-        finishMoveCallback(bestMove, value, (new Date()).getTime() - g_startTime, i - 1);
+        finishMoveCallback(bestMove, value, (new Date()).getTime() - g_startTime, i - 1, Dagaz.AI.g_toMove);
     }
 }
 
@@ -506,11 +510,13 @@ function AllCutNode(ply, depth, beta, allowNull) {
             if (value >= beta) {
 		var histTo = (currentMove >> 8) & 0xFF;
 		if (Dagaz.AI.g_board[histTo] == 0) {
-		    var histPiece = Dagaz.AI.g_board[currentMove & 0xFF] & Dagaz.AI.PIECE_MASK;
-		    Dagaz.AI.historyTable[histPiece][histTo] += ply * ply;
-		    if (Dagaz.AI.historyTable[histPiece][histTo] > 32767) {
-		        Dagaz.AI.historyTable[histPiece][histTo] >>= 1;
-		    }
+                    if (Dagaz.AI.USE_HIST_TABLE) {
+                        var histPiece = Dagaz.AI.g_board[currentMove & 0xFF] & Dagaz.AI.PIECE_MASK;
+                        Dagaz.AI.historyTable[histPiece][histTo] += ply * ply;
+                        if (Dagaz.AI.historyTable[histPiece][histTo] > 32767) {
+                            Dagaz.AI.historyTable[histPiece][histTo] >>= 1;
+                        }
+                    }
 
 		    if (g_killers[depth][0] != currentMove) {
 		        g_killers[depth][1] = g_killers[depth][0];
@@ -615,10 +621,12 @@ function AlphaBeta(ply, depth, alpha, beta, moves) {
             if (value >= beta) {
                 var histTo = (currentMove >> 8) & 0xFF;
                 if (Dagaz.AI.g_board[histTo] == 0) {
-                    var histPiece = Dagaz.AI.g_board[currentMove & 0xFF] & Dagaz.AI.PIECE_MASK;
-                    Dagaz.AI.historyTable[histPiece][histTo] += ply * ply;
-                    if (Dagaz.AI.historyTable[histPiece][histTo] > 32767) {
-                        Dagaz.AI.historyTable[histPiece][histTo] >>= 1;
+                    if (Dagaz.AI.USE_HIST_TABLE) {
+                        var histPiece = Dagaz.AI.g_board[currentMove & 0xFF] & Dagaz.AI.PIECE_MASK;
+                        Dagaz.AI.historyTable[histPiece][histTo] += ply * ply;
+                        if (Dagaz.AI.historyTable[histPiece][histTo] > 32767) {
+                            Dagaz.AI.historyTable[histPiece][histTo] >>= 1;
+                        }
                     }
 
                     if (g_killers[depth][0] != currentMove) {
@@ -744,8 +752,8 @@ Ai.prototype.setContext = function(ctx, board) {
   }
 }
 
-var garbo = function(bestMove, value, timeTaken, ply) {
-  resultMove = Dagaz.AI.FormatMove(bestMove);  
+var garbo = function(bestMove, value, timeTaken, ply, color) {
+  resultMove = Dagaz.AI.FormatMove(bestMove, color);  
   inProgress = false;
   console.log('Garbo: ' + resultMove + ', value = ' + value + ', time = ' + timeTaken + ', ply = ' + ply);
   if (Dagaz.AI.callback) {
@@ -801,7 +809,7 @@ Ai.prototype.getMove = function(ctx) {
       setTimeout(function () {
             var s = Dagaz.AI.InitializeFromFen(fen);
             if (s == '') {
-                Search(garbo, 10, debugPlyCallback, moves);
+                Search(garbo, Dagaz.AI.g_maxply, debugPlyCallback, moves);
             } else {
                 console.log(s);
             }

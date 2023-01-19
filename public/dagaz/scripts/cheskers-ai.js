@@ -490,6 +490,7 @@ Dagaz.AI.GenerateAllMoves = function() {
 
 Dagaz.AI.GenerateCaptureMoves = function() {
   var moves = [];
+  if (NoKing()) return moves;
   GenerateCaptureMoves(moves);
   moves = CheckInvariant(moves);
   GenerateCaptureChessMoves(moves);
