@@ -20,17 +20,17 @@ var CheckInvariants = Dagaz.Model.CheckInvariants;
 
 Dagaz.Model.CheckInvariants = function(board) {
   var design = Dagaz.Model.design;
-  if (_.indexOf([3, 4, 5, 6, 9, 10, 11, 12], +board.turn) >= 0) {
+  if (_.indexOf([1, 2, 3, 4, 5, 8, 9, 10], +board.turn) >= 0) {
       _.each(board.moves, function(move) {
            if (!_.isUndefined(move.failed)) return;
            var b = board.apply(move);
            b.generate();
            if (b.moves.length == 0) {
                clearDices(design, board, move);
-               if (_.indexOf([3, 4, 5, 6], +board.turn) >= 0) {
-                   move.goTo(8);
+               if (_.indexOf([1, 2, 3, 4], +board.turn) >= 0) {
+                   move.goTo(6);
                } else {
-                   move.goTo(2);
+                   move.goTo(0);
                }
            }
       });

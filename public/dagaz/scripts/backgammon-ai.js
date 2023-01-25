@@ -21,7 +21,7 @@ Dagaz.AI.findBot = function(type, params, parent) {
 
 var getDices = function(design, board) {
   var r = [];
-  var pos = design.navigate(board.player, Dagaz.Model.stringToPos("m1a"), 0);
+  var pos = design.navigate(board.player, 0, 0);
   while (pos !== null) {
       var piece = board.getPiece(pos);
       if (piece !== null) {
@@ -38,9 +38,9 @@ var getDices = function(design, board) {
 
 var getSetup = function(design, board, player, setup, positions) {
   var r = null;
-  var pos = Dagaz.Model.stringToPos("a1a");
+  var pos = Dagaz.Model.stringToPos(Dagaz.Model.WHITE_START);
   if (player > 1) {
-      pos = Dagaz.Model.stringToPos("a2a");
+      pos = Dagaz.Model.stringToPos(Dagaz.Model.BLACK_START);
   }
   var cnt = 0;
   for (var ix = 1; pos !== null; ix++) {

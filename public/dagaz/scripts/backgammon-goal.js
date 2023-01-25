@@ -41,9 +41,9 @@ var calcPieces = function(design, board, pos) {
 }
 
 Dagaz.AI.eval = function(design, board, player) {
-  var pos = Dagaz.Model.stringToPos("a1a");
+  var pos = Dagaz.Model.stringToPos(Dagaz.Model.WHITE_START);
   if (player > 1) {
-      pos = Dagaz.Model.stringToPos("a2a");
+      pos = Dagaz.Model.stringToPos(Dagaz.Model.BLACK_START);
   }
   var inHome = true;
   var state = [];

@@ -1,13 +1,13 @@
 <html>
 <head>
 <META http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>Backgammon</title>
+<title>Jacquet</title>
 <link rel="stylesheet" href="css/style-7eb2a9d6.css"/>
 </head>
 <body>
 
-<img id="WhiteBoard" style="display:none" src="images/backgammon/sboard.png">
-<img id="BlackBoard" style="display:none" src="images/backgammon/nboard.png">
+<img id="WhiteBoard" style="display:none" src="images/backgammon/slong.png">
+<img id="BlackBoard" style="display:none" src="images/backgammon/nlong.png">
 <img id="WhiteMan" style="display:none" src="images/backgammon/white.png">
 <img id="BlackMan" style="display:none" src="images/backgammon/black.png">
 <img id="WhiteD1" style="display:none" src="images/backgammon/1.png">
@@ -29,14 +29,15 @@
         <a href="javascript:Dagaz.Controller.home()" title="Home" style="display:none" id="home"><img src="images/home.png"/></a>
         <a href="javascript:Dagaz.Controller.undo()" title="PgDown" style="display:none" id="undo"><img src="images/undo.png"/></a>
         Designed by W. D. Troyka
-        <a target="_blank" href="https://bkgm.com/rules.html">Rules</a>
+        <a target="_blank" href="https://www.bkgm.com/variants/Jacquet.html">Rules</a>
         <a href="javascript:Dagaz.Controller.resign()">I Resign</a>
+        <a href="javascript:Dagaz.Controller.drawOffer()">Offer Draw</a>
         <a href="javascript:Dagaz.Controller.sound()" id="sound">no Sound</a>
         <a href="javascript:Dagaz.Controller.redo()" title="PgUp" style="display:none" id="redo"><img src="images/redo.png"/></a>
         <div align="right" id="timer"></div>
         </div>
         <div class="cc2">
-        <canvas id="Canvas" width="502" height="350" style="cursor:default" class="canvas-body">Broken canvas...</canvas>
+        <canvas id="Canvas" width="552" height="350" style="cursor:default" class="canvas-body">Broken canvas...</canvas>
         </div>
     </div>
 </div>
@@ -48,20 +49,19 @@
 <script src="common-scripts/zrf-model.js"></script>
 <script src="common-scripts/zobrist.js"></script>
 <script src="common-scripts/common-setup-v2.js"></script>
-<script src="common-scripts/2d-view-v4.js"></script>
-<script src="common-scripts/move-list-v3.js"></script>
+<script src="common-scripts/2d-view-v2.js"></script>
+<script src="common-scripts/move-list-v2.js"></script>
 <script src="common-scripts/sound-manager-v2.js"></script>
-<script src="common-scripts/session-manager.js"></script>
-<script src="common-scripts/random-ai.js"></script>
+<script src="scripts/jacquet-extension.js"></script>
+<script src="scripts/jacquet-restrictions.js"></script>
+<script src="scripts/jacquet-courier.js"></script>
 <script src="scripts/backgammon-pass.js"></script>
-<script src="scripts/backgammon-ai.js"></script>
-<script src="scripts/backgammon-view.js"></script>
 <script src="scripts/backgammon-goal.js"></script>
 <script src="scripts/backgammon-dices.js"></script>
 <script src="scripts/backgammon-drops.js"></script>
 <script src="scripts/backgammon-extension.js"></script>
 <script src="scripts/backgammon-restriction.js"></script>
-<script src="scripts/backgammon.js"></script>
+<script src="scripts/jacquet.js"></script>
 <script src="common-scripts/app-net-v2.js"></script>
 
 </body>

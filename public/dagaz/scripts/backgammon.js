@@ -1,6 +1,9 @@
 Dagaz.Controller.persistense = "none";
 Dagaz.View.DY_INVERSE        = false;
 
+Dagaz.Model.WHITE_START = "a1a";
+Dagaz.Model.BLACK_START = "a2a";
+
 ZRF = {
     JUMP:          0,
     IF:            1,
@@ -43,21 +46,18 @@ Dagaz.Model.BuildDesign = function(design) {
     design.addPlayer("White", [0, 1, 2, 3, 4, 5, 6, 7]);
     design.addPlayer("Black", [0, 2, 1, 4, 3, 5, 7, 6]);
 
-    design.addRandom(1, [7]); // 0
-    design.addRandom(2, [7]); // 1
-    design.repeatMark();
-    design.addRandom(1, [0]); // 2
-    design.addRandom(1, [0]); // 3
+    design.addRandom(1, [0]); // 0
+    design.addRandom(1, [0]); // 1
+    design.addTurn(1, [1, 2, 3, 4, 5, 6]); // 2
+    design.addTurn(1, [1, 2, 3, 4, 5, 6]); // 3
     design.addTurn(1, [1, 2, 3, 4, 5, 6]); // 4
     design.addTurn(1, [1, 2, 3, 4, 5, 6]); // 5
-    design.addTurn(1, [1, 2, 3, 4, 5, 6]); // 6
-    design.addTurn(1, [1, 2, 3, 4, 5, 6]); // 7
-    design.addRandom(2, [0]); // 8
-    design.addRandom(2, [0]); // 9
+    design.addRandom(2, [0]); // 6
+    design.addRandom(2, [0]); // 7
+    design.addTurn(2, [1, 2, 3, 4, 5, 6]); // 8
+    design.addTurn(2, [1, 2, 3, 4, 5, 6]); // 9
     design.addTurn(2, [1, 2, 3, 4, 5, 6]); // 10
     design.addTurn(2, [1, 2, 3, 4, 5, 6]); // 11
-    design.addTurn(2, [1, 2, 3, 4, 5, 6]); // 12
-    design.addTurn(2, [1, 2, 3, 4, 5, 6]); // 13
 
     design.addPosition("m1a", [451, 450, 442, 204, 17, 1, 391, 187]);
     design.addPosition("m1b", [0, 0, 0, 203, 16, 1, 0, 0]);

@@ -44,7 +44,7 @@ Dagaz.Model.CheckInvariants = function(board) {
   }
   var alt = null;
   if (inHome && isFuzzy) {
-      var pos = design.navigate(board.player, Dagaz.Model.stringToPos("m1a"), 6);
+      var pos = design.navigate(board.player, 0, 6);
       for (var ix = 1; pos !== null; ix++) {
            var piece = board.getPiece(pos);
            if ((piece !== null) && (piece.player == board.player)) {
@@ -63,23 +63,23 @@ Dagaz.Model.CheckInvariants = function(board) {
                         piece = piece.setValue(0, v - 1);
                         move.movePiece(pos, pos, piece);
                    } else {
-                        if (isBonus && ((board.turn == 7) || (board.turn == 13))) {
+                        if (isBonus && ((board.turn == 5) || (board.turn == 11))) {
                             if (piece.type < 7) {
                                 var dice = Dagaz.Model.createPiece(design.price[piece.type] + 6, board.player).setValue(0, 2);
                                 _.each(design.allPositions(), function(pos) {
                                     if (!design.inZone(1, board.player, pos)) return;
                                     move.dropPiece(pos, dice);
                                 });
-                                if (board.turn == 7) {
-                                    move.goTo(4);
-                                } else {
-                                    move.goTo(10);
-                                }
-                            } else {
-                                if (board.turn == 7) {
+                                if (board.turn == 5) {
                                     move.goTo(2);
                                 } else {
                                     move.goTo(8);
+                                }
+                            } else {
+                                if (board.turn == 5) {
+                                    move.goTo(0);
+                                } else {
+                                    move.goTo(6);
                                 }
                             }
                         } else {
