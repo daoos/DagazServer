@@ -467,7 +467,7 @@ Dagaz.AI.ResetGame = function() {
   pieceSquareAdj[pieceHia]    = MakeTable(Dagaz.AI.pieceAdj[pieceHia]);
   pieceSquareAdj[pieceKing]   = MakeTable(Dagaz.AI.pieceAdj[pieceKing]);
 
-  var pieceDeltas = [[], [], g_knightDeltas, g_bishopDeltas, g_rookDeltas, g_queenDeltas, g_queenDeltas, g_queenDeltas];
+  var pieceDeltas = [[], [], g_knightDeltas, g_bishopDeltas, g_rookDeltas, g_queenDeltas, [], g_queenDeltas];
 
   for (var i = 0; i < 512; i++) {
       g_vectorDelta[i] = new Object();
@@ -1166,21 +1166,21 @@ Dagaz.AI.GenerateCaptureMoves = function(moveStack) {
     from = Dagaz.AI.g_pieceList[pieceIdx++];
     while (from != 0) {
         to = +from + 1; if ((Dagaz.AI.g_board[to] == 0) && noHia(to, Dagaz.AI.g_toMove)) to++;
-        if (Dagaz.AI.g_board[to] & enemy) moveStack[moveStack.length] = GenerateMove(from, to, 0);
+        if ((Dagaz.AI.g_board[to] & enemy) && ((Dagaz.AI.g_board[to] & Dagaz.AI.TYPE_MASK) != pieceKing)) moveStack[moveStack.length] = GenerateMove(from, to, 0);
         to = from - 1; if ((Dagaz.AI.g_board[to] == 0) && noHia(to, Dagaz.AI.g_toMove)) to--;
-        if (Dagaz.AI.g_board[to] & enemy) moveStack[moveStack.length] = GenerateMove(from, to, 0);
+        if ((Dagaz.AI.g_board[to] & enemy) && ((Dagaz.AI.g_board[to] & Dagaz.AI.TYPE_MASK) != pieceKing)) moveStack[moveStack.length] = GenerateMove(from, to, 0);
         to = +from + 16; if ((Dagaz.AI.g_board[to] == 0) && noHia(to, Dagaz.AI.g_toMove)) to += 16;
-        if (Dagaz.AI.g_board[to] & enemy) moveStack[moveStack.length] = GenerateMove(from, to, 0);
+        if ((Dagaz.AI.g_board[to] & enemy) && ((Dagaz.AI.g_board[to] & Dagaz.AI.TYPE_MASK) != pieceKing)) moveStack[moveStack.length] = GenerateMove(from, to, 0);
         to = from - 16; if ((Dagaz.AI.g_board[to] == 0) && noHia(to, Dagaz.AI.g_toMove)) to -= 16;
-        if (Dagaz.AI.g_board[to] & enemy) moveStack[moveStack.length] = GenerateMove(from, to, 0);
+        if ((Dagaz.AI.g_board[to] & enemy) && ((Dagaz.AI.g_board[to] & Dagaz.AI.TYPE_MASK) != pieceKing)) moveStack[moveStack.length] = GenerateMove(from, to, 0);
         to = +from + 17; if ((Dagaz.AI.g_board[to] == 0) && noHia(to, Dagaz.AI.g_toMove)) to += 17;
-        if (Dagaz.AI.g_board[to] & enemy) moveStack[moveStack.length] = GenerateMove(from, to, 0);
+        if ((Dagaz.AI.g_board[to] & enemy) && ((Dagaz.AI.g_board[to] & Dagaz.AI.TYPE_MASK) != pieceKing)) moveStack[moveStack.length] = GenerateMove(from, to, 0);
         to = from - 17; if ((Dagaz.AI.g_board[to] == 0) && noHia(to, Dagaz.AI.g_toMove)) to -= 17;
-        if (Dagaz.AI.g_board[to] & enemy) moveStack[moveStack.length] = GenerateMove(from, to, 0);
+        if ((Dagaz.AI.g_board[to] & enemy) && ((Dagaz.AI.g_board[to] & Dagaz.AI.TYPE_MASK) != pieceKing)) moveStack[moveStack.length] = GenerateMove(from, to, 0);
         to = +from + 15; if ((Dagaz.AI.g_board[to] == 0) && noHia(to, Dagaz.AI.g_toMove)) to += 15;
-        if (Dagaz.AI.g_board[to] & enemy) moveStack[moveStack.length] = GenerateMove(from, to, 0);
+        if ((Dagaz.AI.g_board[to] & enemy) && ((Dagaz.AI.g_board[to] & Dagaz.AI.TYPE_MASK) != pieceKing)) moveStack[moveStack.length] = GenerateMove(from, to, 0);
         to = from - 15; if ((Dagaz.AI.g_board[to] == 0) && noHia(to, Dagaz.AI.g_toMove)) to -= 15;
-        if (Dagaz.AI.g_board[to] & enemy) moveStack[moveStack.length] = GenerateMove(from, to, 0);
+        if ((Dagaz.AI.g_board[to] & enemy) && ((Dagaz.AI.g_board[to] & Dagaz.AI.TYPE_MASK) != pieceKing)) moveStack[moveStack.length] = GenerateMove(from, to, 0);
 	from = Dagaz.AI.g_pieceList[pieceIdx++];
     }
 

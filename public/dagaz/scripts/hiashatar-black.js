@@ -770,6 +770,10 @@ Dagaz.Model.BuildDesign = function(design) {
     design.addCommand(9, ZRF.FUNCTION,	3);	// friend?
     design.addCommand(9, ZRF.FUNCTION,	0);	// not
     design.addCommand(9, ZRF.FUNCTION,	20);	// verify
+    design.addCommand(9, ZRF.LITERAL,	6);	// King
+    design.addCommand(9, ZRF.FUNCTION,	10);	// piece?
+    design.addCommand(9, ZRF.FUNCTION,	0);	// not
+    design.addCommand(9, ZRF.FUNCTION,	20);	// verify
     design.addCommand(9, ZRF.FORK,	3);
     design.addCommand(9, ZRF.FUNCTION,	25);	// to
     design.addCommand(9, ZRF.FUNCTION,	28);	// end
@@ -890,6 +894,10 @@ Dagaz.Model.BuildDesign = function(design) {
     design.addCommand(9, ZRF.PARAM,	9);	// $10
     design.addCommand(9, ZRF.FUNCTION,	22);	// navigate
     design.addCommand(9, ZRF.FUNCTION,	3);	// friend?
+    design.addCommand(9, ZRF.FUNCTION,	0);	// not
+    design.addCommand(9, ZRF.FUNCTION,	20);	// verify
+    design.addCommand(9, ZRF.LITERAL,	6);	// King
+    design.addCommand(9, ZRF.FUNCTION,	10);	// piece?
     design.addCommand(9, ZRF.FUNCTION,	0);	// not
     design.addCommand(9, ZRF.FUNCTION,	20);	// verify
     design.addCommand(9, ZRF.FUNCTION,	25);	// to

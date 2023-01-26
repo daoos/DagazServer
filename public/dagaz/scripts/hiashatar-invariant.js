@@ -58,18 +58,6 @@ var checkLeap = function(design, board, player, pos, o, d, knight) {
   return (piece.player != player) && (piece.type == knight);
 }
 
-var checkStep = function(design, board, player, pos, d, hia) {
-  var p = design.navigate(player, pos, d);
-  if (p === null) return false;
-  if (board.getPiece(p) !== null) return false;
-  if (checkStop(design, board, player, p, hia)) return false;
-  p = design.navigate(player, p, d);
-  if (p === null) return false;
-  var piece = board.getPiece(p);
-  if (piece === null) return false;
-  return (piece.player != player) && (piece.type == hia);
-}
-
 Dagaz.Model.checkPositions = function(design, board, player, positions) {
   var king   = design.getPieceType("King");
   var pawn   = design.getPieceType("Pawn");
@@ -100,14 +88,6 @@ Dagaz.Model.checkPositions = function(design, board, player, positions) {
        if (checkLeap(design, board, player, pos, w, sw, knight)) return true;
        if (checkLeap(design, board, player, pos, e, ne, knight)) return true;
        if (checkLeap(design, board, player, pos, e, se, knight)) return true;
-       if (checkStep(design, board, player, pos, w, hia)) return true;
-       if (checkStep(design, board, player, pos, e, hia)) return true;
-       if (checkStep(design, board, player, pos, s, hia)) return true;
-       if (checkStep(design, board, player, pos, n, hia)) return true;
-       if (checkStep(design, board, player, pos, nw, hia)) return true;
-       if (checkStep(design, board, player, pos, se, hia)) return true;
-       if (checkStep(design, board, player, pos, sw, hia)) return true;
-       if (checkStep(design, board, player, pos, ne, hia)) return true;
   }
   return false;
 }
