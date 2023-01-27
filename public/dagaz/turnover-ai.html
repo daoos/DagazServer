@@ -6,8 +6,8 @@
 </head>
 <body>
 
-<img id="WhiteBoard" style="display:none" src="images/turnover/boardwr.png">
-<img id="BlackBoard" style="display:none" src="images/turnover/boardbr.png">
+<img id="WhiteBoard" style="display:none" src="images/turnover/boardw.png">
+<img id="BlackBoard" style="display:none" src="images/turnover/boardb.png">
 <img id="GoldPawn" style="display:none" src="images/turnover/wb.png">
 <img id="SilverPawn" style="display:none" src="images/turnover/bb.png">
 <img id="GoldBishop" style="display:none" src="images/turnover/ws.png">
@@ -23,7 +23,6 @@
         Copyright (c) 2019 Lucio Jose Patrocinio Filho
         <a target="_blank" href="https://www.chessvariants.com/rules/turnover">Rules</a>
         <a href="javascript:Dagaz.Controller.resign()">I Resign</a>
-        <a href="javascript:Dagaz.Controller.drawOffer()">Offer Draw</a>
         <a href="javascript:Dagaz.Controller.sound()" id="sound">no Sound</a>
         <a href="javascript:Dagaz.Controller.redo()" title="PgUp" style="display:none" id="redo"><img src="images/redo.png"/></a>
         <div align="right" id="timer"></div>
@@ -40,17 +39,21 @@
 <script src="common-scripts/dagaz.js"></script>
 <script src="common-scripts/zrf-model.js"></script>
 <script src="common-scripts/zobrist-v2.js"></script>
-<script src="common-scripts/2d-view-v3.js"></script>
+<script src="common-scripts/2d-view-v4.js"></script>
 <script src="common-scripts/move-list-v2.js"></script>
 <script src="common-scripts/sound-manager-v2.js"></script>
 <script src="common-scripts/session-manager.js"></script>
+<script src="common-scripts/random-ai.js"></script>
+<script src="common-scripts/garbo-ai-v2.js"></script>
+<script src="common-scripts/fast-ai.js"></script>
+<script src="scripts/turnover-ai.js"></script>
 <script src="scripts/turnover-fen.js"></script>
 <script src="scripts/turnover-castle.js"></script>
 <script src="scripts/turnover-invariant.js"></script>
 <script src="scripts/turnover-extension.js"></script>
 <script src="scripts/turnover-promotion.js"></script>
 <script src="scripts/turnover-restrictions.js"></script>
-<script src="scripts/turnover-black.js"></script>
+<script src="scripts/turnover.js"></script>
 <script src="common-scripts/app-net-v2.js"></script>
 
 </body>

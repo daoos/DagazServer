@@ -7,6 +7,17 @@ Dagaz.Model.HEIGHT = 8;
 
 var PIECES = "xrbqpxnkXRBQPXNK";
 
+Dagaz.Model.moveToString = function(move) {
+  var a = null;
+  for (var i = 0; i < move.actions.length; i++) {
+      if ((move.actions[i][0] !== null) && (move.actions[i][1] !== null)) {
+           a = move.actions[i];
+           break;
+      }
+  }
+  return Dagaz.Model.posToString(a[0][0]).substring(0, 2) + Dagaz.Model.posToString(a[1][0]).substring(0, 2);
+}
+
 var getName = function() {
   var str = window.location.pathname.toString();
   var result = str.match(/\/([^.\/]+)\./);
