@@ -147,28 +147,23 @@ var isCastle = function(design, board, pos) {
   return true;
 }
 
-var checkGoals = Dagaz.Model.checkGoals;
+var CheckInvariants = Dagaz.Model.CheckInvariants;
 
-Dagaz.Model.checkGoals = function(design, board, player) {
-  var f = 0; var e = 0;
-  _.each(positions, function(pos) {
-      if (isCastle(design, board, pos)) {
-          if (board.getPiece(pos).player == player) {
-              f++;
-          } else {
-              e++;
-          }
+Dagaz.Model.CheckInvariants = function(board) {
+  var design = Dagaz.Model.design;
+  _.each(board.moves, function(move) {
+      var b = board.apply(move);
+      var cnt = 0;
+      for (var pos = Dagaz.Model.stringToPos('a8b'); pos < design.positions.length; pos++) {
+           var piece = b.getPiece(pos);
+           if ((piece === null) || (piece.player != board.player)) continue;
+           if (isCastle(design, b, pos)) cnt++;
+      }
+      if (cnt == 0) {
+          move.failed = true;
       }
   });
-  if (e == 0) {
-      if (f == 0) {
-          return 0;
-      } else {
-          return 1;
-      }
-  }
-  if (f == 0) return -1;
-  return checkGoals(design, board, player);
+  CheckInvariants(board);
 }
 
 })();
