@@ -857,11 +857,13 @@ function MoveBishopTo(moveStack, from, to, flags) {
 function PawnCapture(moveStack, from, to, color, flags) {
     var row = to & 0xF0;
     if ((row == 0x90) || (row == 0x20)) {
-        if ((flags & moveflagUnpromQueen) || (flags == 0)) {
+        if (flags & moveflagUnpromQueen) {
             if (Dagaz.AI.g_pieceCount[pieceKing | color] < 2) return false;
         }
-        flags &= ~moveflagPromotePawn;
-        flags |= moveflagPromoteQueen; 
+        if (Dagaz.AI.g_pieceCount[pieceKing | color] > 1) {
+            flags &= ~moveflagPromotePawn;
+            flags |= moveflagPromoteQueen; 
+        }
     }
     moveStack[moveStack.length] = GenerateMove(from, to, flags);
     return true;
