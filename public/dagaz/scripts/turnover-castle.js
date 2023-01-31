@@ -99,10 +99,45 @@ var disableMoves = function(design, board, pos) {
   });
 }
 
+var checkmate = function(design, board) {
+  var kings = [];
+  for (pos = Dagaz.Model.stringToPos("a8b"); pos < design.positions.length; pos++) {
+       var piece = board.getPiece(pos);
+       if (piece === null) continue;
+       if (piece.player != board.player) continue;
+       if (isCastle(design, board, pos)) kings.push(pos);
+  }
+  if ((kings.length == 1) && isAttacked(design, board, board.player, kings[0])) {
+       var f = true;
+       board.generate(design);
+       if (board.moves.length > 0) {
+           _.each(board.moves, function(move) {
+                var b = board.apply(move); k = [];
+                for (p = Dagaz.Model.stringToPos("a8b"); p < design.positions.length; p++) {
+                      var piece = board.getPiece(p);
+                      if (piece === null) continue;
+                      if (piece.player != board.player) continue;
+                      if (isCastle(design, b, p)) kings.push(p);
+                }
+                if (k.length > 0) {
+                    if ((k.length > 1) || !isAttacked(design, b, board.player, k[0])) f = false;
+                }
+           });
+       }
+       if (f) return true;
+  }
+  return false;
+}
+
 var CheckInvariants = Dagaz.Model.CheckInvariants;
 
 Dagaz.Model.CheckInvariants = function(board) {
   var design = Dagaz.Model.design;
+  if (checkmate(design, board)) {
+      board.moves = [];
+      CheckInvariants(board);
+      return;
+  }
   var f = []; var e = [];
   for (pos = Dagaz.Model.stringToPos("a8b"); pos < design.positions.length; pos++) {
        var piece = board.getPiece(pos);
