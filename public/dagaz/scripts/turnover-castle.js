@@ -117,7 +117,7 @@ var checkmate = function(design, board) {
                       var piece = board.getPiece(p);
                       if (piece === null) continue;
                       if (piece.player != board.player) continue;
-                      if (isCastle(design, b, p)) kings.push(p);
+                      if (isCastle(design, b, p)) k.push(p);
                 }
                 if (k.length > 0) {
                     if ((k.length > 1) || !isAttacked(design, b, board.player, k[0])) f = false;
