@@ -123,7 +123,8 @@ Dagaz.Model.setup = function(board, init) {
 }
 
 var getPieceNotation = function(design, piece) {
-  var r = 'P';
+  var r = 'X';
+  if (piece.type == design.getPieceType("Man"))  r = 'P';
   if (piece.type == design.getPieceType("King")) r = 'K';
   if (piece.player > 1) {
       return r.toLowerCase();
@@ -144,19 +145,27 @@ Dagaz.Model.getSetup = function(design, board) {
            c = 0;
        }
        k++;
-       var piece = board.getPiece(pos);
-       if (piece === null) {
-           if (c > 8) {
-               str += c;
-               c = 0;
-           }
-           c++;
-       } else {
+       if (design.isKilledPos(pos)) {
            if (c > 0) {
                str += c;
            }
            c = 0;
-           str += getPieceNotation(design, piece);
+           str += 'X';
+       } else {
+           var piece = board.getPiece(pos);
+           if (piece === null) {
+               if (c > 8) {
+                   str += c;
+                   c = 0;
+               }
+               c++;
+           } else {
+               if (c > 0) {
+                   str += c;
+               }
+               c = 0;
+               str += getPieceNotation(design, piece);
+           }
        }
   }
   if (c > 0) {
