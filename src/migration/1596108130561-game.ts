@@ -104,7 +104,7 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(60, 36, 'Cheskers (8x8)', 'cheskers-8x8', 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(61, 36, 'Cheskers (9x9)', 'cheskers-9x9', 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total, max_selector) values(62, 36, 'Cheskers (10x10)', 'cheskers-10x10', 2, 2)`);
-        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total, max_selector) values(63, 36, 'Belarusian Chess', 'belarusian-chess', 2, 2)`);
+        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total, max_selector) values(63, 36, 'Belarusian Chess', 'belarusian-chess', 2, 3)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total, is_hidden) values(64, 30, 'Dark Chess', 'dark-chess', 2, 1)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(65, 30, 'Logical Progressive Chess', 'progressive-chess', 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(66, 30, 'Hiashatar', 'hiashatar', 2)`);
@@ -1104,6 +1104,7 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(649, 'kantorai-kanji', 2, 'kantorai-2-kanji', 'http://www.zillions-of-games.com/cgi-bin/zilligames/submissions.cgi?do=show;id=541', '2001 Chris Huntoon')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(650, 'jacquet', null, 'jacquet', 'https://www.bkgm.com/variants/Jacquet.html')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(651, 'permainan-tabal', null, 'permainan-tabal', 'https://en.wikipedia.org/wiki/Permainan-Tabal')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(652, 'belarusian-chess', 3, 'belarusian-chess-3')`);
     }
 
     public async down(queryRunner: QueryRunner): Promise<any> {
