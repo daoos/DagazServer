@@ -112,9 +112,10 @@ var checkmate = function(design, board) {
        board.generate(design);
        if (board.moves.length > 0) {
            _.each(board.moves, function(move) {
+                if (!_.isUndefined(move.failed)) return;
                 var b = board.apply(move); k = [];
                 for (p = Dagaz.Model.stringToPos("a8b"); p < design.positions.length; p++) {
-                      var piece = board.getPiece(p);
+                      var piece = b.getPiece(p);
                       if (piece === null) continue;
                       if (piece.player != board.player) continue;
                       if (isCastle(design, b, p)) k.push(p);
@@ -133,11 +134,6 @@ var CheckInvariants = Dagaz.Model.CheckInvariants;
 
 Dagaz.Model.CheckInvariants = function(board) {
   var design = Dagaz.Model.design;
-  if (checkmate(design, board)) {
-      board.moves = [];
-      CheckInvariants(board);
-      return;
-  }
   var f = []; var e = [];
   for (pos = Dagaz.Model.stringToPos("a8b"); pos < design.positions.length; pos++) {
        var piece = board.getPiece(pos);
@@ -212,6 +208,11 @@ Dagaz.Model.CheckInvariants = function(board) {
           if (move.actions[0][0][0] != f[0]) return;
           move.failed = true;
       });
+  }
+  if (checkmate(design, board)) {
+      board.moves = [];
+      CheckInvariants(board);
+      return;
   }
   CheckInvariants(board);
 }
