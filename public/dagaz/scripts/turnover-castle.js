@@ -84,8 +84,14 @@ var isAttacked = function(design, board, player, pos) {
          isAttackedJump(design, board, player, pos, 1, 7) ||
          isAttackedJump(design, board, player, pos, 2, 4) ||
          isAttackedJump(design, board, player, pos, 2, 6) ||
+         isAttackedStep(design, board, player, pos, 0, [7]) ||
+         isAttackedStep(design, board, player, pos, 1, [7]) ||
+         isAttackedStep(design, board, player, pos, 2, [7]) ||
+         isAttackedStep(design, board, player, pos, 3, [7]) ||
          isAttackedStep(design, board, player, pos, 4, [1, 7]) ||
-         isAttackedStep(design, board, player, pos, 5, [1, 7]);
+         isAttackedStep(design, board, player, pos, 5, [1, 7]) ||
+         isAttackedStep(design, board, player, pos, 6, [7]) ||
+         isAttackedStep(design, board, player, pos, 7, [7]);
 }
 
 var disableMoves = function(design, board, pos) {
