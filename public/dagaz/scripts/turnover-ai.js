@@ -288,8 +288,7 @@ Dagaz.AI.IsHashMoveValid = function(hashMove) {
         }
 
         var row = to & 0xF0;
-        var delta = (8 - Dagaz.Model.HEIGHT) << 4;
-        if (((row == (0x90 - delta) && !Dagaz.AI.g_toMove) ||
+        if (((row == 0x90 && !Dagaz.AI.g_toMove) ||
              (row == 0x20 && Dagaz.AI.g_toMove)) != (hashMove & moveflagPromotion)) {
             // Handle promotions
             return false;
@@ -856,7 +855,8 @@ function MoveBishopTo(moveStack, from, to, flags) {
 
 function PawnCapture(moveStack, from, to, color, flags) {
     var row = to & 0xF0;
-    if ((row == 0x90) || (row == 0x20)) {
+    if (((row == 0x90) && !Dagaz.AI.g_toMove) || 
+        ((row == 0x20) && Dagaz.AI.g_toMove)) {
         if (flags & moveflagUnpromQueen) {
             if (Dagaz.AI.g_pieceCount[pieceKing | color] < 2) return false;
         }
@@ -871,7 +871,8 @@ function PawnCapture(moveStack, from, to, color, flags) {
 
 function MovePawnTo(moveStack, from, to, color, flags) {
     var row = to & 0xF0;
-    if ((row == 0x90) || (row == 0x20)) {
+    if (((row == 0x90) && !Dagaz.AI.g_toMove) || 
+        ((row == 0x20) && Dagaz.AI.g_toMove)) {
         if (flags & moveflagUnpromQueen) {
             if (Dagaz.AI.g_pieceCount[pieceKing | color] < 2) return false;
         }
