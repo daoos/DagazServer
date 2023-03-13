@@ -23,7 +23,7 @@ Dagaz.Model.BuildDesign = function(design) {
     design.checkVersion("z2j", "2");
     design.checkVersion("show-hints", "false");
     design.checkVersion("show-blink", "false");
-    design.checkVersion("progressive-levels", "true");
+//  design.checkVersion("progressive-levels", "true");
 
     design.addDirection("s"); // 0
     design.addDirection("e"); // 1

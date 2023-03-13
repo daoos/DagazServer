@@ -33,8 +33,8 @@ Dagaz.Model.BuildDesign = function(design) {
     design.checkVersion("pass-partial", "true");
     design.checkVersion("shared-pieces", "true");
     design.checkVersion("drag-n-drop", "false");
-    design.checkVersion("progressive-levels", "silent");
-    design.checkVersion("advisor-wait", "5");
+//  design.checkVersion("progressive-levels", "silent");
+//  design.checkVersion("advisor-wait", "5");
     design.checkVersion("magyar-invariant", "true");
     design.checkVersion("magyar-extension", "true");
     design.checkVersion("magyar-tiles", "true");

@@ -29,7 +29,7 @@ Dagaz.Model.BuildDesign = function(design) {
     design.checkVersion("show-hints", "false");
     design.checkVersion("show-blink", "true");
     design.checkVersion("highlight-goals", "false");
-    design.checkVersion("advisor-wait", "5");
+//  design.checkVersion("advisor-wait", "5");
     design.checkVersion("damone-extension", "true");
 
     design.addDirection("ne"); // 0

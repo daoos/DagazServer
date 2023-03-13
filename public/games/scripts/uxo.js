@@ -34,7 +34,7 @@ Dagaz.Model.BuildDesign = function(design) {
     design.checkVersion("show-captures", "false");
     design.checkVersion("smart-moves", "from");
     design.checkVersion("complete-partial", "true");
-    design.checkVersion("advisor-wait", "10");
+//  design.checkVersion("advisor-wait", "10");
 
     design.addDirection("n");  // 0
     design.addDirection("e");  // 1

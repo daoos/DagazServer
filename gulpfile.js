@@ -385,6 +385,7 @@ const games = [
             "Youg1w":"images/netwalk/g1w.png"
         },
         scripts:[
+            "public/games/common-scripts/common-setup-v2.js",
             "public/games/common-scripts/2d-view.js",
             "public/games/common-scripts/move-list.js",
             "public/games/scripts/netwalk-setup.js",
