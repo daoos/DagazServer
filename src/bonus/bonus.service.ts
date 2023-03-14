@@ -13,7 +13,7 @@ export class BonusService {
 
     async getDigest(uid: number): Promise<string> {
         const x = await this.service.query(
-            `select b.last_setup || d.value_str as digest
+            `select coalesce(b.last_setup, '') || d.value_str as digest
              from   user_games a
              inner  join game_sessions b on (b.id = a.session_id)
              inner  join tokens d on (d.user_id = a.user_id and d.type_id = 1)

@@ -269,6 +269,7 @@ const games = [
             "Youdark":"images/light-off/off.png"
         },
         scripts:[
+            "public/games/common-scripts/common-setup-v2.js",
             "public/games/common-scripts/2d-view.js",
             "public/games/common-scripts/move-list.js",
             "public/games/scripts/light-off-extension.js",
@@ -446,6 +447,7 @@ const games = [
             "Ko" :"images/uxo/ko.png"
         },
         scripts:[
+            "public/games/common-scripts/common-setup-v2.js",
             "public/games/common-scripts/2d-view-v4.js",
             "public/games/common-scripts/move-list-v2.js",
             "public/games/common-scripts/random-ai.js",

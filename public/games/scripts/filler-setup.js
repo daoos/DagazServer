@@ -11,6 +11,10 @@ Dagaz.Model.checkVersion = function(design, name, value) {
   }
 }
 
+Dagaz.Model.getSetup = function(design, board) {
+  return "";
+}
+
 var getSetup = function() {
   var str = window.location.search.toString();
   var result = str.match(/[?&]setup=([^&]*)/);
