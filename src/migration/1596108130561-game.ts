@@ -307,6 +307,7 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(270, 32, 'Permainan Tabal', 'permainan-tabal', 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(271, 37, 'High Jump', 'high-jump', 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(272, 30, 'Straits', 'straits', 2)`);
+        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(273, 17, 'Dropper (10x10)', 'dropper-10x10', 2)`);
 
         await queryRunner.query(`insert into game_styles(id, game_id, name, suffix, player_num) values(1, 23, 'European', '', null)`);
         await queryRunner.query(`insert into game_styles(id, game_id, name, suffix, player_num) values(2, 23, 'Chinese', '-kanji', null)`);
@@ -1111,6 +1112,7 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview) values(652, 'belarusian-chess', 3, 'belarusian-chess-3')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(653, 'high-jump', null, 'high-jump', 'https://en.wikipedia.org/wiki/High_Jump_(game)')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(654, 'straits', null, 'straits', 'https://www.chess.com/blog/Pokshtya/chess-variant-from-1893', '1893 Anna Marriott Watson')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(655, 'dropper-10x10', null, 'dropper-10x10', 'https://andreachia.wordpress.com/2023/04/01/dropper/', 'Andrea Chia')`);
     }
 
     public async down(queryRunner: QueryRunner): Promise<any> {
