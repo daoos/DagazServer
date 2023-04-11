@@ -20,16 +20,32 @@ var isQueen = function(design, board, pos) {
   return true;
 }
 
+var isCastle = function(design, board, pos) {
+  while (pos !== null) {
+       var piece = board.getPiece(pos);
+       if (piece === null) return false;
+       pos = design.navigate(1, pos, 8);
+  }
+  return true;
+}
+
 var CheckInvariants = Dagaz.Model.CheckInvariants;
 
 Dagaz.Model.CheckInvariants = function(board) {
   var design = Dagaz.Model.design;
+  var cnt = 0;
+  for (var pos = Dagaz.Model.stringToPos('a8b'); pos < design.positions.length; pos++) {
+      var piece = board.getPiece(pos);
+      if ((piece === null) || (piece.player != board.player)) continue;
+      if (isCastle(design, board, pos)) cnt++;
+  }
   _.each(board.moves, function(move) {
       if (!move.isSimpleMove() || !_.isUndefined(move.failed)) return;
       var pos = move.actions[0][0][0];
       var piece = board.getPiece(pos);
       if ((piece !== null) && (piece.type == 2)) {
            pos = move.actions[0][1][0];
+           if (cnt == 0) return;
            if (!design.inZone(0, board.player, pos)) return;
            if (board.getPiece(pos) !== null) return;
            pos = design.navigate(board.player, pos, 9);
@@ -48,6 +64,7 @@ Dagaz.Model.CheckInvariants = function(board) {
       }
       if ((piece !== null) && (piece.type == 0)) {
            pos = move.actions[0][1][0];
+           if (cnt == 0) return;
            if (!design.inZone(0, board.player, pos)) return;
            if ((move.mode == 0) || (move.mode == 1) || (move.mode == 2) || (move.mode == 3)) {
                if ((board.getPiece(pos) !== null) && (move.mode != 2) && (move.mode != 3)) {
