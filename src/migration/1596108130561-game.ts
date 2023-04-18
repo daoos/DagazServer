@@ -97,7 +97,7 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total, max_selector) values(53, 35, 'Seven Men's Morris', 'morris-7', 2, 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total, max_selector) values(54, 35, 'Twelve Men's Morris', 'morris-12', 2, 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total, max_selector) values(55, 35, 'Morabaraba', 'morabaraba', 2, 2)`);
-        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(56, 30, 'Turnover', 'turnover', 2)`);
+        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total, max_selector) values(56, 30, 'Turnover', 'turnover', 2, 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(57, 23, 'Janggi', 'janggi', 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(58, 30, 'Sittuyin', 'sittuyin', 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(59, 30, 'Short Assize', 'short-assize', 2)`);
@@ -703,7 +703,7 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(174, 'morris-7', 1, '7-men', 'https://en.wikipedia.org/wiki/Nine_Men%27s_Morris')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(175, 'morris-12', 1, '12-men', 'https://en.wikipedia.org/wiki/Nine_Men%27s_Morris')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(176, 'morabaraba', 1, 'morabaraba', 'https://en.wikipedia.org/wiki/Morabaraba')`);
-        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(177, 'turnover', null, 'turnover', 'https://www.chessvariants.com/rules/turnover', '2019 Lucio Jose Patrocinio Filho')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(177, 'turnover', 1, 'turnover-1', 'https://www.chessvariants.com/rules/turnover', '2019 Lucio Jose Patrocinio Filho')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(178, 'janggi', null, 'janggi', 'https://en.wikipedia.org/wiki/Janggi')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(179, 'janggi-kanji', null, 'janggi-kanji', 'https://en.wikipedia.org/wiki/Janggi')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(180, 'sittuyin', null, 'sittuyin', 'https://en.wikipedia.org/wiki/Sittuyin')`);
@@ -1113,6 +1113,7 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules) values(653, 'high-jump', null, 'high-jump', 'https://en.wikipedia.org/wiki/High_Jump_(game)')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(654, 'straits', null, 'straits', 'https://www.chess.com/blog/Pokshtya/chess-variant-from-1893', '1893 Anna Marriott Watson')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(655, 'dropper-10x10', null, 'dropper-10x10', 'https://andreachia.wordpress.com/2023/04/01/dropper/', 'Andrea Chia')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(656, 'turnover', 2, 'turnover-2', 'https://www.chessvariants.com/rules/turnover', '2019 Lucio Jose Patrocinio Filho')`);
     }
 
     public async down(queryRunner: QueryRunner): Promise<any> {
