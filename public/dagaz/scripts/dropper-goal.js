@@ -49,6 +49,31 @@ var getScore = function(stat, player, limit) {
   return r;
 }
 
+Dagaz.View.showBoard = function(board, ctx) {
+  if (_.isUndefined(board.score)) {
+      board.score = [];
+      var design = Dagaz.Model.design;
+      var stat = analyze(design, board);
+      board.score[0] = getScore(stat, 1); 
+      board.score[1] = getScore(stat, 2);
+  }
+  if (board.score[0] == 0) return;
+  if (board.score[1] == 0) return;
+  var m = ((board.score[1] * Dagaz.View.WIDTH)/(board.score[0] + board.score[1])) | 0;
+  ctx.save();
+  ctx.fillStyle = 'red';
+  ctx.fillRect(0, Dagaz.View.WIDTH + 2, m, 6);
+  ctx.fillStyle = 'blue';
+  ctx.fillRect(m, Dagaz.View.WIDTH + 2, Dagaz.View.WIDTH - m, 6);
+  if (board.score[0] != board.score[1]) {
+      if (board.score[1] > board.score[0]) ctx.fillStyle = 'red';
+      ctx.beginPath();
+      ctx.arc(m, Dagaz.View.WIDTH + 5, 3, 0, 2 * Math.PI);
+      ctx.fill();
+  }
+  ctx.restore();
+}
+
 var checkGoals = Dagaz.Model.checkGoals;
 
 Dagaz.Model.checkGoals = function(design, board, player) {
