@@ -7,6 +7,18 @@ Dagaz.AI.CHECK_GOALS  = true;
 
 var checkVersion = Dagaz.Model.checkVersion;
 
+Dagaz.Model.moveToString = function(move) {
+  var r = "";
+  for (var i = 0; i < move.actions.length; i++) {
+      var a = move.actions[i];
+      if (a[0] === null) continue;
+      if (a[1] === null) continue;
+      r = Dagaz.Model.posToString(a[0][0]) + Dagaz.Model.posToString(a[1][0]);
+      break;
+  }
+  return r;
+}
+
 Dagaz.Model.checkVersion = function(design, name, value) {
   if (name != "doubutsu-shogi-extension") {
       checkVersion(design, name, value);
