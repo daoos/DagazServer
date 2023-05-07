@@ -225,8 +225,8 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(188, 17, 'Go (13x13)', 'go-13x13', 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total, max_selector) values(189, 37, 'Neutron', 'neutron', 2, 4)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(190, 26, 'Co Ganh', 'co-ganh', 2)`);
-        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(191, 24, 'Shashki Adiyukh (8x8)', 'adiuh-checkers', 2)`);
-        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(192, 24, 'Shashki Adiyukh (8x10)', 'adiuh-checkers-8x10', 2)`);
+        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(191, 24, 'Adiyukh Checkers (8x8)', 'adiuh-checkers', 2)`);
+        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(192, 24, 'Adiyukh Checkers (8x10)', 'adiuh-checkers-8x10', 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(193, 30, 'Sovereign Chess', 'sovereign-chess', 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(194, 30, 'Sovereign Chess Arena (12x12)', 'sovereign-chess-12x12', 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total, is_dice) values(195, 45, 'Ur', 'ur', 2, 1)`);
@@ -286,7 +286,7 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(249, 44, 'Tibetan checkers', 'tibetian-checkers', 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(250, 44, 'Da Fang', 'dafang', 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(251, 32, 'Khans', 'khans', 2)`);
-        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(252, 24, 'Shashki Adiyukh (10x10)', 'adiuh-checkers-10x10', 2)`);
+        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(252, 24, 'Adiyukh Checkers (10x10)', 'adiuh-checkers-10x10', 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(253, 24, 'Tavrida', 'tavrida-8x10', 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(254, 37, 'Crazy Tile Chess', 'tile-chess', 2)`);
 //      await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total, is_dice) values(255, 45, 'Sahkku', 'sahkku', 2, 1)`);
