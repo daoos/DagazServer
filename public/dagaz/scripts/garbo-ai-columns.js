@@ -355,8 +355,6 @@ Dagaz.AI.UnmakeStep = function() {
     Dagaz.AI.g_hashKeyHigh = g_moveUndoStack[Dagaz.AI.g_moveCount].hashKeyHigh;
     Dagaz.AI.g_move50 = g_moveUndoStack[Dagaz.AI.g_moveCount].move50;
 
-    var otherColor = Dagaz.AI.colorWhite - Dagaz.AI.g_toMove;
-
     var flags = move & 0xFF000000;
     var captured = null;
     var to = (move >> 8) & 0xFF;

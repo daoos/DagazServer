@@ -127,26 +127,14 @@ function isBad(move) {
   return false;
 }
 
-function IsPrefix(a, b) {
-  if (a.length >= b.length) return false;
-  for (var i = 0; i < a.length; i++) {
-       if (a[i] != b[i]) return false;
-  }
-  return true;
-}
-
 function CheckInvariant(moves) {
+  var mx = 0;
+  for (var i = 0; i < moves.length; i++) {
+      if (mx < moves[i].length) mx = moves[i].length;
+  }
   var result = [];
   for (var i = 0; i < moves.length; i++) {
-       var f = true;
-       if (isBad(moves[i])) f = false;
-       for (var j = 0; j < moves.length; j++) {
-            if (!f) break;
-            if ((i != j) && IsPrefix(moves[i], moves[j])) f = false;
-       }
-       if (f) {
-           result.push(moves[i]);
-       }
+      if (moves[i].length == mx) result.push(moves[i]);
   }
   return result;
 }
