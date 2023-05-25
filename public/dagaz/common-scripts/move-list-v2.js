@@ -251,6 +251,7 @@ MoveList.prototype.setPiece = function(piece) {
       f = Dagaz.Controller.SelectPiece(move, piece, this.level);
       moves.push(move);
       if (result.isPass()) {
+          result.mode = move.mode;
           _.each(move.actions, function(a) {
               if (a[3] != this.level) return;
               result.actions.push([a[0], a[1], a[2], 1]);

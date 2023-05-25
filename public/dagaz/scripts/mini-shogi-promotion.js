@@ -4,6 +4,21 @@ var promote = [];
 
 var checkVersion = Dagaz.Model.checkVersion;
 
+Dagaz.Model.moveToString = function(move) {
+  var r = "";
+  for (var i = 0; i < move.actions.length; i++) {
+      var a = move.actions[i];
+      if (a[0] === null) continue;
+      if (a[1] === null) continue;
+      r = Dagaz.Model.posToString(a[0][0]) + Dagaz.Model.posToString(a[1][0]);
+      if ((a[2] !== null) && (move.mode > 0) && (a[2][0].type == move.mode)) {
+          r = r + '+';
+      }
+      break;
+  }
+  return r;
+}
+
 Dagaz.Model.checkVersion = function(design, name, value) {
   if (name == "mini-shogi-promotion") {
       promote[ 2] = 3; // Silver
@@ -13,24 +28,6 @@ Dagaz.Model.checkVersion = function(design, name, value) {
   } else {
       checkVersion(design, name, value);
   }
-}
-
-Dagaz.Model.moveToString = function(move) {
-  var r = "";
-  _.each(move.actions, function(a) {
-      if (r != "") {
-          r = r + " ";
-      }
-      if (a[0] != null) {
-          r = r + Dagaz.Model.posToString(a[0][0]) + '-' + Dagaz.Model.posToString(a[1][0]);
-      } else {
-          r = r + Dagaz.Model.posToString(a[1][0]);
-      }
-      if (a[2] !== null) {
-          r = r + " " + a[2][0].toString();
-      }
-  });
-  return r;
 }
 
 var CheckInvariants = Dagaz.Model.CheckInvariants;
@@ -57,6 +54,7 @@ Dagaz.Model.CheckInvariants = function(board) {
                    action[2]       = isForced ? [ promoted ] : [ piece, promoted ];
                    action[3]       = move.actions[0][3];
                    move.actions[0] = action;
+                   move.mode = promoted.type;
                }
            }
       }
