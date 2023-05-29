@@ -30,7 +30,7 @@ var pieceRookP            = 0x09;
 var pieceKing             = 0x0A;
 var pieceNo               = 0x80;
 
-const moveflagPromotion   = 0x01000000;
+const moveflagPromotion   = 0x10000000;
 
 var g_moveUndoStack = new Array();
 
@@ -946,9 +946,9 @@ Dagaz.AI.UnmakeMove = function(move) {
 
     if (flags & moveflagPromotion) {
         piece = Dagaz.AI.g_board[to] & (~Dagaz.AI.TYPE_MASK);
-        if ((piece & Dagaz.AI.TYPE_MASK) == pieceSilverP) piece |= pieceSilver;
-           else if ((piece & Dagaz.AI.TYPE_MASK) == pieceBishopP) piece |= pieceBishop;
-           else if ((piece & Dagaz.AI.TYPE_MASK) == pieceRookP) piece |= pieceRook;
+        if ((Dagaz.AI.g_board[to] & Dagaz.AI.TYPE_MASK) == pieceSilverP) piece |= pieceSilver;
+           else if ((Dagaz.AI.g_board[to] & Dagaz.AI.TYPE_MASK) == pieceBishopP) piece |= pieceBishop;
+           else if ((Dagaz.AI.g_board[to] & Dagaz.AI.TYPE_MASK) == pieceRookP) piece |= pieceRook;
            else piece |= piecePawn;
 
         Dagaz.AI.g_board[from] = piece;
@@ -1065,7 +1065,7 @@ function IsSquareOnPieceLine(target, from) {
 }
 
 function GenerateMove(from, to, flags) {
-    return from | (to << 8) /*| flags*/;
+    return from | (to << 8) | flags;
 }
 
 function GenerateDrop(to, slot) {
@@ -1592,7 +1592,7 @@ Dagaz.AI.See = function(move) {
 }
 
 function SeeAddXrayAttack(target, square, us, usAttacks, themAttacks) {
-    var index = square - target + 128;
+    var index = square - target + (Dagaz.AI.VECTORDELTA_SIZE >> 1);
     var delta = -g_vectorDelta[index].delta;
     if (delta == 0) return;
     square += delta;
