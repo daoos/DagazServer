@@ -7,24 +7,24 @@
 <body>
 
 <img id="Board" style="display:none" src="images/shogi/4x5.png">
-<img id="SouthKing" style="display:none" src="images/shogi/sking.png">
-<img id="NorthKing" style="display:none" src="images/shogi/nking.png">
-<img id="SouthBishop" style="display:none" src="images/shogi/sbishop.png">
-<img id="NorthBishop" style="display:none" src="images/shogi/nbishop.png">
-<img id="SouthTokin" style="display:none" src="images/shogi/spawnp.png">
-<img id="NorthTokin" style="display:none" src="images/shogi/npawnp.png">
-<img id="SouthGold" style="display:none" src="images/shogi/sgold.png">
-<img id="NorthGold" style="display:none" src="images/shogi/ngold.png">
-<img id="SouthRook" style="display:none" src="images/shogi/srookp.png">
-<img id="NorthRook" style="display:none" src="images/shogi/nrookp.png">
-<img id="SouthSilver" style="display:none" src="images/shogi/ssilver.png">
-<img id="NorthSilver" style="display:none" src="images/shogi/nsilver.png">
-<img id="SouthLance" style="display:none" src="images/shogi/slancep.png">
-<img id="NorthLance" style="display:none" src="images/shogi/nlancep.png">
-<img id="SouthPawn" style="display:none" src="images/shogi/spawn.png">
-<img id="NorthPawn" style="display:none" src="images/shogi/npawn.png">
-<img id="SouthKnight" style="display:none" src="images/shogi/sknightp.png">
-<img id="NorthKnight" style="display:none" src="images/shogi/nknightp.png">
+<img id="SouthKing" style="display:none" src="images/shogi/kanji/sking.png">
+<img id="NorthKing" style="display:none" src="images/shogi/kanji/nking.png">
+<img id="SouthBishop" style="display:none" src="images/shogi/kanji/sbishop.png">
+<img id="NorthBishop" style="display:none" src="images/shogi/kanji/nbishop.png">
+<img id="SouthTokin" style="display:none" src="images/shogi/kanji/spawnp.png">
+<img id="NorthTokin" style="display:none" src="images/shogi/kanji/npawnp.png">
+<img id="SouthGold" style="display:none" src="images/shogi/kanji/sgold.png">
+<img id="NorthGold" style="display:none" src="images/shogi/kanji/ngold.png">
+<img id="SouthRook" style="display:none" src="images/shogi/kanji/srookp.png">
+<img id="NorthRook" style="display:none" src="images/shogi/kanji/nrookp.png">
+<img id="SouthSilver" style="display:none" src="images/shogi/kanji/ssilver.png">
+<img id="NorthSilver" style="display:none" src="images/shogi/kanji/nsilver.png">
+<img id="SouthLance" style="display:none" src="images/shogi/kanji/slancep.png">
+<img id="NorthLance" style="display:none" src="images/shogi/kanji/nlancep.png">
+<img id="SouthPawn" style="display:none" src="images/shogi/kanji/spawn.png">
+<img id="NorthPawn" style="display:none" src="images/shogi/kanji/npawn.png">
+<img id="SouthKnight" style="display:none" src="images/shogi/kanji/sknightp.png">
+<img id="NorthKnight" style="display:none" src="images/shogi/kanji/nknightp.png">
 
 <div class="center-body">
     <div class="canvas-wrap" id="canvasFit">
@@ -34,7 +34,6 @@
         Copyright (c) 1982 Oyama Yasuharu
         <a target="_blank" href="https://en.wikipedia.org/wiki/Micro_shogi">Rules</a>
         <a href="javascript:Dagaz.Controller.resign()">I Resign</a>
-        <a href="javascript:Dagaz.Controller.drawOffer()">Offer Draw</a>
         <a href="javascript:Dagaz.Controller.sound()" id="sound">no Sound</a>
         <a href="javascript:Dagaz.Controller.redo()" title="PgUp" style="display:none" id="redo"><img src="images/redo.png"/></a>
         <div align="right" id="timer"></div>
@@ -51,15 +50,18 @@
 <script src="common-scripts/dagaz.js"></script>
 <script src="common-scripts/zrf-model.js"></script>
 <script src="common-scripts/zobrist-v2.js"></script>
-<script src="common-scripts/2d-view-v2.js"></script>
+<script src="common-scripts/2d-view-v3.js"></script>
 <script src="common-scripts/move-list-v2.js"></script>
 <script src="common-scripts/sound-manager-v2.js"></script>
 <script src="common-scripts/session-manager.js"></script>
+<script src="common-scripts/random-ai.js"></script>
+<script src="common-scripts/garbo-ai-v2.js"></script>
+<script src="scripts/micro-shogi-ai.js"></script>
 <script src="scripts/micro-shogi-fen.js"></script>
 <script src="scripts/micro-shogi-invariant.js"></script>
 <script src="scripts/micro-shogi-extension.js"></script>
 <script src="scripts/micro-shogi.js"></script>
-<script src="common-scripts/app-net-v2.js"></script>
+<script src="common-scripts/app-net-v5.js"></script>
 
 </body>
 </html>

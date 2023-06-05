@@ -6,15 +6,15 @@ var unprom = [];
 
 Dagaz.Model.checkVersion = function(design, name, value) {
   if (name == "micro-shogi-extension") {
-     unprom[0] = 0;
-     unprom[1] = 1;
-     unprom[2] = 1;
-     unprom[3] = 3;
-     unprom[4] = 3;
-     unprom[5] = 5;
-     unprom[6] = 5;
-     unprom[7] = 7;
-     unprom[8] = 7;
+     unprom[0] = 0; // King
+     unprom[1] = 1; // Bishop
+     unprom[2] = 1; // Tokin -> Bishop
+     unprom[3] = 3; // Gold
+     unprom[4] = 3; // Rook -> Gold
+     unprom[5] = 5; // Silver
+     unprom[6] = 5; // Lance -> Silver
+     unprom[7] = 7; // Pawn
+     unprom[8] = 7; // Knight -> Pawn
   } else {
      checkVersion(design, name, value);
   }
