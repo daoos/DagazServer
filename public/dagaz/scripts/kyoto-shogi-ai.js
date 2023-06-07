@@ -6,6 +6,7 @@ Dagaz.AI.NOISE_FACTOR     = 5;
 Dagaz.Model.WIDTH         = 5;
 Dagaz.Model.HEIGHT        = 5;
 Dagaz.AI.STALMATED        = true;
+Dagaz.AI.g_timeout        = 2000;
 
 Dagaz.AI.PIECE_MASK       = 0x1F;
 Dagaz.AI.TYPE_MASK        = 0xF;
@@ -317,24 +318,7 @@ Dagaz.AI.ScoreMove = function(move) {
 }
 
 Dagaz.AI.IsHashMoveValid = function(hashMove) {
-    var from = hashMove & 0xFF;
-    var to = (hashMove >> 8) & 0xFF;
-    var ourPiece;
-    if (from == 0) {
-        ourPiece = Dagaz.AI.g_board[from];
-    } else {
-        var slot = (hashMove >> 16) & 0xFF;
-        ourPiece = g_reserve[slot];
-    }
-    var pieceType = ourPiece & Dagaz.AI.TYPE_MASK;
-    if (pieceType < piecePawn || pieceType > pieceKing) return false;
-    // Can't move a piece we don't control
-    if (Dagaz.AI.g_toMove != (ourPiece & Dagaz.AI.colorWhite)) return false;
-    // Can't move to a square that has something of the same color
-    if (Dagaz.AI.g_board[to] != 0 && (Dagaz.AI.g_toMove == (Dagaz.AI.g_board[to] & Dagaz.AI.colorWhite))) return false;
-    if (from == 0) return true;
-    if (hashMove >> 24) return false;
-    return IsSquareAttackableFrom(to, from);
+    return false;
 }
 
 Dagaz.AI.isNoZugzwang = function() {
@@ -738,10 +722,10 @@ Dagaz.AI.MakeMove = function(move) {
              newPiece &= ~Dagaz.AI.TYPE_MASK;
              newPiece |= pieceGold;
         }
-        g_reserve[(slot & 1) ? slot - 1 : slot + 1] = newPiece;
+        g_reserve[slot ^ 1] = newPiece;
         Dagaz.AI.g_baseEval += materialTable[newPiece & Dagaz.AI.TYPE_MASK];
-        Dagaz.AI.g_hashKeyLow ^= Dagaz.AI.g_zobristLow[slot + 1][newPiece & Dagaz.AI.PIECE_MASK];
-        Dagaz.AI.g_hashKeyHigh ^= Dagaz.AI.g_zobristHigh[slot + 1][newPiece & Dagaz.AI.PIECE_MASK];
+        Dagaz.AI.g_hashKeyLow ^= Dagaz.AI.g_zobristLow[slot ^ 1][newPiece & Dagaz.AI.PIECE_MASK];
+        Dagaz.AI.g_hashKeyHigh ^= Dagaz.AI.g_zobristHigh[slot ^ 1][newPiece & Dagaz.AI.PIECE_MASK];
 
         // Remove our piece from the piece list
         var capturedType = captured & Dagaz.AI.PIECE_MASK;
@@ -772,12 +756,12 @@ Dagaz.AI.MakeMove = function(move) {
         Dagaz.AI.g_pieceCount[pieceType]++;
         g_reserve[slot] = 0;
 
-        slot = (slot & 1) ? slot - 1 : slot + 1;
-        var p = g_reserve[slot];
+        var s = slot ^ 1;
+        var p = g_reserve[s];
         Dagaz.AI.g_baseEval -= materialTable[p & Dagaz.AI.TYPE_MASK];
-        Dagaz.AI.g_hashKeyLow ^= Dagaz.AI.g_zobristLow[slot][p & Dagaz.AI.PIECE_MASK];
-        Dagaz.AI.g_hashKeyHigh ^= Dagaz.AI.g_zobristHigh[slot][p & Dagaz.AI.PIECE_MASK];
-        g_reserve[slot] = 0;
+        Dagaz.AI.g_hashKeyLow ^= Dagaz.AI.g_zobristLow[s][p & Dagaz.AI.PIECE_MASK];
+        Dagaz.AI.g_hashKeyHigh ^= Dagaz.AI.g_zobristHigh[s][p & Dagaz.AI.PIECE_MASK];
+        g_reserve[s] = 0;
     } else {
         Dagaz.AI.g_hashKeyLow ^= Dagaz.AI.g_zobristLow[from][piece & Dagaz.AI.PIECE_MASK];
         Dagaz.AI.g_hashKeyHigh ^= Dagaz.AI.g_zobristHigh[from][piece & Dagaz.AI.PIECE_MASK];
@@ -920,7 +904,7 @@ Dagaz.AI.UnmakeMove = function(move) {
             Dagaz.AI.g_pieceList[(capturedType << Dagaz.AI.COUNTER_SIZE) | Dagaz.AI.g_pieceIndex[lastPieceSquare]] = lastPieceSquare;
             Dagaz.AI.g_pieceList[(capturedType << Dagaz.AI.COUNTER_SIZE) | Dagaz.AI.g_pieceCount[capturedType]] = 0;
 
-            s = (s & 1) ? s - 1 : s + 1;
+            s ^= 1;
             var p = Dagaz.AI.g_board[to] & (~Dagaz.AI.TYPE_MASK);
             if ((Dagaz.AI.g_board[to] & Dagaz.AI.TYPE_MASK) == pieceTokin) p |= pieceLance;
                else if ((Dagaz.AI.g_board[to] & Dagaz.AI.TYPE_MASK) == pieceLance)  p |= pieceTokin;
@@ -946,7 +930,7 @@ Dagaz.AI.UnmakeMove = function(move) {
 
     if (captured) {
         g_reserve[slot] = 0;
-        g_reserve[(slot & 1) ? slot - 1 : slot + 1] = 0;
+        g_reserve[slot ^ 1] = 0;
         // Restore our piece to the piece list
         var captureType = captured & Dagaz.AI.PIECE_MASK;
         Dagaz.AI.g_pieceIndex[to] = Dagaz.AI.g_pieceCount[captureType];
@@ -1313,15 +1297,6 @@ Dagaz.AI.GenerateDropMoves = function(moveStack, force) {
        if ((piece & friend) == 0) continue;
        for (var to = 0; to < 256; to++) {
            if (Dagaz.AI.g_board[to] != 0) continue;
-           if ((piece & Dagaz.AI.TYPE_MASK) == piecePawn) {
-               var row = to & 0xF0;
-               if (row == 0x60 && !Dagaz.AI.g_toMove) continue;
-               if (row == 0x20 && Dagaz.AI.g_toMove) continue;
-               var pawnPos = Dagaz.AI.g_pieceList[(Dagaz.AI.g_toMove | piecePawn) << Dagaz.AI.COUNTER_SIZE];
-               if (pawnPos != 0) {
-                   if ((pawnPos & 0xF) == (to & 0xF)) continue;
-               }
-           }
            moveStack[moveStack.length] = GenerateDrop(to, slot);
        }
    }

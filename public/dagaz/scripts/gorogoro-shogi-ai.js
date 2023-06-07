@@ -6,6 +6,7 @@ Dagaz.AI.NOISE_FACTOR     = 1;
 Dagaz.Model.WIDTH         = 5;
 Dagaz.Model.HEIGHT        = 6;
 Dagaz.AI.STALMATED        = true;
+Dagaz.AI.g_timeout        = 2000;
 
 Dagaz.AI.PIECE_MASK       = 0xF;
 Dagaz.AI.TYPE_MASK        = 0x7;
@@ -231,8 +232,7 @@ Dagaz.AI.Evaluate = function() {
     if (Dagaz.AI.g_toMove == 0) {
         // Black
         curEval -= mobility;
-    }
-    else {
+    } else {
         curEval += mobility;
     }
     return curEval;
@@ -301,8 +301,7 @@ Dagaz.AI.IsHashMoveValid = function(hashMove) {
 }
 
 Dagaz.AI.isNoZugzwang = function() {
-    return Dagaz.AI.g_pieceCount[piecePawn   | Dagaz.AI.g_toMove] != 0 ||
-           Dagaz.AI.g_pieceCount[piecePawnP  | Dagaz.AI.g_toMove] != 0 ||
+    return Dagaz.AI.g_pieceCount[piecePawnP  | Dagaz.AI.g_toMove] != 0 ||
            Dagaz.AI.g_pieceCount[pieceSilver | Dagaz.AI.g_toMove] != 0 ||
            Dagaz.AI.g_pieceCount[pieceSilverP| Dagaz.AI.g_toMove] != 0 ||
            Dagaz.AI.g_pieceCount[pieceGold   | Dagaz.AI.g_toMove] != 0;
