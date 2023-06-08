@@ -988,13 +988,13 @@ Dagaz.AI.UnmakeMove = function(move) {
     }
 }
 
-/*function IsSquareOnPieceLine(target, from) {
+function IsSquareOnPieceLine(target, from) {
     var index = from - target + (Dagaz.AI.VECTORDELTA_SIZE >> 1);
     var piece = Dagaz.AI.g_board[from];
     return (g_vectorDelta[index].pieceMask[(piece >> Dagaz.AI.TYPE_SIZE) & 1] & (1 << (piece & Dagaz.AI.TYPE_MASK))) ? true : false;
-}*/
+}
 
-/*function IsSquareAttackableFrom(target, from) {
+function IsSquareAttackableFrom(target, from) {
     var index = from - target + (Dagaz.AI.VECTORDELTA_SIZE >> 1);
     var piece = Dagaz.AI.g_board[from];
     if (g_vectorDelta[index].pieceMask[(piece >> Dagaz.AI.TYPE_SIZE) & 1] & (1 << (piece & Dagaz.AI.TYPE_MASK))) {
@@ -1010,85 +1010,6 @@ Dagaz.AI.UnmakeMove = function(move) {
 
 function IsSquareAttackable(target, color) {
     // Attackable by pieces?
-    for (var i = piecePawn; i <= pieceKing; i++) {
-        var index = (color | i) << Dagaz.AI.COUNTER_SIZE;
-        var square = Dagaz.AI.g_pieceList[index];
-        while (square != 0) {
-            if (IsSquareAttackableFrom(target, square)) return true;
-            square = Dagaz.AI.g_pieceList[++index];
-        }
-    }
-    return false;
-}*/
-
-function IsSquareAttackableFrom(target, from) {
-    var to, pos, piece, pieceType, adj;
-
-    piece = Dagaz.AI.g_board[from];
-    pieceType = piece & Dagaz.AI.TYPE_MASK;
-
-    if (pieceType == pieceEmpty) return false;
-    var color = (piece & Dagaz.AI.colorWhite);
-    var enemy = color ? Dagaz.AI.colorBlack : Dagaz.AI.colorWhite;
-    var inc = color ? -1 : 1;
-    var me = color >> Dagaz.AI.TYPE_SIZE;
-
-    if (pieceKnight == pieceType) {
-        if (from + (21 * inc) == target) return true;
-        if (from - (11 * inc) == target) return true;
-    }
-
-    if (_.indexOf([piecePawn, pieceSilver, pieceTokin, pieceGold, pieceKing], pieceType) >= 0) {
-        if (from + (2 * inc) == target) return true;
-    }
-
-    if (_.indexOf([pieceSilver, pieceGold, pieceTokin, pieceKing], pieceType) >= 0) {
-        if (from + (19 * inc) == target) return true;
-        if (from - (13 * inc) == target) return true;
-    }
-
-    if (_.indexOf([pieceGold, pieceTokin, pieceKing], pieceType) >= 0) {
-        if (from - (2 * inc) == target) return true;
-        if (from - 2 == target) return true;
-        if (from + 2 == target) return true;
-        if (from - 17 == target) return true;
-        if (from + 17 == target) return true;
-        if (from - 15 == target) return true;
-        if (from + 15 == target) return true;
-    }
-
-    if (_.indexOf([pieceSilver, pieceKing], pieceType) >= 0) {
-        if (from - (19 * inc) == target) return true;
-        if (from + (13 * inc) == target) return true;
-        if (from - 32 == target) return true;
-        if (from + 32 == target) return true;
-    }
-
-    if (pieceBishop == pieceType) {
-        to = from; do { to += 32; if (to == target) return true; } while (Dagaz.AI.g_board[to] == 0);
-        to = from; do { to -= 32; if (to == target) return true; } while (Dagaz.AI.g_board[to] == 0);
-        to = from; do { to += 19; if (to == target) return true; } while (Dagaz.AI.g_board[to] == 0);
-        to = from; do { to -= 19; if (to == target) return true; } while (Dagaz.AI.g_board[to] == 0);
-        to = from; do { to += 13; if (to == target) return true; } while (Dagaz.AI.g_board[to] == 0);
-        to = from; do { to -= 13; if (to == target) return true; } while (Dagaz.AI.g_board[to] == 0);
-    }
-
-    if (_.indexOf([pieceLance, pieceRook], pieceType) >= 0) {
-        to = from; do { to += (2 * inc); if (to == target) return true; } while (Dagaz.AI.g_board[to] == 0);
-    }
-
-    if (_.indexOf([pieceRook], pieceType) >= 0) {
-        to = from; do { to -= (2 * inc); if (to == target) return true; } while (Dagaz.AI.g_board[to] == 0);
-        to = from; do { to += 17; if (to == target) return true; } while (Dagaz.AI.g_board[to] == 0);
-        to = from; do { to -= 17; if (to == target) return true; } while (Dagaz.AI.g_board[to] == 0);
-        to = from; do { to += 15; if (to == target) return true; } while (Dagaz.AI.g_board[to] == 0);
-        to = from; do { to -= 15; if (to == target) return true; } while (Dagaz.AI.g_board[to] == 0);
-    }
-
-    return false;
-}
-
-function IsSquareAttackable(target, color) {
     for (var i = piecePawn; i <= pieceKing; i++) {
         var index = (color | i) << Dagaz.AI.COUNTER_SIZE;
         var square = Dagaz.AI.g_pieceList[index];
@@ -1587,7 +1508,7 @@ Dagaz.AI.See = function(move) {
         themAttacks[capturingPieceIndex] = 0;
 
         // Add any x-ray attackers
-//      SeeAddXrayAttack(to, capturingPieceSquare, us, usAttacks, themAttacks);
+        SeeAddXrayAttack(to, capturingPieceSquare, us, usAttacks, themAttacks);
 
         // Our turn to capture
         capturingPieceValue = 1000;
@@ -1620,7 +1541,7 @@ Dagaz.AI.See = function(move) {
         usAttacks[capturingPieceIndex] = 0;
 
         // Add any x-ray attackers
-//      SeeAddXrayAttack(to, capturingPieceSquare, us, usAttacks, themAttacks);
+        SeeAddXrayAttack(to, capturingPieceSquare, us, usAttacks, themAttacks);
     }
 }
 
