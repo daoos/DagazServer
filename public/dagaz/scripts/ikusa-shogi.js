@@ -1,5 +1,11 @@
 Dagaz.Controller.persistense = "none";
 
+Dagaz.Model.WIDTH         = 5;
+Dagaz.Model.HEIGHT        = 7;
+
+Dagaz.AI.WHITE_PROM       = 0x30;
+Dagaz.AI.BLACK_PROM       = 0x70;
+
 ZRF = {
     JUMP:          0,
     IF:            1,

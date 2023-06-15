@@ -605,7 +605,7 @@ Dagaz.AI.InitializeFromFen = function(fen) {
     }
 
     // Check for king capture (invalid FEN)
-    kingPos = Dagaz.AI.g_pieceList[(them | pieceKing) << 4]
+    kingPos = Dagaz.AI.g_pieceList[(them | pieceKing) << Dagaz.AI.COUNTER_SIZE];
     if ((kingPos != 0) && IsSquareAttackable(kingPos, Dagaz.AI.g_toMove)) {
         return 'Invalid FEN: Can capture king';
     }

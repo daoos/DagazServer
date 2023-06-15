@@ -18,6 +18,9 @@ Dagaz.AI.VECTORDELTA_SIZE = 256;
 Dagaz.AI.colorBlack       = 0x20;
 Dagaz.AI.colorWhite       = 0x10;
 
+Dagaz.AI.WHITE_PROM       = 0x20;
+Dagaz.AI.BLACK_PROM       = 0x60;
+
 var pieceEmpty            = 0x00;
 var piecePawn             = 0x01;
 var piecePawnP            = 0x02;
@@ -343,44 +346,7 @@ Dagaz.AI.ScoreMove = function(move) {
 }
 
 Dagaz.AI.IsHashMoveValid = function(hashMove) {
-    var from = hashMove & 0xFF;
-    var to = (hashMove >> 8) & 0xFF;
-    var ourPiece;
-    if (from == 0) {
-        ourPiece = Dagaz.AI.g_board[from];
-    } else {
-        var slot = (hashMove >> 16) & 0xFF;
-        ourPiece = g_reserve[slot];
-    }
-    var pieceType = ourPiece & Dagaz.AI.TYPE_MASK;
-    if (pieceType < piecePawn || pieceType > pieceKing) return false;
-    // Can't move a piece we don't control
-    if (Dagaz.AI.g_toMove != (ourPiece & Dagaz.AI.colorWhite)) return false;
-    // Can't move to a square that has something of the same color
-    if (Dagaz.AI.g_board[to] != 0 && (Dagaz.AI.g_toMove == (Dagaz.AI.g_board[to] & Dagaz.AI.colorWhite))) return false;
-    if (from == 0) return true;
-    if (pieceType == piecePawn) {
-        // Valid moves are push, capture, double push, promotions
-        var dir = to - from;
-        if ((Dagaz.AI.g_toMove == Dagaz.AI.colorWhite) != (dir < 0))  {
-            // Pawns have to move in the right direction
-            return false;
-        }
-        var row = to & 0xF0;
-        if (((row == 0x60 && !Dagaz.AI.g_toMove) ||
-             (row == 0x20 && Dagaz.AI.g_toMove)) != (hashMove & moveflagPromotion)) {
-            // Handle promotions
-            return false;
-        }
-        if (dir == -16 || dir == 16) {
-            return true;
-        }
-        return false;
-    } else {
-        // This validates that this piece type can actually make the attack
-        if (hashMove >> 24) return false;
-        return IsSquareAttackableFrom(to, from);
-    }
+    return false;
 }
 
 Dagaz.AI.isNoZugzwang = function() {
@@ -727,7 +693,7 @@ Dagaz.AI.InitializeFromFen = function(fen) {
     }
 
     // Check for king capture (invalid FEN)
-    kingPos = Dagaz.AI.g_pieceList[(them | pieceKing) << 4]
+    kingPos = Dagaz.AI.g_pieceList[(them | pieceKing) << Dagaz.AI.COUNTER_SIZE];
     if ((kingPos != 0) && IsSquareAttackable(kingPos, Dagaz.AI.g_toMove)) {
         return 'Invalid FEN: Can capture king';
     }
@@ -1040,7 +1006,7 @@ function GenerateValidMoves() {
 Dagaz.AI.GenerateAllMoves = function(moveStack) {
     var from, to, piece, pieceIdx, flags = 0;
     var inc = Dagaz.AI.g_toMove ? -16 : 16;
-    var z = Dagaz.AI.g_toMove ? 0x20 : 0x60;
+    var z = Dagaz.AI.g_toMove ? Dagaz.AI.WHITE_PROM : Dagaz.AI.BLACK_PROM;
 
     // Pawn quiet moves
     pieceIdx = (Dagaz.AI.g_toMove | piecePawn) << Dagaz.AI.COUNTER_SIZE;
@@ -1221,7 +1187,7 @@ Dagaz.AI.GenerateCaptureMoves = function(moveStack) {
     var from, to, piece, pieceIdx, flags = 0;
     var enemy = Dagaz.AI.g_toMove ? Dagaz.AI.colorBlack : Dagaz.AI.colorWhite;
     var inc = Dagaz.AI.g_toMove ? -16 : 16;
-    var z = Dagaz.AI.g_toMove ? 0x20 : 0x60;
+    var z = Dagaz.AI.g_toMove ? Dagaz.AI.WHITE_PROM : Dagaz.AI.BLACK_PROM;
 
     // Pawn captures
     pieceIdx = (Dagaz.AI.g_toMove | piecePawn) << Dagaz.AI.COUNTER_SIZE;
@@ -1416,8 +1382,8 @@ Dagaz.AI.GenerateDropMoves = function(moveStack, force) {
            if (Dagaz.AI.g_board[to] != 0) continue;
            if ((piece & Dagaz.AI.TYPE_MASK) == piecePawn) {
                var row = to & 0xF0;
-               if (row == 0x60 && !Dagaz.AI.g_toMove) continue;
-               if (row == 0x20 && Dagaz.AI.g_toMove) continue;
+               if (row == Dagaz.AI.BLACK_PROM && !Dagaz.AI.g_toMove) continue;
+               if (row == Dagaz.AI.WHITE_PROM && Dagaz.AI.g_toMove) continue;
                var pawnPos = Dagaz.AI.g_pieceList[(Dagaz.AI.g_toMove | piecePawn) << Dagaz.AI.COUNTER_SIZE];
                if (pawnPos != 0) {
                    if ((pawnPos & 0xF) == (to & 0xF)) continue;

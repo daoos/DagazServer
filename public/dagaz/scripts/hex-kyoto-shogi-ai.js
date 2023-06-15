@@ -173,7 +173,7 @@ function Mobility(color) {
     var mobUnit = color ? g_mobUnit[0] : g_mobUnit[1];
 
     // Pawn mobility
-    mob = -1;
+    mob = 0;
     pieceIdx = (color | piecePawn) << Dagaz.AI.COUNTER_SIZE;
     from = Dagaz.AI.g_pieceList[pieceIdx++];
     while (from != 0) {
@@ -251,7 +251,7 @@ function Mobility(color) {
     result += 40 * mob;
 
     // Knight mobility
-    mob = -2;
+    mob = 0;
     pieceIdx = (color | pieceKnight) << Dagaz.AI.COUNTER_SIZE;
     from = Dagaz.AI.g_pieceList[pieceIdx++];
     while (from != 0) {
@@ -267,7 +267,7 @@ function Mobility(color) {
     result += 65 * mob;
 
     // Lance mobility
-    mob = -1;
+    mob = 0;
     pieceIdx = (color | pieceLance) << Dagaz.AI.COUNTER_SIZE;
     from = Dagaz.AI.g_pieceList[pieceIdx++];
     while (from != 0) {
@@ -281,7 +281,7 @@ function Mobility(color) {
     result += 25 * mob;
 
     // Bishop mobility
-    mob = -4;
+    mob = 0;
     pieceIdx = (color | pieceBishop) << Dagaz.AI.COUNTER_SIZE;
     from = Dagaz.AI.g_pieceList[pieceIdx++];
     while (from != 0) {
@@ -296,7 +296,7 @@ function Mobility(color) {
     result += 25 * mob;
 
     // Rook mobility
-    mob = -4;
+    mob = 0;
     pieceIdx = (color | pieceRook) << Dagaz.AI.COUNTER_SIZE;
     from = Dagaz.AI.g_pieceList[pieceIdx++];
     while (from != 0) {
@@ -685,7 +685,7 @@ Dagaz.AI.InitializeFromFen = function(fen) {
     }
 
     // Check for king capture (invalid FEN)
-    kingPos = Dagaz.AI.g_pieceList[(them | pieceKing) << 4]
+    kingPos = Dagaz.AI.g_pieceList[(them | pieceKing) << Dagaz.AI.COUNTER_SIZE];
     if ((kingPos != 0) && IsSquareAttackable(kingPos, Dagaz.AI.g_toMove)) {
         return 'Invalid FEN: Can capture king';
     }

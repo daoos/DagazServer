@@ -6,6 +6,7 @@ Dagaz.AI.NOISE_FACTOR     = 0;
 Dagaz.Model.WIDTH         = 3;
 Dagaz.Model.HEIGHT        = 4;
 Dagaz.AI.STALMATED        = true;
+Dagaz.AI.g_timeout        = 2000;
 
 Dagaz.AI.PIECE_MASK       = 0xF;
 Dagaz.AI.TYPE_MASK        = 0x7;
@@ -189,7 +190,7 @@ Dagaz.AI.Evaluate = function() {
     return curEval;
 }
 
-Dagaz.AI.ScoreMove = function(move){
+Dagaz.AI.ScoreMove = function(move) {
     var moveTo = (move >> 8) & 0xFF;
     var captured = Dagaz.AI.g_board[moveTo] & Dagaz.AI.TYPE_MASK;
     var from = move & 0xFF;
@@ -520,7 +521,7 @@ Dagaz.AI.InitializeFromFen = function(fen) {
     }
 
     // Check for king capture (invalid FEN)
-    kingPos = Dagaz.AI.g_pieceList[(them | pieceKing) << 4]
+    kingPos = Dagaz.AI.g_pieceList[(them | pieceKing) << Dagaz.AI.COUNTER_SIZE];
     if ((kingPos != 0) && IsSquareAttackable(kingPos, Dagaz.AI.g_toMove)) {
         return 'Invalid FEN: Can capture king';
     }
@@ -780,7 +781,7 @@ function IsSquareAttackable(target, color) {
     if (Dagaz.AI.g_board[target - (inc + 1)] == queen) return true;
 
     // Attackable by pieces?
-    for (var i = piecePawn; i <= pieceKing; i++) {
+    for (var i = pieceBishop; i <= pieceKing; i++) {
          var index = (color | i) << Dagaz.AI.COUNTER_SIZE;
          var square = Dagaz.AI.g_pieceList[index];
          while (square) {

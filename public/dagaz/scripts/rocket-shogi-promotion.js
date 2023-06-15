@@ -10,6 +10,21 @@ Dagaz.Model.checkVersion = function(design, name, value) {
   }
 }
 
+Dagaz.Model.moveToString = function(move) {
+  var r = "";
+  for (var i = 0; i < move.actions.length; i++) {
+      var a = move.actions[i];
+      if (a[0] === null) continue;
+      if (a[1] === null) continue;
+      r = Dagaz.Model.posToString(a[0][0]) + Dagaz.Model.posToString(a[1][0]);
+      if ((a[2] !== null) && (move.mode > 0) && (a[2][0].type == move.mode)) {
+          r = r + '+';
+      }
+      break;
+  }
+  return r;
+}
+
 var CheckInvariants = Dagaz.Model.CheckInvariants;
 
 Dagaz.Model.CheckInvariants = function(board) {
@@ -43,6 +58,7 @@ Dagaz.Model.CheckInvariants = function(board) {
                    } else {
                        move.actions[0][2] = [ piece, promoted ];
                    }
+                   move.mode = promoted.type;
               }
           }
       }

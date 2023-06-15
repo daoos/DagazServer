@@ -62,6 +62,7 @@ Dagaz.Model.CheckInvariants = function(board) {
                    } else {
                        move.actions[0][2] = [ piece, promoted ];
                    }
+                   move.mode = promoted.type;
               }
           }
       }

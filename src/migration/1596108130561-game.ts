@@ -310,6 +310,7 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(273, 17, 'Dropper (10x10)', 'dropper-10x10', 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(274, 37, 'Stations', 'stations', 2)`);
         await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(275, 25, 'Goro Goro Doubutsu Shogi', 'gorogoro-shogi', 2)`);
+        await queryRunner.query(`insert into game_variants(id, game_id, name, filename, players_total) values(276, 25, 'Judkins Shogi', 'judkins-shogi', 2)`);
 
         await queryRunner.query(`insert into game_styles(id, game_id, name, suffix, player_num) values(1, 23, 'European', '', null)`);
         await queryRunner.query(`insert into game_styles(id, game_id, name, suffix, player_num) values(2, 23, 'Chinese', '-kanji', null)`);
@@ -494,6 +495,13 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_bots(id, game_id, variant_id, selector_value, player_num) values(156, 25, 115, null, null)`);
         await queryRunner.query(`insert into game_bots(id, game_id, variant_id, selector_value, player_num) values(157, 25, 114, null, null)`);
         await queryRunner.query(`insert into game_bots(id, game_id, variant_id, selector_value, player_num) values(158, 25, 116, null, null)`);
+        await queryRunner.query(`insert into game_bots(id, game_id, variant_id, selector_value, player_num) values(159, 25, 176, null, null)`);
+        await queryRunner.query(`insert into game_bots(id, game_id, variant_id, selector_value, player_num) values(160, 25, 181, null, null)`);
+        await queryRunner.query(`insert into game_bots(id, game_id, variant_id, selector_value, player_num) values(161, 25, 182, null, null)`);
+        await queryRunner.query(`insert into game_bots(id, game_id, variant_id, selector_value, player_num) values(162, 25, 177, null, null)`);
+        await queryRunner.query(`insert into game_bots(id, game_id, variant_id, selector_value, player_num) values(163, 25, 183, null, null)`);
+        await queryRunner.query(`insert into game_bots(id, game_id, variant_id, selector_value, player_num) values(164, 25, 184, null, null)`);
+        await queryRunner.query(`insert into game_bots(id, game_id, variant_id, selector_value, player_num) values(165, 25, 276, null, null)`);
 
         await queryRunner.query(`insert into game_setups(id, game_id, variant_id, selector_value, name) values(1, 25, 10, 1, 'Without Handicap')`);
         await queryRunner.query(`insert into game_setups(id, game_id, variant_id, selector_value, name) values(2, 25, 10, 2, 'Left-Kyo Handicap')`);
@@ -1124,6 +1132,8 @@ export class game1596108130561 implements MigrationInterface {
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(656, 'turnover', 2, 'turnover-2', 'https://www.chessvariants.com/rules/turnover', '2019 Lucio Jose Patrocinio Filho')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, copyright) values(657, 'stations', null, 'stations', '2001 L. Lynn Smith')`);
         await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(658, 'gorogoro-shogi', null, 'goro', 'https://en.wikipedia.org/wiki/D%C5%8Dbutsu_sh%C5%8Dgi', 'Madoka Kitao')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(659, 'judkins-shogi', null, 'judkins', 'https://en.wikipedia.org/wiki/Judkins_shogi', '1998 Paul Judkins')`);
+        await queryRunner.query(`insert into game_previews(id, filename, selector_value, preview, rules, copyright) values(660, 'judkins-shogi-kanji', null, 'judkins-kanji', 'https://en.wikipedia.org/wiki/Judkins_shogi', '1998 Paul Judkins')`);
     }
 
     public async down(queryRunner: QueryRunner): Promise<any> {
