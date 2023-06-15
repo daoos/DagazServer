@@ -1529,10 +1529,14 @@ Dagaz.AI.GenerateDropMoves = function(moveStack, force) {
                var row = to & 0xF0;
                if (row == 0x70 && !Dagaz.AI.g_toMove) continue;
                if (row == 0x20 && Dagaz.AI.g_toMove) continue;
-               var pawnPos = Dagaz.AI.g_pieceList[(Dagaz.AI.g_toMove | piecePawn) << Dagaz.AI.COUNTER_SIZE];
-               if (pawnPos != 0) {
-                   if ((pawnPos & 0xF) == (to & 0xF)) continue;
+               var isFound = false;
+               var ix = (Dagaz.AI.g_toMove | piecePawn) << Dagaz.AI.COUNTER_SIZE;
+               var pawnPos = Dagaz.AI.g_pieceList[ix++];
+               while (pawnPos != 0) {
+                   if ((pawnPos & 0xF) == (to & 0xF)) isFound = true;
+                   pawnPos = Dagaz.AI.g_pieceList[ix++];
                }
+               if (isFound) continue;
            }
            moveStack[moveStack.length] = GenerateDrop(to, slot);
        }
