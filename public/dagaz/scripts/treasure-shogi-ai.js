@@ -882,17 +882,26 @@ function GenerateValidMoves() {
 Dagaz.AI.GenerateAllMoves = function(moveStack) {
     var from, to, piece, pieceIdx, flags = 0;
     var inc = Dagaz.AI.g_toMove ? -16 : 16;
-    var z = Dagaz.AI.g_toMove ? Dagaz.AI.WHITE_PROM : Dagaz.AI.BLACK_PROM;
 
     // Knight quiet moves
     pieceIdx = (Dagaz.AI.g_toMove | pieceKnight) << Dagaz.AI.COUNTER_SIZE;
     from = Dagaz.AI.g_pieceList[pieceIdx++];
     while (from != 0) {
         to = from + (2 * inc - 1); 
-        flags = ((to & 0xF0) == z) ? moveflagPromotion : 0;
+        flags = 0;
+        if (Dagaz.AI.g_toMove) {
+            if ((to & 0xF0) <= Dagaz.AI.WHITE_PROM) flags = moveflagPromotion;
+        } else {
+            if ((to & 0xF0) >= Dagaz.AI.BLACK_PROM) flags = moveflagPromotion;
+        }
         if (Dagaz.AI.g_board[to] == 0) moveStack[moveStack.length] = GenerateMove(from, to, flags);
         to = from + (2 * inc + 1); 
-        flags = ((to & 0xF0) == z) ? moveflagPromotion : 0;
+        flags = 0;
+        if (Dagaz.AI.g_toMove) {
+            if ((to & 0xF0) <= Dagaz.AI.WHITE_PROM) flags = moveflagPromotion;
+        } else {
+            if ((to & 0xF0) >= Dagaz.AI.BLACK_PROM) flags = moveflagPromotion;
+        }
         if (Dagaz.AI.g_board[to] == 0) moveStack[moveStack.length] = GenerateMove(from, to, flags);
         from = Dagaz.AI.g_pieceList[pieceIdx++];
     }
@@ -928,24 +937,54 @@ Dagaz.AI.GenerateAllMoves = function(moveStack) {
     from = Dagaz.AI.g_pieceList[pieceIdx++];
     while (from != 0) {
         to = from + inc; 
-        flags = ((to & 0xF0) == z) ? moveflagPromotion : 0;
-        if ((from & 0xF0) == z) flags = moveflagPromotion;
+        flags = 0;
+        if (Dagaz.AI.g_toMove) {
+            if ((to & 0xF0) <= Dagaz.AI.WHITE_PROM) flags = moveflagPromotion;
+            if ((from & 0xF0) <= Dagaz.AI.WHITE_PROM) flags = moveflagPromotion;
+        } else {
+            if ((to & 0xF0) >= Dagaz.AI.BLACK_PROM) flags = moveflagPromotion;
+            if ((from & 0xF0) >= Dagaz.AI.BLACK_PROM) flags = moveflagPromotion;
+        }
         if (Dagaz.AI.g_board[to] == 0) moveStack[moveStack.length] = GenerateMove(from, to, flags);
         to = from - 17; 
-        flags = ((to & 0xF0) == z) ? moveflagPromotion : 0;
-        if ((from & 0xF0) == z) flags = moveflagPromotion;
+        flags = 0;
+        if (Dagaz.AI.g_toMove) {
+            if ((to & 0xF0) <= Dagaz.AI.WHITE_PROM) flags = moveflagPromotion;
+            if ((from & 0xF0) <= Dagaz.AI.WHITE_PROM) flags = moveflagPromotion;
+        } else {
+            if ((to & 0xF0) >= Dagaz.AI.BLACK_PROM) flags = moveflagPromotion;
+            if ((from & 0xF0) >= Dagaz.AI.BLACK_PROM) flags = moveflagPromotion;
+        }
         if (Dagaz.AI.g_board[to] == 0) moveStack[moveStack.length] = GenerateMove(from, to, flags);
         to = from - 15; 
-        flags = ((to & 0xF0) == z) ? moveflagPromotion : 0;
-        if ((from & 0xF0) == z) flags = moveflagPromotion;
+        flags = 0;
+        if (Dagaz.AI.g_toMove) {
+            if ((to & 0xF0) <= Dagaz.AI.WHITE_PROM) flags = moveflagPromotion;
+            if ((from & 0xF0) <= Dagaz.AI.WHITE_PROM) flags = moveflagPromotion;
+        } else {
+            if ((to & 0xF0) >= Dagaz.AI.BLACK_PROM) flags = moveflagPromotion;
+            if ((from & 0xF0) >= Dagaz.AI.BLACK_PROM) flags = moveflagPromotion;
+        }
         if (Dagaz.AI.g_board[to] == 0) moveStack[moveStack.length] = GenerateMove(from, to, flags);
         to = from + 17; 
-        flags = ((to & 0xF0) == z) ? moveflagPromotion : 0;
-        if ((from & 0xF0) == z) flags = moveflagPromotion;
+        flags = 0;
+        if (Dagaz.AI.g_toMove) {
+            if ((to & 0xF0) <= Dagaz.AI.WHITE_PROM) flags = moveflagPromotion;
+            if ((from & 0xF0) <= Dagaz.AI.WHITE_PROM) flags = moveflagPromotion;
+        } else {
+            if ((to & 0xF0) >= Dagaz.AI.BLACK_PROM) flags = moveflagPromotion;
+            if ((from & 0xF0) >= Dagaz.AI.BLACK_PROM) flags = moveflagPromotion;
+        }
         if (Dagaz.AI.g_board[to] == 0) moveStack[moveStack.length] = GenerateMove(from, to, flags);
         to = from + 15; 
-        flags = ((to & 0xF0) == z) ? moveflagPromotion : 0;
-        if ((from & 0xF0) == z) flags = moveflagPromotion;
+        flags = 0;
+        if (Dagaz.AI.g_toMove) {
+            if ((to & 0xF0) <= Dagaz.AI.WHITE_PROM) flags = moveflagPromotion;
+            if ((from & 0xF0) <= Dagaz.AI.WHITE_PROM) flags = moveflagPromotion;
+        } else {
+            if ((to & 0xF0) >= Dagaz.AI.BLACK_PROM) flags = moveflagPromotion;
+            if ((from & 0xF0) >= Dagaz.AI.BLACK_PROM) flags = moveflagPromotion;
+        }
         if (Dagaz.AI.g_board[to] == 0) moveStack[moveStack.length] = GenerateMove(from, to, flags);
 	from = Dagaz.AI.g_pieceList[pieceIdx++];
     }
@@ -981,8 +1020,14 @@ Dagaz.AI.GenerateAllMoves = function(moveStack) {
     from = Dagaz.AI.g_pieceList[pieceIdx++];
     while (from != 0) {
 	to = from + inc; while (Dagaz.AI.g_board[to] == 0) { 
-             flags = ((to & 0xF0) == z) ? moveflagPromotion : 0;
-             if ((from & 0xF0) == z) flags = moveflagPromotion;
+             flags = 0;
+             if (Dagaz.AI.g_toMove) {
+                 if ((to & 0xF0) <= Dagaz.AI.WHITE_PROM) flags = moveflagPromotion;
+                 if ((from & 0xF0) <= Dagaz.AI.WHITE_PROM) flags = moveflagPromotion;
+             } else {
+                 if ((to & 0xF0) >= Dagaz.AI.BLACK_PROM) flags = moveflagPromotion;
+                 if ((from & 0xF0) >= Dagaz.AI.BLACK_PROM) flags = moveflagPromotion;
+             }
              moveStack[moveStack.length] = GenerateMove(from, to, flags); to += inc; 
         }
 	from = Dagaz.AI.g_pieceList[pieceIdx++];
@@ -1007,17 +1052,26 @@ Dagaz.AI.GenerateCaptureMoves = function(moveStack) {
     var from, to, piece, pieceIdx, flags = 0;
     var enemy = Dagaz.AI.g_toMove ? Dagaz.AI.colorBlack : Dagaz.AI.colorWhite;
     var inc = Dagaz.AI.g_toMove ? -16 : 16;
-    var z = Dagaz.AI.g_toMove ? Dagaz.AI.WHITE_PROM : Dagaz.AI.BLACK_PROM;
 
     // Knight captures
     pieceIdx = (Dagaz.AI.g_toMove | pieceKnight) << Dagaz.AI.COUNTER_SIZE;
     from = Dagaz.AI.g_pieceList[pieceIdx++];
     while (from != 0) {
         to = from + (2 * inc - 1); 
-        flags = ((to & 0xF0) == z) ? moveflagPromotion : 0;
+        flags = 0;
+        if (Dagaz.AI.g_toMove) {
+            if ((to & 0xF0) <= Dagaz.AI.WHITE_PROM) flags = moveflagPromotion;
+        } else {
+            if ((to & 0xF0) >= Dagaz.AI.BLACK_PROM) flags = moveflagPromotion;
+        }
         if (Dagaz.AI.g_board[to] & enemy) moveStack[moveStack.length] = GenerateMove(from, to, flags);
         to = from + (2 * inc + 1); 
-        flags = ((to & 0xF0) == z) ? moveflagPromotion : 0;
+        flags = 0;
+        if (Dagaz.AI.g_toMove) {
+            if ((to & 0xF0) <= Dagaz.AI.WHITE_PROM) flags = moveflagPromotion;
+        } else {
+            if ((to & 0xF0) >= Dagaz.AI.BLACK_PROM) flags = moveflagPromotion;
+        }
         if (Dagaz.AI.g_board[to] & enemy) moveStack[moveStack.length] = GenerateMove(from, to, flags);
         from = Dagaz.AI.g_pieceList[pieceIdx++];
     }
@@ -1053,24 +1107,54 @@ Dagaz.AI.GenerateCaptureMoves = function(moveStack) {
     from = Dagaz.AI.g_pieceList[pieceIdx++];
     while (from != 0) {
         to = from + inc; 
-        flags = ((to & 0xF0) == z) ? moveflagPromotion : 0;
-        if ((from & 0xF0) == z) flags = moveflagPromotion;
+        flags = 0;
+        if (Dagaz.AI.g_toMove) {
+            if ((to & 0xF0) <= Dagaz.AI.WHITE_PROM) flags = moveflagPromotion;
+            if ((from & 0xF0) <= Dagaz.AI.WHITE_PROM) flags = moveflagPromotion;
+        } else {
+            if ((to & 0xF0) >= Dagaz.AI.BLACK_PROM) flags = moveflagPromotion;
+            if ((from & 0xF0) >= Dagaz.AI.BLACK_PROM) flags = moveflagPromotion;
+        }
         if (Dagaz.AI.g_board[to] & enemy)  moveStack[moveStack.length] = GenerateMove(from, to, flags);
         to = from - 17; 
-        flags = ((to & 0xF0) == z) ? moveflagPromotion : 0;
-        if ((from & 0xF0) == z) flags = moveflagPromotion;
+        flags = 0;
+        if (Dagaz.AI.g_toMove) {
+            if ((to & 0xF0) <= Dagaz.AI.WHITE_PROM) flags = moveflagPromotion;
+            if ((from & 0xF0) <= Dagaz.AI.WHITE_PROM) flags = moveflagPromotion;
+        } else {
+            if ((to & 0xF0) >= Dagaz.AI.BLACK_PROM) flags = moveflagPromotion;
+            if ((from & 0xF0) >= Dagaz.AI.BLACK_PROM) flags = moveflagPromotion;
+        }
         if (Dagaz.AI.g_board[to] & enemy)  moveStack[moveStack.length] = GenerateMove(from, to, flags);
         to = from - 15; 
-        flags = ((to & 0xF0) == z) ? moveflagPromotion : 0;
-        if ((from & 0xF0) == z) flags = moveflagPromotion;
+        flags = 0;
+        if (Dagaz.AI.g_toMove) {
+            if ((to & 0xF0) <= Dagaz.AI.WHITE_PROM) flags = moveflagPromotion;
+            if ((from & 0xF0) <= Dagaz.AI.WHITE_PROM) flags = moveflagPromotion;
+        } else {
+            if ((to & 0xF0) >= Dagaz.AI.BLACK_PROM) flags = moveflagPromotion;
+            if ((from & 0xF0) >= Dagaz.AI.BLACK_PROM) flags = moveflagPromotion;
+        }
         if (Dagaz.AI.g_board[to] & enemy)  moveStack[moveStack.length] = GenerateMove(from, to, flags);
         to = from + 17; 
-        flags = ((to & 0xF0) == z) ? moveflagPromotion : 0;
-        if ((from & 0xF0) == z) flags = moveflagPromotion;
+        flags = 0;
+        if (Dagaz.AI.g_toMove) {
+            if ((to & 0xF0) <= Dagaz.AI.WHITE_PROM) flags = moveflagPromotion;
+            if ((from & 0xF0) <= Dagaz.AI.WHITE_PROM) flags = moveflagPromotion;
+        } else {
+            if ((to & 0xF0) >= Dagaz.AI.BLACK_PROM) flags = moveflagPromotion;
+            if ((from & 0xF0) >= Dagaz.AI.BLACK_PROM) flags = moveflagPromotion;
+        }
         if (Dagaz.AI.g_board[to] & enemy)  moveStack[moveStack.length] = GenerateMove(from, to, flags);
         to = from + 15; 
-        flags = ((to & 0xF0) == z) ? moveflagPromotion : 0;
-        if ((from & 0xF0) == z) flags = moveflagPromotion;
+        flags = 0;
+        if (Dagaz.AI.g_toMove) {
+            if ((to & 0xF0) <= Dagaz.AI.WHITE_PROM) flags = moveflagPromotion;
+            if ((from & 0xF0) <= Dagaz.AI.WHITE_PROM) flags = moveflagPromotion;
+        } else {
+            if ((to & 0xF0) >= Dagaz.AI.BLACK_PROM) flags = moveflagPromotion;
+            if ((from & 0xF0) >= Dagaz.AI.BLACK_PROM) flags = moveflagPromotion;
+        }
         if (Dagaz.AI.g_board[to] & enemy)  moveStack[moveStack.length] = GenerateMove(from, to, flags);
 	from = Dagaz.AI.g_pieceList[pieceIdx++];
     }
@@ -1107,8 +1191,14 @@ Dagaz.AI.GenerateCaptureMoves = function(moveStack) {
     while (from != 0) {
 	to = from; do { to += inc; } while (Dagaz.AI.g_board[to] == 0); 
         if (Dagaz.AI.g_board[to] & enemy) {
-            flags = ((to & 0xF0) == z) ? moveflagPromotion : 0;
-            if ((from & 0xF0) == z) flags = moveflagPromotion;
+            flags = 0;
+            if (Dagaz.AI.g_toMove) {
+                 if ((to & 0xF0) <= Dagaz.AI.WHITE_PROM) flags = moveflagPromotion;
+                 if ((from & 0xF0) <= Dagaz.AI.WHITE_PROM) flags = moveflagPromotion;
+            } else {
+                 if ((to & 0xF0) >= Dagaz.AI.BLACK_PROM) flags = moveflagPromotion;
+                 if ((from & 0xF0) >= Dagaz.AI.BLACK_PROM) flags = moveflagPromotion;
+            }
             moveStack[moveStack.length] = GenerateMove(from, to, flags);
         }
 	from = Dagaz.AI.g_pieceList[pieceIdx++];
@@ -1144,8 +1234,8 @@ Dagaz.AI.GenerateDropMoves = function(moveStack, force) {
            }
            if ((piece & Dagaz.AI.TYPE_MASK) == pieceLance) {
                var row = to & 0xF0;
-               if (row == Dagaz.AI.BLACK_PROM && !Dagaz.AI.g_toMove) continue;
-               if (row == Dagaz.AI.WHITE_PROM && Dagaz.AI.g_toMove) continue;
+               if (row == ((Dagaz.Model.HEIGHT + 1) << 4) && !Dagaz.AI.g_toMove) continue;
+               if (row == 0x20 && Dagaz.AI.g_toMove) continue;
            }
            moveStack[moveStack.length] = GenerateDrop(to, slot);
        }

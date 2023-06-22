@@ -1,5 +1,7 @@
 Dagaz.Controller.persistense = "setup";
 
+Dagaz.AI.RESERVE_SIZE = 2;
+
 (function() {
 
 var getName = function() {
@@ -103,15 +105,15 @@ var createPiece = function(design, c) {
 
 var toBoard = function(pos) {
   var y = (pos / Dagaz.Model.WIDTH) | 0;
-  var x = (pos % Dagaz.Model.WIDTH) + 3;
-  return y * (Dagaz.Model.WIDTH + 6) + x;
+  var x = (pos % Dagaz.Model.WIDTH) + (Dagaz.AI.RESERVE_SIZE + 1);
+  return y * (Dagaz.Model.WIDTH + 2 * (Dagaz.AI.RESERVE_SIZE + 1)) + x;
 }
 
 var toReserve = function(pos) {
-  var y = (pos / 4) | 0;
-  var x = pos % 4;
-  if (x > 1) x += Dagaz.Model.WIDTH + 2;
-  return y * (Dagaz.Model.WIDTH + 6) + x;
+  var y = (pos / (Dagaz.AI.RESERVE_SIZE * 2)) | 0;
+  var x = pos % (Dagaz.AI.RESERVE_SIZE * 2);
+  if (x > (Dagaz.AI.RESERVE_SIZE - 1)) x += Dagaz.Model.WIDTH + 2;
+  return y * (Dagaz.Model.WIDTH + 2 * (Dagaz.AI.RESERVE_SIZE + 1)) + x;
 }
 
 Dagaz.Model.setup = function(board, init) {
@@ -147,7 +149,7 @@ Dagaz.Model.setup = function(board, init) {
                    board.setPiece(toReserve(pos), piece);
                    pos++;
                }
-               if (pos >= 4 * Dagaz.Model.HEIGHT) break;
+               if (pos >= (Dagaz.AI.RESERVE_SIZE * 2) * Dagaz.Model.HEIGHT) break;
            }
       }
       var turn = getTurn(init);
@@ -221,8 +223,8 @@ Dagaz.Model.getSetup = function(design, board) {
   }
   str += '-';
   k = 0; c = 0;
-  for (var pos = 0; pos < 4 * Dagaz.Model.HEIGHT; pos++) {
-       if (k >= 4) {
+  for (var pos = 0; pos < (Dagaz.AI.RESERVE_SIZE * 2) * Dagaz.Model.HEIGHT; pos++) {
+       if (k >= (Dagaz.AI.RESERVE_SIZE * 2)) {
            if (c > 0) {
                str += c;
            }
