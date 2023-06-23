@@ -40,15 +40,16 @@ var pieceNo               = 0x80;
 
 const moveflagPromotion   = 0x10000000;
 
-var g_moveUndoStack = new Array();
+var g_moveUndoStack       = new Array();
 
-const RESERVE_SIZE = 100;
+const RESERVE_SIZE        = 100;
 var g_reserve = new Array(RESERVE_SIZE);
 
 // Evaulation variables
 var g_mobUnit;
 
-var materialTable = [0, 100, 200, 300, 400, 400, 400, 400, 450, 900, 1000, 1500, 1700, 2000, 600000];
+var materialTable = [0,  87, 254, 371, 530, 500, 489, 482, 447, 235,  571,  647,  832,  955, 600000];
+var inHandTable   = [0, 174, 508, 742, 617, 754, 960, 717, 894, 470, 1142, 1294, 1403, 1602, 600000];
 
 var g_seeValues = [0, 1, 2, 3, 4, 4, 4, 4, 4, 6, 6, 6, 7, 7, 900, 0,
                    0, 1, 2, 3, 4, 4, 4, 4, 4, 6, 6, 6, 7, 7, 900, 0];
@@ -953,7 +954,7 @@ Dagaz.AI.MakeMove = function(move) {
              newPiece |= pieceRook;
         }
         g_reserve[slot] = newPiece;
-        Dagaz.AI.g_baseEval += materialTable[newPiece & Dagaz.AI.TYPE_MASK];
+        Dagaz.AI.g_baseEval += inHandTable[newPiece & Dagaz.AI.TYPE_MASK];
 
         Dagaz.AI.g_hashKeyLow ^= Dagaz.AI.g_zobristLow[slot][newPiece & Dagaz.AI.PIECE_MASK];
         Dagaz.AI.g_hashKeyHigh ^= Dagaz.AI.g_zobristHigh[slot][newPiece & Dagaz.AI.PIECE_MASK];
@@ -977,7 +978,7 @@ Dagaz.AI.MakeMove = function(move) {
     if (from == 0) {
         slot = (move >> 16) & 0xFF;
         piece = g_reserve[slot];
-        Dagaz.AI.g_baseEval -= materialTable[piece & Dagaz.AI.TYPE_MASK];
+        Dagaz.AI.g_baseEval -= inHandTable[piece & Dagaz.AI.TYPE_MASK];
         Dagaz.AI.g_hashKeyLow ^= Dagaz.AI.g_zobristLow[slot][piece & Dagaz.AI.PIECE_MASK];
         Dagaz.AI.g_hashKeyHigh ^= Dagaz.AI.g_zobristHigh[slot][piece & Dagaz.AI.PIECE_MASK];
 
