@@ -637,6 +637,7 @@ function UndoHistory(inCheck, baseEval, hashKeyLow, hashKeyHigh, move50, capture
 }
 
 Dagaz.AI.MakeMove = function(move) {
+    var slot = GetSlot();
     var me = Dagaz.AI.g_toMove >> Dagaz.AI.TYPE_SIZE;
     var otherColor = Dagaz.AI.colorWhite - Dagaz.AI.g_toMove; 
     
@@ -645,7 +646,10 @@ Dagaz.AI.MakeMove = function(move) {
     var from = move & 0xFF;
     var captured = Dagaz.AI.g_board[to];
     var piece = Dagaz.AI.g_board[from];
-    var slot = GetSlot();
+
+    if (captured && (slot === null)) {
+        return false;
+    }
 
     g_moveUndoStack[Dagaz.AI.g_moveCount] = new UndoHistory(Dagaz.AI.g_inCheck, Dagaz.AI.g_baseEval, Dagaz.AI.g_hashKeyLow, Dagaz.AI.g_hashKeyHigh, Dagaz.AI.g_move50, captured, slot);
     Dagaz.AI.g_moveCount++;
@@ -750,11 +754,6 @@ Dagaz.AI.MakeMove = function(move) {
     Dagaz.AI.g_toMove = otherColor;
     Dagaz.AI.g_baseEval = -Dagaz.AI.g_baseEval;
 
-    if (slot === null) {
-        Dagaz.AI.UnmakeMove(move);
-        return false;
-    }
-    
     var kingPos = Dagaz.AI.g_pieceList[(pieceKing | (Dagaz.AI.colorWhite - Dagaz.AI.g_toMove)) << Dagaz.AI.COUNTER_SIZE];
     if ((kingPos != 0) && IsSquareAttackable(kingPos, otherColor)) {
         Dagaz.AI.UnmakeMove(move);

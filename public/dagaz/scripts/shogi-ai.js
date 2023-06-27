@@ -526,6 +526,13 @@ function MakeTable(table) {
     return result;
 }
 
+function onBoard(target) {
+  if (target < 0) return false;
+  if ((target & 0xF0) >= 0x90) return false;
+  if ((target & 0x0F) >= 0x09) return false;
+  return true;
+}
+
 var ResetGame = Dagaz.AI.ResetGame;
 
 Dagaz.AI.ResetGame = function() {
@@ -573,7 +580,7 @@ Dagaz.AI.ResetGame = function() {
                 for (var dir = 0; dir < pieceDeltas[i].length; dir++) {
                      var delta = pieceDeltas[i][dir];
                      var target = square + delta;
-                     while (!(target & 0x88)) { // TODO:
+                     while (onBoard(target)) {
                          var index = square - target + (Dagaz.AI.VECTORDELTA_SIZE >> 1);
                          g_vectorDelta[index].pieceMask[Dagaz.AI.colorWhite >> Dagaz.AI.TYPE_SIZE] |= (1 << i);
                          var flip = -1;
@@ -607,7 +614,7 @@ Dagaz.AI.ResetGame = function() {
                      }
                      delta = -delta;
                      var target = square + delta;
-                     while (!(target & 0x88)) {
+                     while (onBoard(target)) {
                          var index = square - target + (Dagaz.AI.VECTORDELTA_SIZE >> 1);
                          g_vectorDelta[index].pieceMask[0] |= (1 << i);
                          var flip = -1;
@@ -913,6 +920,7 @@ function UndoHistory(inCheck, baseEval, hashKeyLow, hashKeyHigh, move50, capture
 }
 
 Dagaz.AI.MakeMove = function(move) {
+    var slot = GetSlot();
     var me = Dagaz.AI.g_toMove >> Dagaz.AI.TYPE_SIZE;
     var otherColor = Dagaz.AI.colorWhite - Dagaz.AI.g_toMove; 
     
@@ -921,7 +929,10 @@ Dagaz.AI.MakeMove = function(move) {
     var from = move & 0xFF;
     var captured = Dagaz.AI.g_board[to];
     var piece = Dagaz.AI.g_board[from];
-    var slot = GetSlot();
+
+    if (captured && (slot === null)) {
+        return false;
+    }
 
     g_moveUndoStack[Dagaz.AI.g_moveCount] = new UndoHistory(Dagaz.AI.g_inCheck, Dagaz.AI.g_baseEval, Dagaz.AI.g_hashKeyLow, Dagaz.AI.g_hashKeyHigh, Dagaz.AI.g_move50, captured, slot);
     Dagaz.AI.g_moveCount++;
@@ -1046,11 +1057,6 @@ Dagaz.AI.MakeMove = function(move) {
     Dagaz.AI.g_toMove = otherColor;
     Dagaz.AI.g_baseEval = -Dagaz.AI.g_baseEval;
 
-    if (slot === null) {
-        Dagaz.AI.UnmakeMove(move);
-        return false;
-    }
-    
     var kingPos = Dagaz.AI.g_pieceList[(pieceKing | (Dagaz.AI.colorWhite - Dagaz.AI.g_toMove)) << Dagaz.AI.COUNTER_SIZE];
     if ((kingPos != 0) && IsSquareAttackable(kingPos, otherColor)) {
         Dagaz.AI.UnmakeMove(move);
