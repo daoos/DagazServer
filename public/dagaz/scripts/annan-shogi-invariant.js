@@ -89,12 +89,39 @@ var isAttacked = function(design, board, pos, player) {
          checkLeap(design, board, player, pos, n, ne, knight);
 }
 
+var pawnFound = function(design, board, player, pos, dir, except) {
+  var p = design.navigate(player, pos, dir);
+  while (p !== null) {
+      if (p != except) {
+          var piece = board.getPiece(p);
+          if ((piece !== null) && (piece.player == player) && (piece.type == design.getPieceType("Pawn"))) {
+              return true;
+          }
+      }
+      p = design.navigate(player, p, dir);
+  }
+  return false;
+}
+
 var CheckInvariants = Dagaz.Model.CheckInvariants;
 
 Dagaz.Model.CheckInvariants = function(board) {
   var design = Dagaz.Model.design;
+  var n = design.getDirection("n");
+  var s = design.getDirection("s");
   _.each(board.moves, function(move) {
       if (!_.isUndefined(move.failed)) return;
+      if ((move.actions.length > 0) && (move.actions[0][0] !== null)) {
+          var pos = move.actions[0][0][0];
+          var target = move.actions[0][1][0];
+          var piece = board.getPiece(pos);
+          if (piece.type == design.getPieceType("Pawn")) {
+              if (pawnFound(design, board, board.player, target, n, pos) || pawnFound(design, board, board.player, target, s, pos)) {
+                  move.failed = true;
+                  return;
+              }
+          }
+      }
       var b = board.apply(move);
       var king = findPiece(design, b, board.player, design.getPieceType("King"));
       if (king === null) return;

@@ -1,5 +1,14 @@
 Dagaz.Controller.persistense = "none";
 
+Dagaz.AI.g_timeout        = 5000;
+
+Dagaz.Model.WIDTH         = 9;
+Dagaz.Model.HEIGHT        = 9;
+Dagaz.AI.RESERVE_SIZE     = 3;
+
+Dagaz.AI.WHITE_PROM       = 0x40;
+Dagaz.AI.BLACK_PROM       = 0x80;
+
 ZRF = {
     JUMP:          0,
     IF:            1,
