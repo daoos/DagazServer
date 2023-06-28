@@ -370,41 +370,44 @@ Dagaz.AI.See = function(move) {
 }
 
 function Mobility(color) {
-    var mob, to;
+    var mob, from, to, pieceIdx;
     var result = 0;
     var inc = color == Dagaz.AI.colorWhite ? -16 : 16;
     var me = color == Dagaz.AI.colorWhite ? Dagaz.AI.colorWhite : Dagaz.AI.colorBlack;
     var enemy = color == Dagaz.AI.colorWhite ? Dagaz.AI.colorBlack : Dagaz.AI.colorWhite;
-    for (var from = 0; from < 256; from++) {
-         if (Dagaz.AI.g_board[from] & me) {
-             mob = 0;
-             to = from - 16;
-             if (Dagaz.AI.g_board[to] == pieceEmpty) {
-                 mob++;
-             } else if (Dagaz.AI.g_board[to] & me) {
-                 to -= 16; if (Dagaz.AI.g_board[to] & enemy) mob += 10;
-             }
-             to = from + 16;
-             if (Dagaz.AI.g_board[to] == pieceEmpty) {
-                 mob++;
-             } else if (Dagaz.AI.g_board[to] & me) {
-                 to += 16; if (Dagaz.AI.g_board[to] & enemy) mob += 10;
-             }
-             to = from - 1;
-             if (Dagaz.AI.g_board[to] == pieceEmpty) {
-                 mob++;
-             } else if (Dagaz.AI.g_board[to] & me) {
-                 to--; if (Dagaz.AI.g_board[to] & enemy) mob += 10;
-             }
-             to = from + 1;
-             if (Dagaz.AI.g_board[to] == pieceEmpty) {
-                 mob++;
-             } else if (Dagaz.AI.g_board[to] & me) {
-                 to++; if (Dagaz.AI.g_board[to] & enemy) mob += 10;
-             }
-             result += 10 * mob;
-         }
+
+    // Man mobility
+    mob = 0;
+    pieceIdx = (color | pieceMan) << Dagaz.AI.COUNTER_SIZE;
+    from = Dagaz.AI.g_pieceList[pieceIdx++];
+    while (from != 0) {
+        to = from - 16;
+        if (Dagaz.AI.g_board[to] == pieceEmpty) {
+            mob++;
+        } else if (Dagaz.AI.g_board[to] & me) {
+            to -= 16; if (Dagaz.AI.g_board[to] & enemy) mob += 10;
+        }
+        to = from + 16;
+        if (Dagaz.AI.g_board[to] == pieceEmpty) {
+            mob++;
+        } else if (Dagaz.AI.g_board[to] & me) {
+            to += 16; if (Dagaz.AI.g_board[to] & enemy) mob += 10;
+        }
+        to = from - 1;
+        if (Dagaz.AI.g_board[to] == pieceEmpty) {
+            mob++;
+        } else if (Dagaz.AI.g_board[to] & me) {
+            to--; if (Dagaz.AI.g_board[to] & enemy) mob += 10;
+        }
+        to = from + 1;
+        if (Dagaz.AI.g_board[to] == pieceEmpty) {
+            mob++;
+        } else if (Dagaz.AI.g_board[to] & me) {
+            to++; if (Dagaz.AI.g_board[to] & enemy) mob += 10;
+        }
+        from = Dagaz.AI.g_pieceList[pieceIdx++];
     }
+    result += 10 * mob;
     return result;
 }
 

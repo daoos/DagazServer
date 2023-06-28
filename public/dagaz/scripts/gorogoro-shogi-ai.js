@@ -764,6 +764,12 @@ Dagaz.AI.MakeMove = function(move) {
     kingPos = Dagaz.AI.g_pieceList[(pieceKing | Dagaz.AI.g_toMove) << Dagaz.AI.COUNTER_SIZE];
     if (kingPos != 0) {
         Dagaz.AI.g_inCheck = IsSquareAttackable(kingPos, Dagaz.AI.colorWhite - Dagaz.AI.g_toMove);
+        if (Dagaz.AI.g_inCheck && (from == 0) && ((piece & Dagaz.AI.TYPE_MASK) == piecePawn)) {
+            if (GenerateValidMoves().length == 0) {
+                Dagaz.AI.UnmakeMove(move);
+                return false;
+            }
+        }
     }
 
     Dagaz.AI.g_repMoveStack[Dagaz.AI.g_moveCount - 1] = Dagaz.AI.g_hashKeyLow;
